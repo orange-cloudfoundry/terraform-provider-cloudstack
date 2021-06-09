@@ -51,28 +51,32 @@ func resourceCloudStackVPNCustomerGateway() *schema.Resource {
 			},
 
 			"dpd": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Computed: true,
+				Type:       schema.TypeBool,
+				ConfigMode: schema.SchemaConfigModeAttr,
+				Optional:   true,
+				Computed:   true,
 			},
 
 			"esp_lifetime": {
-				Type:     schema.TypeInt,
-				Optional: true,
-				Computed: true,
+				Type:       schema.TypeInt,
+				ConfigMode: schema.SchemaConfigModeAttr,
+				Optional:   true,
+				Computed:   true,
 			},
 
 			"ike_lifetime": {
-				Type:     schema.TypeInt,
-				Optional: true,
-				Computed: true,
+				Type:       schema.TypeInt,
+				ConfigMode: schema.SchemaConfigModeAttr,
+				Optional:   true,
+				Computed:   true,
 			},
 
 			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-				ForceNew: true,
+				Type:       schema.TypeString,
+				ConfigMode: schema.SchemaConfigModeAttr,
+				Optional:   true,
+				Computed:   true,
+				ForceNew:   true,
 			},
 		},
 	}

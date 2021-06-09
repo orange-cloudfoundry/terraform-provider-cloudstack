@@ -56,15 +56,17 @@ func resourceCloudStackSecurityGroupRule() *schema.Resource {
 						},
 
 						"icmp_type": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							Computed: true,
+							Type:       schema.TypeInt,
+							ConfigMode: schema.SchemaConfigModeAttr,
+							Optional:   true,
+							Computed:   true,
 						},
 
 						"icmp_code": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							Computed: true,
+							Type:       schema.TypeInt,
+							ConfigMode: schema.SchemaConfigModeAttr,
+							Optional:   true,
+							Computed:   true,
 						},
 
 						"ports": {

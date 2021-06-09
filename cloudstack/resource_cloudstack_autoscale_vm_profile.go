@@ -37,16 +37,18 @@ func resourceCloudStackAutoScaleVMProfile() *schema.Resource {
 			},
 
 			"destroy_vm_grace_period": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:       schema.TypeString,
+				ConfigMode: schema.SchemaConfigModeAttr,
+				Optional:   true,
+				Computed:   true,
 			},
 
 			"other_deploy_params": {
-				Type:     schema.TypeMap,
-				Optional: true,
-				Computed: true,
-				ForceNew: true,
+				Type:       schema.TypeMap,
+				ConfigMode: schema.SchemaConfigModeAttr,
+				Optional:   true,
+				Computed:   true,
+				ForceNew:   true,
 			},
 
 			"metadata": metadataSchema(),

@@ -1,3 +1,5 @@
+**THIS is a hard fork of https://github.com/hashicorp/terraform-provider-cloudstack because this repo is considered as archived by hashicorp**
+
 Terraform Provider
 ==================
 
@@ -10,8 +12,29 @@ Terraform Provider
 Requirements
 ------------
 
--	[Terraform](https://www.terraform.io/downloads.html) 0.12.x
--	[Go](https://golang.org/doc/install) 1.14 (to build the provider plugin)
+- [Terraform](https://www.terraform.io/downloads.html) >= 0.13
+- [Go](https://golang.org/doc/install) 1.16 (to build the provider plugin)
+
+## Installations
+
+**Requirements:** You need, of course, terraform (**>=0.13**) which is available here: https://www.terraform.io/downloads.html
+
+Add to your terraform file:
+
+```hcl
+terraform {
+  required_providers {
+    cfsecurity = {
+      source  = "orange-cloudfoundry/cloudstack"
+      version = "latest"
+    }
+  }
+}
+```
+
+## Documentation
+
+You can find documentation at https://registry.terraform.io/providers/orange-cloudfoundry/cloudstack/latest/docs
 
 Building The Provider
 ---------------------

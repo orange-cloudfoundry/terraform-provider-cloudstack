@@ -32,9 +32,10 @@ func resourceCloudStackDisk() *schema.Resource {
 			},
 
 			"device_id": {
-				Type:     schema.TypeInt,
-				Optional: true,
-				Computed: true,
+				Type:       schema.TypeInt,
+				ConfigMode: schema.SchemaConfigModeAttr,
+				Optional:   true,
+				Computed:   true,
 			},
 
 			"disk_offering": {
@@ -43,9 +44,10 @@ func resourceCloudStackDisk() *schema.Resource {
 			},
 
 			"size": {
-				Type:     schema.TypeInt,
-				Optional: true,
-				Computed: true,
+				Type:       schema.TypeInt,
+				ConfigMode: schema.SchemaConfigModeAttr,
+				Optional:   true,
+				Computed:   true,
 			},
 
 			"shrink_ok": {
@@ -60,10 +62,11 @@ func resourceCloudStackDisk() *schema.Resource {
 			},
 
 			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-				ForceNew: true,
+				Type:       schema.TypeString,
+				ConfigMode: schema.SchemaConfigModeAttr,
+				Optional:   true,
+				Computed:   true,
+				ForceNew:   true,
 			},
 
 			"zone": {

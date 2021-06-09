@@ -57,15 +57,17 @@ func resourceCloudStackNetworkACLRule() *schema.Resource {
 						},
 
 						"icmp_type": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							Computed: true,
+							Type:       schema.TypeInt,
+							ConfigMode: schema.SchemaConfigModeAttr,
+							Optional:   true,
+							Computed:   true,
 						},
 
 						"icmp_code": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							Computed: true,
+							Type:       schema.TypeInt,
+							ConfigMode: schema.SchemaConfigModeAttr,
+							Optional:   true,
+							Computed:   true,
 						},
 
 						"ports": {
@@ -172,7 +174,7 @@ func createNetworkACLRule(d *schema.ResourceData, meta interface{}, rule map[str
 	uuids := rule["uuids"].(map[string]interface{})
 
 	// Make sure all required parameters are there
-	if err := verifyNetworkACLRuleParams(d, rule); err != nil {
+	if err := verifyNetworkACLRuleParams(rule); err != nil {
 		return err
 	}
 
@@ -535,7 +537,7 @@ func deleteNetworkACLRules(d *schema.ResourceData, meta interface{}, rules *sche
 			sem <- struct{}{}
 
 			// Delete a single rule
-			err := deleteNetworkACLRule(d, meta, rule)
+			err := deleteNetworkACLRule(meta, rule)
 
 			// If we have at least one UUID, we need to save the rule
 			if len(rule["uuids"].(map[string]interface{})) > 0 {
@@ -555,7 +557,7 @@ func deleteNetworkACLRules(d *schema.ResourceData, meta interface{}, rules *sche
 	return errs.ErrorOrNil()
 }
 
-func deleteNetworkACLRule(d *schema.ResourceData, meta interface{}, rule map[string]interface{}) error {
+func deleteNetworkACLRule(meta interface{}, rule map[string]interface{}) error {
 	cs := meta.(*cloudstack.CloudStackClient)
 	uuids := rule["uuids"].(map[string]interface{})
 
@@ -603,7 +605,7 @@ func verifyNetworkACLParams(d *schema.ResourceData) error {
 	return nil
 }
 
-func verifyNetworkACLRuleParams(d *schema.ResourceData, rule map[string]interface{}) error {
+func verifyNetworkACLRuleParams(rule map[string]interface{}) error {
 	action := rule["action"].(string)
 	if action != "allow" && action != "deny" {
 		return fmt.Errorf("Parameter action only accepts 'allow' or 'deny' as values")

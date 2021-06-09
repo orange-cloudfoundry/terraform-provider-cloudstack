@@ -3,9 +3,9 @@ package cloudstack
 import (
 	"errors"
 
-	"github.com/go-ini/ini"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"gopkg.in/ini.v1"
 )
 
 // Provider returns a terraform.ResourceProvider.

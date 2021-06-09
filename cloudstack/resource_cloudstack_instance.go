@@ -24,15 +24,17 @@ func resourceCloudStackInstance() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"name": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:       schema.TypeString,
+				ConfigMode: schema.SchemaConfigModeAttr,
+				Optional:   true,
+				Computed:   true,
 			},
 
 			"display_name": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:       schema.TypeString,
+				ConfigMode: schema.SchemaConfigModeAttr,
+				Optional:   true,
+				Computed:   true,
 			},
 
 			"service_offering": {
@@ -41,17 +43,19 @@ func resourceCloudStackInstance() *schema.Resource {
 			},
 
 			"network_id": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-				ForceNew: true,
+				Type:       schema.TypeString,
+				ConfigMode: schema.SchemaConfigModeAttr,
+				Optional:   true,
+				Computed:   true,
+				ForceNew:   true,
 			},
 
 			"ip_address": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-				ForceNew: true,
+				Type:       schema.TypeString,
+				ConfigMode: schema.SchemaConfigModeAttr,
+				Optional:   true,
+				Computed:   true,
+				ForceNew:   true,
 			},
 
 			"template": {
@@ -61,16 +65,18 @@ func resourceCloudStackInstance() *schema.Resource {
 			},
 
 			"root_disk_size": {
-				Type:     schema.TypeInt,
-				Optional: true,
-				Computed: true,
-				ForceNew: true,
+				Type:       schema.TypeInt,
+				ConfigMode: schema.SchemaConfigModeAttr,
+				Optional:   true,
+				Computed:   true,
+				ForceNew:   true,
 			},
 
 			"group": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:       schema.TypeString,
+				ConfigMode: schema.SchemaConfigModeAttr,
+				Optional:   true,
+				Computed:   true,
 			},
 
 			"affinity_group_ids": {
@@ -108,10 +114,11 @@ func resourceCloudStackInstance() *schema.Resource {
 			},
 
 			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-				ForceNew: true,
+				Type:       schema.TypeString,
+				ConfigMode: schema.SchemaConfigModeAttr,
+				Optional:   true,
+				Computed:   true,
+				ForceNew:   true,
 			},
 
 			"zone": {
@@ -136,9 +143,9 @@ func resourceCloudStackInstance() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 				StateFunc: func(v interface{}) string {
-					switch v.(type) {
+					switch val := v.(type) {
 					case string:
-						hash := sha1.Sum([]byte(v.(string)))
+						hash := sha1.Sum([]byte(val))
 						return hex.EncodeToString(hash[:])
 					default:
 						return ""

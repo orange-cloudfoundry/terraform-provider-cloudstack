@@ -23,10 +23,11 @@ func resourceCloudStackNIC() *schema.Resource {
 			},
 
 			"ip_address": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-				ForceNew: true,
+				Type:       schema.TypeString,
+				ConfigMode: schema.SchemaConfigModeAttr,
+				Optional:   true,
+				Computed:   true,
+				ForceNew:   true,
 			},
 
 			"virtual_machine_id": {
