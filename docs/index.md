@@ -6,6 +6,9 @@ description: |-
   The CloudStack provider is used to interact with the many resources supported by CloudStack. The provider needs to be configured with a URL pointing to a running CloudStack API and the proper credentials before it can be used.
 ---
 
+
+** THIS is a hard fork and a temporary home of https://github.com/hashicorp/terraform-provider-cloudstack because this repo is considered as archived by hashicorp, you will find new provider supported by apache cloudstack on https://github.com/apache/cloudstack-terraform-provider when it will be ready **
+
 # CloudStack Provider
 
 The CloudStack provider is used to interact with the many resources

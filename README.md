@@ -1,4 +1,4 @@
-**THIS is a hard fork of https://github.com/hashicorp/terraform-provider-cloudstack because this repo is considered as archived by hashicorp**
+** :warning: THIS is a hard fork and a temporary home of https://github.com/hashicorp/terraform-provider-cloudstack because this repo is considered as archived by hashicorp, you will find new provider supported by apache cloudstack on https://github.com/apache/cloudstack-terraform-provider when it will be ready :warning: **
 
 Terraform Provider
 ==================
