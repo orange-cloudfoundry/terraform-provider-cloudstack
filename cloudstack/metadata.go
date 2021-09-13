@@ -3,8 +3,8 @@ package cloudstack
 import (
 	"log"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/apache/cloudstack-go/v2/cloudstack"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
 // metadataSchema returns the schema to use for metadata

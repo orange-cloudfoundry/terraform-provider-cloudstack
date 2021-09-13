@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/apache/cloudstack-go/v2/cloudstack"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
-	"github.com/apache/cloudstack-go/v2/cloudstack"
 )
 
 func TestAccCloudStackSecurityGroup_basic(t *testing.T) {

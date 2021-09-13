@@ -21,6 +21,13 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
+
+      - name: lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          # Required: the version of golangci-lint is required and must be specified without patch version: we always use the latest patch version.
+          version: v1.32
+
       - name: get deps
         run: |
           go mod tidy
@@ -28,11 +35,6 @@ jobs:
             echo "::error::modules are not tidy, please run go mod tidy"
             exit 1
           fi
-      - name: lint
-        uses: golangci/golangci-lint-action@v2
-        with:
-          # Required: the version of golangci-lint is required and must be specified without patch version: we always use the latest patch version.
-          version: v1.32
 
       - name: tests
         run: |

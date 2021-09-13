@@ -8,9 +8,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/apache/cloudstack-go/v2/cloudstack"
 	multierror "github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/apache/cloudstack-go/v2/cloudstack"
 )
 
 type authorizeSecurityGroupParams interface {

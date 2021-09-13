@@ -3,8 +3,8 @@ package cloudstack
 import (
 	"log"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/apache/cloudstack-go/v2/cloudstack"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
 // tagsSchema returns the schema to use for tags
