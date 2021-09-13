@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/xanzy/go-cloudstack/v2/cloudstack"
+	"github.com/apache/cloudstack-go/v2/cloudstack"
 )
 
 // Define a regexp for parsing the port

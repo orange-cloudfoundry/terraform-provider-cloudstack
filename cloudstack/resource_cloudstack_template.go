@@ -1,3 +1,4 @@
+
 package cloudstack
 
 import (
@@ -7,7 +8,7 @@ import (
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/xanzy/go-cloudstack/v2/cloudstack"
+	"github.com/apache/cloudstack-go/v2/cloudstack"
 )
 
 func resourceCloudStackTemplate() *schema.Resource {
@@ -146,10 +147,10 @@ func resourceCloudStackTemplateCreate(d *schema.ResourceData, meta interface{}) 
 		d.Get("format").(string),
 		d.Get("hypervisor").(string),
 		name,
-		ostypeid,
 		d.Get("url").(string),
 	)
 
+	p.SetOstypeid(ostypeid)
 	// Set optional parameters
 	if v, ok := d.GetOk("is_dynamically_scalable"); ok {
 		p.SetIsdynamicallyscalable(v.(bool))
