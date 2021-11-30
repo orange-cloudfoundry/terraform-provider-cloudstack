@@ -4,7 +4,7 @@ require (
 	github.com/apache/cloudstack-go/v2 v2.11.0
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/terraform-plugin-sdk v1.17.2
-	gopkg.in/ini.v1 v1.65.0
+	gopkg.in/ini.v1 v1.66.0
 )
 
 require (
