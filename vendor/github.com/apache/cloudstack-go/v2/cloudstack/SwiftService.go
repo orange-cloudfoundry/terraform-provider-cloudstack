@@ -26,6 +26,14 @@ import (
 	"strconv"
 )
 
+type SwiftServiceIface interface {
+	AddSwift(p *AddSwiftParams) (*AddSwiftResponse, error)
+	NewAddSwiftParams(url string) *AddSwiftParams
+	ListSwifts(p *ListSwiftsParams) (*ListSwiftsResponse, error)
+	NewListSwiftsParams() *ListSwiftsParams
+	GetSwiftID(keyword string, opts ...OptionFunc) (string, int, error)
+}
+
 type AddSwiftParams struct {
 	p map[string]interface{}
 }
@@ -57,11 +65,27 @@ func (p *AddSwiftParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *AddSwiftParams) GetAccount() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["account"].(string)
+	return value, ok
+}
+
 func (p *AddSwiftParams) SetKey(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["key"] = v
+}
+
+func (p *AddSwiftParams) GetKey() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["key"].(string)
+	return value, ok
 }
 
 func (p *AddSwiftParams) SetUrl(v string) {
@@ -71,11 +95,27 @@ func (p *AddSwiftParams) SetUrl(v string) {
 	p.p["url"] = v
 }
 
+func (p *AddSwiftParams) GetUrl() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["url"].(string)
+	return value, ok
+}
+
 func (p *AddSwiftParams) SetUsername(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["username"] = v
+}
+
+func (p *AddSwiftParams) GetUsername() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["username"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new AddSwiftParams instance,
@@ -103,19 +143,20 @@ func (s *SwiftService) AddSwift(p *AddSwiftParams) (*AddSwiftResponse, error) {
 }
 
 type AddSwiftResponse struct {
-	Disksizetotal int64  `json:"disksizetotal"`
-	Disksizeused  int64  `json:"disksizeused"`
-	Id            string `json:"id"`
-	JobID         string `json:"jobid"`
-	Jobstatus     int    `json:"jobstatus"`
-	Name          string `json:"name"`
-	Protocol      string `json:"protocol"`
-	Providername  string `json:"providername"`
-	Readonly      bool   `json:"readonly"`
-	Scope         string `json:"scope"`
-	Url           string `json:"url"`
-	Zoneid        string `json:"zoneid"`
-	Zonename      string `json:"zonename"`
+	Disksizetotal  int64  `json:"disksizetotal"`
+	Disksizeused   int64  `json:"disksizeused"`
+	Hasannotations bool   `json:"hasannotations"`
+	Id             string `json:"id"`
+	JobID          string `json:"jobid"`
+	Jobstatus      int    `json:"jobstatus"`
+	Name           string `json:"name"`
+	Protocol       string `json:"protocol"`
+	Providername   string `json:"providername"`
+	Readonly       bool   `json:"readonly"`
+	Scope          string `json:"scope"`
+	Url            string `json:"url"`
+	Zoneid         string `json:"zoneid"`
+	Zonename       string `json:"zonename"`
 }
 
 type ListSwiftsParams struct {
@@ -152,11 +193,27 @@ func (p *ListSwiftsParams) SetId(v int64) {
 	p.p["id"] = v
 }
 
+func (p *ListSwiftsParams) GetId() (int64, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(int64)
+	return value, ok
+}
+
 func (p *ListSwiftsParams) SetKeyword(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["keyword"] = v
+}
+
+func (p *ListSwiftsParams) GetKeyword() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["keyword"].(string)
+	return value, ok
 }
 
 func (p *ListSwiftsParams) SetPage(v int) {
@@ -166,11 +223,27 @@ func (p *ListSwiftsParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListSwiftsParams) GetPage() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["page"].(int)
+	return value, ok
+}
+
 func (p *ListSwiftsParams) SetPagesize(v int) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ListSwiftsParams) GetPagesize() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["pagesize"].(int)
+	return value, ok
 }
 
 // You should always use this function to get a new ListSwiftsParams instance,
@@ -238,17 +311,18 @@ type ListSwiftsResponse struct {
 }
 
 type Swift struct {
-	Disksizetotal int64  `json:"disksizetotal"`
-	Disksizeused  int64  `json:"disksizeused"`
-	Id            string `json:"id"`
-	JobID         string `json:"jobid"`
-	Jobstatus     int    `json:"jobstatus"`
-	Name          string `json:"name"`
-	Protocol      string `json:"protocol"`
-	Providername  string `json:"providername"`
-	Readonly      bool   `json:"readonly"`
-	Scope         string `json:"scope"`
-	Url           string `json:"url"`
-	Zoneid        string `json:"zoneid"`
-	Zonename      string `json:"zonename"`
+	Disksizetotal  int64  `json:"disksizetotal"`
+	Disksizeused   int64  `json:"disksizeused"`
+	Hasannotations bool   `json:"hasannotations"`
+	Id             string `json:"id"`
+	JobID          string `json:"jobid"`
+	Jobstatus      int    `json:"jobstatus"`
+	Name           string `json:"name"`
+	Protocol       string `json:"protocol"`
+	Providername   string `json:"providername"`
+	Readonly       bool   `json:"readonly"`
+	Scope          string `json:"scope"`
+	Url            string `json:"url"`
+	Zoneid         string `json:"zoneid"`
+	Zonename       string `json:"zonename"`
 }

@@ -25,6 +25,17 @@ import (
 	"strconv"
 )
 
+type ConfigurationServiceIface interface {
+	ListCapabilities(p *ListCapabilitiesParams) (*ListCapabilitiesResponse, error)
+	NewListCapabilitiesParams() *ListCapabilitiesParams
+	ListConfigurations(p *ListConfigurationsParams) (*ListConfigurationsResponse, error)
+	NewListConfigurationsParams() *ListConfigurationsParams
+	ListDeploymentPlanners(p *ListDeploymentPlannersParams) (*ListDeploymentPlannersResponse, error)
+	NewListDeploymentPlannersParams() *ListDeploymentPlannersParams
+	UpdateConfiguration(p *UpdateConfigurationParams) (*UpdateConfigurationResponse, error)
+	NewUpdateConfigurationParams(name string) *UpdateConfigurationParams
+}
+
 type ListCapabilitiesParams struct {
 	p map[string]interface{}
 }
@@ -75,6 +86,7 @@ type Capability struct {
 	Cloudstackversion                            string `json:"cloudstackversion"`
 	Customdiskofferingmaxsize                    int64  `json:"customdiskofferingmaxsize"`
 	Customdiskofferingminsize                    int64  `json:"customdiskofferingminsize"`
+	Defaultuipagesize                            int64  `json:"defaultuipagesize"`
 	Dynamicrolesenabled                          bool   `json:"dynamicrolesenabled"`
 	JobID                                        string `json:"jobid"`
 	Jobstatus                                    int    `json:"jobstatus"`
@@ -142,11 +154,27 @@ func (p *ListConfigurationsParams) SetAccountid(v string) {
 	p.p["accountid"] = v
 }
 
+func (p *ListConfigurationsParams) GetAccountid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["accountid"].(string)
+	return value, ok
+}
+
 func (p *ListConfigurationsParams) SetCategory(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["category"] = v
+}
+
+func (p *ListConfigurationsParams) GetCategory() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["category"].(string)
+	return value, ok
 }
 
 func (p *ListConfigurationsParams) SetClusterid(v string) {
@@ -156,11 +184,27 @@ func (p *ListConfigurationsParams) SetClusterid(v string) {
 	p.p["clusterid"] = v
 }
 
+func (p *ListConfigurationsParams) GetClusterid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["clusterid"].(string)
+	return value, ok
+}
+
 func (p *ListConfigurationsParams) SetDomainid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *ListConfigurationsParams) GetDomainid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["domainid"].(string)
+	return value, ok
 }
 
 func (p *ListConfigurationsParams) SetImagestoreuuid(v string) {
@@ -170,11 +214,27 @@ func (p *ListConfigurationsParams) SetImagestoreuuid(v string) {
 	p.p["imagestoreuuid"] = v
 }
 
+func (p *ListConfigurationsParams) GetImagestoreuuid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["imagestoreuuid"].(string)
+	return value, ok
+}
+
 func (p *ListConfigurationsParams) SetKeyword(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["keyword"] = v
+}
+
+func (p *ListConfigurationsParams) GetKeyword() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["keyword"].(string)
+	return value, ok
 }
 
 func (p *ListConfigurationsParams) SetName(v string) {
@@ -184,11 +244,27 @@ func (p *ListConfigurationsParams) SetName(v string) {
 	p.p["name"] = v
 }
 
+func (p *ListConfigurationsParams) GetName() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["name"].(string)
+	return value, ok
+}
+
 func (p *ListConfigurationsParams) SetPage(v int) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["page"] = v
+}
+
+func (p *ListConfigurationsParams) GetPage() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["page"].(int)
+	return value, ok
 }
 
 func (p *ListConfigurationsParams) SetPagesize(v int) {
@@ -198,6 +274,14 @@ func (p *ListConfigurationsParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListConfigurationsParams) GetPagesize() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["pagesize"].(int)
+	return value, ok
+}
+
 func (p *ListConfigurationsParams) SetStorageid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -205,11 +289,27 @@ func (p *ListConfigurationsParams) SetStorageid(v string) {
 	p.p["storageid"] = v
 }
 
+func (p *ListConfigurationsParams) GetStorageid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["storageid"].(string)
+	return value, ok
+}
+
 func (p *ListConfigurationsParams) SetZoneid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *ListConfigurationsParams) GetZoneid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["zoneid"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new ListConfigurationsParams instance,
@@ -282,6 +382,14 @@ func (p *ListDeploymentPlannersParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListDeploymentPlannersParams) GetKeyword() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["keyword"].(string)
+	return value, ok
+}
+
 func (p *ListDeploymentPlannersParams) SetPage(v int) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -289,11 +397,27 @@ func (p *ListDeploymentPlannersParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListDeploymentPlannersParams) GetPage() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["page"].(int)
+	return value, ok
+}
+
 func (p *ListDeploymentPlannersParams) SetPagesize(v int) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ListDeploymentPlannersParams) GetPagesize() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["pagesize"].(int)
+	return value, ok
 }
 
 // You should always use this function to get a new ListDeploymentPlannersParams instance,
@@ -373,11 +497,27 @@ func (p *UpdateConfigurationParams) SetAccountid(v string) {
 	p.p["accountid"] = v
 }
 
+func (p *UpdateConfigurationParams) GetAccountid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["accountid"].(string)
+	return value, ok
+}
+
 func (p *UpdateConfigurationParams) SetClusterid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["clusterid"] = v
+}
+
+func (p *UpdateConfigurationParams) GetClusterid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["clusterid"].(string)
+	return value, ok
 }
 
 func (p *UpdateConfigurationParams) SetDomainid(v string) {
@@ -387,11 +527,27 @@ func (p *UpdateConfigurationParams) SetDomainid(v string) {
 	p.p["domainid"] = v
 }
 
+func (p *UpdateConfigurationParams) GetDomainid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["domainid"].(string)
+	return value, ok
+}
+
 func (p *UpdateConfigurationParams) SetImagestoreuuid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["imagestoreuuid"] = v
+}
+
+func (p *UpdateConfigurationParams) GetImagestoreuuid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["imagestoreuuid"].(string)
+	return value, ok
 }
 
 func (p *UpdateConfigurationParams) SetName(v string) {
@@ -401,11 +557,27 @@ func (p *UpdateConfigurationParams) SetName(v string) {
 	p.p["name"] = v
 }
 
+func (p *UpdateConfigurationParams) GetName() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["name"].(string)
+	return value, ok
+}
+
 func (p *UpdateConfigurationParams) SetStorageid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["storageid"] = v
+}
+
+func (p *UpdateConfigurationParams) GetStorageid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["storageid"].(string)
+	return value, ok
 }
 
 func (p *UpdateConfigurationParams) SetValue(v string) {
@@ -415,11 +587,27 @@ func (p *UpdateConfigurationParams) SetValue(v string) {
 	p.p["value"] = v
 }
 
+func (p *UpdateConfigurationParams) GetValue() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["value"].(string)
+	return value, ok
+}
+
 func (p *UpdateConfigurationParams) SetZoneid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *UpdateConfigurationParams) GetZoneid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["zoneid"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new UpdateConfigurationParams instance,

@@ -27,6 +27,28 @@ import (
 	"strings"
 )
 
+type SystemVMServiceIface interface {
+	ChangeServiceForSystemVm(p *ChangeServiceForSystemVmParams) (*ChangeServiceForSystemVmResponse, error)
+	NewChangeServiceForSystemVmParams(id string, serviceofferingid string) *ChangeServiceForSystemVmParams
+	DestroySystemVm(p *DestroySystemVmParams) (*DestroySystemVmResponse, error)
+	NewDestroySystemVmParams(id string) *DestroySystemVmParams
+	ListSystemVms(p *ListSystemVmsParams) (*ListSystemVmsResponse, error)
+	NewListSystemVmsParams() *ListSystemVmsParams
+	GetSystemVmID(name string, opts ...OptionFunc) (string, int, error)
+	GetSystemVmByName(name string, opts ...OptionFunc) (*SystemVm, int, error)
+	GetSystemVmByID(id string, opts ...OptionFunc) (*SystemVm, int, error)
+	MigrateSystemVm(p *MigrateSystemVmParams) (*MigrateSystemVmResponse, error)
+	NewMigrateSystemVmParams(virtualmachineid string) *MigrateSystemVmParams
+	RebootSystemVm(p *RebootSystemVmParams) (*RebootSystemVmResponse, error)
+	NewRebootSystemVmParams(id string) *RebootSystemVmParams
+	ScaleSystemVm(p *ScaleSystemVmParams) (*ScaleSystemVmResponse, error)
+	NewScaleSystemVmParams(id string, serviceofferingid string) *ScaleSystemVmParams
+	StartSystemVm(p *StartSystemVmParams) (*StartSystemVmResponse, error)
+	NewStartSystemVmParams(id string) *StartSystemVmParams
+	StopSystemVm(p *StopSystemVmParams) (*StopSystemVmResponse, error)
+	NewStopSystemVmParams(id string) *StopSystemVmParams
+}
+
 type ChangeServiceForSystemVmParams struct {
 	p map[string]interface{}
 }
@@ -58,6 +80,14 @@ func (p *ChangeServiceForSystemVmParams) SetDetails(v map[string]string) {
 	p.p["details"] = v
 }
 
+func (p *ChangeServiceForSystemVmParams) GetDetails() (map[string]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["details"].(map[string]string)
+	return value, ok
+}
+
 func (p *ChangeServiceForSystemVmParams) SetId(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -65,11 +95,27 @@ func (p *ChangeServiceForSystemVmParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ChangeServiceForSystemVmParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
 func (p *ChangeServiceForSystemVmParams) SetServiceofferingid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["serviceofferingid"] = v
+}
+
+func (p *ChangeServiceForSystemVmParams) GetServiceofferingid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["serviceofferingid"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new ChangeServiceForSystemVmParams instance,
@@ -98,41 +144,43 @@ func (s *SystemVMService) ChangeServiceForSystemVm(p *ChangeServiceForSystemVmPa
 }
 
 type ChangeServiceForSystemVmResponse struct {
-	Activeviewersessions int      `json:"activeviewersessions"`
-	Agentstate           string   `json:"agentstate"`
-	Created              string   `json:"created"`
-	Disconnected         string   `json:"disconnected"`
-	Dns1                 string   `json:"dns1"`
-	Dns2                 string   `json:"dns2"`
-	Gateway              string   `json:"gateway"`
-	Guestvlan            string   `json:"guestvlan"`
-	Hostid               string   `json:"hostid"`
-	Hostname             string   `json:"hostname"`
-	Hypervisor           string   `json:"hypervisor"`
-	Id                   string   `json:"id"`
-	JobID                string   `json:"jobid"`
-	Jobstatus            int      `json:"jobstatus"`
-	Linklocalip          string   `json:"linklocalip"`
-	Linklocalmacaddress  string   `json:"linklocalmacaddress"`
-	Linklocalnetmask     string   `json:"linklocalnetmask"`
-	Name                 string   `json:"name"`
-	Networkdomain        string   `json:"networkdomain"`
-	Podid                string   `json:"podid"`
-	Podname              string   `json:"podname"`
-	Privateip            string   `json:"privateip"`
-	Privatemacaddress    string   `json:"privatemacaddress"`
-	Privatenetmask       string   `json:"privatenetmask"`
-	Publicip             string   `json:"publicip"`
-	Publicmacaddress     string   `json:"publicmacaddress"`
-	Publicnetmask        string   `json:"publicnetmask"`
-	Publicvlan           []string `json:"publicvlan"`
-	State                string   `json:"state"`
-	Systemvmtype         string   `json:"systemvmtype"`
-	Templateid           string   `json:"templateid"`
-	Templatename         string   `json:"templatename"`
-	Version              string   `json:"version"`
-	Zoneid               string   `json:"zoneid"`
-	Zonename             string   `json:"zonename"`
+	Activeviewersessions  int      `json:"activeviewersessions"`
+	Agentstate            string   `json:"agentstate"`
+	Created               string   `json:"created"`
+	Disconnected          string   `json:"disconnected"`
+	Dns1                  string   `json:"dns1"`
+	Dns2                  string   `json:"dns2"`
+	Gateway               string   `json:"gateway"`
+	Guestvlan             string   `json:"guestvlan"`
+	Hasannotations        bool     `json:"hasannotations"`
+	Hostid                string   `json:"hostid"`
+	Hostname              string   `json:"hostname"`
+	Hypervisor            string   `json:"hypervisor"`
+	Id                    string   `json:"id"`
+	Isdynamicallyscalable bool     `json:"isdynamicallyscalable"`
+	JobID                 string   `json:"jobid"`
+	Jobstatus             int      `json:"jobstatus"`
+	Linklocalip           string   `json:"linklocalip"`
+	Linklocalmacaddress   string   `json:"linklocalmacaddress"`
+	Linklocalnetmask      string   `json:"linklocalnetmask"`
+	Name                  string   `json:"name"`
+	Networkdomain         string   `json:"networkdomain"`
+	Podid                 string   `json:"podid"`
+	Podname               string   `json:"podname"`
+	Privateip             string   `json:"privateip"`
+	Privatemacaddress     string   `json:"privatemacaddress"`
+	Privatenetmask        string   `json:"privatenetmask"`
+	Publicip              string   `json:"publicip"`
+	Publicmacaddress      string   `json:"publicmacaddress"`
+	Publicnetmask         string   `json:"publicnetmask"`
+	Publicvlan            []string `json:"publicvlan"`
+	State                 string   `json:"state"`
+	Systemvmtype          string   `json:"systemvmtype"`
+	Templateid            string   `json:"templateid"`
+	Templatename          string   `json:"templatename"`
+	Version               string   `json:"version"`
+	Zoneid                string   `json:"zoneid"`
+	Zonename              string   `json:"zonename"`
 }
 
 type DestroySystemVmParams struct {
@@ -155,6 +203,14 @@ func (p *DestroySystemVmParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *DestroySystemVmParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new DestroySystemVmParams instance,
@@ -202,41 +258,43 @@ func (s *SystemVMService) DestroySystemVm(p *DestroySystemVmParams) (*DestroySys
 }
 
 type DestroySystemVmResponse struct {
-	Activeviewersessions int      `json:"activeviewersessions"`
-	Agentstate           string   `json:"agentstate"`
-	Created              string   `json:"created"`
-	Disconnected         string   `json:"disconnected"`
-	Dns1                 string   `json:"dns1"`
-	Dns2                 string   `json:"dns2"`
-	Gateway              string   `json:"gateway"`
-	Guestvlan            string   `json:"guestvlan"`
-	Hostid               string   `json:"hostid"`
-	Hostname             string   `json:"hostname"`
-	Hypervisor           string   `json:"hypervisor"`
-	Id                   string   `json:"id"`
-	JobID                string   `json:"jobid"`
-	Jobstatus            int      `json:"jobstatus"`
-	Linklocalip          string   `json:"linklocalip"`
-	Linklocalmacaddress  string   `json:"linklocalmacaddress"`
-	Linklocalnetmask     string   `json:"linklocalnetmask"`
-	Name                 string   `json:"name"`
-	Networkdomain        string   `json:"networkdomain"`
-	Podid                string   `json:"podid"`
-	Podname              string   `json:"podname"`
-	Privateip            string   `json:"privateip"`
-	Privatemacaddress    string   `json:"privatemacaddress"`
-	Privatenetmask       string   `json:"privatenetmask"`
-	Publicip             string   `json:"publicip"`
-	Publicmacaddress     string   `json:"publicmacaddress"`
-	Publicnetmask        string   `json:"publicnetmask"`
-	Publicvlan           []string `json:"publicvlan"`
-	State                string   `json:"state"`
-	Systemvmtype         string   `json:"systemvmtype"`
-	Templateid           string   `json:"templateid"`
-	Templatename         string   `json:"templatename"`
-	Version              string   `json:"version"`
-	Zoneid               string   `json:"zoneid"`
-	Zonename             string   `json:"zonename"`
+	Activeviewersessions  int      `json:"activeviewersessions"`
+	Agentstate            string   `json:"agentstate"`
+	Created               string   `json:"created"`
+	Disconnected          string   `json:"disconnected"`
+	Dns1                  string   `json:"dns1"`
+	Dns2                  string   `json:"dns2"`
+	Gateway               string   `json:"gateway"`
+	Guestvlan             string   `json:"guestvlan"`
+	Hasannotations        bool     `json:"hasannotations"`
+	Hostid                string   `json:"hostid"`
+	Hostname              string   `json:"hostname"`
+	Hypervisor            string   `json:"hypervisor"`
+	Id                    string   `json:"id"`
+	Isdynamicallyscalable bool     `json:"isdynamicallyscalable"`
+	JobID                 string   `json:"jobid"`
+	Jobstatus             int      `json:"jobstatus"`
+	Linklocalip           string   `json:"linklocalip"`
+	Linklocalmacaddress   string   `json:"linklocalmacaddress"`
+	Linklocalnetmask      string   `json:"linklocalnetmask"`
+	Name                  string   `json:"name"`
+	Networkdomain         string   `json:"networkdomain"`
+	Podid                 string   `json:"podid"`
+	Podname               string   `json:"podname"`
+	Privateip             string   `json:"privateip"`
+	Privatemacaddress     string   `json:"privatemacaddress"`
+	Privatenetmask        string   `json:"privatenetmask"`
+	Publicip              string   `json:"publicip"`
+	Publicmacaddress      string   `json:"publicmacaddress"`
+	Publicnetmask         string   `json:"publicnetmask"`
+	Publicvlan            []string `json:"publicvlan"`
+	State                 string   `json:"state"`
+	Systemvmtype          string   `json:"systemvmtype"`
+	Templateid            string   `json:"templateid"`
+	Templatename          string   `json:"templatename"`
+	Version               string   `json:"version"`
+	Zoneid                string   `json:"zoneid"`
+	Zonename              string   `json:"zonename"`
 }
 
 type ListSystemVmsParams struct {
@@ -293,11 +351,27 @@ func (p *ListSystemVmsParams) SetHostid(v string) {
 	p.p["hostid"] = v
 }
 
+func (p *ListSystemVmsParams) GetHostid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["hostid"].(string)
+	return value, ok
+}
+
 func (p *ListSystemVmsParams) SetId(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *ListSystemVmsParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
 }
 
 func (p *ListSystemVmsParams) SetKeyword(v string) {
@@ -307,11 +381,27 @@ func (p *ListSystemVmsParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListSystemVmsParams) GetKeyword() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["keyword"].(string)
+	return value, ok
+}
+
 func (p *ListSystemVmsParams) SetName(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *ListSystemVmsParams) GetName() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["name"].(string)
+	return value, ok
 }
 
 func (p *ListSystemVmsParams) SetPage(v int) {
@@ -321,11 +411,27 @@ func (p *ListSystemVmsParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListSystemVmsParams) GetPage() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["page"].(int)
+	return value, ok
+}
+
 func (p *ListSystemVmsParams) SetPagesize(v int) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ListSystemVmsParams) GetPagesize() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["pagesize"].(int)
+	return value, ok
 }
 
 func (p *ListSystemVmsParams) SetPodid(v string) {
@@ -335,11 +441,27 @@ func (p *ListSystemVmsParams) SetPodid(v string) {
 	p.p["podid"] = v
 }
 
+func (p *ListSystemVmsParams) GetPodid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["podid"].(string)
+	return value, ok
+}
+
 func (p *ListSystemVmsParams) SetState(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["state"] = v
+}
+
+func (p *ListSystemVmsParams) GetState() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["state"].(string)
+	return value, ok
 }
 
 func (p *ListSystemVmsParams) SetStorageid(v string) {
@@ -349,6 +471,14 @@ func (p *ListSystemVmsParams) SetStorageid(v string) {
 	p.p["storageid"] = v
 }
 
+func (p *ListSystemVmsParams) GetStorageid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["storageid"].(string)
+	return value, ok
+}
+
 func (p *ListSystemVmsParams) SetSystemvmtype(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -356,11 +486,27 @@ func (p *ListSystemVmsParams) SetSystemvmtype(v string) {
 	p.p["systemvmtype"] = v
 }
 
+func (p *ListSystemVmsParams) GetSystemvmtype() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["systemvmtype"].(string)
+	return value, ok
+}
+
 func (p *ListSystemVmsParams) SetZoneid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *ListSystemVmsParams) GetZoneid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["zoneid"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new ListSystemVmsParams instance,
@@ -475,41 +621,43 @@ type ListSystemVmsResponse struct {
 }
 
 type SystemVm struct {
-	Activeviewersessions int      `json:"activeviewersessions"`
-	Agentstate           string   `json:"agentstate"`
-	Created              string   `json:"created"`
-	Disconnected         string   `json:"disconnected"`
-	Dns1                 string   `json:"dns1"`
-	Dns2                 string   `json:"dns2"`
-	Gateway              string   `json:"gateway"`
-	Guestvlan            string   `json:"guestvlan"`
-	Hostid               string   `json:"hostid"`
-	Hostname             string   `json:"hostname"`
-	Hypervisor           string   `json:"hypervisor"`
-	Id                   string   `json:"id"`
-	JobID                string   `json:"jobid"`
-	Jobstatus            int      `json:"jobstatus"`
-	Linklocalip          string   `json:"linklocalip"`
-	Linklocalmacaddress  string   `json:"linklocalmacaddress"`
-	Linklocalnetmask     string   `json:"linklocalnetmask"`
-	Name                 string   `json:"name"`
-	Networkdomain        string   `json:"networkdomain"`
-	Podid                string   `json:"podid"`
-	Podname              string   `json:"podname"`
-	Privateip            string   `json:"privateip"`
-	Privatemacaddress    string   `json:"privatemacaddress"`
-	Privatenetmask       string   `json:"privatenetmask"`
-	Publicip             string   `json:"publicip"`
-	Publicmacaddress     string   `json:"publicmacaddress"`
-	Publicnetmask        string   `json:"publicnetmask"`
-	Publicvlan           []string `json:"publicvlan"`
-	State                string   `json:"state"`
-	Systemvmtype         string   `json:"systemvmtype"`
-	Templateid           string   `json:"templateid"`
-	Templatename         string   `json:"templatename"`
-	Version              string   `json:"version"`
-	Zoneid               string   `json:"zoneid"`
-	Zonename             string   `json:"zonename"`
+	Activeviewersessions  int      `json:"activeviewersessions"`
+	Agentstate            string   `json:"agentstate"`
+	Created               string   `json:"created"`
+	Disconnected          string   `json:"disconnected"`
+	Dns1                  string   `json:"dns1"`
+	Dns2                  string   `json:"dns2"`
+	Gateway               string   `json:"gateway"`
+	Guestvlan             string   `json:"guestvlan"`
+	Hasannotations        bool     `json:"hasannotations"`
+	Hostid                string   `json:"hostid"`
+	Hostname              string   `json:"hostname"`
+	Hypervisor            string   `json:"hypervisor"`
+	Id                    string   `json:"id"`
+	Isdynamicallyscalable bool     `json:"isdynamicallyscalable"`
+	JobID                 string   `json:"jobid"`
+	Jobstatus             int      `json:"jobstatus"`
+	Linklocalip           string   `json:"linklocalip"`
+	Linklocalmacaddress   string   `json:"linklocalmacaddress"`
+	Linklocalnetmask      string   `json:"linklocalnetmask"`
+	Name                  string   `json:"name"`
+	Networkdomain         string   `json:"networkdomain"`
+	Podid                 string   `json:"podid"`
+	Podname               string   `json:"podname"`
+	Privateip             string   `json:"privateip"`
+	Privatemacaddress     string   `json:"privatemacaddress"`
+	Privatenetmask        string   `json:"privatenetmask"`
+	Publicip              string   `json:"publicip"`
+	Publicmacaddress      string   `json:"publicmacaddress"`
+	Publicnetmask         string   `json:"publicnetmask"`
+	Publicvlan            []string `json:"publicvlan"`
+	State                 string   `json:"state"`
+	Systemvmtype          string   `json:"systemvmtype"`
+	Templateid            string   `json:"templateid"`
+	Templatename          string   `json:"templatename"`
+	Version               string   `json:"version"`
+	Zoneid                string   `json:"zoneid"`
+	Zonename              string   `json:"zonename"`
 }
 
 type MigrateSystemVmParams struct {
@@ -521,13 +669,35 @@ func (p *MigrateSystemVmParams) toURLValues() url.Values {
 	if p.p == nil {
 		return u
 	}
+	if v, found := p.p["autoselect"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("autoselect", vv)
+	}
 	if v, found := p.p["hostid"]; found {
 		u.Set("hostid", v.(string))
+	}
+	if v, found := p.p["storageid"]; found {
+		u.Set("storageid", v.(string))
 	}
 	if v, found := p.p["virtualmachineid"]; found {
 		u.Set("virtualmachineid", v.(string))
 	}
 	return u
+}
+
+func (p *MigrateSystemVmParams) SetAutoselect(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["autoselect"] = v
+}
+
+func (p *MigrateSystemVmParams) GetAutoselect() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["autoselect"].(bool)
+	return value, ok
 }
 
 func (p *MigrateSystemVmParams) SetHostid(v string) {
@@ -537,6 +707,29 @@ func (p *MigrateSystemVmParams) SetHostid(v string) {
 	p.p["hostid"] = v
 }
 
+func (p *MigrateSystemVmParams) GetHostid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["hostid"].(string)
+	return value, ok
+}
+
+func (p *MigrateSystemVmParams) SetStorageid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["storageid"] = v
+}
+
+func (p *MigrateSystemVmParams) GetStorageid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["storageid"].(string)
+	return value, ok
+}
+
 func (p *MigrateSystemVmParams) SetVirtualmachineid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -544,12 +737,19 @@ func (p *MigrateSystemVmParams) SetVirtualmachineid(v string) {
 	p.p["virtualmachineid"] = v
 }
 
+func (p *MigrateSystemVmParams) GetVirtualmachineid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["virtualmachineid"].(string)
+	return value, ok
+}
+
 // You should always use this function to get a new MigrateSystemVmParams instance,
 // as then you are sure you have configured all required params
-func (s *SystemVMService) NewMigrateSystemVmParams(hostid string, virtualmachineid string) *MigrateSystemVmParams {
+func (s *SystemVMService) NewMigrateSystemVmParams(virtualmachineid string) *MigrateSystemVmParams {
 	p := &MigrateSystemVmParams{}
 	p.p = make(map[string]interface{})
-	p.p["hostid"] = hostid
 	p.p["virtualmachineid"] = virtualmachineid
 	return p
 }
@@ -590,41 +790,43 @@ func (s *SystemVMService) MigrateSystemVm(p *MigrateSystemVmParams) (*MigrateSys
 }
 
 type MigrateSystemVmResponse struct {
-	Activeviewersessions int      `json:"activeviewersessions"`
-	Agentstate           string   `json:"agentstate"`
-	Created              string   `json:"created"`
-	Disconnected         string   `json:"disconnected"`
-	Dns1                 string   `json:"dns1"`
-	Dns2                 string   `json:"dns2"`
-	Gateway              string   `json:"gateway"`
-	Guestvlan            string   `json:"guestvlan"`
-	Hostid               string   `json:"hostid"`
-	Hostname             string   `json:"hostname"`
-	Hypervisor           string   `json:"hypervisor"`
-	Id                   string   `json:"id"`
-	JobID                string   `json:"jobid"`
-	Jobstatus            int      `json:"jobstatus"`
-	Linklocalip          string   `json:"linklocalip"`
-	Linklocalmacaddress  string   `json:"linklocalmacaddress"`
-	Linklocalnetmask     string   `json:"linklocalnetmask"`
-	Name                 string   `json:"name"`
-	Networkdomain        string   `json:"networkdomain"`
-	Podid                string   `json:"podid"`
-	Podname              string   `json:"podname"`
-	Privateip            string   `json:"privateip"`
-	Privatemacaddress    string   `json:"privatemacaddress"`
-	Privatenetmask       string   `json:"privatenetmask"`
-	Publicip             string   `json:"publicip"`
-	Publicmacaddress     string   `json:"publicmacaddress"`
-	Publicnetmask        string   `json:"publicnetmask"`
-	Publicvlan           []string `json:"publicvlan"`
-	State                string   `json:"state"`
-	Systemvmtype         string   `json:"systemvmtype"`
-	Templateid           string   `json:"templateid"`
-	Templatename         string   `json:"templatename"`
-	Version              string   `json:"version"`
-	Zoneid               string   `json:"zoneid"`
-	Zonename             string   `json:"zonename"`
+	Activeviewersessions  int      `json:"activeviewersessions"`
+	Agentstate            string   `json:"agentstate"`
+	Created               string   `json:"created"`
+	Disconnected          string   `json:"disconnected"`
+	Dns1                  string   `json:"dns1"`
+	Dns2                  string   `json:"dns2"`
+	Gateway               string   `json:"gateway"`
+	Guestvlan             string   `json:"guestvlan"`
+	Hasannotations        bool     `json:"hasannotations"`
+	Hostid                string   `json:"hostid"`
+	Hostname              string   `json:"hostname"`
+	Hypervisor            string   `json:"hypervisor"`
+	Id                    string   `json:"id"`
+	Isdynamicallyscalable bool     `json:"isdynamicallyscalable"`
+	JobID                 string   `json:"jobid"`
+	Jobstatus             int      `json:"jobstatus"`
+	Linklocalip           string   `json:"linklocalip"`
+	Linklocalmacaddress   string   `json:"linklocalmacaddress"`
+	Linklocalnetmask      string   `json:"linklocalnetmask"`
+	Name                  string   `json:"name"`
+	Networkdomain         string   `json:"networkdomain"`
+	Podid                 string   `json:"podid"`
+	Podname               string   `json:"podname"`
+	Privateip             string   `json:"privateip"`
+	Privatemacaddress     string   `json:"privatemacaddress"`
+	Privatenetmask        string   `json:"privatenetmask"`
+	Publicip              string   `json:"publicip"`
+	Publicmacaddress      string   `json:"publicmacaddress"`
+	Publicnetmask         string   `json:"publicnetmask"`
+	Publicvlan            []string `json:"publicvlan"`
+	State                 string   `json:"state"`
+	Systemvmtype          string   `json:"systemvmtype"`
+	Templateid            string   `json:"templateid"`
+	Templatename          string   `json:"templatename"`
+	Version               string   `json:"version"`
+	Zoneid                string   `json:"zoneid"`
+	Zonename              string   `json:"zonename"`
 }
 
 type RebootSystemVmParams struct {
@@ -636,10 +838,29 @@ func (p *RebootSystemVmParams) toURLValues() url.Values {
 	if p.p == nil {
 		return u
 	}
+	if v, found := p.p["forced"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("forced", vv)
+	}
 	if v, found := p.p["id"]; found {
 		u.Set("id", v.(string))
 	}
 	return u
+}
+
+func (p *RebootSystemVmParams) SetForced(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["forced"] = v
+}
+
+func (p *RebootSystemVmParams) GetForced() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["forced"].(bool)
+	return value, ok
 }
 
 func (p *RebootSystemVmParams) SetId(v string) {
@@ -647,6 +868,14 @@ func (p *RebootSystemVmParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *RebootSystemVmParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new RebootSystemVmParams instance,
@@ -694,41 +923,43 @@ func (s *SystemVMService) RebootSystemVm(p *RebootSystemVmParams) (*RebootSystem
 }
 
 type RebootSystemVmResponse struct {
-	Activeviewersessions int      `json:"activeviewersessions"`
-	Agentstate           string   `json:"agentstate"`
-	Created              string   `json:"created"`
-	Disconnected         string   `json:"disconnected"`
-	Dns1                 string   `json:"dns1"`
-	Dns2                 string   `json:"dns2"`
-	Gateway              string   `json:"gateway"`
-	Guestvlan            string   `json:"guestvlan"`
-	Hostid               string   `json:"hostid"`
-	Hostname             string   `json:"hostname"`
-	Hypervisor           string   `json:"hypervisor"`
-	Id                   string   `json:"id"`
-	JobID                string   `json:"jobid"`
-	Jobstatus            int      `json:"jobstatus"`
-	Linklocalip          string   `json:"linklocalip"`
-	Linklocalmacaddress  string   `json:"linklocalmacaddress"`
-	Linklocalnetmask     string   `json:"linklocalnetmask"`
-	Name                 string   `json:"name"`
-	Networkdomain        string   `json:"networkdomain"`
-	Podid                string   `json:"podid"`
-	Podname              string   `json:"podname"`
-	Privateip            string   `json:"privateip"`
-	Privatemacaddress    string   `json:"privatemacaddress"`
-	Privatenetmask       string   `json:"privatenetmask"`
-	Publicip             string   `json:"publicip"`
-	Publicmacaddress     string   `json:"publicmacaddress"`
-	Publicnetmask        string   `json:"publicnetmask"`
-	Publicvlan           []string `json:"publicvlan"`
-	State                string   `json:"state"`
-	Systemvmtype         string   `json:"systemvmtype"`
-	Templateid           string   `json:"templateid"`
-	Templatename         string   `json:"templatename"`
-	Version              string   `json:"version"`
-	Zoneid               string   `json:"zoneid"`
-	Zonename             string   `json:"zonename"`
+	Activeviewersessions  int      `json:"activeviewersessions"`
+	Agentstate            string   `json:"agentstate"`
+	Created               string   `json:"created"`
+	Disconnected          string   `json:"disconnected"`
+	Dns1                  string   `json:"dns1"`
+	Dns2                  string   `json:"dns2"`
+	Gateway               string   `json:"gateway"`
+	Guestvlan             string   `json:"guestvlan"`
+	Hasannotations        bool     `json:"hasannotations"`
+	Hostid                string   `json:"hostid"`
+	Hostname              string   `json:"hostname"`
+	Hypervisor            string   `json:"hypervisor"`
+	Id                    string   `json:"id"`
+	Isdynamicallyscalable bool     `json:"isdynamicallyscalable"`
+	JobID                 string   `json:"jobid"`
+	Jobstatus             int      `json:"jobstatus"`
+	Linklocalip           string   `json:"linklocalip"`
+	Linklocalmacaddress   string   `json:"linklocalmacaddress"`
+	Linklocalnetmask      string   `json:"linklocalnetmask"`
+	Name                  string   `json:"name"`
+	Networkdomain         string   `json:"networkdomain"`
+	Podid                 string   `json:"podid"`
+	Podname               string   `json:"podname"`
+	Privateip             string   `json:"privateip"`
+	Privatemacaddress     string   `json:"privatemacaddress"`
+	Privatenetmask        string   `json:"privatenetmask"`
+	Publicip              string   `json:"publicip"`
+	Publicmacaddress      string   `json:"publicmacaddress"`
+	Publicnetmask         string   `json:"publicnetmask"`
+	Publicvlan            []string `json:"publicvlan"`
+	State                 string   `json:"state"`
+	Systemvmtype          string   `json:"systemvmtype"`
+	Templateid            string   `json:"templateid"`
+	Templatename          string   `json:"templatename"`
+	Version               string   `json:"version"`
+	Zoneid                string   `json:"zoneid"`
+	Zonename              string   `json:"zonename"`
 }
 
 type ScaleSystemVmParams struct {
@@ -762,6 +993,14 @@ func (p *ScaleSystemVmParams) SetDetails(v map[string]string) {
 	p.p["details"] = v
 }
 
+func (p *ScaleSystemVmParams) GetDetails() (map[string]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["details"].(map[string]string)
+	return value, ok
+}
+
 func (p *ScaleSystemVmParams) SetId(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -769,11 +1008,27 @@ func (p *ScaleSystemVmParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ScaleSystemVmParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
 func (p *ScaleSystemVmParams) SetServiceofferingid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["serviceofferingid"] = v
+}
+
+func (p *ScaleSystemVmParams) GetServiceofferingid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["serviceofferingid"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new ScaleSystemVmParams instance,
@@ -822,41 +1077,43 @@ func (s *SystemVMService) ScaleSystemVm(p *ScaleSystemVmParams) (*ScaleSystemVmR
 }
 
 type ScaleSystemVmResponse struct {
-	Activeviewersessions int      `json:"activeviewersessions"`
-	Agentstate           string   `json:"agentstate"`
-	Created              string   `json:"created"`
-	Disconnected         string   `json:"disconnected"`
-	Dns1                 string   `json:"dns1"`
-	Dns2                 string   `json:"dns2"`
-	Gateway              string   `json:"gateway"`
-	Guestvlan            string   `json:"guestvlan"`
-	Hostid               string   `json:"hostid"`
-	Hostname             string   `json:"hostname"`
-	Hypervisor           string   `json:"hypervisor"`
-	Id                   string   `json:"id"`
-	JobID                string   `json:"jobid"`
-	Jobstatus            int      `json:"jobstatus"`
-	Linklocalip          string   `json:"linklocalip"`
-	Linklocalmacaddress  string   `json:"linklocalmacaddress"`
-	Linklocalnetmask     string   `json:"linklocalnetmask"`
-	Name                 string   `json:"name"`
-	Networkdomain        string   `json:"networkdomain"`
-	Podid                string   `json:"podid"`
-	Podname              string   `json:"podname"`
-	Privateip            string   `json:"privateip"`
-	Privatemacaddress    string   `json:"privatemacaddress"`
-	Privatenetmask       string   `json:"privatenetmask"`
-	Publicip             string   `json:"publicip"`
-	Publicmacaddress     string   `json:"publicmacaddress"`
-	Publicnetmask        string   `json:"publicnetmask"`
-	Publicvlan           []string `json:"publicvlan"`
-	State                string   `json:"state"`
-	Systemvmtype         string   `json:"systemvmtype"`
-	Templateid           string   `json:"templateid"`
-	Templatename         string   `json:"templatename"`
-	Version              string   `json:"version"`
-	Zoneid               string   `json:"zoneid"`
-	Zonename             string   `json:"zonename"`
+	Activeviewersessions  int      `json:"activeviewersessions"`
+	Agentstate            string   `json:"agentstate"`
+	Created               string   `json:"created"`
+	Disconnected          string   `json:"disconnected"`
+	Dns1                  string   `json:"dns1"`
+	Dns2                  string   `json:"dns2"`
+	Gateway               string   `json:"gateway"`
+	Guestvlan             string   `json:"guestvlan"`
+	Hasannotations        bool     `json:"hasannotations"`
+	Hostid                string   `json:"hostid"`
+	Hostname              string   `json:"hostname"`
+	Hypervisor            string   `json:"hypervisor"`
+	Id                    string   `json:"id"`
+	Isdynamicallyscalable bool     `json:"isdynamicallyscalable"`
+	JobID                 string   `json:"jobid"`
+	Jobstatus             int      `json:"jobstatus"`
+	Linklocalip           string   `json:"linklocalip"`
+	Linklocalmacaddress   string   `json:"linklocalmacaddress"`
+	Linklocalnetmask      string   `json:"linklocalnetmask"`
+	Name                  string   `json:"name"`
+	Networkdomain         string   `json:"networkdomain"`
+	Podid                 string   `json:"podid"`
+	Podname               string   `json:"podname"`
+	Privateip             string   `json:"privateip"`
+	Privatemacaddress     string   `json:"privatemacaddress"`
+	Privatenetmask        string   `json:"privatenetmask"`
+	Publicip              string   `json:"publicip"`
+	Publicmacaddress      string   `json:"publicmacaddress"`
+	Publicnetmask         string   `json:"publicnetmask"`
+	Publicvlan            []string `json:"publicvlan"`
+	State                 string   `json:"state"`
+	Systemvmtype          string   `json:"systemvmtype"`
+	Templateid            string   `json:"templateid"`
+	Templatename          string   `json:"templatename"`
+	Version               string   `json:"version"`
+	Zoneid                string   `json:"zoneid"`
+	Zonename              string   `json:"zonename"`
 }
 
 type StartSystemVmParams struct {
@@ -879,6 +1136,14 @@ func (p *StartSystemVmParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *StartSystemVmParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new StartSystemVmParams instance,
@@ -926,41 +1191,43 @@ func (s *SystemVMService) StartSystemVm(p *StartSystemVmParams) (*StartSystemVmR
 }
 
 type StartSystemVmResponse struct {
-	Activeviewersessions int      `json:"activeviewersessions"`
-	Agentstate           string   `json:"agentstate"`
-	Created              string   `json:"created"`
-	Disconnected         string   `json:"disconnected"`
-	Dns1                 string   `json:"dns1"`
-	Dns2                 string   `json:"dns2"`
-	Gateway              string   `json:"gateway"`
-	Guestvlan            string   `json:"guestvlan"`
-	Hostid               string   `json:"hostid"`
-	Hostname             string   `json:"hostname"`
-	Hypervisor           string   `json:"hypervisor"`
-	Id                   string   `json:"id"`
-	JobID                string   `json:"jobid"`
-	Jobstatus            int      `json:"jobstatus"`
-	Linklocalip          string   `json:"linklocalip"`
-	Linklocalmacaddress  string   `json:"linklocalmacaddress"`
-	Linklocalnetmask     string   `json:"linklocalnetmask"`
-	Name                 string   `json:"name"`
-	Networkdomain        string   `json:"networkdomain"`
-	Podid                string   `json:"podid"`
-	Podname              string   `json:"podname"`
-	Privateip            string   `json:"privateip"`
-	Privatemacaddress    string   `json:"privatemacaddress"`
-	Privatenetmask       string   `json:"privatenetmask"`
-	Publicip             string   `json:"publicip"`
-	Publicmacaddress     string   `json:"publicmacaddress"`
-	Publicnetmask        string   `json:"publicnetmask"`
-	Publicvlan           []string `json:"publicvlan"`
-	State                string   `json:"state"`
-	Systemvmtype         string   `json:"systemvmtype"`
-	Templateid           string   `json:"templateid"`
-	Templatename         string   `json:"templatename"`
-	Version              string   `json:"version"`
-	Zoneid               string   `json:"zoneid"`
-	Zonename             string   `json:"zonename"`
+	Activeviewersessions  int      `json:"activeviewersessions"`
+	Agentstate            string   `json:"agentstate"`
+	Created               string   `json:"created"`
+	Disconnected          string   `json:"disconnected"`
+	Dns1                  string   `json:"dns1"`
+	Dns2                  string   `json:"dns2"`
+	Gateway               string   `json:"gateway"`
+	Guestvlan             string   `json:"guestvlan"`
+	Hasannotations        bool     `json:"hasannotations"`
+	Hostid                string   `json:"hostid"`
+	Hostname              string   `json:"hostname"`
+	Hypervisor            string   `json:"hypervisor"`
+	Id                    string   `json:"id"`
+	Isdynamicallyscalable bool     `json:"isdynamicallyscalable"`
+	JobID                 string   `json:"jobid"`
+	Jobstatus             int      `json:"jobstatus"`
+	Linklocalip           string   `json:"linklocalip"`
+	Linklocalmacaddress   string   `json:"linklocalmacaddress"`
+	Linklocalnetmask      string   `json:"linklocalnetmask"`
+	Name                  string   `json:"name"`
+	Networkdomain         string   `json:"networkdomain"`
+	Podid                 string   `json:"podid"`
+	Podname               string   `json:"podname"`
+	Privateip             string   `json:"privateip"`
+	Privatemacaddress     string   `json:"privatemacaddress"`
+	Privatenetmask        string   `json:"privatenetmask"`
+	Publicip              string   `json:"publicip"`
+	Publicmacaddress      string   `json:"publicmacaddress"`
+	Publicnetmask         string   `json:"publicnetmask"`
+	Publicvlan            []string `json:"publicvlan"`
+	State                 string   `json:"state"`
+	Systemvmtype          string   `json:"systemvmtype"`
+	Templateid            string   `json:"templateid"`
+	Templatename          string   `json:"templatename"`
+	Version               string   `json:"version"`
+	Zoneid                string   `json:"zoneid"`
+	Zonename              string   `json:"zonename"`
 }
 
 type StopSystemVmParams struct {
@@ -989,11 +1256,27 @@ func (p *StopSystemVmParams) SetForced(v bool) {
 	p.p["forced"] = v
 }
 
+func (p *StopSystemVmParams) GetForced() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["forced"].(bool)
+	return value, ok
+}
+
 func (p *StopSystemVmParams) SetId(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *StopSystemVmParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new StopSystemVmParams instance,
@@ -1041,39 +1324,41 @@ func (s *SystemVMService) StopSystemVm(p *StopSystemVmParams) (*StopSystemVmResp
 }
 
 type StopSystemVmResponse struct {
-	Activeviewersessions int      `json:"activeviewersessions"`
-	Agentstate           string   `json:"agentstate"`
-	Created              string   `json:"created"`
-	Disconnected         string   `json:"disconnected"`
-	Dns1                 string   `json:"dns1"`
-	Dns2                 string   `json:"dns2"`
-	Gateway              string   `json:"gateway"`
-	Guestvlan            string   `json:"guestvlan"`
-	Hostid               string   `json:"hostid"`
-	Hostname             string   `json:"hostname"`
-	Hypervisor           string   `json:"hypervisor"`
-	Id                   string   `json:"id"`
-	JobID                string   `json:"jobid"`
-	Jobstatus            int      `json:"jobstatus"`
-	Linklocalip          string   `json:"linklocalip"`
-	Linklocalmacaddress  string   `json:"linklocalmacaddress"`
-	Linklocalnetmask     string   `json:"linklocalnetmask"`
-	Name                 string   `json:"name"`
-	Networkdomain        string   `json:"networkdomain"`
-	Podid                string   `json:"podid"`
-	Podname              string   `json:"podname"`
-	Privateip            string   `json:"privateip"`
-	Privatemacaddress    string   `json:"privatemacaddress"`
-	Privatenetmask       string   `json:"privatenetmask"`
-	Publicip             string   `json:"publicip"`
-	Publicmacaddress     string   `json:"publicmacaddress"`
-	Publicnetmask        string   `json:"publicnetmask"`
-	Publicvlan           []string `json:"publicvlan"`
-	State                string   `json:"state"`
-	Systemvmtype         string   `json:"systemvmtype"`
-	Templateid           string   `json:"templateid"`
-	Templatename         string   `json:"templatename"`
-	Version              string   `json:"version"`
-	Zoneid               string   `json:"zoneid"`
-	Zonename             string   `json:"zonename"`
+	Activeviewersessions  int      `json:"activeviewersessions"`
+	Agentstate            string   `json:"agentstate"`
+	Created               string   `json:"created"`
+	Disconnected          string   `json:"disconnected"`
+	Dns1                  string   `json:"dns1"`
+	Dns2                  string   `json:"dns2"`
+	Gateway               string   `json:"gateway"`
+	Guestvlan             string   `json:"guestvlan"`
+	Hasannotations        bool     `json:"hasannotations"`
+	Hostid                string   `json:"hostid"`
+	Hostname              string   `json:"hostname"`
+	Hypervisor            string   `json:"hypervisor"`
+	Id                    string   `json:"id"`
+	Isdynamicallyscalable bool     `json:"isdynamicallyscalable"`
+	JobID                 string   `json:"jobid"`
+	Jobstatus             int      `json:"jobstatus"`
+	Linklocalip           string   `json:"linklocalip"`
+	Linklocalmacaddress   string   `json:"linklocalmacaddress"`
+	Linklocalnetmask      string   `json:"linklocalnetmask"`
+	Name                  string   `json:"name"`
+	Networkdomain         string   `json:"networkdomain"`
+	Podid                 string   `json:"podid"`
+	Podname               string   `json:"podname"`
+	Privateip             string   `json:"privateip"`
+	Privatemacaddress     string   `json:"privatemacaddress"`
+	Privatenetmask        string   `json:"privatenetmask"`
+	Publicip              string   `json:"publicip"`
+	Publicmacaddress      string   `json:"publicmacaddress"`
+	Publicnetmask         string   `json:"publicnetmask"`
+	Publicvlan            []string `json:"publicvlan"`
+	State                 string   `json:"state"`
+	Systemvmtype          string   `json:"systemvmtype"`
+	Templateid            string   `json:"templateid"`
+	Templatename          string   `json:"templatename"`
+	Version               string   `json:"version"`
+	Zoneid                string   `json:"zoneid"`
+	Zonename              string   `json:"zonename"`
 }

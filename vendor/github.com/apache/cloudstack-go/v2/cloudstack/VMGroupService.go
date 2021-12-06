@@ -27,6 +27,20 @@ import (
 	"strings"
 )
 
+type VMGroupServiceIface interface {
+	CreateInstanceGroup(p *CreateInstanceGroupParams) (*CreateInstanceGroupResponse, error)
+	NewCreateInstanceGroupParams(name string) *CreateInstanceGroupParams
+	DeleteInstanceGroup(p *DeleteInstanceGroupParams) (*DeleteInstanceGroupResponse, error)
+	NewDeleteInstanceGroupParams(id string) *DeleteInstanceGroupParams
+	ListInstanceGroups(p *ListInstanceGroupsParams) (*ListInstanceGroupsResponse, error)
+	NewListInstanceGroupsParams() *ListInstanceGroupsParams
+	GetInstanceGroupID(name string, opts ...OptionFunc) (string, int, error)
+	GetInstanceGroupByName(name string, opts ...OptionFunc) (*InstanceGroup, int, error)
+	GetInstanceGroupByID(id string, opts ...OptionFunc) (*InstanceGroup, int, error)
+	UpdateInstanceGroup(p *UpdateInstanceGroupParams) (*UpdateInstanceGroupResponse, error)
+	NewUpdateInstanceGroupParams(id string) *UpdateInstanceGroupParams
+}
+
 type CreateInstanceGroupParams struct {
 	p map[string]interface{}
 }
@@ -58,11 +72,27 @@ func (p *CreateInstanceGroupParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *CreateInstanceGroupParams) GetAccount() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["account"].(string)
+	return value, ok
+}
+
 func (p *CreateInstanceGroupParams) SetDomainid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *CreateInstanceGroupParams) GetDomainid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["domainid"].(string)
+	return value, ok
 }
 
 func (p *CreateInstanceGroupParams) SetName(v string) {
@@ -72,11 +102,27 @@ func (p *CreateInstanceGroupParams) SetName(v string) {
 	p.p["name"] = v
 }
 
+func (p *CreateInstanceGroupParams) GetName() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["name"].(string)
+	return value, ok
+}
+
 func (p *CreateInstanceGroupParams) SetProjectid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["projectid"] = v
+}
+
+func (p *CreateInstanceGroupParams) GetProjectid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["projectid"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new CreateInstanceGroupParams instance,
@@ -104,16 +150,17 @@ func (s *VMGroupService) CreateInstanceGroup(p *CreateInstanceGroupParams) (*Cre
 }
 
 type CreateInstanceGroupResponse struct {
-	Account   string `json:"account"`
-	Created   string `json:"created"`
-	Domain    string `json:"domain"`
-	Domainid  string `json:"domainid"`
-	Id        string `json:"id"`
-	JobID     string `json:"jobid"`
-	Jobstatus int    `json:"jobstatus"`
-	Name      string `json:"name"`
-	Project   string `json:"project"`
-	Projectid string `json:"projectid"`
+	Account        string `json:"account"`
+	Created        string `json:"created"`
+	Domain         string `json:"domain"`
+	Domainid       string `json:"domainid"`
+	Hasannotations bool   `json:"hasannotations"`
+	Id             string `json:"id"`
+	JobID          string `json:"jobid"`
+	Jobstatus      int    `json:"jobstatus"`
+	Name           string `json:"name"`
+	Project        string `json:"project"`
+	Projectid      string `json:"projectid"`
 }
 
 type DeleteInstanceGroupParams struct {
@@ -136,6 +183,14 @@ func (p *DeleteInstanceGroupParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *DeleteInstanceGroupParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new DeleteInstanceGroupParams instance,
@@ -249,11 +304,27 @@ func (p *ListInstanceGroupsParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *ListInstanceGroupsParams) GetAccount() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["account"].(string)
+	return value, ok
+}
+
 func (p *ListInstanceGroupsParams) SetDomainid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *ListInstanceGroupsParams) GetDomainid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["domainid"].(string)
+	return value, ok
 }
 
 func (p *ListInstanceGroupsParams) SetId(v string) {
@@ -263,11 +334,27 @@ func (p *ListInstanceGroupsParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ListInstanceGroupsParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
 func (p *ListInstanceGroupsParams) SetIsrecursive(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isrecursive"] = v
+}
+
+func (p *ListInstanceGroupsParams) GetIsrecursive() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["isrecursive"].(bool)
+	return value, ok
 }
 
 func (p *ListInstanceGroupsParams) SetKeyword(v string) {
@@ -277,11 +364,27 @@ func (p *ListInstanceGroupsParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListInstanceGroupsParams) GetKeyword() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["keyword"].(string)
+	return value, ok
+}
+
 func (p *ListInstanceGroupsParams) SetListall(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["listall"] = v
+}
+
+func (p *ListInstanceGroupsParams) GetListall() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["listall"].(bool)
+	return value, ok
 }
 
 func (p *ListInstanceGroupsParams) SetName(v string) {
@@ -291,11 +394,27 @@ func (p *ListInstanceGroupsParams) SetName(v string) {
 	p.p["name"] = v
 }
 
+func (p *ListInstanceGroupsParams) GetName() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["name"].(string)
+	return value, ok
+}
+
 func (p *ListInstanceGroupsParams) SetPage(v int) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["page"] = v
+}
+
+func (p *ListInstanceGroupsParams) GetPage() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["page"].(int)
+	return value, ok
 }
 
 func (p *ListInstanceGroupsParams) SetPagesize(v int) {
@@ -305,11 +424,27 @@ func (p *ListInstanceGroupsParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListInstanceGroupsParams) GetPagesize() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["pagesize"].(int)
+	return value, ok
+}
+
 func (p *ListInstanceGroupsParams) SetProjectid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["projectid"] = v
+}
+
+func (p *ListInstanceGroupsParams) GetProjectid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["projectid"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new ListInstanceGroupsParams instance,
@@ -424,16 +559,17 @@ type ListInstanceGroupsResponse struct {
 }
 
 type InstanceGroup struct {
-	Account   string `json:"account"`
-	Created   string `json:"created"`
-	Domain    string `json:"domain"`
-	Domainid  string `json:"domainid"`
-	Id        string `json:"id"`
-	JobID     string `json:"jobid"`
-	Jobstatus int    `json:"jobstatus"`
-	Name      string `json:"name"`
-	Project   string `json:"project"`
-	Projectid string `json:"projectid"`
+	Account        string `json:"account"`
+	Created        string `json:"created"`
+	Domain         string `json:"domain"`
+	Domainid       string `json:"domainid"`
+	Hasannotations bool   `json:"hasannotations"`
+	Id             string `json:"id"`
+	JobID          string `json:"jobid"`
+	Jobstatus      int    `json:"jobstatus"`
+	Name           string `json:"name"`
+	Project        string `json:"project"`
+	Projectid      string `json:"projectid"`
 }
 
 type UpdateInstanceGroupParams struct {
@@ -461,11 +597,27 @@ func (p *UpdateInstanceGroupParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *UpdateInstanceGroupParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
 func (p *UpdateInstanceGroupParams) SetName(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *UpdateInstanceGroupParams) GetName() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["name"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new UpdateInstanceGroupParams instance,
@@ -493,14 +645,15 @@ func (s *VMGroupService) UpdateInstanceGroup(p *UpdateInstanceGroupParams) (*Upd
 }
 
 type UpdateInstanceGroupResponse struct {
-	Account   string `json:"account"`
-	Created   string `json:"created"`
-	Domain    string `json:"domain"`
-	Domainid  string `json:"domainid"`
-	Id        string `json:"id"`
-	JobID     string `json:"jobid"`
-	Jobstatus int    `json:"jobstatus"`
-	Name      string `json:"name"`
-	Project   string `json:"project"`
-	Projectid string `json:"projectid"`
+	Account        string `json:"account"`
+	Created        string `json:"created"`
+	Domain         string `json:"domain"`
+	Domainid       string `json:"domainid"`
+	Hasannotations bool   `json:"hasannotations"`
+	Id             string `json:"id"`
+	JobID          string `json:"jobid"`
+	Jobstatus      int    `json:"jobstatus"`
+	Name           string `json:"name"`
+	Project        string `json:"project"`
+	Projectid      string `json:"projectid"`
 }

@@ -27,6 +27,33 @@ import (
 	"strings"
 )
 
+type ISOServiceIface interface {
+	AttachIso(p *AttachIsoParams) (*AttachIsoResponse, error)
+	NewAttachIsoParams(id string, virtualmachineid string) *AttachIsoParams
+	CopyIso(p *CopyIsoParams) (*CopyIsoResponse, error)
+	NewCopyIsoParams(id string) *CopyIsoParams
+	DeleteIso(p *DeleteIsoParams) (*DeleteIsoResponse, error)
+	NewDeleteIsoParams(id string) *DeleteIsoParams
+	DetachIso(p *DetachIsoParams) (*DetachIsoResponse, error)
+	NewDetachIsoParams(virtualmachineid string) *DetachIsoParams
+	ExtractIso(p *ExtractIsoParams) (*ExtractIsoResponse, error)
+	NewExtractIsoParams(id string, mode string) *ExtractIsoParams
+	ListIsoPermissions(p *ListIsoPermissionsParams) (*ListIsoPermissionsResponse, error)
+	NewListIsoPermissionsParams(id string) *ListIsoPermissionsParams
+	GetIsoPermissionByID(id string, opts ...OptionFunc) (*IsoPermission, int, error)
+	ListIsos(p *ListIsosParams) (*ListIsosResponse, error)
+	NewListIsosParams() *ListIsosParams
+	GetIsoID(name string, isofilter string, zoneid string, opts ...OptionFunc) (string, int, error)
+	GetIsoByName(name string, isofilter string, zoneid string, opts ...OptionFunc) (*Iso, int, error)
+	GetIsoByID(id string, opts ...OptionFunc) (*Iso, int, error)
+	RegisterIso(p *RegisterIsoParams) (*RegisterIsoResponse, error)
+	NewRegisterIsoParams(displaytext string, name string, url string, zoneid string) *RegisterIsoParams
+	UpdateIso(p *UpdateIsoParams) (*UpdateIsoResponse, error)
+	NewUpdateIsoParams(id string) *UpdateIsoParams
+	UpdateIsoPermissions(p *UpdateIsoPermissionsParams) (*UpdateIsoPermissionsResponse, error)
+	NewUpdateIsoPermissionsParams(id string) *UpdateIsoPermissionsParams
+}
+
 type AttachIsoParams struct {
 	p map[string]interface{}
 }
@@ -56,6 +83,14 @@ func (p *AttachIsoParams) SetForced(v bool) {
 	p.p["forced"] = v
 }
 
+func (p *AttachIsoParams) GetForced() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["forced"].(bool)
+	return value, ok
+}
+
 func (p *AttachIsoParams) SetId(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -63,11 +98,27 @@ func (p *AttachIsoParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *AttachIsoParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
 func (p *AttachIsoParams) SetVirtualmachineid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["virtualmachineid"] = v
+}
+
+func (p *AttachIsoParams) GetVirtualmachineid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["virtualmachineid"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new AttachIsoParams instance,
@@ -142,9 +193,11 @@ type AttachIsoResponse struct {
 	Groupid               string                           `json:"groupid"`
 	Guestosid             string                           `json:"guestosid"`
 	Haenable              bool                             `json:"haenable"`
+	Hasannotations        bool                             `json:"hasannotations"`
 	Hostid                string                           `json:"hostid"`
 	Hostname              string                           `json:"hostname"`
 	Hypervisor            string                           `json:"hypervisor"`
+	Icon                  string                           `json:"icon"`
 	Id                    string                           `json:"id"`
 	Instancename          string                           `json:"instancename"`
 	Isdynamicallyscalable bool                             `json:"isdynamicallyscalable"`
@@ -154,6 +207,7 @@ type AttachIsoResponse struct {
 	JobID                 string                           `json:"jobid"`
 	Jobstatus             int                              `json:"jobstatus"`
 	Keypair               string                           `json:"keypair"`
+	Lastupdated           string                           `json:"lastupdated"`
 	Memory                int                              `json:"memory"`
 	Memoryintfreekbs      int64                            `json:"memoryintfreekbs"`
 	Memorykbs             int64                            `json:"memorykbs"`
@@ -166,14 +220,17 @@ type AttachIsoResponse struct {
 	Ostypeid              string                           `json:"ostypeid"`
 	Password              string                           `json:"password"`
 	Passwordenabled       bool                             `json:"passwordenabled"`
+	Pooltype              string                           `json:"pooltype"`
 	Project               string                           `json:"project"`
 	Projectid             string                           `json:"projectid"`
 	Publicip              string                           `json:"publicip"`
 	Publicipid            string                           `json:"publicipid"`
-	Readonlyuidetails     string                           `json:"readonlyuidetails"`
+	Readonlydetails       string                           `json:"readonlydetails"`
+	Receivedbytes         int64                            `json:"receivedbytes"`
 	Rootdeviceid          int64                            `json:"rootdeviceid"`
 	Rootdevicetype        string                           `json:"rootdevicetype"`
 	Securitygroup         []AttachIsoResponseSecuritygroup `json:"securitygroup"`
+	Sentbytes             int64                            `json:"sentbytes"`
 	Serviceofferingid     string                           `json:"serviceofferingid"`
 	Serviceofferingname   string                           `json:"serviceofferingname"`
 	Servicestate          string                           `json:"servicestate"`
@@ -290,11 +347,27 @@ func (p *CopyIsoParams) SetDestzoneid(v string) {
 	p.p["destzoneid"] = v
 }
 
+func (p *CopyIsoParams) GetDestzoneid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["destzoneid"].(string)
+	return value, ok
+}
+
 func (p *CopyIsoParams) SetDestzoneids(v []string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["destzoneids"] = v
+}
+
+func (p *CopyIsoParams) GetDestzoneids() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["destzoneids"].([]string)
+	return value, ok
 }
 
 func (p *CopyIsoParams) SetId(v string) {
@@ -304,11 +377,27 @@ func (p *CopyIsoParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *CopyIsoParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
 func (p *CopyIsoParams) SetSourcezoneid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["sourcezoneid"] = v
+}
+
+func (p *CopyIsoParams) GetSourcezoneid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["sourcezoneid"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new CopyIsoParams instance,
@@ -373,9 +462,11 @@ type CopyIsoResponse struct {
 	Domainid              string              `json:"domainid"`
 	Downloaddetails       []map[string]string `json:"downloaddetails"`
 	Format                string              `json:"format"`
+	Hasannotations        bool                `json:"hasannotations"`
 	Hostid                string              `json:"hostid"`
 	Hostname              string              `json:"hostname"`
 	Hypervisor            string              `json:"hypervisor"`
+	Icon                  string              `json:"icon"`
 	Id                    string              `json:"id"`
 	Isdynamicallyscalable bool                `json:"isdynamicallyscalable"`
 	Isextractable         bool                `json:"isextractable"`
@@ -458,11 +549,27 @@ func (p *DeleteIsoParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *DeleteIsoParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
 func (p *DeleteIsoParams) SetZoneid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *DeleteIsoParams) GetZoneid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["zoneid"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new DeleteIsoParams instance,
@@ -537,11 +644,27 @@ func (p *DetachIsoParams) SetForced(v bool) {
 	p.p["forced"] = v
 }
 
+func (p *DetachIsoParams) GetForced() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["forced"].(bool)
+	return value, ok
+}
+
 func (p *DetachIsoParams) SetVirtualmachineid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["virtualmachineid"] = v
+}
+
+func (p *DetachIsoParams) GetVirtualmachineid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["virtualmachineid"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new DetachIsoParams instance,
@@ -615,9 +738,11 @@ type DetachIsoResponse struct {
 	Groupid               string                           `json:"groupid"`
 	Guestosid             string                           `json:"guestosid"`
 	Haenable              bool                             `json:"haenable"`
+	Hasannotations        bool                             `json:"hasannotations"`
 	Hostid                string                           `json:"hostid"`
 	Hostname              string                           `json:"hostname"`
 	Hypervisor            string                           `json:"hypervisor"`
+	Icon                  string                           `json:"icon"`
 	Id                    string                           `json:"id"`
 	Instancename          string                           `json:"instancename"`
 	Isdynamicallyscalable bool                             `json:"isdynamicallyscalable"`
@@ -627,6 +752,7 @@ type DetachIsoResponse struct {
 	JobID                 string                           `json:"jobid"`
 	Jobstatus             int                              `json:"jobstatus"`
 	Keypair               string                           `json:"keypair"`
+	Lastupdated           string                           `json:"lastupdated"`
 	Memory                int                              `json:"memory"`
 	Memoryintfreekbs      int64                            `json:"memoryintfreekbs"`
 	Memorykbs             int64                            `json:"memorykbs"`
@@ -639,14 +765,17 @@ type DetachIsoResponse struct {
 	Ostypeid              string                           `json:"ostypeid"`
 	Password              string                           `json:"password"`
 	Passwordenabled       bool                             `json:"passwordenabled"`
+	Pooltype              string                           `json:"pooltype"`
 	Project               string                           `json:"project"`
 	Projectid             string                           `json:"projectid"`
 	Publicip              string                           `json:"publicip"`
 	Publicipid            string                           `json:"publicipid"`
-	Readonlyuidetails     string                           `json:"readonlyuidetails"`
+	Readonlydetails       string                           `json:"readonlydetails"`
+	Receivedbytes         int64                            `json:"receivedbytes"`
 	Rootdeviceid          int64                            `json:"rootdeviceid"`
 	Rootdevicetype        string                           `json:"rootdevicetype"`
 	Securitygroup         []DetachIsoResponseSecuritygroup `json:"securitygroup"`
+	Sentbytes             int64                            `json:"sentbytes"`
 	Serviceofferingid     string                           `json:"serviceofferingid"`
 	Serviceofferingname   string                           `json:"serviceofferingname"`
 	Servicestate          string                           `json:"servicestate"`
@@ -762,11 +891,27 @@ func (p *ExtractIsoParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ExtractIsoParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
 func (p *ExtractIsoParams) SetMode(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["mode"] = v
+}
+
+func (p *ExtractIsoParams) GetMode() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["mode"].(string)
+	return value, ok
 }
 
 func (p *ExtractIsoParams) SetUrl(v string) {
@@ -776,11 +921,27 @@ func (p *ExtractIsoParams) SetUrl(v string) {
 	p.p["url"] = v
 }
 
+func (p *ExtractIsoParams) GetUrl() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["url"].(string)
+	return value, ok
+}
+
 func (p *ExtractIsoParams) SetZoneid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *ExtractIsoParams) GetZoneid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["zoneid"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new ExtractIsoParams instance,
@@ -867,6 +1028,14 @@ func (p *ListIsoPermissionsParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *ListIsoPermissionsParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new ListIsoPermissionsParams instance,
@@ -1002,6 +1171,10 @@ func (p *ListIsosParams) toURLValues() url.Values {
 	if v, found := p.p["projectid"]; found {
 		u.Set("projectid", v.(string))
 	}
+	if v, found := p.p["showicon"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("showicon", vv)
+	}
 	if v, found := p.p["showremoved"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("showremoved", vv)
@@ -1030,11 +1203,27 @@ func (p *ListIsosParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *ListIsosParams) GetAccount() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["account"].(string)
+	return value, ok
+}
+
 func (p *ListIsosParams) SetBootable(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["bootable"] = v
+}
+
+func (p *ListIsosParams) GetBootable() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["bootable"].(bool)
+	return value, ok
 }
 
 func (p *ListIsosParams) SetDomainid(v string) {
@@ -1044,11 +1233,27 @@ func (p *ListIsosParams) SetDomainid(v string) {
 	p.p["domainid"] = v
 }
 
+func (p *ListIsosParams) GetDomainid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["domainid"].(string)
+	return value, ok
+}
+
 func (p *ListIsosParams) SetHypervisor(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["hypervisor"] = v
+}
+
+func (p *ListIsosParams) GetHypervisor() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["hypervisor"].(string)
+	return value, ok
 }
 
 func (p *ListIsosParams) SetId(v string) {
@@ -1058,11 +1263,27 @@ func (p *ListIsosParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ListIsosParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
 func (p *ListIsosParams) SetIsofilter(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isofilter"] = v
+}
+
+func (p *ListIsosParams) GetIsofilter() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["isofilter"].(string)
+	return value, ok
 }
 
 func (p *ListIsosParams) SetIspublic(v bool) {
@@ -1072,11 +1293,27 @@ func (p *ListIsosParams) SetIspublic(v bool) {
 	p.p["ispublic"] = v
 }
 
+func (p *ListIsosParams) GetIspublic() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ispublic"].(bool)
+	return value, ok
+}
+
 func (p *ListIsosParams) SetIsready(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isready"] = v
+}
+
+func (p *ListIsosParams) GetIsready() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["isready"].(bool)
+	return value, ok
 }
 
 func (p *ListIsosParams) SetIsrecursive(v bool) {
@@ -1086,11 +1323,27 @@ func (p *ListIsosParams) SetIsrecursive(v bool) {
 	p.p["isrecursive"] = v
 }
 
+func (p *ListIsosParams) GetIsrecursive() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["isrecursive"].(bool)
+	return value, ok
+}
+
 func (p *ListIsosParams) SetKeyword(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["keyword"] = v
+}
+
+func (p *ListIsosParams) GetKeyword() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["keyword"].(string)
+	return value, ok
 }
 
 func (p *ListIsosParams) SetListall(v bool) {
@@ -1100,11 +1353,27 @@ func (p *ListIsosParams) SetListall(v bool) {
 	p.p["listall"] = v
 }
 
+func (p *ListIsosParams) GetListall() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["listall"].(bool)
+	return value, ok
+}
+
 func (p *ListIsosParams) SetName(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *ListIsosParams) GetName() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["name"].(string)
+	return value, ok
 }
 
 func (p *ListIsosParams) SetPage(v int) {
@@ -1114,11 +1383,27 @@ func (p *ListIsosParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListIsosParams) GetPage() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["page"].(int)
+	return value, ok
+}
+
 func (p *ListIsosParams) SetPagesize(v int) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ListIsosParams) GetPagesize() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["pagesize"].(int)
+	return value, ok
 }
 
 func (p *ListIsosParams) SetProjectid(v string) {
@@ -1128,11 +1413,42 @@ func (p *ListIsosParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *ListIsosParams) GetProjectid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["projectid"].(string)
+	return value, ok
+}
+
+func (p *ListIsosParams) SetShowicon(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["showicon"] = v
+}
+
+func (p *ListIsosParams) GetShowicon() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["showicon"].(bool)
+	return value, ok
+}
+
 func (p *ListIsosParams) SetShowremoved(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["showremoved"] = v
+}
+
+func (p *ListIsosParams) GetShowremoved() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["showremoved"].(bool)
+	return value, ok
 }
 
 func (p *ListIsosParams) SetShowunique(v bool) {
@@ -1142,6 +1458,14 @@ func (p *ListIsosParams) SetShowunique(v bool) {
 	p.p["showunique"] = v
 }
 
+func (p *ListIsosParams) GetShowunique() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["showunique"].(bool)
+	return value, ok
+}
+
 func (p *ListIsosParams) SetTags(v map[string]string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1149,11 +1473,27 @@ func (p *ListIsosParams) SetTags(v map[string]string) {
 	p.p["tags"] = v
 }
 
+func (p *ListIsosParams) GetTags() (map[string]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["tags"].(map[string]string)
+	return value, ok
+}
+
 func (p *ListIsosParams) SetZoneid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *ListIsosParams) GetZoneid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["zoneid"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new ListIsosParams instance,
@@ -1287,9 +1627,11 @@ type Iso struct {
 	Domainid              string              `json:"domainid"`
 	Downloaddetails       []map[string]string `json:"downloaddetails"`
 	Format                string              `json:"format"`
+	Hasannotations        bool                `json:"hasannotations"`
 	Hostid                string              `json:"hostid"`
 	Hostname              string              `json:"hostname"`
 	Hypervisor            string              `json:"hypervisor"`
+	Icon                  string              `json:"icon"`
 	Id                    string              `json:"id"`
 	Isdynamicallyscalable bool                `json:"isdynamicallyscalable"`
 	Isextractable         bool                `json:"isextractable"`
@@ -1424,11 +1766,27 @@ func (p *RegisterIsoParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *RegisterIsoParams) GetAccount() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["account"].(string)
+	return value, ok
+}
+
 func (p *RegisterIsoParams) SetBootable(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["bootable"] = v
+}
+
+func (p *RegisterIsoParams) GetBootable() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["bootable"].(bool)
+	return value, ok
 }
 
 func (p *RegisterIsoParams) SetChecksum(v string) {
@@ -1438,11 +1796,27 @@ func (p *RegisterIsoParams) SetChecksum(v string) {
 	p.p["checksum"] = v
 }
 
+func (p *RegisterIsoParams) GetChecksum() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["checksum"].(string)
+	return value, ok
+}
+
 func (p *RegisterIsoParams) SetDirectdownload(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["directdownload"] = v
+}
+
+func (p *RegisterIsoParams) GetDirectdownload() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["directdownload"].(bool)
+	return value, ok
 }
 
 func (p *RegisterIsoParams) SetDisplaytext(v string) {
@@ -1452,11 +1826,27 @@ func (p *RegisterIsoParams) SetDisplaytext(v string) {
 	p.p["displaytext"] = v
 }
 
+func (p *RegisterIsoParams) GetDisplaytext() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["displaytext"].(string)
+	return value, ok
+}
+
 func (p *RegisterIsoParams) SetDomainid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *RegisterIsoParams) GetDomainid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["domainid"].(string)
+	return value, ok
 }
 
 func (p *RegisterIsoParams) SetImagestoreuuid(v string) {
@@ -1466,11 +1856,27 @@ func (p *RegisterIsoParams) SetImagestoreuuid(v string) {
 	p.p["imagestoreuuid"] = v
 }
 
+func (p *RegisterIsoParams) GetImagestoreuuid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["imagestoreuuid"].(string)
+	return value, ok
+}
+
 func (p *RegisterIsoParams) SetIsdynamicallyscalable(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isdynamicallyscalable"] = v
+}
+
+func (p *RegisterIsoParams) GetIsdynamicallyscalable() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["isdynamicallyscalable"].(bool)
+	return value, ok
 }
 
 func (p *RegisterIsoParams) SetIsextractable(v bool) {
@@ -1480,11 +1886,27 @@ func (p *RegisterIsoParams) SetIsextractable(v bool) {
 	p.p["isextractable"] = v
 }
 
+func (p *RegisterIsoParams) GetIsextractable() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["isextractable"].(bool)
+	return value, ok
+}
+
 func (p *RegisterIsoParams) SetIsfeatured(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isfeatured"] = v
+}
+
+func (p *RegisterIsoParams) GetIsfeatured() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["isfeatured"].(bool)
+	return value, ok
 }
 
 func (p *RegisterIsoParams) SetIspublic(v bool) {
@@ -1494,11 +1916,27 @@ func (p *RegisterIsoParams) SetIspublic(v bool) {
 	p.p["ispublic"] = v
 }
 
+func (p *RegisterIsoParams) GetIspublic() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ispublic"].(bool)
+	return value, ok
+}
+
 func (p *RegisterIsoParams) SetName(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *RegisterIsoParams) GetName() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["name"].(string)
+	return value, ok
 }
 
 func (p *RegisterIsoParams) SetOstypeid(v string) {
@@ -1508,11 +1946,27 @@ func (p *RegisterIsoParams) SetOstypeid(v string) {
 	p.p["ostypeid"] = v
 }
 
+func (p *RegisterIsoParams) GetOstypeid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ostypeid"].(string)
+	return value, ok
+}
+
 func (p *RegisterIsoParams) SetPasswordenabled(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["passwordenabled"] = v
+}
+
+func (p *RegisterIsoParams) GetPasswordenabled() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["passwordenabled"].(bool)
+	return value, ok
 }
 
 func (p *RegisterIsoParams) SetProjectid(v string) {
@@ -1522,6 +1976,14 @@ func (p *RegisterIsoParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *RegisterIsoParams) GetProjectid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["projectid"].(string)
+	return value, ok
+}
+
 func (p *RegisterIsoParams) SetUrl(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1529,11 +1991,27 @@ func (p *RegisterIsoParams) SetUrl(v string) {
 	p.p["url"] = v
 }
 
+func (p *RegisterIsoParams) GetUrl() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["url"].(string)
+	return value, ok
+}
+
 func (p *RegisterIsoParams) SetZoneid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *RegisterIsoParams) GetZoneid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["zoneid"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new RegisterIsoParams instance,
@@ -1581,9 +2059,11 @@ type RegisterIsoResponse struct {
 	Domainid              string              `json:"domainid"`
 	Downloaddetails       []map[string]string `json:"downloaddetails"`
 	Format                string              `json:"format"`
+	Hasannotations        bool                `json:"hasannotations"`
 	Hostid                string              `json:"hostid"`
 	Hostname              string              `json:"hostname"`
 	Hypervisor            string              `json:"hypervisor"`
+	Icon                  string              `json:"icon"`
 	Id                    string              `json:"id"`
 	Isdynamicallyscalable bool                `json:"isdynamicallyscalable"`
 	Isextractable         bool                `json:"isextractable"`
@@ -1713,11 +2193,27 @@ func (p *UpdateIsoParams) SetBootable(v bool) {
 	p.p["bootable"] = v
 }
 
+func (p *UpdateIsoParams) GetBootable() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["bootable"].(bool)
+	return value, ok
+}
+
 func (p *UpdateIsoParams) SetCleanupdetails(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["cleanupdetails"] = v
+}
+
+func (p *UpdateIsoParams) GetCleanupdetails() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["cleanupdetails"].(bool)
+	return value, ok
 }
 
 func (p *UpdateIsoParams) SetDetails(v map[string]string) {
@@ -1727,11 +2223,27 @@ func (p *UpdateIsoParams) SetDetails(v map[string]string) {
 	p.p["details"] = v
 }
 
+func (p *UpdateIsoParams) GetDetails() (map[string]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["details"].(map[string]string)
+	return value, ok
+}
+
 func (p *UpdateIsoParams) SetDisplaytext(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["displaytext"] = v
+}
+
+func (p *UpdateIsoParams) GetDisplaytext() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["displaytext"].(string)
+	return value, ok
 }
 
 func (p *UpdateIsoParams) SetFormat(v string) {
@@ -1741,11 +2253,27 @@ func (p *UpdateIsoParams) SetFormat(v string) {
 	p.p["format"] = v
 }
 
+func (p *UpdateIsoParams) GetFormat() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["format"].(string)
+	return value, ok
+}
+
 func (p *UpdateIsoParams) SetId(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *UpdateIsoParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
 }
 
 func (p *UpdateIsoParams) SetIsdynamicallyscalable(v bool) {
@@ -1755,11 +2283,27 @@ func (p *UpdateIsoParams) SetIsdynamicallyscalable(v bool) {
 	p.p["isdynamicallyscalable"] = v
 }
 
+func (p *UpdateIsoParams) GetIsdynamicallyscalable() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["isdynamicallyscalable"].(bool)
+	return value, ok
+}
+
 func (p *UpdateIsoParams) SetIsrouting(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isrouting"] = v
+}
+
+func (p *UpdateIsoParams) GetIsrouting() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["isrouting"].(bool)
+	return value, ok
 }
 
 func (p *UpdateIsoParams) SetName(v string) {
@@ -1769,11 +2313,27 @@ func (p *UpdateIsoParams) SetName(v string) {
 	p.p["name"] = v
 }
 
+func (p *UpdateIsoParams) GetName() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["name"].(string)
+	return value, ok
+}
+
 func (p *UpdateIsoParams) SetOstypeid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["ostypeid"] = v
+}
+
+func (p *UpdateIsoParams) GetOstypeid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ostypeid"].(string)
+	return value, ok
 }
 
 func (p *UpdateIsoParams) SetPasswordenabled(v bool) {
@@ -1783,11 +2343,27 @@ func (p *UpdateIsoParams) SetPasswordenabled(v bool) {
 	p.p["passwordenabled"] = v
 }
 
+func (p *UpdateIsoParams) GetPasswordenabled() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["passwordenabled"].(bool)
+	return value, ok
+}
+
 func (p *UpdateIsoParams) SetRequireshvm(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["requireshvm"] = v
+}
+
+func (p *UpdateIsoParams) GetRequireshvm() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["requireshvm"].(bool)
+	return value, ok
 }
 
 func (p *UpdateIsoParams) SetSortkey(v int) {
@@ -1797,11 +2373,27 @@ func (p *UpdateIsoParams) SetSortkey(v int) {
 	p.p["sortkey"] = v
 }
 
+func (p *UpdateIsoParams) GetSortkey() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["sortkey"].(int)
+	return value, ok
+}
+
 func (p *UpdateIsoParams) SetSshkeyenabled(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["sshkeyenabled"] = v
+}
+
+func (p *UpdateIsoParams) GetSshkeyenabled() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["sshkeyenabled"].(bool)
+	return value, ok
 }
 
 // You should always use this function to get a new UpdateIsoParams instance,
@@ -1846,9 +2438,11 @@ type UpdateIsoResponse struct {
 	Domainid              string              `json:"domainid"`
 	Downloaddetails       []map[string]string `json:"downloaddetails"`
 	Format                string              `json:"format"`
+	Hasannotations        bool                `json:"hasannotations"`
 	Hostid                string              `json:"hostid"`
 	Hostname              string              `json:"hostname"`
 	Hypervisor            string              `json:"hypervisor"`
+	Icon                  string              `json:"icon"`
 	Id                    string              `json:"id"`
 	Isdynamicallyscalable bool                `json:"isdynamicallyscalable"`
 	Isextractable         bool                `json:"isextractable"`
@@ -1951,11 +2545,27 @@ func (p *UpdateIsoPermissionsParams) SetAccounts(v []string) {
 	p.p["accounts"] = v
 }
 
+func (p *UpdateIsoPermissionsParams) GetAccounts() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["accounts"].([]string)
+	return value, ok
+}
+
 func (p *UpdateIsoPermissionsParams) SetId(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *UpdateIsoPermissionsParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
 }
 
 func (p *UpdateIsoPermissionsParams) SetIsextractable(v bool) {
@@ -1965,11 +2575,27 @@ func (p *UpdateIsoPermissionsParams) SetIsextractable(v bool) {
 	p.p["isextractable"] = v
 }
 
+func (p *UpdateIsoPermissionsParams) GetIsextractable() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["isextractable"].(bool)
+	return value, ok
+}
+
 func (p *UpdateIsoPermissionsParams) SetIsfeatured(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isfeatured"] = v
+}
+
+func (p *UpdateIsoPermissionsParams) GetIsfeatured() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["isfeatured"].(bool)
+	return value, ok
 }
 
 func (p *UpdateIsoPermissionsParams) SetIspublic(v bool) {
@@ -1979,6 +2605,14 @@ func (p *UpdateIsoPermissionsParams) SetIspublic(v bool) {
 	p.p["ispublic"] = v
 }
 
+func (p *UpdateIsoPermissionsParams) GetIspublic() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ispublic"].(bool)
+	return value, ok
+}
+
 func (p *UpdateIsoPermissionsParams) SetOp(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1986,11 +2620,27 @@ func (p *UpdateIsoPermissionsParams) SetOp(v string) {
 	p.p["op"] = v
 }
 
+func (p *UpdateIsoPermissionsParams) GetOp() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["op"].(string)
+	return value, ok
+}
+
 func (p *UpdateIsoPermissionsParams) SetProjectids(v []string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["projectids"] = v
+}
+
+func (p *UpdateIsoPermissionsParams) GetProjectids() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["projectids"].([]string)
+	return value, ok
 }
 
 // You should always use this function to get a new UpdateIsoPermissionsParams instance,
