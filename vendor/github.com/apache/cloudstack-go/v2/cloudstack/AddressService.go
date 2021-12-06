@@ -27,6 +27,18 @@ import (
 	"strings"
 )
 
+type AddressServiceIface interface {
+	AssociateIpAddress(p *AssociateIpAddressParams) (*AssociateIpAddressResponse, error)
+	NewAssociateIpAddressParams() *AssociateIpAddressParams
+	DisassociateIpAddress(p *DisassociateIpAddressParams) (*DisassociateIpAddressResponse, error)
+	NewDisassociateIpAddressParams(id string) *DisassociateIpAddressParams
+	ListPublicIpAddresses(p *ListPublicIpAddressesParams) (*ListPublicIpAddressesResponse, error)
+	NewListPublicIpAddressesParams() *ListPublicIpAddressesParams
+	GetPublicIpAddressByID(id string, opts ...OptionFunc) (*PublicIpAddress, int, error)
+	UpdateIpAddress(p *UpdateIpAddressParams) (*UpdateIpAddressResponse, error)
+	NewUpdateIpAddressParams(id string) *UpdateIpAddressParams
+}
+
 type AssociateIpAddressParams struct {
 	p map[string]interface{}
 }
@@ -79,11 +91,27 @@ func (p *AssociateIpAddressParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *AssociateIpAddressParams) GetAccount() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["account"].(string)
+	return value, ok
+}
+
 func (p *AssociateIpAddressParams) SetDomainid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *AssociateIpAddressParams) GetDomainid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["domainid"].(string)
+	return value, ok
 }
 
 func (p *AssociateIpAddressParams) SetFordisplay(v bool) {
@@ -93,11 +121,27 @@ func (p *AssociateIpAddressParams) SetFordisplay(v bool) {
 	p.p["fordisplay"] = v
 }
 
+func (p *AssociateIpAddressParams) GetFordisplay() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["fordisplay"].(bool)
+	return value, ok
+}
+
 func (p *AssociateIpAddressParams) SetIpaddress(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["ipaddress"] = v
+}
+
+func (p *AssociateIpAddressParams) GetIpaddress() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ipaddress"].(string)
+	return value, ok
 }
 
 func (p *AssociateIpAddressParams) SetIsportable(v bool) {
@@ -107,11 +151,27 @@ func (p *AssociateIpAddressParams) SetIsportable(v bool) {
 	p.p["isportable"] = v
 }
 
+func (p *AssociateIpAddressParams) GetIsportable() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["isportable"].(bool)
+	return value, ok
+}
+
 func (p *AssociateIpAddressParams) SetNetworkid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["networkid"] = v
+}
+
+func (p *AssociateIpAddressParams) GetNetworkid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["networkid"].(string)
+	return value, ok
 }
 
 func (p *AssociateIpAddressParams) SetProjectid(v string) {
@@ -121,11 +181,27 @@ func (p *AssociateIpAddressParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *AssociateIpAddressParams) GetProjectid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["projectid"].(string)
+	return value, ok
+}
+
 func (p *AssociateIpAddressParams) SetRegionid(v int) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["regionid"] = v
+}
+
+func (p *AssociateIpAddressParams) GetRegionid() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["regionid"].(int)
+	return value, ok
 }
 
 func (p *AssociateIpAddressParams) SetVpcid(v string) {
@@ -135,11 +211,27 @@ func (p *AssociateIpAddressParams) SetVpcid(v string) {
 	p.p["vpcid"] = v
 }
 
+func (p *AssociateIpAddressParams) GetVpcid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["vpcid"].(string)
+	return value, ok
+}
+
 func (p *AssociateIpAddressParams) SetZoneid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *AssociateIpAddressParams) GetZoneid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["zoneid"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new AssociateIpAddressParams instance,
@@ -194,6 +286,7 @@ type AssociateIpAddressResponse struct {
 	Domainid                  string `json:"domainid"`
 	Fordisplay                bool   `json:"fordisplay"`
 	Forvirtualnetwork         bool   `json:"forvirtualnetwork"`
+	Hasannotations            bool   `json:"hasannotations"`
 	Id                        string `json:"id"`
 	Ipaddress                 string `json:"ipaddress"`
 	Isportable                bool   `json:"isportable"`
@@ -242,6 +335,14 @@ func (p *DisassociateIpAddressParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *DisassociateIpAddressParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new DisassociateIpAddressParams instance,
@@ -395,11 +496,27 @@ func (p *ListPublicIpAddressesParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *ListPublicIpAddressesParams) GetAccount() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["account"].(string)
+	return value, ok
+}
+
 func (p *ListPublicIpAddressesParams) SetAllocatedonly(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["allocatedonly"] = v
+}
+
+func (p *ListPublicIpAddressesParams) GetAllocatedonly() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["allocatedonly"].(bool)
+	return value, ok
 }
 
 func (p *ListPublicIpAddressesParams) SetAssociatednetworkid(v string) {
@@ -409,11 +526,27 @@ func (p *ListPublicIpAddressesParams) SetAssociatednetworkid(v string) {
 	p.p["associatednetworkid"] = v
 }
 
+func (p *ListPublicIpAddressesParams) GetAssociatednetworkid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["associatednetworkid"].(string)
+	return value, ok
+}
+
 func (p *ListPublicIpAddressesParams) SetDomainid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *ListPublicIpAddressesParams) GetDomainid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["domainid"].(string)
+	return value, ok
 }
 
 func (p *ListPublicIpAddressesParams) SetFordisplay(v bool) {
@@ -423,11 +556,27 @@ func (p *ListPublicIpAddressesParams) SetFordisplay(v bool) {
 	p.p["fordisplay"] = v
 }
 
+func (p *ListPublicIpAddressesParams) GetFordisplay() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["fordisplay"].(bool)
+	return value, ok
+}
+
 func (p *ListPublicIpAddressesParams) SetForloadbalancing(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["forloadbalancing"] = v
+}
+
+func (p *ListPublicIpAddressesParams) GetForloadbalancing() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["forloadbalancing"].(bool)
+	return value, ok
 }
 
 func (p *ListPublicIpAddressesParams) SetForvirtualnetwork(v bool) {
@@ -437,11 +586,27 @@ func (p *ListPublicIpAddressesParams) SetForvirtualnetwork(v bool) {
 	p.p["forvirtualnetwork"] = v
 }
 
+func (p *ListPublicIpAddressesParams) GetForvirtualnetwork() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["forvirtualnetwork"].(bool)
+	return value, ok
+}
+
 func (p *ListPublicIpAddressesParams) SetId(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *ListPublicIpAddressesParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
 }
 
 func (p *ListPublicIpAddressesParams) SetIpaddress(v string) {
@@ -451,11 +616,27 @@ func (p *ListPublicIpAddressesParams) SetIpaddress(v string) {
 	p.p["ipaddress"] = v
 }
 
+func (p *ListPublicIpAddressesParams) GetIpaddress() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ipaddress"].(string)
+	return value, ok
+}
+
 func (p *ListPublicIpAddressesParams) SetIsrecursive(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isrecursive"] = v
+}
+
+func (p *ListPublicIpAddressesParams) GetIsrecursive() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["isrecursive"].(bool)
+	return value, ok
 }
 
 func (p *ListPublicIpAddressesParams) SetIssourcenat(v bool) {
@@ -465,11 +646,27 @@ func (p *ListPublicIpAddressesParams) SetIssourcenat(v bool) {
 	p.p["issourcenat"] = v
 }
 
+func (p *ListPublicIpAddressesParams) GetIssourcenat() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["issourcenat"].(bool)
+	return value, ok
+}
+
 func (p *ListPublicIpAddressesParams) SetIsstaticnat(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isstaticnat"] = v
+}
+
+func (p *ListPublicIpAddressesParams) GetIsstaticnat() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["isstaticnat"].(bool)
+	return value, ok
 }
 
 func (p *ListPublicIpAddressesParams) SetKeyword(v string) {
@@ -479,11 +676,27 @@ func (p *ListPublicIpAddressesParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListPublicIpAddressesParams) GetKeyword() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["keyword"].(string)
+	return value, ok
+}
+
 func (p *ListPublicIpAddressesParams) SetListall(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["listall"] = v
+}
+
+func (p *ListPublicIpAddressesParams) GetListall() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["listall"].(bool)
+	return value, ok
 }
 
 func (p *ListPublicIpAddressesParams) SetNetworkid(v string) {
@@ -493,11 +706,27 @@ func (p *ListPublicIpAddressesParams) SetNetworkid(v string) {
 	p.p["networkid"] = v
 }
 
+func (p *ListPublicIpAddressesParams) GetNetworkid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["networkid"].(string)
+	return value, ok
+}
+
 func (p *ListPublicIpAddressesParams) SetPage(v int) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["page"] = v
+}
+
+func (p *ListPublicIpAddressesParams) GetPage() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["page"].(int)
+	return value, ok
 }
 
 func (p *ListPublicIpAddressesParams) SetPagesize(v int) {
@@ -507,11 +736,27 @@ func (p *ListPublicIpAddressesParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListPublicIpAddressesParams) GetPagesize() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["pagesize"].(int)
+	return value, ok
+}
+
 func (p *ListPublicIpAddressesParams) SetPhysicalnetworkid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["physicalnetworkid"] = v
+}
+
+func (p *ListPublicIpAddressesParams) GetPhysicalnetworkid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["physicalnetworkid"].(string)
+	return value, ok
 }
 
 func (p *ListPublicIpAddressesParams) SetProjectid(v string) {
@@ -521,11 +766,27 @@ func (p *ListPublicIpAddressesParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *ListPublicIpAddressesParams) GetProjectid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["projectid"].(string)
+	return value, ok
+}
+
 func (p *ListPublicIpAddressesParams) SetState(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["state"] = v
+}
+
+func (p *ListPublicIpAddressesParams) GetState() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["state"].(string)
+	return value, ok
 }
 
 func (p *ListPublicIpAddressesParams) SetTags(v map[string]string) {
@@ -535,11 +796,27 @@ func (p *ListPublicIpAddressesParams) SetTags(v map[string]string) {
 	p.p["tags"] = v
 }
 
+func (p *ListPublicIpAddressesParams) GetTags() (map[string]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["tags"].(map[string]string)
+	return value, ok
+}
+
 func (p *ListPublicIpAddressesParams) SetVlanid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["vlanid"] = v
+}
+
+func (p *ListPublicIpAddressesParams) GetVlanid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["vlanid"].(string)
+	return value, ok
 }
 
 func (p *ListPublicIpAddressesParams) SetVpcid(v string) {
@@ -549,11 +826,27 @@ func (p *ListPublicIpAddressesParams) SetVpcid(v string) {
 	p.p["vpcid"] = v
 }
 
+func (p *ListPublicIpAddressesParams) GetVpcid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["vpcid"].(string)
+	return value, ok
+}
+
 func (p *ListPublicIpAddressesParams) SetZoneid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *ListPublicIpAddressesParams) GetZoneid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["zoneid"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new ListPublicIpAddressesParams instance,
@@ -626,6 +919,7 @@ type PublicIpAddress struct {
 	Domainid                  string `json:"domainid"`
 	Fordisplay                bool   `json:"fordisplay"`
 	Forvirtualnetwork         bool   `json:"forvirtualnetwork"`
+	Hasannotations            bool   `json:"hasannotations"`
 	Id                        string `json:"id"`
 	Ipaddress                 string `json:"ipaddress"`
 	Isportable                bool   `json:"isportable"`
@@ -683,6 +977,14 @@ func (p *UpdateIpAddressParams) SetCustomid(v string) {
 	p.p["customid"] = v
 }
 
+func (p *UpdateIpAddressParams) GetCustomid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["customid"].(string)
+	return value, ok
+}
+
 func (p *UpdateIpAddressParams) SetFordisplay(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -690,11 +992,27 @@ func (p *UpdateIpAddressParams) SetFordisplay(v bool) {
 	p.p["fordisplay"] = v
 }
 
+func (p *UpdateIpAddressParams) GetFordisplay() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["fordisplay"].(bool)
+	return value, ok
+}
+
 func (p *UpdateIpAddressParams) SetId(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *UpdateIpAddressParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new UpdateIpAddressParams instance,
@@ -750,6 +1068,7 @@ type UpdateIpAddressResponse struct {
 	Domainid                  string `json:"domainid"`
 	Fordisplay                bool   `json:"fordisplay"`
 	Forvirtualnetwork         bool   `json:"forvirtualnetwork"`
+	Hasannotations            bool   `json:"hasannotations"`
 	Id                        string `json:"id"`
 	Ipaddress                 string `json:"ipaddress"`
 	Isportable                bool   `json:"isportable"`

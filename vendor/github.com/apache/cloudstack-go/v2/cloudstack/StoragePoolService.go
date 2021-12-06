@@ -25,6 +25,15 @@ import (
 	"strconv"
 )
 
+type StoragePoolServiceIface interface {
+	CancelStorageMaintenance(p *CancelStorageMaintenanceParams) (*CancelStorageMaintenanceResponse, error)
+	NewCancelStorageMaintenanceParams(id string) *CancelStorageMaintenanceParams
+	EnableStorageMaintenance(p *EnableStorageMaintenanceParams) (*EnableStorageMaintenanceResponse, error)
+	NewEnableStorageMaintenanceParams(id string) *EnableStorageMaintenanceParams
+	ListStorageProviders(p *ListStorageProvidersParams) (*ListStorageProvidersResponse, error)
+	NewListStorageProvidersParams(storagePoolType string) *ListStorageProvidersParams
+}
+
 type CancelStorageMaintenanceParams struct {
 	p map[string]interface{}
 }
@@ -45,6 +54,14 @@ func (p *CancelStorageMaintenanceParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *CancelStorageMaintenanceParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new CancelStorageMaintenanceParams instance,
@@ -100,6 +117,7 @@ type CancelStorageMaintenanceResponse struct {
 	Disksizeallocated    int64             `json:"disksizeallocated"`
 	Disksizetotal        int64             `json:"disksizetotal"`
 	Disksizeused         int64             `json:"disksizeused"`
+	Hasannotations       bool              `json:"hasannotations"`
 	Hypervisor           string            `json:"hypervisor"`
 	Id                   string            `json:"id"`
 	Ipaddress            string            `json:"ipaddress"`
@@ -141,6 +159,14 @@ func (p *EnableStorageMaintenanceParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *EnableStorageMaintenanceParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new EnableStorageMaintenanceParams instance,
@@ -196,6 +222,7 @@ type EnableStorageMaintenanceResponse struct {
 	Disksizeallocated    int64             `json:"disksizeallocated"`
 	Disksizetotal        int64             `json:"disksizetotal"`
 	Disksizeused         int64             `json:"disksizeused"`
+	Hasannotations       bool              `json:"hasannotations"`
 	Hypervisor           string            `json:"hypervisor"`
 	Id                   string            `json:"id"`
 	Ipaddress            string            `json:"ipaddress"`
@@ -250,11 +277,27 @@ func (p *ListStorageProvidersParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListStorageProvidersParams) GetKeyword() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["keyword"].(string)
+	return value, ok
+}
+
 func (p *ListStorageProvidersParams) SetPage(v int) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["page"] = v
+}
+
+func (p *ListStorageProvidersParams) GetPage() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["page"].(int)
+	return value, ok
 }
 
 func (p *ListStorageProvidersParams) SetPagesize(v int) {
@@ -264,11 +307,27 @@ func (p *ListStorageProvidersParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListStorageProvidersParams) GetPagesize() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["pagesize"].(int)
+	return value, ok
+}
+
 func (p *ListStorageProvidersParams) SetType(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["type"] = v
+}
+
+func (p *ListStorageProvidersParams) GetType() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["type"].(string)
+	return value, ok
 }
 
 // You should always use this function to get a new ListStorageProvidersParams instance,
