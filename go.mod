@@ -1,5 +1,7 @@
 module github.com/terraform-providers/terraform-provider-cloudstack
 
+go 1.18
+
 require (
 	github.com/apache/cloudstack-go/v2 v2.12.0
 	github.com/hashicorp/go-multierror v1.1.1
@@ -86,5 +88,3 @@ require (
 	google.golang.org/grpc v1.32.0 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
 )
-
-go 1.17
