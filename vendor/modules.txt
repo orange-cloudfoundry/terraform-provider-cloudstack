@@ -22,7 +22,7 @@ github.com/Masterminds/sprig
 # github.com/agext/levenshtein v1.2.2
 ## explicit
 github.com/agext/levenshtein
-# github.com/apache/cloudstack-go/v2 v2.13.0
+# github.com/apache/cloudstack-go/v2 v2.13.1
 ## explicit; go 1.17
 github.com/apache/cloudstack-go/v2/cloudstack
 # github.com/apparentlymart/go-cidr v1.1.0
