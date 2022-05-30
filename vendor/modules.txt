@@ -554,6 +554,6 @@ google.golang.org/protobuf/types/known/durationpb
 google.golang.org/protobuf/types/known/emptypb
 google.golang.org/protobuf/types/known/timestamppb
 google.golang.org/protobuf/types/pluginpb
-# gopkg.in/ini.v1 v1.66.4
+# gopkg.in/ini.v1 v1.66.5
 ## explicit
 gopkg.in/ini.v1
