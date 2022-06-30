@@ -50,6 +50,13 @@ jobs:
         run: |
           go test -v ./...
 
+      - name: Import GPG key
+        id: import_gpg
+        uses: hashicorp/ghaction-import-gpg@v2.1.0
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.PAASBOT_GPG_KEY }}
+          PASSPHRASE: ${{ secrets.PAASBOT_GPG_PASSPHRASE }}
+
       - name: run goreleaser
         uses: goreleaser/goreleaser-action@v2
         if: success() && startsWith(github.ref, 'refs/tags/')
@@ -59,3 +66,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USER: github-actions
+          GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
+
