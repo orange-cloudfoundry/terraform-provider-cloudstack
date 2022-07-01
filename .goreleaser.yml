@@ -22,7 +22,7 @@ builds:
     goos:
       # - freebsd
       # - openbsd
-      # - windows
+      - windows
       - linux
       - darwin
     goarch:
