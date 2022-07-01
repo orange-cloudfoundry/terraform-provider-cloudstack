@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/apache/cloudstack-go/v2/cloudstack"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceCloudStackLoadBalancerRule() *schema.Resource {
@@ -98,8 +98,6 @@ func resourceCloudStackLoadBalancerRuleCreate(d *schema.ResourceData, meta inter
 		return err
 	}
 
-	d.Partial(true)
-
 	// Create a new parameter struct
 	p := cs.LoadBalancer.NewCreateLoadBalancerRuleParams(
 		d.Get("algorithm").(string),
@@ -137,16 +135,8 @@ func resourceCloudStackLoadBalancerRuleCreate(d *schema.ResourceData, meta inter
 		return err
 	}
 
-	// Set the load balancer rule ID and set partials
+	// Set the load balancer rule ID
 	d.SetId(r.Id)
-	d.SetPartial("name")
-	d.SetPartial("description")
-	d.SetPartial("ip_address_id")
-	d.SetPartial("network_id")
-	d.SetPartial("algorithm")
-	d.SetPartial("private_port")
-	d.SetPartial("public_port")
-	d.SetPartial("protocol")
 
 	if certificateID, ok := d.GetOk("certificate_id"); ok {
 		// Create a new parameter struct
@@ -155,7 +145,6 @@ func resourceCloudStackLoadBalancerRuleCreate(d *schema.ResourceData, meta inter
 			return err
 		}
 	}
-	d.SetPartial("certificate_id")
 
 	// Create a new parameter struct
 	mp := cs.LoadBalancer.NewAssignToLoadBalancerRuleParams(r.Id)
@@ -171,9 +160,6 @@ func resourceCloudStackLoadBalancerRuleCreate(d *schema.ResourceData, meta inter
 	if err != nil {
 		return err
 	}
-
-	d.SetPartial("member_ids")
-	d.Partial(false)
 
 	return resourceCloudStackLoadBalancerRuleRead(d, meta)
 }

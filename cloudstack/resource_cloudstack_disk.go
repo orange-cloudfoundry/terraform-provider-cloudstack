@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/apache/cloudstack-go/v2/cloudstack"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceCloudStackDisk() *schema.Resource {
@@ -82,7 +82,6 @@ func resourceCloudStackDisk() *schema.Resource {
 
 func resourceCloudStackDiskCreate(d *schema.ResourceData, meta interface{}) error {
 	cs := meta.(*cloudstack.CloudStackClient)
-	d.Partial(true)
 
 	name := d.Get("name").(string)
 
@@ -122,15 +121,8 @@ func resourceCloudStackDiskCreate(d *schema.ResourceData, meta interface{}) erro
 		return fmt.Errorf("Error creating the new disk %s: %s", name, err)
 	}
 
-	d.SetPartial("name")
-	d.SetPartial("device_id")
-	d.SetPartial("disk_offering")
-	d.SetPartial("size")
-	d.SetPartial("virtual_machine_id")
-	d.SetPartial("project")
-	d.SetPartial("zone")
 
-	// Set the volume ID and partials
+	// Set the volume ID
 	d.SetId(r.Id)
 
 	// Set tags if necessary
@@ -138,18 +130,13 @@ func resourceCloudStackDiskCreate(d *schema.ResourceData, meta interface{}) erro
 	if err != nil {
 		return fmt.Errorf("Error setting tags on the new disk %s: %s", name, err)
 	}
-	d.SetPartial("tags")
 
 	if d.Get("attach").(bool) {
 		if err := resourceCloudStackDiskAttach(d, meta); err != nil {
 			return fmt.Errorf("Error attaching the new disk %s to virtual machine: %s", name, err)
 		}
-
-		// Set the additional partial
-		d.SetPartial("attach")
 	}
 
-	d.Partial(false)
 	return resourceCloudStackDiskRead(d, meta)
 }
 
@@ -194,8 +181,6 @@ func resourceCloudStackDiskRead(d *schema.ResourceData, meta interface{}) error 
 
 func resourceCloudStackDiskUpdate(d *schema.ResourceData, meta interface{}) error {
 	cs := meta.(*cloudstack.CloudStackClient)
-	d.Partial(true)
-
 	name := d.Get("name").(string)
 
 	if d.HasChange("disk_offering") || d.HasChange("size") {
@@ -230,10 +215,8 @@ func resourceCloudStackDiskUpdate(d *schema.ResourceData, meta interface{}) erro
 			return fmt.Errorf("Error changing disk offering/size for disk %s: %s", name, err)
 		}
 
-		// Update the volume ID and set partials
+		// Update the volume ID
 		d.SetId(r.Id)
-		d.SetPartial("disk_offering")
-		d.SetPartial("size")
 	}
 
 	// If the device ID changed, just detach here so we can re-attach the
@@ -251,11 +234,6 @@ func resourceCloudStackDiskUpdate(d *schema.ResourceData, meta interface{}) erro
 		if err != nil {
 			return fmt.Errorf("Error attaching disk %s to virtual machine: %s", name, err)
 		}
-
-		// Set the additional partials
-		d.SetPartial("attach")
-		d.SetPartial("device_id")
-		d.SetPartial("virtual_machine_id")
 	} else {
 		// Detach the volume
 		if err := resourceCloudStackDiskDetach(d, meta); err != nil {
@@ -269,10 +247,7 @@ func resourceCloudStackDiskUpdate(d *schema.ResourceData, meta interface{}) erro
 		if err != nil {
 			return fmt.Errorf("Error updating tags on disk %s: %s", name, err)
 		}
-		d.SetPartial("tags")
 	}
-
-	d.Partial(false)
 
 	return resourceCloudStackDiskRead(d, meta)
 }

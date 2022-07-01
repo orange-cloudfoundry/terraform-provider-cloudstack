@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/apache/cloudstack-go/v2/cloudstack"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 const none = "none"
@@ -142,7 +142,6 @@ func resourceCloudStackNetwork() *schema.Resource {
 
 func resourceCloudStackNetworkCreate(d *schema.ResourceData, meta interface{}) error {
 	cs := meta.(*cloudstack.CloudStackClient)
-	d.Partial(true)
 
 	name := d.Get("name").(string)
 
@@ -224,27 +223,12 @@ func resourceCloudStackNetworkCreate(d *schema.ResourceData, meta interface{}) e
 		return fmt.Errorf("Error creating network %s: %s", name, err)
 	}
 
-	d.SetPartial("name")
-	d.SetPartial("display_text")
-	d.SetPartial("cidr")
-	d.SetPartial("gateway")
-	d.SetPartial("startip")
-	d.SetPartial("endip")
-	d.SetPartial("network_domain")
-	d.SetPartial("network_offering")
-	d.SetPartial("vlan")
-	d.SetPartial("vpc_id")
-	d.SetPartial("acl_id")
-	d.SetPartial("project")
-	d.SetPartial("zone")
-
 	d.SetId(r.Id)
 
 	// Set tags if necessary
 	if err = setTags(cs, d, "network"); err != nil {
 		return fmt.Errorf("Error setting tags: %v", err)
 	}
-	d.SetPartial("tags")
 
 	if d.Get("source_nat_ip").(bool) {
 		// Create a new parameter struct
@@ -270,13 +254,7 @@ func resourceCloudStackNetworkCreate(d *schema.ResourceData, meta interface{}) e
 			return fmt.Errorf("Error associating a new IP address: %s", err)
 		}
 		d.Set("source_nat_ip_id", ip.Id)
-
-		// Set the additional partial
-		d.SetPartial("source_nat_ip")
-		d.SetPartial("source_nat_ip_id")
 	}
-
-	d.Partial(false)
 	return resourceCloudStackNetworkRead(d, meta)
 }
 
