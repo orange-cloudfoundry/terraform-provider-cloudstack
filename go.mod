@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/apache/cloudstack-go/v2 v2.13.2
 	github.com/hashicorp/go-multierror v1.1.1
-	github.com/hashicorp/terraform-plugin-sdk/v2 v2.23.0
+	github.com/hashicorp/terraform-plugin-sdk/v2 v2.24.0
 	gopkg.in/ini.v1 v1.67.0
 )
 
