@@ -52,17 +52,16 @@ jobs:
 
       - name: Import GPG key
         id: import_gpg
-        uses: hashicorp/ghaction-import-gpg@v2.1.0
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.PAASBOT_GPG_KEY }}
-          PASSPHRASE: ${{ secrets.PAASBOT_GPG_PASSPHRASE }}
+        uses: crazy-max/ghaction-import-gpg@v5
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: run goreleaser
-        uses: goreleaser/goreleaser-action@v3.0.0
+        uses: goreleaser/goreleaser-action@v4
         with:
           version: latest
           args: release --rm-dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
-
