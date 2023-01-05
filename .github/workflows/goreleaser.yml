@@ -62,9 +62,11 @@ jobs:
 
       - name: run goreleaser
         uses: goreleaser/goreleaser-action@v4
+        if: success() && startsWith(github.ref, 'refs/tags/')
         with:
           version: latest
           args: release --rm-dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          USER: github-actions
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
