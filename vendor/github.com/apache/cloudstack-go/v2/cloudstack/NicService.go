@@ -344,6 +344,8 @@ type Nic struct {
 	Type             string `json:"type"`
 	Virtualmachineid string `json:"virtualmachineid"`
 	Vlanid           int    `json:"vlanid"`
+	Vpcid            string `json:"vpcid"`
+	Vpcname          string `json:"vpcname"`
 }
 
 type RemoveIpFromNicParams struct {
@@ -545,7 +547,7 @@ type UpdateVmNicIpResponse struct {
 	Hostid                string                               `json:"hostid"`
 	Hostname              string                               `json:"hostname"`
 	Hypervisor            string                               `json:"hypervisor"`
-	Icon                  string                               `json:"icon"`
+	Icon                  interface{}                          `json:"icon"`
 	Id                    string                               `json:"id"`
 	Instancename          string                               `json:"instancename"`
 	Isdynamicallyscalable bool                                 `json:"isdynamicallyscalable"`
@@ -554,7 +556,7 @@ type UpdateVmNicIpResponse struct {
 	Isoname               string                               `json:"isoname"`
 	JobID                 string                               `json:"jobid"`
 	Jobstatus             int                                  `json:"jobstatus"`
-	Keypair               string                               `json:"keypair"`
+	Keypairs              string                               `json:"keypairs"`
 	Lastupdated           string                               `json:"lastupdated"`
 	Memory                int                                  `json:"memory"`
 	Memoryintfreekbs      int64                                `json:"memoryintfreekbs"`

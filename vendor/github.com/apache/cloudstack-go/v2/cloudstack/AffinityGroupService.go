@@ -981,7 +981,7 @@ type UpdateVMAffinityGroupResponse struct {
 	Hostid                string                                       `json:"hostid"`
 	Hostname              string                                       `json:"hostname"`
 	Hypervisor            string                                       `json:"hypervisor"`
-	Icon                  string                                       `json:"icon"`
+	Icon                  interface{}                                  `json:"icon"`
 	Id                    string                                       `json:"id"`
 	Instancename          string                                       `json:"instancename"`
 	Isdynamicallyscalable bool                                         `json:"isdynamicallyscalable"`
@@ -990,7 +990,7 @@ type UpdateVMAffinityGroupResponse struct {
 	Isoname               string                                       `json:"isoname"`
 	JobID                 string                                       `json:"jobid"`
 	Jobstatus             int                                          `json:"jobstatus"`
-	Keypair               string                                       `json:"keypair"`
+	Keypairs              string                                       `json:"keypairs"`
 	Lastupdated           string                                       `json:"lastupdated"`
 	Memory                int                                          `json:"memory"`
 	Memoryintfreekbs      int64                                        `json:"memoryintfreekbs"`
