@@ -33,7 +33,7 @@ type NetworkServiceIface interface {
 	AddOpenDaylightController(p *AddOpenDaylightControllerParams) (*AddOpenDaylightControllerResponse, error)
 	NewAddOpenDaylightControllerParams(password string, physicalnetworkid string, url string, username string) *AddOpenDaylightControllerParams
 	CreateNetwork(p *CreateNetworkParams) (*CreateNetworkResponse, error)
-	NewCreateNetworkParams(displaytext string, name string, networkofferingid string, zoneid string) *CreateNetworkParams
+	NewCreateNetworkParams(name string, networkofferingid string, zoneid string) *CreateNetworkParams
 	CreatePhysicalNetwork(p *CreatePhysicalNetworkParams) (*CreatePhysicalNetworkResponse, error)
 	NewCreatePhysicalNetworkParams(name string, zoneid string) *CreatePhysicalNetworkParams
 	CreateServiceInstance(p *CreateServiceInstanceParams) (*CreateServiceInstanceResponse, error)
@@ -96,6 +96,21 @@ type NetworkServiceIface interface {
 	NewUpdatePhysicalNetworkParams(id string) *UpdatePhysicalNetworkParams
 	UpdateStorageNetworkIpRange(p *UpdateStorageNetworkIpRangeParams) (*UpdateStorageNetworkIpRangeResponse, error)
 	NewUpdateStorageNetworkIpRangeParams(id string) *UpdateStorageNetworkIpRangeParams
+	DeleteGuestNetworkIpv6Prefix(p *DeleteGuestNetworkIpv6PrefixParams) (*DeleteGuestNetworkIpv6PrefixResponse, error)
+	NewDeleteGuestNetworkIpv6PrefixParams(id string) *DeleteGuestNetworkIpv6PrefixParams
+	CreateGuestNetworkIpv6Prefix(p *CreateGuestNetworkIpv6PrefixParams) (*CreateGuestNetworkIpv6PrefixResponse, error)
+	NewCreateGuestNetworkIpv6PrefixParams(prefix string, zoneid string) *CreateGuestNetworkIpv6PrefixParams
+	ListGuestNetworkIpv6Prefixes(p *ListGuestNetworkIpv6PrefixesParams) (*ListGuestNetworkIpv6PrefixesResponse, error)
+	NewListGuestNetworkIpv6PrefixesParams() *ListGuestNetworkIpv6PrefixesParams
+	GetGuestNetworkIpv6PrefixeByID(id string, opts ...OptionFunc) (*GuestNetworkIpv6Prefixe, int, error)
+	CreateNetworkPermissions(p *CreateNetworkPermissionsParams) (*CreateNetworkPermissionsResponse, error)
+	NewCreateNetworkPermissionsParams(networkid string) *CreateNetworkPermissionsParams
+	ResetNetworkPermissions(p *ResetNetworkPermissionsParams) (*ResetNetworkPermissionsResponse, error)
+	NewResetNetworkPermissionsParams(networkid string) *ResetNetworkPermissionsParams
+	ListNetworkPermissions(p *ListNetworkPermissionsParams) (*ListNetworkPermissionsResponse, error)
+	NewListNetworkPermissionsParams(networkid string) *ListNetworkPermissionsParams
+	RemoveNetworkPermissions(p *RemoveNetworkPermissionsParams) (*RemoveNetworkPermissionsResponse, error)
+	NewRemoveNetworkPermissionsParams(networkid string) *RemoveNetworkPermissionsParams
 }
 
 type AddNetworkServiceProviderParams struct {
@@ -399,6 +414,9 @@ func (p *CreateNetworkParams) toURLValues() url.Values {
 	if v, found := p.p["acltype"]; found {
 		u.Set("acltype", v.(string))
 	}
+	if v, found := p.p["associatednetworkid"]; found {
+		u.Set("associatednetworkid", v.(string))
+	}
 	if v, found := p.p["bypassvlanoverlapcheck"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("bypassvlanoverlapcheck", vv)
@@ -409,6 +427,12 @@ func (p *CreateNetworkParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["displaytext"]; found {
 		u.Set("displaytext", v.(string))
+	}
+	if v, found := p.p["dns1"]; found {
+		u.Set("dns1", v.(string))
+	}
+	if v, found := p.p["dns2"]; found {
+		u.Set("dns2", v.(string))
 	}
 	if v, found := p.p["domainid"]; found {
 		u.Set("domainid", v.(string))
@@ -431,6 +455,12 @@ func (p *CreateNetworkParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["ip6cidr"]; found {
 		u.Set("ip6cidr", v.(string))
+	}
+	if v, found := p.p["ip6dns1"]; found {
+		u.Set("ip6dns1", v.(string))
+	}
+	if v, found := p.p["ip6dns2"]; found {
+		u.Set("ip6dns2", v.(string))
 	}
 	if v, found := p.p["ip6gateway"]; found {
 		u.Set("ip6gateway", v.(string))
@@ -456,8 +486,16 @@ func (p *CreateNetworkParams) toURLValues() url.Values {
 	if v, found := p.p["physicalnetworkid"]; found {
 		u.Set("physicalnetworkid", v.(string))
 	}
+	if v, found := p.p["privatemtu"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("privatemtu", vv)
+	}
 	if v, found := p.p["projectid"]; found {
 		u.Set("projectid", v.(string))
+	}
+	if v, found := p.p["publicmtu"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("publicmtu", vv)
 	}
 	if v, found := p.p["routerip"]; found {
 		u.Set("routerip", v.(string))
@@ -474,6 +512,9 @@ func (p *CreateNetworkParams) toURLValues() url.Values {
 	if v, found := p.p["subdomainaccess"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("subdomainaccess", vv)
+	}
+	if v, found := p.p["tungstenvirtualrouteruuid"]; found {
+		u.Set("tungstenvirtualrouteruuid", v.(string))
 	}
 	if v, found := p.p["vlan"]; found {
 		u.Set("vlan", v.(string))
@@ -532,6 +573,21 @@ func (p *CreateNetworkParams) GetAcltype() (string, bool) {
 	return value, ok
 }
 
+func (p *CreateNetworkParams) SetAssociatednetworkid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["associatednetworkid"] = v
+}
+
+func (p *CreateNetworkParams) GetAssociatednetworkid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["associatednetworkid"].(string)
+	return value, ok
+}
+
 func (p *CreateNetworkParams) SetBypassvlanoverlapcheck(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -574,6 +630,36 @@ func (p *CreateNetworkParams) GetDisplaytext() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["displaytext"].(string)
+	return value, ok
+}
+
+func (p *CreateNetworkParams) SetDns1(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["dns1"] = v
+}
+
+func (p *CreateNetworkParams) GetDns1() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["dns1"].(string)
+	return value, ok
+}
+
+func (p *CreateNetworkParams) SetDns2(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["dns2"] = v
+}
+
+func (p *CreateNetworkParams) GetDns2() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["dns2"].(string)
 	return value, ok
 }
 
@@ -679,6 +765,36 @@ func (p *CreateNetworkParams) GetIp6cidr() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["ip6cidr"].(string)
+	return value, ok
+}
+
+func (p *CreateNetworkParams) SetIp6dns1(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["ip6dns1"] = v
+}
+
+func (p *CreateNetworkParams) GetIp6dns1() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ip6dns1"].(string)
+	return value, ok
+}
+
+func (p *CreateNetworkParams) SetIp6dns2(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["ip6dns2"] = v
+}
+
+func (p *CreateNetworkParams) GetIp6dns2() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ip6dns2"].(string)
 	return value, ok
 }
 
@@ -802,6 +918,21 @@ func (p *CreateNetworkParams) GetPhysicalnetworkid() (string, bool) {
 	return value, ok
 }
 
+func (p *CreateNetworkParams) SetPrivatemtu(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["privatemtu"] = v
+}
+
+func (p *CreateNetworkParams) GetPrivatemtu() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["privatemtu"].(int)
+	return value, ok
+}
+
 func (p *CreateNetworkParams) SetProjectid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -814,6 +945,21 @@ func (p *CreateNetworkParams) GetProjectid() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["projectid"].(string)
+	return value, ok
+}
+
+func (p *CreateNetworkParams) SetPublicmtu(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["publicmtu"] = v
+}
+
+func (p *CreateNetworkParams) GetPublicmtu() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["publicmtu"].(int)
 	return value, ok
 }
 
@@ -892,6 +1038,21 @@ func (p *CreateNetworkParams) GetSubdomainaccess() (bool, bool) {
 	return value, ok
 }
 
+func (p *CreateNetworkParams) SetTungstenvirtualrouteruuid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["tungstenvirtualrouteruuid"] = v
+}
+
+func (p *CreateNetworkParams) GetTungstenvirtualrouteruuid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["tungstenvirtualrouteruuid"].(string)
+	return value, ok
+}
+
 func (p *CreateNetworkParams) SetVlan(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -939,10 +1100,9 @@ func (p *CreateNetworkParams) GetZoneid() (string, bool) {
 
 // You should always use this function to get a new CreateNetworkParams instance,
 // as then you are sure you have configured all required params
-func (s *NetworkService) NewCreateNetworkParams(displaytext string, name string, networkofferingid string, zoneid string) *CreateNetworkParams {
+func (s *NetworkService) NewCreateNetworkParams(name string, networkofferingid string, zoneid string) *CreateNetworkParams {
 	p := &CreateNetworkParams{}
 	p.p = make(map[string]interface{})
-	p.p["displaytext"] = displaytext
 	p.p["name"] = name
 	p.p["networkofferingid"] = networkofferingid
 	p.p["zoneid"] = zoneid
@@ -973,6 +1133,8 @@ type CreateNetworkResponse struct {
 	Aclid                       string                         `json:"aclid"`
 	Aclname                     string                         `json:"aclname"`
 	Acltype                     string                         `json:"acltype"`
+	Associatednetwork           string                         `json:"associatednetwork"`
+	Associatednetworkid         string                         `json:"associatednetworkid"`
 	Broadcastdomaintype         string                         `json:"broadcastdomaintype"`
 	Broadcasturi                string                         `json:"broadcasturi"`
 	Canusefordeploy             bool                           `json:"canusefordeploy"`
@@ -985,13 +1147,19 @@ type CreateNetworkResponse struct {
 	Dns2                        string                         `json:"dns2"`
 	Domain                      string                         `json:"domain"`
 	Domainid                    string                         `json:"domainid"`
+	Egressdefaultpolicy         bool                           `json:"egressdefaultpolicy"`
 	Externalid                  string                         `json:"externalid"`
 	Gateway                     string                         `json:"gateway"`
 	Hasannotations              bool                           `json:"hasannotations"`
-	Icon                        string                         `json:"icon"`
+	Icon                        interface{}                    `json:"icon"`
 	Id                          string                         `json:"id"`
+	Internetprotocol            string                         `json:"internetprotocol"`
 	Ip6cidr                     string                         `json:"ip6cidr"`
+	Ip6dns1                     string                         `json:"ip6dns1"`
+	Ip6dns2                     string                         `json:"ip6dns2"`
 	Ip6gateway                  string                         `json:"ip6gateway"`
+	Ip6routes                   []interface{}                  `json:"ip6routes"`
+	Ip6routing                  string                         `json:"ip6routing"`
 	Isdefault                   bool                           `json:"isdefault"`
 	Ispersistent                bool                           `json:"ispersistent"`
 	Issystem                    bool                           `json:"issystem"`
@@ -1007,8 +1175,10 @@ type CreateNetworkResponse struct {
 	Networkofferingid           string                         `json:"networkofferingid"`
 	Networkofferingname         string                         `json:"networkofferingname"`
 	Physicalnetworkid           string                         `json:"physicalnetworkid"`
+	Privatemtu                  int                            `json:"privatemtu"`
 	Project                     string                         `json:"project"`
 	Projectid                   string                         `json:"projectid"`
+	Publicmtu                   int                            `json:"publicmtu"`
 	Receivedbytes               int64                          `json:"receivedbytes"`
 	Redundantrouter             bool                           `json:"redundantrouter"`
 	Related                     string                         `json:"related"`
@@ -1020,8 +1190,10 @@ type CreateNetworkResponse struct {
 	State                       string                         `json:"state"`
 	Strechedl2subnet            bool                           `json:"strechedl2subnet"`
 	Subdomainaccess             bool                           `json:"subdomainaccess"`
+	Supportsvmautoscaling       bool                           `json:"supportsvmautoscaling"`
 	Tags                        []Tags                         `json:"tags"`
 	Traffictype                 string                         `json:"traffictype"`
+	Tungstenvirtualrouteruuid   string                         `json:"tungstenvirtualrouteruuid"`
 	Type                        string                         `json:"type"`
 	Vlan                        string                         `json:"vlan"`
 	Vpcid                       string                         `json:"vpcid"`
@@ -1801,6 +1973,7 @@ func (s *NetworkService) DedicatePublicIpRange(p *DedicatePublicIpRangeParams) (
 
 type DedicatePublicIpRangeResponse struct {
 	Account           string `json:"account"`
+	Cidr              string `json:"cidr"`
 	Description       string `json:"description"`
 	Domain            string `json:"domain"`
 	Domainid          string `json:"domainid"`
@@ -2391,6 +2564,8 @@ type NetscalerLoadBalancerNetwork struct {
 	Aclid                       string                                `json:"aclid"`
 	Aclname                     string                                `json:"aclname"`
 	Acltype                     string                                `json:"acltype"`
+	Associatednetwork           string                                `json:"associatednetwork"`
+	Associatednetworkid         string                                `json:"associatednetworkid"`
 	Broadcastdomaintype         string                                `json:"broadcastdomaintype"`
 	Broadcasturi                string                                `json:"broadcasturi"`
 	Canusefordeploy             bool                                  `json:"canusefordeploy"`
@@ -2403,13 +2578,19 @@ type NetscalerLoadBalancerNetwork struct {
 	Dns2                        string                                `json:"dns2"`
 	Domain                      string                                `json:"domain"`
 	Domainid                    string                                `json:"domainid"`
+	Egressdefaultpolicy         bool                                  `json:"egressdefaultpolicy"`
 	Externalid                  string                                `json:"externalid"`
 	Gateway                     string                                `json:"gateway"`
 	Hasannotations              bool                                  `json:"hasannotations"`
-	Icon                        string                                `json:"icon"`
+	Icon                        interface{}                           `json:"icon"`
 	Id                          string                                `json:"id"`
+	Internetprotocol            string                                `json:"internetprotocol"`
 	Ip6cidr                     string                                `json:"ip6cidr"`
+	Ip6dns1                     string                                `json:"ip6dns1"`
+	Ip6dns2                     string                                `json:"ip6dns2"`
 	Ip6gateway                  string                                `json:"ip6gateway"`
+	Ip6routes                   []interface{}                         `json:"ip6routes"`
+	Ip6routing                  string                                `json:"ip6routing"`
 	Isdefault                   bool                                  `json:"isdefault"`
 	Ispersistent                bool                                  `json:"ispersistent"`
 	Issystem                    bool                                  `json:"issystem"`
@@ -2425,8 +2606,10 @@ type NetscalerLoadBalancerNetwork struct {
 	Networkofferingid           string                                `json:"networkofferingid"`
 	Networkofferingname         string                                `json:"networkofferingname"`
 	Physicalnetworkid           string                                `json:"physicalnetworkid"`
+	Privatemtu                  int                                   `json:"privatemtu"`
 	Project                     string                                `json:"project"`
 	Projectid                   string                                `json:"projectid"`
+	Publicmtu                   int                                   `json:"publicmtu"`
 	Receivedbytes               int64                                 `json:"receivedbytes"`
 	Redundantrouter             bool                                  `json:"redundantrouter"`
 	Related                     string                                `json:"related"`
@@ -2438,8 +2621,10 @@ type NetscalerLoadBalancerNetwork struct {
 	State                       string                                `json:"state"`
 	Strechedl2subnet            bool                                  `json:"strechedl2subnet"`
 	Subdomainaccess             bool                                  `json:"subdomainaccess"`
+	Supportsvmautoscaling       bool                                  `json:"supportsvmautoscaling"`
 	Tags                        []Tags                                `json:"tags"`
 	Traffictype                 string                                `json:"traffictype"`
+	Tungstenvirtualrouteruuid   string                                `json:"tungstenvirtualrouteruuid"`
 	Type                        string                                `json:"type"`
 	Vlan                        string                                `json:"vlan"`
 	Vpcid                       string                                `json:"vpcid"`
@@ -2786,6 +2971,9 @@ func (p *ListNetworksParams) toURLValues() url.Values {
 	if v, found := p.p["acltype"]; found {
 		u.Set("acltype", v.(string))
 	}
+	if v, found := p.p["associatednetworkid"]; found {
+		u.Set("associatednetworkid", v.(string))
+	}
 	if v, found := p.p["canusefordeploy"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("canusefordeploy", vv)
@@ -2818,6 +3006,9 @@ func (p *ListNetworksParams) toURLValues() url.Values {
 	if v, found := p.p["listall"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("listall", vv)
+	}
+	if v, found := p.p["networkfilter"]; found {
+		u.Set("networkfilter", v.(string))
 	}
 	if v, found := p.p["networkofferingid"]; found {
 		u.Set("networkofferingid", v.(string))
@@ -2865,6 +3056,9 @@ func (p *ListNetworksParams) toURLValues() url.Values {
 	if v, found := p.p["type"]; found {
 		u.Set("type", v.(string))
 	}
+	if v, found := p.p["vlan"]; found {
+		u.Set("vlan", v.(string))
+	}
 	if v, found := p.p["vpcid"]; found {
 		u.Set("vpcid", v.(string))
 	}
@@ -2901,6 +3095,21 @@ func (p *ListNetworksParams) GetAcltype() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["acltype"].(string)
+	return value, ok
+}
+
+func (p *ListNetworksParams) SetAssociatednetworkid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["associatednetworkid"] = v
+}
+
+func (p *ListNetworksParams) GetAssociatednetworkid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["associatednetworkid"].(string)
 	return value, ok
 }
 
@@ -3036,6 +3245,21 @@ func (p *ListNetworksParams) GetListall() (bool, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["listall"].(bool)
+	return value, ok
+}
+
+func (p *ListNetworksParams) SetNetworkfilter(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["networkfilter"] = v
+}
+
+func (p *ListNetworksParams) GetNetworkfilter() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["networkfilter"].(string)
 	return value, ok
 }
 
@@ -3219,6 +3443,21 @@ func (p *ListNetworksParams) GetType() (string, bool) {
 	return value, ok
 }
 
+func (p *ListNetworksParams) SetVlan(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["vlan"] = v
+}
+
+func (p *ListNetworksParams) GetVlan() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["vlan"].(string)
+	return value, ok
+}
+
 func (p *ListNetworksParams) SetVpcid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3365,6 +3604,8 @@ type Network struct {
 	Aclid                       string                   `json:"aclid"`
 	Aclname                     string                   `json:"aclname"`
 	Acltype                     string                   `json:"acltype"`
+	Associatednetwork           string                   `json:"associatednetwork"`
+	Associatednetworkid         string                   `json:"associatednetworkid"`
 	Broadcastdomaintype         string                   `json:"broadcastdomaintype"`
 	Broadcasturi                string                   `json:"broadcasturi"`
 	Canusefordeploy             bool                     `json:"canusefordeploy"`
@@ -3377,13 +3618,19 @@ type Network struct {
 	Dns2                        string                   `json:"dns2"`
 	Domain                      string                   `json:"domain"`
 	Domainid                    string                   `json:"domainid"`
+	Egressdefaultpolicy         bool                     `json:"egressdefaultpolicy"`
 	Externalid                  string                   `json:"externalid"`
 	Gateway                     string                   `json:"gateway"`
 	Hasannotations              bool                     `json:"hasannotations"`
-	Icon                        string                   `json:"icon"`
+	Icon                        interface{}              `json:"icon"`
 	Id                          string                   `json:"id"`
+	Internetprotocol            string                   `json:"internetprotocol"`
 	Ip6cidr                     string                   `json:"ip6cidr"`
+	Ip6dns1                     string                   `json:"ip6dns1"`
+	Ip6dns2                     string                   `json:"ip6dns2"`
 	Ip6gateway                  string                   `json:"ip6gateway"`
+	Ip6routes                   []interface{}            `json:"ip6routes"`
+	Ip6routing                  string                   `json:"ip6routing"`
 	Isdefault                   bool                     `json:"isdefault"`
 	Ispersistent                bool                     `json:"ispersistent"`
 	Issystem                    bool                     `json:"issystem"`
@@ -3399,8 +3646,10 @@ type Network struct {
 	Networkofferingid           string                   `json:"networkofferingid"`
 	Networkofferingname         string                   `json:"networkofferingname"`
 	Physicalnetworkid           string                   `json:"physicalnetworkid"`
+	Privatemtu                  int                      `json:"privatemtu"`
 	Project                     string                   `json:"project"`
 	Projectid                   string                   `json:"projectid"`
+	Publicmtu                   int                      `json:"publicmtu"`
 	Receivedbytes               int64                    `json:"receivedbytes"`
 	Redundantrouter             bool                     `json:"redundantrouter"`
 	Related                     string                   `json:"related"`
@@ -3412,8 +3661,10 @@ type Network struct {
 	State                       string                   `json:"state"`
 	Strechedl2subnet            bool                     `json:"strechedl2subnet"`
 	Subdomainaccess             bool                     `json:"subdomainaccess"`
+	Supportsvmautoscaling       bool                     `json:"supportsvmautoscaling"`
 	Tags                        []Tags                   `json:"tags"`
 	Traffictype                 string                   `json:"traffictype"`
+	Tungstenvirtualrouteruuid   string                   `json:"tungstenvirtualrouteruuid"`
 	Type                        string                   `json:"type"`
 	Vlan                        string                   `json:"vlan"`
 	Vpcid                       string                   `json:"vpcid"`
@@ -3602,6 +3853,8 @@ type NiciraNvpDeviceNetwork struct {
 	Aclid                       string                          `json:"aclid"`
 	Aclname                     string                          `json:"aclname"`
 	Acltype                     string                          `json:"acltype"`
+	Associatednetwork           string                          `json:"associatednetwork"`
+	Associatednetworkid         string                          `json:"associatednetworkid"`
 	Broadcastdomaintype         string                          `json:"broadcastdomaintype"`
 	Broadcasturi                string                          `json:"broadcasturi"`
 	Canusefordeploy             bool                            `json:"canusefordeploy"`
@@ -3614,13 +3867,19 @@ type NiciraNvpDeviceNetwork struct {
 	Dns2                        string                          `json:"dns2"`
 	Domain                      string                          `json:"domain"`
 	Domainid                    string                          `json:"domainid"`
+	Egressdefaultpolicy         bool                            `json:"egressdefaultpolicy"`
 	Externalid                  string                          `json:"externalid"`
 	Gateway                     string                          `json:"gateway"`
 	Hasannotations              bool                            `json:"hasannotations"`
-	Icon                        string                          `json:"icon"`
+	Icon                        interface{}                     `json:"icon"`
 	Id                          string                          `json:"id"`
+	Internetprotocol            string                          `json:"internetprotocol"`
 	Ip6cidr                     string                          `json:"ip6cidr"`
+	Ip6dns1                     string                          `json:"ip6dns1"`
+	Ip6dns2                     string                          `json:"ip6dns2"`
 	Ip6gateway                  string                          `json:"ip6gateway"`
+	Ip6routes                   []interface{}                   `json:"ip6routes"`
+	Ip6routing                  string                          `json:"ip6routing"`
 	Isdefault                   bool                            `json:"isdefault"`
 	Ispersistent                bool                            `json:"ispersistent"`
 	Issystem                    bool                            `json:"issystem"`
@@ -3636,8 +3895,10 @@ type NiciraNvpDeviceNetwork struct {
 	Networkofferingid           string                          `json:"networkofferingid"`
 	Networkofferingname         string                          `json:"networkofferingname"`
 	Physicalnetworkid           string                          `json:"physicalnetworkid"`
+	Privatemtu                  int                             `json:"privatemtu"`
 	Project                     string                          `json:"project"`
 	Projectid                   string                          `json:"projectid"`
+	Publicmtu                   int                             `json:"publicmtu"`
 	Receivedbytes               int64                           `json:"receivedbytes"`
 	Redundantrouter             bool                            `json:"redundantrouter"`
 	Related                     string                          `json:"related"`
@@ -3649,8 +3910,10 @@ type NiciraNvpDeviceNetwork struct {
 	State                       string                          `json:"state"`
 	Strechedl2subnet            bool                            `json:"strechedl2subnet"`
 	Subdomainaccess             bool                            `json:"subdomainaccess"`
+	Supportsvmautoscaling       bool                            `json:"supportsvmautoscaling"`
 	Tags                        []Tags                          `json:"tags"`
 	Traffictype                 string                          `json:"traffictype"`
+	Tungstenvirtualrouteruuid   string                          `json:"tungstenvirtualrouteruuid"`
 	Type                        string                          `json:"type"`
 	Vlan                        string                          `json:"vlan"`
 	Vpcid                       string                          `json:"vpcid"`
@@ -3958,6 +4221,8 @@ type PaloAltoFirewallNetwork struct {
 	Aclid                       string                           `json:"aclid"`
 	Aclname                     string                           `json:"aclname"`
 	Acltype                     string                           `json:"acltype"`
+	Associatednetwork           string                           `json:"associatednetwork"`
+	Associatednetworkid         string                           `json:"associatednetworkid"`
 	Broadcastdomaintype         string                           `json:"broadcastdomaintype"`
 	Broadcasturi                string                           `json:"broadcasturi"`
 	Canusefordeploy             bool                             `json:"canusefordeploy"`
@@ -3970,13 +4235,19 @@ type PaloAltoFirewallNetwork struct {
 	Dns2                        string                           `json:"dns2"`
 	Domain                      string                           `json:"domain"`
 	Domainid                    string                           `json:"domainid"`
+	Egressdefaultpolicy         bool                             `json:"egressdefaultpolicy"`
 	Externalid                  string                           `json:"externalid"`
 	Gateway                     string                           `json:"gateway"`
 	Hasannotations              bool                             `json:"hasannotations"`
-	Icon                        string                           `json:"icon"`
+	Icon                        interface{}                      `json:"icon"`
 	Id                          string                           `json:"id"`
+	Internetprotocol            string                           `json:"internetprotocol"`
 	Ip6cidr                     string                           `json:"ip6cidr"`
+	Ip6dns1                     string                           `json:"ip6dns1"`
+	Ip6dns2                     string                           `json:"ip6dns2"`
 	Ip6gateway                  string                           `json:"ip6gateway"`
+	Ip6routes                   []interface{}                    `json:"ip6routes"`
+	Ip6routing                  string                           `json:"ip6routing"`
 	Isdefault                   bool                             `json:"isdefault"`
 	Ispersistent                bool                             `json:"ispersistent"`
 	Issystem                    bool                             `json:"issystem"`
@@ -3992,8 +4263,10 @@ type PaloAltoFirewallNetwork struct {
 	Networkofferingid           string                           `json:"networkofferingid"`
 	Networkofferingname         string                           `json:"networkofferingname"`
 	Physicalnetworkid           string                           `json:"physicalnetworkid"`
+	Privatemtu                  int                              `json:"privatemtu"`
 	Project                     string                           `json:"project"`
 	Projectid                   string                           `json:"projectid"`
+	Publicmtu                   int                              `json:"publicmtu"`
 	Receivedbytes               int64                            `json:"receivedbytes"`
 	Redundantrouter             bool                             `json:"redundantrouter"`
 	Related                     string                           `json:"related"`
@@ -4005,8 +4278,10 @@ type PaloAltoFirewallNetwork struct {
 	State                       string                           `json:"state"`
 	Strechedl2subnet            bool                             `json:"strechedl2subnet"`
 	Subdomainaccess             bool                             `json:"subdomainaccess"`
+	Supportsvmautoscaling       bool                             `json:"supportsvmautoscaling"`
 	Tags                        []Tags                           `json:"tags"`
 	Traffictype                 string                           `json:"traffictype"`
+	Tungstenvirtualrouteruuid   string                           `json:"tungstenvirtualrouteruuid"`
 	Type                        string                           `json:"type"`
 	Vlan                        string                           `json:"vlan"`
 	Vpcid                       string                           `json:"vpcid"`
@@ -4744,6 +5019,10 @@ func (p *RestartNetworkParams) toURLValues() url.Values {
 	if v, found := p.p["id"]; found {
 		u.Set("id", v.(string))
 	}
+	if v, found := p.p["livepatch"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("livepatch", vv)
+	}
 	if v, found := p.p["makeredundant"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("makeredundant", vv)
@@ -4778,6 +5057,21 @@ func (p *RestartNetworkParams) GetId() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+func (p *RestartNetworkParams) SetLivepatch(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["livepatch"] = v
+}
+
+func (p *RestartNetworkParams) GetLivepatch() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["livepatch"].(bool)
 	return value, ok
 }
 
@@ -4865,6 +5159,12 @@ func (p *UpdateNetworkParams) toURLValues() url.Values {
 	if v, found := p.p["displaytext"]; found {
 		u.Set("displaytext", v.(string))
 	}
+	if v, found := p.p["dns1"]; found {
+		u.Set("dns1", v.(string))
+	}
+	if v, found := p.p["dns2"]; found {
+		u.Set("dns2", v.(string))
+	}
 	if v, found := p.p["forced"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("forced", vv)
@@ -4879,6 +5179,12 @@ func (p *UpdateNetworkParams) toURLValues() url.Values {
 	if v, found := p.p["id"]; found {
 		u.Set("id", v.(string))
 	}
+	if v, found := p.p["ip6dns1"]; found {
+		u.Set("ip6dns1", v.(string))
+	}
+	if v, found := p.p["ip6dns2"]; found {
+		u.Set("ip6dns2", v.(string))
+	}
 	if v, found := p.p["name"]; found {
 		u.Set("name", v.(string))
 	}
@@ -4887,6 +5193,14 @@ func (p *UpdateNetworkParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["networkofferingid"]; found {
 		u.Set("networkofferingid", v.(string))
+	}
+	if v, found := p.p["privatemtu"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("privatemtu", vv)
+	}
+	if v, found := p.p["publicmtu"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("publicmtu", vv)
 	}
 	if v, found := p.p["updateinsequence"]; found {
 		vv := strconv.FormatBool(v.(bool))
@@ -4955,6 +5269,36 @@ func (p *UpdateNetworkParams) GetDisplaytext() (string, bool) {
 	return value, ok
 }
 
+func (p *UpdateNetworkParams) SetDns1(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["dns1"] = v
+}
+
+func (p *UpdateNetworkParams) GetDns1() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["dns1"].(string)
+	return value, ok
+}
+
+func (p *UpdateNetworkParams) SetDns2(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["dns2"] = v
+}
+
+func (p *UpdateNetworkParams) GetDns2() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["dns2"].(string)
+	return value, ok
+}
+
 func (p *UpdateNetworkParams) SetForced(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -5015,6 +5359,36 @@ func (p *UpdateNetworkParams) GetId() (string, bool) {
 	return value, ok
 }
 
+func (p *UpdateNetworkParams) SetIp6dns1(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["ip6dns1"] = v
+}
+
+func (p *UpdateNetworkParams) GetIp6dns1() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ip6dns1"].(string)
+	return value, ok
+}
+
+func (p *UpdateNetworkParams) SetIp6dns2(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["ip6dns2"] = v
+}
+
+func (p *UpdateNetworkParams) GetIp6dns2() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ip6dns2"].(string)
+	return value, ok
+}
+
 func (p *UpdateNetworkParams) SetName(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -5057,6 +5431,36 @@ func (p *UpdateNetworkParams) GetNetworkofferingid() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["networkofferingid"].(string)
+	return value, ok
+}
+
+func (p *UpdateNetworkParams) SetPrivatemtu(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["privatemtu"] = v
+}
+
+func (p *UpdateNetworkParams) GetPrivatemtu() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["privatemtu"].(int)
+	return value, ok
+}
+
+func (p *UpdateNetworkParams) SetPublicmtu(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["publicmtu"] = v
+}
+
+func (p *UpdateNetworkParams) GetPublicmtu() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["publicmtu"].(int)
 	return value, ok
 }
 
@@ -5124,6 +5528,8 @@ type UpdateNetworkResponse struct {
 	Aclid                       string                         `json:"aclid"`
 	Aclname                     string                         `json:"aclname"`
 	Acltype                     string                         `json:"acltype"`
+	Associatednetwork           string                         `json:"associatednetwork"`
+	Associatednetworkid         string                         `json:"associatednetworkid"`
 	Broadcastdomaintype         string                         `json:"broadcastdomaintype"`
 	Broadcasturi                string                         `json:"broadcasturi"`
 	Canusefordeploy             bool                           `json:"canusefordeploy"`
@@ -5136,13 +5542,19 @@ type UpdateNetworkResponse struct {
 	Dns2                        string                         `json:"dns2"`
 	Domain                      string                         `json:"domain"`
 	Domainid                    string                         `json:"domainid"`
+	Egressdefaultpolicy         bool                           `json:"egressdefaultpolicy"`
 	Externalid                  string                         `json:"externalid"`
 	Gateway                     string                         `json:"gateway"`
 	Hasannotations              bool                           `json:"hasannotations"`
-	Icon                        string                         `json:"icon"`
+	Icon                        interface{}                    `json:"icon"`
 	Id                          string                         `json:"id"`
+	Internetprotocol            string                         `json:"internetprotocol"`
 	Ip6cidr                     string                         `json:"ip6cidr"`
+	Ip6dns1                     string                         `json:"ip6dns1"`
+	Ip6dns2                     string                         `json:"ip6dns2"`
 	Ip6gateway                  string                         `json:"ip6gateway"`
+	Ip6routes                   []interface{}                  `json:"ip6routes"`
+	Ip6routing                  string                         `json:"ip6routing"`
 	Isdefault                   bool                           `json:"isdefault"`
 	Ispersistent                bool                           `json:"ispersistent"`
 	Issystem                    bool                           `json:"issystem"`
@@ -5158,8 +5570,10 @@ type UpdateNetworkResponse struct {
 	Networkofferingid           string                         `json:"networkofferingid"`
 	Networkofferingname         string                         `json:"networkofferingname"`
 	Physicalnetworkid           string                         `json:"physicalnetworkid"`
+	Privatemtu                  int                            `json:"privatemtu"`
 	Project                     string                         `json:"project"`
 	Projectid                   string                         `json:"projectid"`
+	Publicmtu                   int                            `json:"publicmtu"`
 	Receivedbytes               int64                          `json:"receivedbytes"`
 	Redundantrouter             bool                           `json:"redundantrouter"`
 	Related                     string                         `json:"related"`
@@ -5171,8 +5585,10 @@ type UpdateNetworkResponse struct {
 	State                       string                         `json:"state"`
 	Strechedl2subnet            bool                           `json:"strechedl2subnet"`
 	Subdomainaccess             bool                           `json:"subdomainaccess"`
+	Supportsvmautoscaling       bool                           `json:"supportsvmautoscaling"`
 	Tags                        []Tags                         `json:"tags"`
 	Traffictype                 string                         `json:"traffictype"`
+	Tungstenvirtualrouteruuid   string                         `json:"tungstenvirtualrouteruuid"`
 	Type                        string                         `json:"type"`
 	Vlan                        string                         `json:"vlan"`
 	Vpcid                       string                         `json:"vpcid"`
@@ -5649,4 +6065,811 @@ type UpdateStorageNetworkIpRangeResponse struct {
 	Startip   string `json:"startip"`
 	Vlan      int    `json:"vlan"`
 	Zoneid    string `json:"zoneid"`
+}
+
+type DeleteGuestNetworkIpv6PrefixParams struct {
+	p map[string]interface{}
+}
+
+func (p *DeleteGuestNetworkIpv6PrefixParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["id"]; found {
+		u.Set("id", v.(string))
+	}
+	return u
+}
+
+func (p *DeleteGuestNetworkIpv6PrefixParams) SetId(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["id"] = v
+}
+
+func (p *DeleteGuestNetworkIpv6PrefixParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+// You should always use this function to get a new DeleteGuestNetworkIpv6PrefixParams instance,
+// as then you are sure you have configured all required params
+func (s *NetworkService) NewDeleteGuestNetworkIpv6PrefixParams(id string) *DeleteGuestNetworkIpv6PrefixParams {
+	p := &DeleteGuestNetworkIpv6PrefixParams{}
+	p.p = make(map[string]interface{})
+	p.p["id"] = id
+	return p
+}
+
+// Deletes an existing guest network IPv6 prefix.
+func (s *NetworkService) DeleteGuestNetworkIpv6Prefix(p *DeleteGuestNetworkIpv6PrefixParams) (*DeleteGuestNetworkIpv6PrefixResponse, error) {
+	resp, err := s.cs.newRequest("deleteGuestNetworkIpv6Prefix", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r DeleteGuestNetworkIpv6PrefixResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	// If we have a async client, we need to wait for the async result
+	if s.cs.async {
+		b, err := s.cs.GetAsyncJobResult(r.JobID, s.cs.timeout)
+		if err != nil {
+			if err == AsyncTimeoutErr {
+				return &r, err
+			}
+			return nil, err
+		}
+
+		if err := json.Unmarshal(b, &r); err != nil {
+			return nil, err
+		}
+	}
+
+	return &r, nil
+}
+
+type DeleteGuestNetworkIpv6PrefixResponse struct {
+	Displaytext string `json:"displaytext"`
+	JobID       string `json:"jobid"`
+	Jobstatus   int    `json:"jobstatus"`
+	Success     bool   `json:"success"`
+}
+
+type CreateGuestNetworkIpv6PrefixParams struct {
+	p map[string]interface{}
+}
+
+func (p *CreateGuestNetworkIpv6PrefixParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["prefix"]; found {
+		u.Set("prefix", v.(string))
+	}
+	if v, found := p.p["zoneid"]; found {
+		u.Set("zoneid", v.(string))
+	}
+	return u
+}
+
+func (p *CreateGuestNetworkIpv6PrefixParams) SetPrefix(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["prefix"] = v
+}
+
+func (p *CreateGuestNetworkIpv6PrefixParams) GetPrefix() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["prefix"].(string)
+	return value, ok
+}
+
+func (p *CreateGuestNetworkIpv6PrefixParams) SetZoneid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["zoneid"] = v
+}
+
+func (p *CreateGuestNetworkIpv6PrefixParams) GetZoneid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["zoneid"].(string)
+	return value, ok
+}
+
+// You should always use this function to get a new CreateGuestNetworkIpv6PrefixParams instance,
+// as then you are sure you have configured all required params
+func (s *NetworkService) NewCreateGuestNetworkIpv6PrefixParams(prefix string, zoneid string) *CreateGuestNetworkIpv6PrefixParams {
+	p := &CreateGuestNetworkIpv6PrefixParams{}
+	p.p = make(map[string]interface{})
+	p.p["prefix"] = prefix
+	p.p["zoneid"] = zoneid
+	return p
+}
+
+// Creates a guest network IPv6 prefix.
+func (s *NetworkService) CreateGuestNetworkIpv6Prefix(p *CreateGuestNetworkIpv6PrefixParams) (*CreateGuestNetworkIpv6PrefixResponse, error) {
+	resp, err := s.cs.newRequest("createGuestNetworkIpv6Prefix", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r CreateGuestNetworkIpv6PrefixResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	// If we have a async client, we need to wait for the async result
+	if s.cs.async {
+		b, err := s.cs.GetAsyncJobResult(r.JobID, s.cs.timeout)
+		if err != nil {
+			if err == AsyncTimeoutErr {
+				return &r, err
+			}
+			return nil, err
+		}
+
+		b, err = getRawValue(b)
+		if err != nil {
+			return nil, err
+		}
+
+		if err := json.Unmarshal(b, &r); err != nil {
+			return nil, err
+		}
+	}
+
+	return &r, nil
+}
+
+type CreateGuestNetworkIpv6PrefixResponse struct {
+	Availablesubnets int    `json:"availablesubnets"`
+	Created          string `json:"created"`
+	Id               string `json:"id"`
+	JobID            string `json:"jobid"`
+	Jobstatus        int    `json:"jobstatus"`
+	Prefix           string `json:"prefix"`
+	Totalsubnets     int    `json:"totalsubnets"`
+	Usedsubnets      int    `json:"usedsubnets"`
+	Zoneid           string `json:"zoneid"`
+}
+
+type ListGuestNetworkIpv6PrefixesParams struct {
+	p map[string]interface{}
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["id"]; found {
+		u.Set("id", v.(string))
+	}
+	if v, found := p.p["keyword"]; found {
+		u.Set("keyword", v.(string))
+	}
+	if v, found := p.p["page"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("page", vv)
+	}
+	if v, found := p.p["pagesize"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("pagesize", vv)
+	}
+	if v, found := p.p["zoneid"]; found {
+		u.Set("zoneid", v.(string))
+	}
+	return u
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) SetId(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["id"] = v
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) SetKeyword(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["keyword"] = v
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) GetKeyword() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["keyword"].(string)
+	return value, ok
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) SetPage(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["page"] = v
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) GetPage() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["page"].(int)
+	return value, ok
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) SetPagesize(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["pagesize"] = v
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) GetPagesize() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["pagesize"].(int)
+	return value, ok
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) SetZoneid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["zoneid"] = v
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) GetZoneid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["zoneid"].(string)
+	return value, ok
+}
+
+// You should always use this function to get a new ListGuestNetworkIpv6PrefixesParams instance,
+// as then you are sure you have configured all required params
+func (s *NetworkService) NewListGuestNetworkIpv6PrefixesParams() *ListGuestNetworkIpv6PrefixesParams {
+	p := &ListGuestNetworkIpv6PrefixesParams{}
+	p.p = make(map[string]interface{})
+	return p
+}
+
+// This is a courtesy helper function, which in some cases may not work as expected!
+func (s *NetworkService) GetGuestNetworkIpv6PrefixeByID(id string, opts ...OptionFunc) (*GuestNetworkIpv6Prefixe, int, error) {
+	p := &ListGuestNetworkIpv6PrefixesParams{}
+	p.p = make(map[string]interface{})
+
+	p.p["id"] = id
+
+	for _, fn := range append(s.cs.options, opts...) {
+		if err := fn(s.cs, p); err != nil {
+			return nil, -1, err
+		}
+	}
+
+	l, err := s.ListGuestNetworkIpv6Prefixes(p)
+	if err != nil {
+		if strings.Contains(err.Error(), fmt.Sprintf(
+			"Invalid parameter id value=%s due to incorrect long value format, "+
+				"or entity does not exist", id)) {
+			return nil, 0, fmt.Errorf("No match found for %s: %+v", id, l)
+		}
+		return nil, -1, err
+	}
+
+	if l.Count == 0 {
+		return nil, l.Count, fmt.Errorf("No match found for %s: %+v", id, l)
+	}
+
+	if l.Count == 1 {
+		return l.GuestNetworkIpv6Prefixes[0], l.Count, nil
+	}
+	return nil, l.Count, fmt.Errorf("There is more then one result for GuestNetworkIpv6Prefixe UUID: %s!", id)
+}
+
+// Lists guest network IPv6 prefixes
+func (s *NetworkService) ListGuestNetworkIpv6Prefixes(p *ListGuestNetworkIpv6PrefixesParams) (*ListGuestNetworkIpv6PrefixesResponse, error) {
+	resp, err := s.cs.newRequest("listGuestNetworkIpv6Prefixes", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r ListGuestNetworkIpv6PrefixesResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
+
+type ListGuestNetworkIpv6PrefixesResponse struct {
+	Count                    int                        `json:"count"`
+	GuestNetworkIpv6Prefixes []*GuestNetworkIpv6Prefixe `json:"guestnetworkipv6prefixe"`
+}
+
+type GuestNetworkIpv6Prefixe struct {
+	Availablesubnets int    `json:"availablesubnets"`
+	Created          string `json:"created"`
+	Id               string `json:"id"`
+	JobID            string `json:"jobid"`
+	Jobstatus        int    `json:"jobstatus"`
+	Prefix           string `json:"prefix"`
+	Totalsubnets     int    `json:"totalsubnets"`
+	Usedsubnets      int    `json:"usedsubnets"`
+	Zoneid           string `json:"zoneid"`
+}
+
+type CreateNetworkPermissionsParams struct {
+	p map[string]interface{}
+}
+
+func (p *CreateNetworkPermissionsParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["accountids"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("accountids", vv)
+	}
+	if v, found := p.p["accounts"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("accounts", vv)
+	}
+	if v, found := p.p["networkid"]; found {
+		u.Set("networkid", v.(string))
+	}
+	if v, found := p.p["projectids"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("projectids", vv)
+	}
+	return u
+}
+
+func (p *CreateNetworkPermissionsParams) SetAccountids(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["accountids"] = v
+}
+
+func (p *CreateNetworkPermissionsParams) GetAccountids() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["accountids"].([]string)
+	return value, ok
+}
+
+func (p *CreateNetworkPermissionsParams) SetAccounts(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["accounts"] = v
+}
+
+func (p *CreateNetworkPermissionsParams) GetAccounts() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["accounts"].([]string)
+	return value, ok
+}
+
+func (p *CreateNetworkPermissionsParams) SetNetworkid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["networkid"] = v
+}
+
+func (p *CreateNetworkPermissionsParams) GetNetworkid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["networkid"].(string)
+	return value, ok
+}
+
+func (p *CreateNetworkPermissionsParams) SetProjectids(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["projectids"] = v
+}
+
+func (p *CreateNetworkPermissionsParams) GetProjectids() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["projectids"].([]string)
+	return value, ok
+}
+
+// You should always use this function to get a new CreateNetworkPermissionsParams instance,
+// as then you are sure you have configured all required params
+func (s *NetworkService) NewCreateNetworkPermissionsParams(networkid string) *CreateNetworkPermissionsParams {
+	p := &CreateNetworkPermissionsParams{}
+	p.p = make(map[string]interface{})
+	p.p["networkid"] = networkid
+	return p
+}
+
+// Updates network permissions.
+func (s *NetworkService) CreateNetworkPermissions(p *CreateNetworkPermissionsParams) (*CreateNetworkPermissionsResponse, error) {
+	resp, err := s.cs.newRequest("createNetworkPermissions", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r CreateNetworkPermissionsResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
+
+type CreateNetworkPermissionsResponse struct {
+	Displaytext string `json:"displaytext"`
+	JobID       string `json:"jobid"`
+	Jobstatus   int    `json:"jobstatus"`
+	Success     bool   `json:"success"`
+}
+
+func (r *CreateNetworkPermissionsResponse) UnmarshalJSON(b []byte) error {
+	var m map[string]interface{}
+	err := json.Unmarshal(b, &m)
+	if err != nil {
+		return err
+	}
+
+	if success, ok := m["success"].(string); ok {
+		m["success"] = success == "true"
+		b, err = json.Marshal(m)
+		if err != nil {
+			return err
+		}
+	}
+
+	if ostypeid, ok := m["ostypeid"].(float64); ok {
+		m["ostypeid"] = strconv.Itoa(int(ostypeid))
+		b, err = json.Marshal(m)
+		if err != nil {
+			return err
+		}
+	}
+
+	type alias CreateNetworkPermissionsResponse
+	return json.Unmarshal(b, (*alias)(r))
+}
+
+type ResetNetworkPermissionsParams struct {
+	p map[string]interface{}
+}
+
+func (p *ResetNetworkPermissionsParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["networkid"]; found {
+		u.Set("networkid", v.(string))
+	}
+	return u
+}
+
+func (p *ResetNetworkPermissionsParams) SetNetworkid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["networkid"] = v
+}
+
+func (p *ResetNetworkPermissionsParams) GetNetworkid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["networkid"].(string)
+	return value, ok
+}
+
+// You should always use this function to get a new ResetNetworkPermissionsParams instance,
+// as then you are sure you have configured all required params
+func (s *NetworkService) NewResetNetworkPermissionsParams(networkid string) *ResetNetworkPermissionsParams {
+	p := &ResetNetworkPermissionsParams{}
+	p.p = make(map[string]interface{})
+	p.p["networkid"] = networkid
+	return p
+}
+
+// Resets network permissions.
+func (s *NetworkService) ResetNetworkPermissions(p *ResetNetworkPermissionsParams) (*ResetNetworkPermissionsResponse, error) {
+	resp, err := s.cs.newRequest("resetNetworkPermissions", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r ResetNetworkPermissionsResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
+
+type ResetNetworkPermissionsResponse struct {
+	Displaytext string `json:"displaytext"`
+	JobID       string `json:"jobid"`
+	Jobstatus   int    `json:"jobstatus"`
+	Success     bool   `json:"success"`
+}
+
+func (r *ResetNetworkPermissionsResponse) UnmarshalJSON(b []byte) error {
+	var m map[string]interface{}
+	err := json.Unmarshal(b, &m)
+	if err != nil {
+		return err
+	}
+
+	if success, ok := m["success"].(string); ok {
+		m["success"] = success == "true"
+		b, err = json.Marshal(m)
+		if err != nil {
+			return err
+		}
+	}
+
+	if ostypeid, ok := m["ostypeid"].(float64); ok {
+		m["ostypeid"] = strconv.Itoa(int(ostypeid))
+		b, err = json.Marshal(m)
+		if err != nil {
+			return err
+		}
+	}
+
+	type alias ResetNetworkPermissionsResponse
+	return json.Unmarshal(b, (*alias)(r))
+}
+
+type ListNetworkPermissionsParams struct {
+	p map[string]interface{}
+}
+
+func (p *ListNetworkPermissionsParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["networkid"]; found {
+		u.Set("networkid", v.(string))
+	}
+	return u
+}
+
+func (p *ListNetworkPermissionsParams) SetNetworkid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["networkid"] = v
+}
+
+func (p *ListNetworkPermissionsParams) GetNetworkid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["networkid"].(string)
+	return value, ok
+}
+
+// You should always use this function to get a new ListNetworkPermissionsParams instance,
+// as then you are sure you have configured all required params
+func (s *NetworkService) NewListNetworkPermissionsParams(networkid string) *ListNetworkPermissionsParams {
+	p := &ListNetworkPermissionsParams{}
+	p.p = make(map[string]interface{})
+	p.p["networkid"] = networkid
+	return p
+}
+
+// List network visibility and all accounts that have permissions to view this network.
+func (s *NetworkService) ListNetworkPermissions(p *ListNetworkPermissionsParams) (*ListNetworkPermissionsResponse, error) {
+	resp, err := s.cs.newRequest("listNetworkPermissions", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r ListNetworkPermissionsResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
+
+type ListNetworkPermissionsResponse struct {
+	Count              int                  `json:"count"`
+	NetworkPermissions []*NetworkPermission `json:"networkpermission"`
+}
+
+type NetworkPermission struct {
+	Account   string `json:"account"`
+	Accountid string `json:"accountid"`
+	Domain    string `json:"domain"`
+	Domainid  string `json:"domainid"`
+	JobID     string `json:"jobid"`
+	Jobstatus int    `json:"jobstatus"`
+	Networkid string `json:"networkid"`
+	Project   string `json:"project"`
+	Projectid string `json:"projectid"`
+}
+
+type RemoveNetworkPermissionsParams struct {
+	p map[string]interface{}
+}
+
+func (p *RemoveNetworkPermissionsParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["accountids"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("accountids", vv)
+	}
+	if v, found := p.p["accounts"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("accounts", vv)
+	}
+	if v, found := p.p["networkid"]; found {
+		u.Set("networkid", v.(string))
+	}
+	if v, found := p.p["projectids"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("projectids", vv)
+	}
+	return u
+}
+
+func (p *RemoveNetworkPermissionsParams) SetAccountids(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["accountids"] = v
+}
+
+func (p *RemoveNetworkPermissionsParams) GetAccountids() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["accountids"].([]string)
+	return value, ok
+}
+
+func (p *RemoveNetworkPermissionsParams) SetAccounts(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["accounts"] = v
+}
+
+func (p *RemoveNetworkPermissionsParams) GetAccounts() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["accounts"].([]string)
+	return value, ok
+}
+
+func (p *RemoveNetworkPermissionsParams) SetNetworkid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["networkid"] = v
+}
+
+func (p *RemoveNetworkPermissionsParams) GetNetworkid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["networkid"].(string)
+	return value, ok
+}
+
+func (p *RemoveNetworkPermissionsParams) SetProjectids(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["projectids"] = v
+}
+
+func (p *RemoveNetworkPermissionsParams) GetProjectids() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["projectids"].([]string)
+	return value, ok
+}
+
+// You should always use this function to get a new RemoveNetworkPermissionsParams instance,
+// as then you are sure you have configured all required params
+func (s *NetworkService) NewRemoveNetworkPermissionsParams(networkid string) *RemoveNetworkPermissionsParams {
+	p := &RemoveNetworkPermissionsParams{}
+	p.p = make(map[string]interface{})
+	p.p["networkid"] = networkid
+	return p
+}
+
+// Removes network permissions.
+func (s *NetworkService) RemoveNetworkPermissions(p *RemoveNetworkPermissionsParams) (*RemoveNetworkPermissionsResponse, error) {
+	resp, err := s.cs.newRequest("removeNetworkPermissions", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r RemoveNetworkPermissionsResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
+
+type RemoveNetworkPermissionsResponse struct {
+	Displaytext string `json:"displaytext"`
+	JobID       string `json:"jobid"`
+	Jobstatus   int    `json:"jobstatus"`
+	Success     bool   `json:"success"`
+}
+
+func (r *RemoveNetworkPermissionsResponse) UnmarshalJSON(b []byte) error {
+	var m map[string]interface{}
+	err := json.Unmarshal(b, &m)
+	if err != nil {
+		return err
+	}
+
+	if success, ok := m["success"].(string); ok {
+		m["success"] = success == "true"
+		b, err = json.Marshal(m)
+		if err != nil {
+			return err
+		}
+	}
+
+	if ostypeid, ok := m["ostypeid"].(float64); ok {
+		m["ostypeid"] = strconv.Itoa(int(ostypeid))
+		b, err = json.Marshal(m)
+		if err != nil {
+			return err
+		}
+	}
+
+	type alias RemoveNetworkPermissionsResponse
+	return json.Unmarshal(b, (*alias)(r))
 }
