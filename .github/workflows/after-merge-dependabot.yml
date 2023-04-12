@@ -46,7 +46,7 @@ jobs:
             echo "::warning::bumping patch version"
           fi
           tag="v${major}.${minor}.${patch}"
-          echo "::set-output name=tag::${tag}"
+          echo "tag::${tag}" >> $GITHUB_OUTPUT
           echo "::warning::tag == ${tag}"
 
       - name: Create tag
