@@ -121,9 +121,15 @@ func resourceCloudStackSecondaryIPAddressRead(d *schema.ResourceData, meta inter
 
 	for _, ip := range l.Nics[0].Secondaryip {
 		if ip.Id == d.Id() {
-			d.Set("ip_address", ip.Ipaddress)
-			d.Set("nic_id", l.Nics[0].Id)
-			d.Set("virtual_machine_id", l.Nics[0].Virtualmachineid)
+			if err = d.Set("ip_address", ip.Ipaddress); err != nil {
+				return err
+			}
+			if err = d.Set("nic_id", l.Nics[0].Id); err != nil {
+				return err
+			}
+			if err = d.Set("virtual_machine_id", l.Nics[0].Virtualmachineid); err != nil {
+				return err
+			}
 			return nil
 		}
 	}

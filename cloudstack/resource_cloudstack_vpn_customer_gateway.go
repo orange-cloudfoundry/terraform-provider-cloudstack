@@ -140,15 +140,33 @@ func resourceCloudStackVPNCustomerGatewayRead(d *schema.ResourceData, meta inter
 		return err
 	}
 
-	d.Set("name", v.Name)
-	d.Set("cidr", v.Cidrlist)
-	d.Set("esp_policy", v.Esppolicy)
-	d.Set("gateway", v.Gateway)
-	d.Set("ike_policy", v.Ikepolicy)
-	d.Set("ipsec_psk", v.Ipsecpsk)
-	d.Set("dpd", v.Dpd)
-	d.Set("esp_lifetime", int(v.Esplifetime))
-	d.Set("ike_lifetime", int(v.Ikelifetime))
+	if err = d.Set("name", v.Name); err != nil {
+		return err
+	}
+	if err = d.Set("cidr", v.Cidrlist); err != nil {
+		return err
+	}
+	if err = d.Set("esp_policy", v.Esppolicy); err != nil {
+		return err
+	}
+	if err = d.Set("gateway", v.Gateway); err != nil {
+		return err
+	}
+	if err = d.Set("ike_policy", v.Ikepolicy); err != nil {
+		return err
+	}
+	if err = d.Set("ipsec_psk", v.Ipsecpsk); err != nil {
+		return err
+	}
+	if err = d.Set("dpd", v.Dpd); err != nil {
+		return err
+	}
+	if err = d.Set("esp_lifetime", int(v.Esplifetime)); err != nil {
+		return err
+	}
+	if err = d.Set("ike_lifetime", int(v.Ikelifetime)); err != nil {
+		return err
+	}
 
 	setValueOrID(d, "project", v.Project, v.Projectid)
 

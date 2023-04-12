@@ -141,8 +141,12 @@ func resourceCloudStackStaticNATRead(d *schema.ResourceData, meta interface{}) e
 		return nil
 	}
 
-	d.Set("virtual_machine_id", ip.Virtualmachineid)
-	d.Set("vm_guest_ip", ip.Vmipaddress)
+	if err = d.Set("virtual_machine_id", ip.Virtualmachineid); err != nil {
+		return err
+	}
+	if err = d.Set("vm_guest_ip", ip.Vmipaddress); err != nil {
+		return err
+	}
 
 	setValueOrID(d, "project", ip.Project, ip.Projectid)
 

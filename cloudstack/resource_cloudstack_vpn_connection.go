@@ -66,8 +66,12 @@ func resourceCloudStackVPNConnectionRead(d *schema.ResourceData, meta interface{
 		return err
 	}
 
-	d.Set("customer_gateway_id", v.S2scustomergatewayid)
-	d.Set("vpn_gateway_id", v.S2svpngatewayid)
+	if err = d.Set("customer_gateway_id", v.S2scustomergatewayid); err != nil {
+		return err
+	}
+	if err = d.Set("vpn_gateway_id", v.S2svpngatewayid); err != nil {
+		return err
+	}
 
 	return nil
 }

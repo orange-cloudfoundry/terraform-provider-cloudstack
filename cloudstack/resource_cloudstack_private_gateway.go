@@ -126,12 +126,24 @@ func resourceCloudStackPrivateGatewayRead(d *schema.ResourceData, meta interface
 		return err
 	}
 
-	d.Set("gateway", gw.Gateway)
-	d.Set("ip_address", gw.Ipaddress)
-	d.Set("netmask", gw.Netmask)
-	d.Set("vlan", gw.Vlan)
-	d.Set("acl_id", gw.Aclid)
-	d.Set("vpc_id", gw.Vpcid)
+	if err := d.Set("gateway", gw.Gateway); err != nil {
+		return err
+	}
+	if err := d.Set("ip_address", gw.Ipaddress); err != nil {
+		return err
+	}
+	if err := d.Set("netmask", gw.Netmask); err != nil {
+		return err
+	}
+	if err := d.Set("vlan", gw.Vlan); err != nil {
+		return err
+	}
+	if err := d.Set("acl_id", gw.Aclid); err != nil {
+		return err
+	}
+	if err := d.Set("vpc_id", gw.Vpcid); err != nil {
+		return err
+	}
 
 	return nil
 }

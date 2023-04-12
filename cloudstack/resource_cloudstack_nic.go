@@ -94,9 +94,15 @@ func resourceCloudStackNICRead(d *schema.ResourceData, meta interface{}) error {
 	found := false
 	for _, n := range vm.Nic {
 		if n.Id == d.Id() {
-			d.Set("ip_address", n.Ipaddress)
-			d.Set("network_id", n.Networkid)
-			d.Set("virtual_machine_id", vm.Id)
+			if err := d.Set("ip_address", n.Ipaddress); err != nil {
+				return err
+			}
+			if err := d.Set("network_id", n.Networkid); err != nil {
+				return err
+			}
+			if err := d.Set("virtual_machine_id", vm.Id); err != nil {
+				return err
+			}
 			found = true
 			break
 		}

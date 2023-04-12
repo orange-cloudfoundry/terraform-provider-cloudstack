@@ -123,7 +123,9 @@ func resourceCloudStackNetworkACLRuleCreate(d *schema.ResourceData, meta interfa
 		err := createNetworkACLRules(d, meta, rules, nrs)
 
 		// We need to update this first to preserve the correct state
-		d.Set("rule", rules)
+		if err2 := d.Set("rule", rules); err2 != nil {
+			return err2
+		}
 
 		if err != nil {
 			return err
@@ -447,7 +449,9 @@ func resourceCloudStackNetworkACLRuleRead(d *schema.ResourceData, meta interface
 	}
 
 	if rules.Len() > 0 {
-		d.Set("rule", rules)
+		if err := d.Set("rule", rules); err != nil {
+			return err
+		}
 	} else if !managed {
 		d.SetId("")
 	}
@@ -478,7 +482,9 @@ func resourceCloudStackNetworkACLRuleUpdate(d *schema.ResourceData, meta interfa
 			err := createNetworkACLRules(d, meta, rules, nrs)
 
 			// We need to update this first to preserve the correct state
-			d.Set("rule", rules)
+			if err2 := d.Set("rule", rules); err2 != nil {
+				return err2
+			}
 
 			if err != nil {
 				return err
@@ -490,7 +496,9 @@ func resourceCloudStackNetworkACLRuleUpdate(d *schema.ResourceData, meta interfa
 			err := deleteNetworkACLRules(d, meta, rules, ors)
 
 			// We need to update this first to preserve the correct state
-			d.Set("rule", rules)
+			if err2 := d.Set("rule", rules); err2 != nil {
+				return err2
+			}
 
 			if err != nil {
 				return err
@@ -511,7 +519,9 @@ func resourceCloudStackNetworkACLRuleDelete(d *schema.ResourceData, meta interfa
 		err := deleteNetworkACLRules(d, meta, rules, ors)
 
 		// We need to update this first to preserve the correct state
-		d.Set("rule", rules)
+		if err2 := d.Set("rule", rules); err2 != nil {
+			return err2
+		}
 
 		if err != nil {
 			return err

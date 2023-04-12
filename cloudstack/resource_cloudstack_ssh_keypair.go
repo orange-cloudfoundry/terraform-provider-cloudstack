@@ -79,7 +79,9 @@ func resourceCloudStackSSHKeyPairCreate(d *schema.ResourceData, meta interface{}
 		if err != nil {
 			return err
 		}
-		d.Set("private_key", r.Privatekey)
+		if err = d.Set("private_key", r.Privatekey); err != nil {
+			return err
+		}
 	}
 
 	log.Printf("[DEBUG] Key pair successfully generated at Cloudstack")
@@ -112,8 +114,12 @@ func resourceCloudStackSSHKeyPairRead(d *schema.ResourceData, meta interface{}) 
 	}
 
 	//SSHKeyPair name is unique in a cloudstack account so dont need to check for multiple
-	d.Set("name", r.SSHKeyPairs[0].Name)
-	d.Set("fingerprint", r.SSHKeyPairs[0].Fingerprint)
+	if err = d.Set("name", r.SSHKeyPairs[0].Name); err != nil {
+		return err
+	}
+	if err = d.Set("fingerprint", r.SSHKeyPairs[0].Fingerprint); err != nil {
+		return err
+	}
 
 	return nil
 }

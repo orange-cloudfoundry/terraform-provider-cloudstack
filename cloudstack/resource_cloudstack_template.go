@@ -241,22 +241,44 @@ func resourceCloudStackTemplateRead(d *schema.ResourceData, meta interface{}) er
 		return err
 	}
 
-	d.Set("name", t.Name)
-	d.Set("display_text", t.Displaytext)
-	d.Set("format", t.Format)
-	d.Set("hypervisor", t.Hypervisor)
-	d.Set("is_dynamically_scalable", t.Isdynamicallyscalable)
-	d.Set("is_extractable", t.Isextractable)
-	d.Set("is_featured", t.Isfeatured)
-	d.Set("is_public", t.Ispublic)
-	d.Set("password_enabled", t.Passwordenabled)
-	d.Set("is_ready", t.Isready)
+	if err = d.Set("name", t.Name); err != nil {
+		return err
+	}
+	if err = d.Set("display_text", t.Displaytext); err != nil {
+		return err
+	}
+	if err = d.Set("format", t.Format); err != nil {
+		return err
+	}
+	if err = d.Set("hypervisor", t.Hypervisor); err != nil {
+		return err
+	}
+	if err = d.Set("is_dynamically_scalable", t.Isdynamicallyscalable); err != nil {
+		return err
+	}
+	if err = d.Set("is_extractable", t.Isextractable); err != nil {
+		return err
+	}
+	if err = d.Set("is_featured", t.Isfeatured); err != nil {
+		return err
+	}
+	if err = d.Set("is_public", t.Ispublic); err != nil {
+		return err
+	}
+	if err = d.Set("password_enabled", t.Passwordenabled); err != nil {
+		return err
+	}
+	if err = d.Set("is_ready", t.Isready); err != nil {
+		return err
+	}
 
 	tags := make(map[string]interface{})
 	for _, tag := range t.Tags {
 		tags[tag.Key] = tag.Value
 	}
-	d.Set("tags", tags)
+	if err = d.Set("tags", tags); err != nil {
+		return err
+	}
 
 	setValueOrID(d, "os_type", t.Ostypename, t.Ostypeid)
 	setValueOrID(d, "project", t.Project, t.Projectid)

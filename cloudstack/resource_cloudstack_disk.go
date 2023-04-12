@@ -121,7 +121,6 @@ func resourceCloudStackDiskCreate(d *schema.ResourceData, meta interface{}) erro
 		return fmt.Errorf("Error creating the new disk %s: %s", name, err)
 	}
 
-
 	// Set the volume ID
 	d.SetId(r.Id)
 
@@ -157,23 +156,35 @@ func resourceCloudStackDiskRead(d *schema.ResourceData, meta interface{}) error 
 		return err
 	}
 
-	d.Set("name", v.Name)
-	d.Set("attach", v.Virtualmachineid != "")   // If attached this contains a virtual machine ID
-	d.Set("size", int(v.Size/(1024*1024*1024))) // Needed to get GB's again
+	if err := d.Set("name", v.Name); err != nil {
+		return err
+	}
+	if err := d.Set("attach", v.Virtualmachineid != ""); err != nil { // If attached this contains a virtual machine ID
+		return err
+	}
+	if err := d.Set("size", int(v.Size/(1024*1024*1024))); err != nil { // Needed to get GB's again
+		return err
+	}
 
 	tags := make(map[string]interface{})
 	for _, tag := range v.Tags {
 		tags[tag.Key] = tag.Value
 	}
-	d.Set("tags", tags)
+	if err := d.Set("tags", tags); err != nil {
+		return err
+	}
 
 	setValueOrID(d, "disk_offering", v.Diskofferingname, v.Diskofferingid)
 	setValueOrID(d, "project", v.Project, v.Projectid)
 	setValueOrID(d, "zone", v.Zonename, v.Zoneid)
 
 	if v.Virtualmachineid != "" {
-		d.Set("device_id", int(v.Deviceid))
-		d.Set("virtual_machine_id", v.Virtualmachineid)
+		if err := d.Set("device_id", int(v.Deviceid)); err != nil {
+			return err
+		}
+		if err := d.Set("virtual_machine_id", v.Virtualmachineid); err != nil {
+			return err
+		}
 	}
 
 	return nil

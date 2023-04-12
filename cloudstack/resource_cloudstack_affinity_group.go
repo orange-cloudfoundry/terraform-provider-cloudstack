@@ -102,9 +102,15 @@ func resourceCloudStackAffinityGroupRead(d *schema.ResourceData, meta interface{
 	}
 
 	// Update the config
-	d.Set("name", ag.Name)
-	d.Set("description", ag.Description)
-	d.Set("type", ag.Type)
+	if err := d.Set("name", ag.Name); err != nil {
+		return err
+	}
+	if err := d.Set("description", ag.Description); err != nil {
+		return err
+	}
+	if err := d.Set("type", ag.Type); err != nil {
+		return err
+	}
 
 	return nil
 }

@@ -104,7 +104,9 @@ func resourceCloudStackFirewallCreate(d *schema.ResourceData, meta interface{}) 
 		err := createFirewallRules(d, meta, rules, nrs)
 
 		// We need to update this first to preserve the correct state
-		d.Set("rule", rules)
+		if err2 := d.Set("rule", rules); err2 != nil {
+			return err2
+		}
 
 		if err != nil {
 			return err
@@ -357,7 +359,9 @@ func resourceCloudStackFirewallRead(d *schema.ResourceData, meta interface{}) er
 	}
 
 	if rules.Len() > 0 {
-		d.Set("rule", rules)
+		if err := d.Set("rule", rules); err != nil {
+			return err
+		}
 	} else if !managed {
 		d.SetId("")
 	}
@@ -388,7 +392,9 @@ func resourceCloudStackFirewallUpdate(d *schema.ResourceData, meta interface{}) 
 			err := deleteFirewallRules(d, meta, rules, ors)
 
 			// We need to update this first to preserve the correct state
-			d.Set("rule", rules)
+			if err2 := d.Set("rule", rules); err2 != nil {
+				return err2
+			}
 
 			if err != nil {
 				return err
@@ -400,7 +406,9 @@ func resourceCloudStackFirewallUpdate(d *schema.ResourceData, meta interface{}) 
 			err := createFirewallRules(d, meta, rules, nrs)
 
 			// We need to update this first to preserve the correct state
-			d.Set("rule", rules)
+			if err2 := d.Set("rule", rules); err2 != nil {
+				return err2
+			}
 
 			if err != nil {
 				return err
@@ -421,7 +429,9 @@ func resourceCloudStackFirewallDelete(d *schema.ResourceData, meta interface{}) 
 		err := deleteFirewallRules(d, meta, rules, ors)
 
 		// We need to update this first to preserve the correct state
-		d.Set("rule", rules)
+		if err2 := d.Set("rule", rules); err2 != nil {
+			return err2
+		}
 
 		if err != nil {
 			return err

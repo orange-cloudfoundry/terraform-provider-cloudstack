@@ -93,8 +93,12 @@ func resourceCloudStackSecurityGroupRead(d *schema.ResourceData, meta interface{
 	}
 
 	// Update the config
-	d.Set("name", sg.Name)
-	d.Set("description", sg.Description)
+	if err = d.Set("name", sg.Name); err != nil {
+		return err
+	}
+	if err = d.Set("description", sg.Description); err != nil {
+		return err
+	}
 
 	setValueOrID(d, "project", sg.Project, sg.Projectid)
 
