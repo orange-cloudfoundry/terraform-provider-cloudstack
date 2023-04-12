@@ -32,9 +32,9 @@ func setValueOrID(d *schema.ResourceData, key string, value string, id string) {
 			id = cloudstack.UnlimitedResourceID
 		}
 
-		d.Set(key, id)
+		_ = d.Set(key, id)
 	} else {
-		d.Set(key, value)
+		_ = d.Set(key, value)
 	}
 }
 
@@ -142,7 +142,9 @@ func importStatePassthrough(d *schema.ResourceData, meta interface{}) ([]*schema
 	// Try to split the ID to extract the optional project name.
 	s := strings.SplitN(d.Id(), "/", 2)
 	if len(s) == 2 {
-		d.Set("project", s[0])
+		if err := d.Set("project", s[0]); err != nil {
+			return []*schema.ResourceData{d}, err
+		}
 	}
 
 	d.SetId(s[len(s)-1])

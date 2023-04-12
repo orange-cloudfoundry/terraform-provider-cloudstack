@@ -253,7 +253,9 @@ func resourceCloudStackNetworkCreate(d *schema.ResourceData, meta interface{}) e
 		if err != nil {
 			return fmt.Errorf("Error associating a new IP address: %s", err)
 		}
-		d.Set("source_nat_ip_id", ip.Id)
+		if err = d.Set("source_nat_ip_id", ip.Id); err != nil {
+			return err
+		}
 	}
 	return resourceCloudStackNetworkRead(d, meta)
 }
@@ -277,23 +279,39 @@ func resourceCloudStackNetworkRead(d *schema.ResourceData, meta interface{}) err
 		return err
 	}
 
-	d.Set("name", n.Name)
-	d.Set("display_text", n.Displaytext)
-	d.Set("cidr", n.Cidr)
-	d.Set("gateway", n.Gateway)
-	d.Set("network_domain", n.Networkdomain)
-	d.Set("vpc_id", n.Vpcid)
+	if err = d.Set("name", n.Name); err != nil {
+		return err
+	}
+	if err = d.Set("display_text", n.Displaytext); err != nil {
+		return err
+	}
+	if err = d.Set("cidr", n.Cidr); err != nil {
+		return err
+	}
+	if err = d.Set("gateway", n.Gateway); err != nil {
+		return err
+	}
+	if err = d.Set("network_domain", n.Networkdomain); err != nil {
+		return err
+	}
+	if err = d.Set("vpc_id", n.Vpcid); err != nil {
+		return err
+	}
 
 	if n.Aclid == "" {
 		n.Aclid = none
 	}
-	d.Set("acl_id", n.Aclid)
+	if err = d.Set("acl_id", n.Aclid); err != nil {
+		return err
+	}
 
 	tags := make(map[string]interface{})
 	for _, tag := range n.Tags {
 		tags[tag.Key] = tag.Value
 	}
-	d.Set("tags", tags)
+	if err = d.Set("tags", tags); err != nil {
+		return err
+	}
 
 	setValueOrID(d, "network_offering", n.Networkofferingname, n.Networkofferingid)
 	setValueOrID(d, "project", n.Project, n.Projectid)
@@ -308,8 +326,12 @@ func resourceCloudStackNetworkRead(d *schema.ResourceData, meta interface{}) err
 			if count == 0 {
 				log.Printf(
 					"[DEBUG] Source NAT IP with ID %s is no longer associated", d.Id())
-				d.Set("source_nat_ip", false)
-				d.Set("source_nat_ip_id", "")
+				if err = d.Set("source_nat_ip", false); err != nil {
+					return err
+				}
+				if err = d.Set("source_nat_ip_id", ""); err != nil {
+					return err
+				}
 				return nil
 			}
 
@@ -317,8 +339,12 @@ func resourceCloudStackNetworkRead(d *schema.ResourceData, meta interface{}) err
 		}
 
 		if n.Id != ip.Associatednetworkid {
-			d.Set("source_nat_ip", false)
-			d.Set("source_nat_ip_id", "")
+			if err = d.Set("source_nat_ip", false); err != nil {
+				return err
+			}
+			if err = d.Set("source_nat_ip_id", ""); err != nil {
+				return err
+			}
 		}
 	}
 

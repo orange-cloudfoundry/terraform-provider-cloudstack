@@ -124,7 +124,9 @@ func resourceCloudStackSecurityGroupRuleCreate(d *schema.ResourceData, meta inte
 		err := createSecurityGroupRules(d, meta, rules, nrs)
 
 		// We need to update this first to preserve the correct state
-		d.Set("rule", rules)
+		if err2 := d.Set("rule", rules); err2 != nil {
+			return err2
+		}
 
 		if err != nil {
 			return err
@@ -465,7 +467,9 @@ func resourceCloudStackSecurityGroupRuleUpdate(d *schema.ResourceData, meta inte
 			err := deleteSecurityGroupRules(d, meta, rules, ors)
 
 			// We need to update this first to preserve the correct state
-			d.Set("rule", rules)
+			if err2 := d.Set("rule", rules); err2 != nil {
+				return err2
+			}
 
 			if err != nil {
 				return err
@@ -477,7 +481,9 @@ func resourceCloudStackSecurityGroupRuleUpdate(d *schema.ResourceData, meta inte
 			err := createSecurityGroupRules(d, meta, rules, nrs)
 
 			// We need to update this first to preserve the correct state
-			d.Set("rule", rules)
+			if err2 := d.Set("rule", rules); err2 != nil {
+				return err2
+			}
 
 			if err != nil {
 				return err
@@ -498,7 +504,9 @@ func resourceCloudStackSecurityGroupRuleDelete(d *schema.ResourceData, meta inte
 		err := deleteSecurityGroupRules(d, meta, rules, ors)
 
 		// We need to update this first to preserve the correct state
-		d.Set("rule", rules)
+		if err2 := d.Set("rule", rules); err2 != nil {
+			return err2
+		}
 
 		if err != nil {
 			return err

@@ -93,9 +93,15 @@ func resourceCloudStackNetworkACLRead(d *schema.ResourceData, meta interface{}) 
 		return err
 	}
 
-	d.Set("name", f.Name)
-	d.Set("description", f.Description)
-	d.Set("vpc_id", f.Vpcid)
+	if err = d.Set("name", f.Name); err != nil {
+		return err
+	}
+	if err = d.Set("description", f.Description); err != nil {
+		return err
+	}
+	if err = d.Set("vpc_id", f.Vpcid); err != nil {
+		return err
+	}
 
 	return nil
 }

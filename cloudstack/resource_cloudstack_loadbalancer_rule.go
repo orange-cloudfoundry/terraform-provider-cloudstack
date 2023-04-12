@@ -182,16 +182,30 @@ func resourceCloudStackLoadBalancerRuleRead(d *schema.ResourceData, meta interfa
 		return err
 	}
 
-	d.Set("name", lb.Name)
-	d.Set("ip_address_id", lb.Publicipid)
-	d.Set("algorithm", lb.Algorithm)
-	d.Set("public_port", lb.Publicport)
-	d.Set("private_port", lb.Privateport)
-	d.Set("protocol", lb.Protocol)
+	if err := d.Set("name", lb.Name); err != nil {
+		return err
+	}
+	if err := d.Set("ip_address_id", lb.Publicipid); err != nil {
+		return err
+	}
+	if err := d.Set("algorithm", lb.Algorithm); err != nil {
+		return err
+	}
+	if err := d.Set("public_port", lb.Publicport); err != nil {
+		return err
+	}
+	if err := d.Set("private_port", lb.Privateport); err != nil {
+		return err
+	}
+	if err := d.Set("protocol", lb.Protocol); err != nil {
+		return err
+	}
 
 	// Only set network if user specified it to avoid spurious diffs
 	if _, ok := d.GetOk("network_id"); ok {
-		d.Set("network_id", lb.Networkid)
+		if err := d.Set("network_id", lb.Networkid); err != nil {
+			return err
+		}
 	}
 
 	setValueOrID(d, "project", lb.Project, lb.Projectid)
@@ -206,7 +220,9 @@ func resourceCloudStackLoadBalancerRuleRead(d *schema.ResourceData, meta interfa
 	for _, i := range l.LoadBalancerRuleInstances {
 		mbs = append(mbs, i.Id)
 	}
-	d.Set("member_ids", mbs)
+	if err := d.Set("member_ids", mbs); err != nil {
+		return err
+	}
 
 	return nil
 }

@@ -135,17 +135,25 @@ func resourceCloudStackIPAddressRead(d *schema.ResourceData, meta interface{}) e
 		return err
 	}
 
-	d.Set("is_portable", ip.Isportable)
+	if err := d.Set("is_portable", ip.Isportable); err != nil {
+		return err
+	}
 
 	// Updated the IP address
-	d.Set("ip_address", ip.Ipaddress)
+	if err := d.Set("ip_address", ip.Ipaddress); err != nil {
+		return err
+	}
 
 	if _, ok := d.GetOk("network_id"); ok {
-		d.Set("network_id", ip.Associatednetworkid)
+		if err := d.Set("network_id", ip.Associatednetworkid); err != nil {
+			return err
+		}
 	}
 
 	if _, ok := d.GetOk("vpc_id"); ok {
-		d.Set("vpc_id", ip.Vpcid)
+		if err := d.Set("vpc_id", ip.Vpcid); err != nil {
+			return err
+		}
 	}
 
 	if _, ok := d.GetOk("zone"); ok {
@@ -156,7 +164,9 @@ func resourceCloudStackIPAddressRead(d *schema.ResourceData, meta interface{}) e
 	for _, tag := range ip.Tags {
 		tags[tag.Key] = tag.Value
 	}
-	d.Set("tags", tags)
+	if err := d.Set("tags", tags); err != nil {
+		return err
+	}
 
 	setValueOrID(d, "project", ip.Project, ip.Projectid)
 

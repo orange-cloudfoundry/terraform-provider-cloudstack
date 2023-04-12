@@ -323,15 +323,25 @@ func resourceCloudStackInstanceRead(d *schema.ResourceData, meta interface{}) er
 	}
 
 	// Update the config
-	d.Set("name", vm.Name)
-	d.Set("display_name", vm.Displayname)
-	d.Set("group", vm.Group)
+	if err := d.Set("name", vm.Name); err != nil {
+		return err
+	}
+	if err := d.Set("display_name", vm.Displayname); err != nil {
+		return err
+	}
+	if err := d.Set("group", vm.Group); err != nil {
+		return err
+	}
 
 	// In some rare cases (when destroying a machine failes) it can happen that
 	// an instance does not have any attached NIC anymore.
 	if len(vm.Nic) > 0 {
-		d.Set("network_id", vm.Nic[0].Networkid)
-		d.Set("ip_address", vm.Nic[0].Ipaddress)
+		if err := d.Set("network_id", vm.Nic[0].Networkid); err != nil {
+			return err
+		}
+		if err := d.Set("ip_address", vm.Nic[0].Ipaddress); err != nil {
+			return err
+		}
 	}
 
 	// Create a new param struct.
@@ -349,7 +359,9 @@ func resourceCloudStackInstanceRead(d *schema.ResourceData, meta interface{}) er
 	if len(l.Volumes) != 1 {
 		log.Printf("[DEBUG] Failed to find root disk of instance: %s", vm.Name)
 	} else {
-		d.Set("root_disk_size", l.Volumes[0].Size>>30) // B to GiB
+		if err := d.Set("root_disk_size", l.Volumes[0].Size>>30); err != nil { // B to GiB
+			return err
+		}
 	}
 
 	if _, ok := d.GetOk("affinity_group_ids"); ok {
@@ -357,7 +369,9 @@ func resourceCloudStackInstanceRead(d *schema.ResourceData, meta interface{}) er
 		for _, group := range vm.Affinitygroup {
 			groups.Add(group.Id)
 		}
-		d.Set("affinity_group_ids", groups)
+		if err := d.Set("affinity_group_ids", groups); err != nil {
+			return err
+		}
 	}
 
 	if _, ok := d.GetOk("affinity_group_names"); ok {
@@ -365,7 +379,9 @@ func resourceCloudStackInstanceRead(d *schema.ResourceData, meta interface{}) er
 		for _, group := range vm.Affinitygroup {
 			groups.Add(group.Name)
 		}
-		d.Set("affinity_group_names", groups)
+		if err := d.Set("affinity_group_names", groups); err != nil {
+			return err
+		}
 	}
 
 	if _, ok := d.GetOk("security_group_ids"); ok {
@@ -373,7 +389,9 @@ func resourceCloudStackInstanceRead(d *schema.ResourceData, meta interface{}) er
 		for _, group := range vm.Securitygroup {
 			groups.Add(group.Id)
 		}
-		d.Set("security_group_ids", groups)
+		if err := d.Set("security_group_ids", groups); err != nil {
+			return err
+		}
 	}
 
 	if _, ok := d.GetOk("security_group_names"); ok {
@@ -381,14 +399,18 @@ func resourceCloudStackInstanceRead(d *schema.ResourceData, meta interface{}) er
 		for _, group := range vm.Securitygroup {
 			groups.Add(group.Name)
 		}
-		d.Set("security_group_names", groups)
+		if err := d.Set("security_group_names", groups); err != nil {
+			return err
+		}
 	}
 
 	tags := make(map[string]interface{})
 	for _, tag := range vm.Tags {
 		tags[tag.Key] = tag.Value
 	}
-	d.Set("tags", tags)
+	if err := d.Set("tags", tags); err != nil {
+		return err
+	}
 
 	setValueOrID(d, "service_offering", vm.Serviceofferingname, vm.Serviceofferingid)
 	setValueOrID(d, "template", vm.Templatename, vm.Templateid)
@@ -611,7 +633,9 @@ func resourceCloudStackInstanceDelete(d *schema.ResourceData, meta interface{}) 
 func resourceCloudStackInstanceImport(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
 	// We set start_vm to true as that matches the default and we assume that
 	// when you need to import an instance it means it is already running.
-	d.Set("start_vm", true)
+	if err := d.Set("start_vm", true); err != nil {
+		return []*schema.ResourceData{d}, err
+	}
 	return importStatePassthrough(d, meta)
 }
 

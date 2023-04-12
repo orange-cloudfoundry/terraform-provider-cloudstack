@@ -155,16 +155,26 @@ func resourceCloudStackVPCRead(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	d.Set("name", v.Name)
-	d.Set("display_text", v.Displaytext)
-	d.Set("cidr", v.Cidr)
-	d.Set("network_domain", v.Networkdomain)
+	if err = d.Set("name", v.Name); err != nil {
+		return nil
+	}
+	if err = d.Set("display_text", v.Displaytext); err != nil {
+		return nil
+	}
+	if err = d.Set("cidr", v.Cidr); err != nil {
+		return nil
+	}
+	if err = d.Set("network_domain", v.Networkdomain); err != nil {
+		return nil
+	}
 
 	tags := make(map[string]interface{})
 	for _, tag := range v.Tags {
 		tags[tag.Key] = tag.Value
 	}
-	d.Set("tags", tags)
+	if err = d.Set("tags", tags); err != nil {
+		return nil
+	}
 
 	// Get the VPC offering details
 	o, _, err := cs.VPC.GetVPCOfferingByID(v.Vpcofferingid)
@@ -193,7 +203,9 @@ func resourceCloudStackVPCRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	if l.Count == 1 {
-		d.Set("source_nat_ip", l.PublicIpAddresses[0].Ipaddress)
+		if err = d.Set("source_nat_ip", l.PublicIpAddresses[0].Ipaddress); err != nil {
+			return err
+		}
 	}
 
 	return nil

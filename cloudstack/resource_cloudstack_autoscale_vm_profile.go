@@ -147,7 +147,9 @@ func resourceCloudStackAutoScaleVMProfileRead(d *schema.ResourceData, meta inter
 	setValueOrID(d, "template", template.Name, p.Templateid)
 	setValueOrID(d, "zone", zone.Name, p.Zoneid)
 
-	d.Set("destroy_vm_grace_period", (time.Duration(p.Destroyvmgraceperiod) * time.Second).String())
+	if err := d.Set("destroy_vm_grace_period", (time.Duration(p.Destroyvmgraceperiod) * time.Second).String()); err != nil {
+		return err
+	}
 
 	if p.Otherdeployparams != "" {
 		var values url.Values
@@ -159,14 +161,18 @@ func resourceCloudStackAutoScaleVMProfileRead(d *schema.ResourceData, meta inter
 		for key := range values {
 			otherParams[key] = values.Get(key)
 		}
-		d.Set("other_deploy_params", otherParams)
+		if err := d.Set("other_deploy_params", otherParams); err != nil {
+			return nil
+		}
 	}
 
 	metadata, err := getMetadata(cs, d, "AutoScaleVmProfile")
 	if err != nil {
 		return err
 	}
-	d.Set("metadata", metadata)
+	if err := d.Set("metadata", metadata); err != nil {
+		return nil
+	}
 
 	return nil
 }

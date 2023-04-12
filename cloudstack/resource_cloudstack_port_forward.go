@@ -92,7 +92,9 @@ func resourceCloudStackPortForwardCreate(d *schema.ResourceData, meta interface{
 		err := createPortForwards(d, meta, forwards, nrs)
 
 		// We need to update this first to preserve the correct state
-		d.Set("forward", forwards)
+		if err2 := d.Set("forward", forwards); err2 != nil {
+			return err2
+		}
 
 		if err != nil {
 			return err
@@ -302,7 +304,9 @@ func resourceCloudStackPortForwardRead(d *schema.ResourceData, meta interface{})
 	}
 
 	if forwards.Len() > 0 {
-		d.Set("forward", forwards)
+		if err := d.Set("forward", forwards); err != nil {
+			return err
+		}
 	} else if !managed {
 		d.SetId("")
 	}
@@ -328,7 +332,9 @@ func resourceCloudStackPortForwardUpdate(d *schema.ResourceData, meta interface{
 			err := deletePortForwards(d, meta, forwards, ors)
 
 			// We need to update this first to preserve the correct state
-			d.Set("forward", forwards)
+			if err2 := d.Set("forward", forwards); err2 != nil {
+				return err2
+			}
 
 			if err != nil {
 				return err
@@ -340,7 +346,9 @@ func resourceCloudStackPortForwardUpdate(d *schema.ResourceData, meta interface{
 			err := createPortForwards(d, meta, forwards, nrs)
 
 			// We need to update this first to preserve the correct state
-			d.Set("forward", forwards)
+			if err2 := d.Set("forward", forwards); err2 != nil {
+				return err2
+			}
 
 			if err != nil {
 				return err
@@ -361,7 +369,9 @@ func resourceCloudStackPortForwardDelete(d *schema.ResourceData, meta interface{
 		err := deletePortForwards(d, meta, forwards, ors)
 
 		// We need to update this first to preserve the correct state
-		d.Set("forward", forwards)
+		if err2 := d.Set("forward", forwards); err2 != nil {
+			return err2
+		}
 
 		if err != nil {
 			return err

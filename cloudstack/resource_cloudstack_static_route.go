@@ -66,7 +66,9 @@ func resourceCloudStackStaticRouteRead(d *schema.ResourceData, meta interface{})
 		return err
 	}
 
-	d.Set("cidr", r.Cidr)
+	if err = d.Set("cidr", r.Cidr); err != nil {
+		return err
+	}
 
 	return nil
 }

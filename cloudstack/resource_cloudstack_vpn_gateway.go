@@ -66,8 +66,12 @@ func resourceCloudStackVPNGatewayRead(d *schema.ResourceData, meta interface{}) 
 		return err
 	}
 
-	d.Set("vpc_id", v.Vpcid)
-	d.Set("public_ip", v.Publicip)
+	if err = d.Set("vpc_id", v.Vpcid); err != nil {
+		return err
+	}
+	if err = d.Set("public_ip", v.Publicip); err != nil {
+		return err
+	}
 
 	return nil
 }

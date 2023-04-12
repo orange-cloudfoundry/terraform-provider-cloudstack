@@ -104,7 +104,9 @@ func resourceCloudStackEgressFirewallCreate(d *schema.ResourceData, meta interfa
 		err := createEgressFirewallRules(d, meta, rules, nrs)
 
 		// We need to update this first to preserve the correct state
-		d.Set("rule", rules)
+		if err2 := d.Set("rule", rules); err2 != nil {
+			return err2
+		}
 
 		if err != nil {
 			return err
@@ -356,7 +358,9 @@ func resourceCloudStackEgressFirewallRead(d *schema.ResourceData, meta interface
 	}
 
 	if rules.Len() > 0 {
-		d.Set("rule", rules)
+		if err := d.Set("rule", rules); err != nil {
+			return err
+		}
 	} else if !managed {
 		d.SetId("")
 	}
@@ -387,7 +391,9 @@ func resourceCloudStackEgressFirewallUpdate(d *schema.ResourceData, meta interfa
 			err := deleteEgressFirewallRules(d, meta, rules, ors)
 
 			// We need to update this first to preserve the correct state
-			d.Set("rule", rules)
+			if err2 := d.Set("rule", rules); err2 != nil {
+				return err2
+			}
 
 			if err != nil {
 				return err
@@ -399,7 +405,9 @@ func resourceCloudStackEgressFirewallUpdate(d *schema.ResourceData, meta interfa
 			err := createEgressFirewallRules(d, meta, rules, nrs)
 
 			// We need to update this first to preserve the correct state
-			d.Set("rule", rules)
+			if err2 := d.Set("rule", rules); err2 != nil {
+				return err2
+			}
 
 			if err != nil {
 				return err
@@ -420,7 +428,9 @@ func resourceCloudStackEgressFirewallDelete(d *schema.ResourceData, meta interfa
 		err := deleteEgressFirewallRules(d, meta, rules, ors)
 
 		// We need to update this first to preserve the correct state
-		d.Set("rule", rules)
+		if err2 := d.Set("rule", rules); err2 != nil {
+			return err2
+		}
 
 		if err != nil {
 			return err

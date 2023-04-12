@@ -109,20 +109,38 @@ func dataSourceCloudstackTemplateRead(d *schema.ResourceData, meta interface{}) 
 
 func templateDescriptionAttributes(d *schema.ResourceData, template *cloudstack.Template) error {
 	d.SetId(template.Id)
-	d.Set("template_id", template.Id)
-	d.Set("account", template.Account)
-	d.Set("created", template.Created)
-	d.Set("display_text", template.Displaytext)
-	d.Set("format", template.Format)
-	d.Set("hypervisor", template.Hypervisor)
-	d.Set("name", template.Name)
-	d.Set("size", template.Size)
+	if err := d.Set("template_id", template.Id); err != nil {
+		return err
+	}
+	if err := d.Set("account", template.Account); err != nil {
+		return err
+	}
+	if err := d.Set("created", template.Created); err != nil {
+		return err
+	}
+	if err := d.Set("display_text", template.Displaytext); err != nil {
+		return err
+	}
+	if err := d.Set("format", template.Format); err != nil {
+		return err
+	}
+	if err := d.Set("hypervisor", template.Hypervisor); err != nil {
+		return err
+	}
+	if err := d.Set("name", template.Name); err != nil {
+		return err
+	}
+	if err := d.Set("size", template.Size); err != nil {
+		return err
+	}
 
 	tags := make(map[string]interface{})
 	for _, tag := range template.Tags {
 		tags[tag.Key] = tag.Value
 	}
-	d.Set("tags", tags)
+	if err := d.Set("tags", tags); err != nil {
+		return err
+	}
 
 	return nil
 }
