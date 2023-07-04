@@ -1,4 +1,4 @@
-# github.com/ProtonMail/go-crypto v0.0.0-20230217124315-7d5c6f04bbb8
+# github.com/ProtonMail/go-crypto v0.0.0-20230626094100-7e9e0395ebec
 ## explicit; go 1.13
 github.com/ProtonMail/go-crypto/bitcurves
 github.com/ProtonMail/go-crypto/brainpool
@@ -124,10 +124,10 @@ github.com/hashicorp/logutils
 ## explicit; go 1.18
 github.com/hashicorp/terraform-exec/internal/version
 github.com/hashicorp/terraform-exec/tfexec
-# github.com/hashicorp/terraform-json v0.17.0
+# github.com/hashicorp/terraform-json v0.17.1
 ## explicit; go 1.18
 github.com/hashicorp/terraform-json
-# github.com/hashicorp/terraform-plugin-go v0.16.0
+# github.com/hashicorp/terraform-plugin-go v0.18.0
 ## explicit; go 1.19
 github.com/hashicorp/terraform-plugin-go/internal/logging
 github.com/hashicorp/terraform-plugin-go/tfprotov5
@@ -184,7 +184,7 @@ github.com/hashicorp/yamux
 # github.com/mattn/go-colorable v0.1.13
 ## explicit; go 1.15
 github.com/mattn/go-colorable
-# github.com/mattn/go-isatty v0.0.18
+# github.com/mattn/go-isatty v0.0.19
 ## explicit; go 1.15
 github.com/mattn/go-isatty
 # github.com/mitchellh/copystructure v1.2.0
@@ -230,10 +230,12 @@ github.com/zclconf/go-cty/cty/json
 github.com/zclconf/go-cty/cty/set
 # golang.org/x/crypto v0.10.0
 ## explicit; go 1.17
+golang.org/x/crypto/argon2
+golang.org/x/crypto/blake2b
 golang.org/x/crypto/cast5
 golang.org/x/crypto/hkdf
 golang.org/x/crypto/sha3
-# golang.org/x/mod v0.10.0
+# golang.org/x/mod v0.11.0
 ## explicit; go 1.17
 golang.org/x/mod/internal/lazyregexp
 golang.org/x/mod/modfile
@@ -273,10 +275,10 @@ google.golang.org/appengine/internal/datastore
 google.golang.org/appengine/internal/log
 google.golang.org/appengine/internal/modules
 google.golang.org/appengine/internal/remote_api
-# google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1
+# google.golang.org/genproto/googleapis/rpc v0.0.0-20230629202037-9506855d4529
 ## explicit; go 1.19
 google.golang.org/genproto/googleapis/rpc/status
-# google.golang.org/grpc v1.56.0
+# google.golang.org/grpc v1.56.1
 ## explicit; go 1.17
 google.golang.org/grpc
 google.golang.org/grpc/attributes
@@ -330,7 +332,7 @@ google.golang.org/grpc/serviceconfig
 google.golang.org/grpc/stats
 google.golang.org/grpc/status
 google.golang.org/grpc/tap
-# google.golang.org/protobuf v1.30.0
+# google.golang.org/protobuf v1.31.0
 ## explicit; go 1.11
 google.golang.org/protobuf/encoding/protojson
 google.golang.org/protobuf/encoding/prototext
