@@ -68,6 +68,8 @@ type VolumeServiceIface interface {
 	NewUpdateVolumeParams() *UpdateVolumeParams
 	UploadVolume(p *UploadVolumeParams) (*UploadVolumeResponse, error)
 	NewUploadVolumeParams(format string, name string, url string, zoneid string) *UploadVolumeParams
+	ChangeOfferingForVolume(p *ChangeOfferingForVolumeParams) (*ChangeOfferingForVolumeResponse, error)
+	NewChangeOfferingForVolumeParams(diskofferingid string, id string) *ChangeOfferingForVolumeParams
 }
 
 type AttachVolumeParams struct {
@@ -205,6 +207,7 @@ type AttachVolumeResponse struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -247,6 +250,7 @@ type AttachVolumeResponse struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }
@@ -567,6 +571,7 @@ type CreateVolumeResponse struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -609,6 +614,7 @@ type CreateVolumeResponse struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }
@@ -817,6 +823,7 @@ type DestroyVolumeResponse struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -859,6 +866,7 @@ type DestroyVolumeResponse struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }
@@ -996,6 +1004,7 @@ type DetachVolumeResponse struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -1038,6 +1047,7 @@ type DetachVolumeResponse struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }
@@ -1237,10 +1247,13 @@ func (s *VolumeService) GetPathForVolume(p *GetPathForVolumeParams) (*GetPathFor
 		return nil, err
 	}
 
-	var r GetPathForVolumeResponse
-	if err := json.Unmarshal(resp, &r); err != nil {
+	var nested struct {
+		Response GetPathForVolumeResponse `json:"apipathforvolume"`
+	}
+	if err := json.Unmarshal(resp, &nested); err != nil {
 		return nil, err
 	}
+	r := nested.Response
 
 	return &r, nil
 }
@@ -1630,6 +1643,10 @@ func (p *ListVolumesParams) toURLValues() url.Values {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("listall", vv)
 	}
+	if v, found := p.p["listsystemvms"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("listsystemvms", vv)
+	}
 	if v, found := p.p["name"]; found {
 		u.Set("name", v.(string))
 	}
@@ -1646,6 +1663,10 @@ func (p *ListVolumesParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["projectid"]; found {
 		u.Set("projectid", v.(string))
+	}
+	if v, found := p.p["retrieveonlyresourcecount"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("retrieveonlyresourcecount", vv)
 	}
 	if v, found := p.p["state"]; found {
 		u.Set("state", v.(string))
@@ -1837,6 +1858,21 @@ func (p *ListVolumesParams) GetListall() (bool, bool) {
 	return value, ok
 }
 
+func (p *ListVolumesParams) SetListsystemvms(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["listsystemvms"] = v
+}
+
+func (p *ListVolumesParams) GetListsystemvms() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["listsystemvms"].(bool)
+	return value, ok
+}
+
 func (p *ListVolumesParams) SetName(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1909,6 +1945,21 @@ func (p *ListVolumesParams) GetProjectid() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["projectid"].(string)
+	return value, ok
+}
+
+func (p *ListVolumesParams) SetRetrieveonlyresourcecount(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["retrieveonlyresourcecount"] = v
+}
+
+func (p *ListVolumesParams) GetRetrieveonlyresourcecount() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["retrieveonlyresourcecount"].(bool)
 	return value, ok
 }
 
@@ -2136,6 +2187,7 @@ type Volume struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -2178,6 +2230,7 @@ type Volume struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }
@@ -2228,6 +2281,10 @@ func (p *ListVolumesMetricsParams) toURLValues() url.Values {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("listall", vv)
 	}
+	if v, found := p.p["listsystemvms"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("listsystemvms", vv)
+	}
 	if v, found := p.p["name"]; found {
 		u.Set("name", v.(string))
 	}
@@ -2244,6 +2301,10 @@ func (p *ListVolumesMetricsParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["projectid"]; found {
 		u.Set("projectid", v.(string))
+	}
+	if v, found := p.p["retrieveonlyresourcecount"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("retrieveonlyresourcecount", vv)
 	}
 	if v, found := p.p["state"]; found {
 		u.Set("state", v.(string))
@@ -2435,6 +2496,21 @@ func (p *ListVolumesMetricsParams) GetListall() (bool, bool) {
 	return value, ok
 }
 
+func (p *ListVolumesMetricsParams) SetListsystemvms(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["listsystemvms"] = v
+}
+
+func (p *ListVolumesMetricsParams) GetListsystemvms() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["listsystemvms"].(bool)
+	return value, ok
+}
+
 func (p *ListVolumesMetricsParams) SetName(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2507,6 +2583,21 @@ func (p *ListVolumesMetricsParams) GetProjectid() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["projectid"].(string)
+	return value, ok
+}
+
+func (p *ListVolumesMetricsParams) SetRetrieveonlyresourcecount(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["retrieveonlyresourcecount"] = v
+}
+
+func (p *ListVolumesMetricsParams) GetRetrieveonlyresourcecount() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["retrieveonlyresourcecount"].(bool)
 	return value, ok
 }
 
@@ -2735,6 +2826,7 @@ type VolumesMetric struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -2778,6 +2870,7 @@ type VolumesMetric struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }
@@ -2935,6 +3028,7 @@ type MigrateVolumeResponse struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -2977,6 +3071,7 @@ type MigrateVolumeResponse struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }
@@ -3058,6 +3153,7 @@ type RecoverVolumeResponse struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -3100,6 +3196,7 @@ type RecoverVolumeResponse struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }
@@ -3295,6 +3392,7 @@ type ResizeVolumeResponse struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -3337,6 +3435,7 @@ type ResizeVolumeResponse struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }
@@ -3564,6 +3663,7 @@ type UpdateVolumeResponse struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -3606,6 +3706,7 @@ type UpdateVolumeResponse struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }
@@ -3872,6 +3973,7 @@ type UploadVolumeResponse struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -3914,6 +4016,266 @@ type UploadVolumeResponse struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
+	Zoneid                     string `json:"zoneid"`
+	Zonename                   string `json:"zonename"`
+}
+
+type ChangeOfferingForVolumeParams struct {
+	p map[string]interface{}
+}
+
+func (p *ChangeOfferingForVolumeParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["automigrate"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("automigrate", vv)
+	}
+	if v, found := p.p["diskofferingid"]; found {
+		u.Set("diskofferingid", v.(string))
+	}
+	if v, found := p.p["id"]; found {
+		u.Set("id", v.(string))
+	}
+	if v, found := p.p["maxiops"]; found {
+		vv := strconv.FormatInt(v.(int64), 10)
+		u.Set("maxiops", vv)
+	}
+	if v, found := p.p["miniops"]; found {
+		vv := strconv.FormatInt(v.(int64), 10)
+		u.Set("miniops", vv)
+	}
+	if v, found := p.p["shrinkok"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("shrinkok", vv)
+	}
+	if v, found := p.p["size"]; found {
+		vv := strconv.FormatInt(v.(int64), 10)
+		u.Set("size", vv)
+	}
+	return u
+}
+
+func (p *ChangeOfferingForVolumeParams) SetAutomigrate(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["automigrate"] = v
+}
+
+func (p *ChangeOfferingForVolumeParams) GetAutomigrate() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["automigrate"].(bool)
+	return value, ok
+}
+
+func (p *ChangeOfferingForVolumeParams) SetDiskofferingid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["diskofferingid"] = v
+}
+
+func (p *ChangeOfferingForVolumeParams) GetDiskofferingid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["diskofferingid"].(string)
+	return value, ok
+}
+
+func (p *ChangeOfferingForVolumeParams) SetId(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["id"] = v
+}
+
+func (p *ChangeOfferingForVolumeParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+func (p *ChangeOfferingForVolumeParams) SetMaxiops(v int64) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["maxiops"] = v
+}
+
+func (p *ChangeOfferingForVolumeParams) GetMaxiops() (int64, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["maxiops"].(int64)
+	return value, ok
+}
+
+func (p *ChangeOfferingForVolumeParams) SetMiniops(v int64) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["miniops"] = v
+}
+
+func (p *ChangeOfferingForVolumeParams) GetMiniops() (int64, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["miniops"].(int64)
+	return value, ok
+}
+
+func (p *ChangeOfferingForVolumeParams) SetShrinkok(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["shrinkok"] = v
+}
+
+func (p *ChangeOfferingForVolumeParams) GetShrinkok() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["shrinkok"].(bool)
+	return value, ok
+}
+
+func (p *ChangeOfferingForVolumeParams) SetSize(v int64) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["size"] = v
+}
+
+func (p *ChangeOfferingForVolumeParams) GetSize() (int64, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["size"].(int64)
+	return value, ok
+}
+
+// You should always use this function to get a new ChangeOfferingForVolumeParams instance,
+// as then you are sure you have configured all required params
+func (s *VolumeService) NewChangeOfferingForVolumeParams(diskofferingid string, id string) *ChangeOfferingForVolumeParams {
+	p := &ChangeOfferingForVolumeParams{}
+	p.p = make(map[string]interface{})
+	p.p["diskofferingid"] = diskofferingid
+	p.p["id"] = id
+	return p
+}
+
+// Change disk offering of the volume and also an option to auto migrate if required to apply the new disk offering
+func (s *VolumeService) ChangeOfferingForVolume(p *ChangeOfferingForVolumeParams) (*ChangeOfferingForVolumeResponse, error) {
+	resp, err := s.cs.newRequest("changeOfferingForVolume", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r ChangeOfferingForVolumeResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	// If we have a async client, we need to wait for the async result
+	if s.cs.async {
+		b, err := s.cs.GetAsyncJobResult(r.JobID, s.cs.timeout)
+		if err != nil {
+			if err == AsyncTimeoutErr {
+				return &r, err
+			}
+			return nil, err
+		}
+
+		b, err = getRawValue(b)
+		if err != nil {
+			return nil, err
+		}
+
+		if err := json.Unmarshal(b, &r); err != nil {
+			return nil, err
+		}
+	}
+
+	return &r, nil
+}
+
+type ChangeOfferingForVolumeResponse struct {
+	Account                    string `json:"account"`
+	Attached                   string `json:"attached"`
+	Chaininfo                  string `json:"chaininfo"`
+	Clusterid                  string `json:"clusterid"`
+	Clustername                string `json:"clustername"`
+	Created                    string `json:"created"`
+	Destroyed                  bool   `json:"destroyed"`
+	Deviceid                   int64  `json:"deviceid"`
+	DiskBytesReadRate          int64  `json:"diskBytesReadRate"`
+	DiskBytesWriteRate         int64  `json:"diskBytesWriteRate"`
+	DiskIopsReadRate           int64  `json:"diskIopsReadRate"`
+	DiskIopsWriteRate          int64  `json:"diskIopsWriteRate"`
+	Diskioread                 int64  `json:"diskioread"`
+	Diskiowrite                int64  `json:"diskiowrite"`
+	Diskkbsread                int64  `json:"diskkbsread"`
+	Diskkbswrite               int64  `json:"diskkbswrite"`
+	Diskofferingdisplaytext    string `json:"diskofferingdisplaytext"`
+	Diskofferingid             string `json:"diskofferingid"`
+	Diskofferingname           string `json:"diskofferingname"`
+	Displayvolume              bool   `json:"displayvolume"`
+	Domain                     string `json:"domain"`
+	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
+	Hasannotations             bool   `json:"hasannotations"`
+	Hypervisor                 string `json:"hypervisor"`
+	Id                         string `json:"id"`
+	Isextractable              bool   `json:"isextractable"`
+	Isodisplaytext             string `json:"isodisplaytext"`
+	Isoid                      string `json:"isoid"`
+	Isoname                    string `json:"isoname"`
+	JobID                      string `json:"jobid"`
+	Jobstatus                  int    `json:"jobstatus"`
+	Maxiops                    int64  `json:"maxiops"`
+	Miniops                    int64  `json:"miniops"`
+	Name                       string `json:"name"`
+	Path                       string `json:"path"`
+	Physicalsize               int64  `json:"physicalsize"`
+	Podid                      string `json:"podid"`
+	Podname                    string `json:"podname"`
+	Project                    string `json:"project"`
+	Projectid                  string `json:"projectid"`
+	Provisioningtype           string `json:"provisioningtype"`
+	Quiescevm                  bool   `json:"quiescevm"`
+	Serviceofferingdisplaytext string `json:"serviceofferingdisplaytext"`
+	Serviceofferingid          string `json:"serviceofferingid"`
+	Serviceofferingname        string `json:"serviceofferingname"`
+	Size                       int64  `json:"size"`
+	Snapshotid                 string `json:"snapshotid"`
+	State                      string `json:"state"`
+	Status                     string `json:"status"`
+	Storage                    string `json:"storage"`
+	Storageid                  string `json:"storageid"`
+	Storagetype                string `json:"storagetype"`
+	Supportsstoragesnapshot    bool   `json:"supportsstoragesnapshot"`
+	Tags                       []Tags `json:"tags"`
+	Templatedisplaytext        string `json:"templatedisplaytext"`
+	Templateid                 string `json:"templateid"`
+	Templatename               string `json:"templatename"`
+	Type                       string `json:"type"`
+	Utilization                string `json:"utilization"`
+	Virtualmachineid           string `json:"virtualmachineid"`
+	Virtualsize                int64  `json:"virtualsize"`
+	Vmdisplayname              string `json:"vmdisplayname"`
+	Vmname                     string `json:"vmname"`
+	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }

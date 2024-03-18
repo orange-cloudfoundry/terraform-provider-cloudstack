@@ -331,11 +331,14 @@ type Nic struct {
 	JobID                string   `json:"jobid"`
 	Jobstatus            int      `json:"jobstatus"`
 	Macaddress           string   `json:"macaddress"`
+	Mtu                  int      `json:"mtu"`
 	Netmask              string   `json:"netmask"`
 	Networkid            string   `json:"networkid"`
 	Networkname          string   `json:"networkname"`
 	Nsxlogicalswitch     string   `json:"nsxlogicalswitch"`
 	Nsxlogicalswitchport string   `json:"nsxlogicalswitchport"`
+	Publicip             string   `json:"publicip"`
+	Publicipid           string   `json:"publicipid"`
 	Secondaryip          []struct {
 		Id        string `json:"id"`
 		Ipaddress string `json:"ipaddress"`
@@ -344,6 +347,8 @@ type Nic struct {
 	Type             string `json:"type"`
 	Virtualmachineid string `json:"virtualmachineid"`
 	Vlanid           int    `json:"vlanid"`
+	Vpcid            string `json:"vpcid"`
+	Vpcname          string `json:"vpcname"`
 }
 
 type RemoveIpFromNicParams struct {
@@ -517,6 +522,8 @@ func (s *NicService) UpdateVmNicIp(p *UpdateVmNicIpParams) (*UpdateVmNicIpRespon
 type UpdateVmNicIpResponse struct {
 	Account               string                               `json:"account"`
 	Affinitygroup         []UpdateVmNicIpResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                               `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                               `json:"autoscalevmgroupname"`
 	Backupofferingid      string                               `json:"backupofferingid"`
 	Backupofferingname    string                               `json:"backupofferingname"`
 	Bootmode              string                               `json:"bootmode"`
@@ -542,10 +549,11 @@ type UpdateVmNicIpResponse struct {
 	Guestosid             string                               `json:"guestosid"`
 	Haenable              bool                                 `json:"haenable"`
 	Hasannotations        bool                                 `json:"hasannotations"`
+	Hostcontrolstate      string                               `json:"hostcontrolstate"`
 	Hostid                string                               `json:"hostid"`
 	Hostname              string                               `json:"hostname"`
 	Hypervisor            string                               `json:"hypervisor"`
-	Icon                  string                               `json:"icon"`
+	Icon                  interface{}                          `json:"icon"`
 	Id                    string                               `json:"id"`
 	Instancename          string                               `json:"instancename"`
 	Isdynamicallyscalable bool                                 `json:"isdynamicallyscalable"`
@@ -554,7 +562,7 @@ type UpdateVmNicIpResponse struct {
 	Isoname               string                               `json:"isoname"`
 	JobID                 string                               `json:"jobid"`
 	Jobstatus             int                                  `json:"jobstatus"`
-	Keypair               string                               `json:"keypair"`
+	Keypairs              string                               `json:"keypairs"`
 	Lastupdated           string                               `json:"lastupdated"`
 	Memory                int                                  `json:"memory"`
 	Memoryintfreekbs      int64                                `json:"memoryintfreekbs"`
@@ -587,9 +595,17 @@ type UpdateVmNicIpResponse struct {
 	Templatedisplaytext   string                               `json:"templatedisplaytext"`
 	Templateid            string                               `json:"templateid"`
 	Templatename          string                               `json:"templatename"`
+	Templatetype          string                               `json:"templatetype"`
+	Userdata              string                               `json:"userdata"`
+	Userdatadetails       string                               `json:"userdatadetails"`
+	Userdataid            string                               `json:"userdataid"`
+	Userdataname          string                               `json:"userdataname"`
+	Userdatapolicy        string                               `json:"userdatapolicy"`
 	Userid                string                               `json:"userid"`
 	Username              string                               `json:"username"`
 	Vgpu                  string                               `json:"vgpu"`
+	Vnfdetails            map[string]string                    `json:"vnfdetails"`
+	Vnfnics               []string                             `json:"vnfnics"`
 	Zoneid                string                               `json:"zoneid"`
 	Zonename              string                               `json:"zonename"`
 }

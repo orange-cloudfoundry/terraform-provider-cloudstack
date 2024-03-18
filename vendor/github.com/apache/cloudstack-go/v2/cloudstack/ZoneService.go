@@ -99,6 +99,10 @@ func (p *CreateZoneParams) toURLValues() url.Values {
 	if v, found := p.p["ip6dns2"]; found {
 		u.Set("ip6dns2", v.(string))
 	}
+	if v, found := p.p["isedge"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("isedge", vv)
+	}
 	if v, found := p.p["localstorageenabled"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("localstorageenabled", vv)
@@ -266,6 +270,21 @@ func (p *CreateZoneParams) GetIp6dns2() (string, bool) {
 	return value, ok
 }
 
+func (p *CreateZoneParams) SetIsedge(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["isedge"] = v
+}
+
+func (p *CreateZoneParams) GetIsedge() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["isedge"].(bool)
+	return value, ok
+}
+
 func (p *CreateZoneParams) SetLocalstorageenabled(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -345,6 +364,10 @@ func (s *ZoneService) CreateZone(p *CreateZoneParams) (*CreateZoneResponse, erro
 		return nil, err
 	}
 
+	if resp, err = getRawValue(resp); err != nil {
+		return nil, err
+	}
+
 	var r CreateZoneResponse
 	if err := json.Unmarshal(resp, &r); err != nil {
 		return nil, err
@@ -354,33 +377,37 @@ func (s *ZoneService) CreateZone(p *CreateZoneParams) (*CreateZoneResponse, erro
 }
 
 type CreateZoneResponse struct {
-	Allocationstate       string                       `json:"allocationstate"`
-	Capacity              []CreateZoneResponseCapacity `json:"capacity"`
-	Description           string                       `json:"description"`
-	Dhcpprovider          string                       `json:"dhcpprovider"`
-	Displaytext           string                       `json:"displaytext"`
-	Dns1                  string                       `json:"dns1"`
-	Dns2                  string                       `json:"dns2"`
-	Domain                string                       `json:"domain"`
-	Domainid              string                       `json:"domainid"`
-	Domainname            string                       `json:"domainname"`
-	Guestcidraddress      string                       `json:"guestcidraddress"`
-	Hasannotations        bool                         `json:"hasannotations"`
-	Icon                  string                       `json:"icon"`
-	Id                    string                       `json:"id"`
-	Internaldns1          string                       `json:"internaldns1"`
-	Internaldns2          string                       `json:"internaldns2"`
-	Ip6dns1               string                       `json:"ip6dns1"`
-	Ip6dns2               string                       `json:"ip6dns2"`
-	JobID                 string                       `json:"jobid"`
-	Jobstatus             int                          `json:"jobstatus"`
-	Localstorageenabled   bool                         `json:"localstorageenabled"`
-	Name                  string                       `json:"name"`
-	Networktype           string                       `json:"networktype"`
-	Resourcedetails       map[string]string            `json:"resourcedetails"`
-	Securitygroupsenabled bool                         `json:"securitygroupsenabled"`
-	Tags                  []Tags                       `json:"tags"`
-	Zonetoken             string                       `json:"zonetoken"`
+	Allocationstate              string                       `json:"allocationstate"`
+	Allowuserspecifyvrmtu        bool                         `json:"allowuserspecifyvrmtu"`
+	Capacity                     []CreateZoneResponseCapacity `json:"capacity"`
+	Description                  string                       `json:"description"`
+	Dhcpprovider                 string                       `json:"dhcpprovider"`
+	Displaytext                  string                       `json:"displaytext"`
+	Dns1                         string                       `json:"dns1"`
+	Dns2                         string                       `json:"dns2"`
+	Domain                       string                       `json:"domain"`
+	Domainid                     string                       `json:"domainid"`
+	Domainname                   string                       `json:"domainname"`
+	Guestcidraddress             string                       `json:"guestcidraddress"`
+	Hasannotations               bool                         `json:"hasannotations"`
+	Icon                         interface{}                  `json:"icon"`
+	Id                           string                       `json:"id"`
+	Internaldns1                 string                       `json:"internaldns1"`
+	Internaldns2                 string                       `json:"internaldns2"`
+	Ip6dns1                      string                       `json:"ip6dns1"`
+	Ip6dns2                      string                       `json:"ip6dns2"`
+	JobID                        string                       `json:"jobid"`
+	Jobstatus                    int                          `json:"jobstatus"`
+	Localstorageenabled          bool                         `json:"localstorageenabled"`
+	Name                         string                       `json:"name"`
+	Networktype                  string                       `json:"networktype"`
+	Resourcedetails              map[string]string            `json:"resourcedetails"`
+	Routerprivateinterfacemaxmtu int                          `json:"routerprivateinterfacemaxmtu"`
+	Routerpublicinterfacemaxmtu  int                          `json:"routerpublicinterfacemaxmtu"`
+	Securitygroupsenabled        bool                         `json:"securitygroupsenabled"`
+	Tags                         []Tags                       `json:"tags"`
+	Type                         string                       `json:"type"`
+	Zonetoken                    string                       `json:"zonetoken"`
 }
 
 type CreateZoneResponseCapacity struct {
@@ -1138,6 +1165,10 @@ func (p *ListZonesParams) toURLValues() url.Values {
 	if v, found := p.p["id"]; found {
 		u.Set("id", v.(string))
 	}
+	if v, found := p.p["ids"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("ids", vv)
+	}
 	if v, found := p.p["keyword"]; found {
 		u.Set("keyword", v.(string))
 	}
@@ -1215,6 +1246,21 @@ func (p *ListZonesParams) GetId() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+func (p *ListZonesParams) SetIds(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["ids"] = v
+}
+
+func (p *ListZonesParams) GetIds() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ids"].([]string)
 	return value, ok
 }
 
@@ -1450,33 +1496,37 @@ type ListZonesResponse struct {
 }
 
 type Zone struct {
-	Allocationstate       string            `json:"allocationstate"`
-	Capacity              []ZoneCapacity    `json:"capacity"`
-	Description           string            `json:"description"`
-	Dhcpprovider          string            `json:"dhcpprovider"`
-	Displaytext           string            `json:"displaytext"`
-	Dns1                  string            `json:"dns1"`
-	Dns2                  string            `json:"dns2"`
-	Domain                string            `json:"domain"`
-	Domainid              string            `json:"domainid"`
-	Domainname            string            `json:"domainname"`
-	Guestcidraddress      string            `json:"guestcidraddress"`
-	Hasannotations        bool              `json:"hasannotations"`
-	Icon                  string            `json:"icon"`
-	Id                    string            `json:"id"`
-	Internaldns1          string            `json:"internaldns1"`
-	Internaldns2          string            `json:"internaldns2"`
-	Ip6dns1               string            `json:"ip6dns1"`
-	Ip6dns2               string            `json:"ip6dns2"`
-	JobID                 string            `json:"jobid"`
-	Jobstatus             int               `json:"jobstatus"`
-	Localstorageenabled   bool              `json:"localstorageenabled"`
-	Name                  string            `json:"name"`
-	Networktype           string            `json:"networktype"`
-	Resourcedetails       map[string]string `json:"resourcedetails"`
-	Securitygroupsenabled bool              `json:"securitygroupsenabled"`
-	Tags                  []Tags            `json:"tags"`
-	Zonetoken             string            `json:"zonetoken"`
+	Allocationstate              string            `json:"allocationstate"`
+	Allowuserspecifyvrmtu        bool              `json:"allowuserspecifyvrmtu"`
+	Capacity                     []ZoneCapacity    `json:"capacity"`
+	Description                  string            `json:"description"`
+	Dhcpprovider                 string            `json:"dhcpprovider"`
+	Displaytext                  string            `json:"displaytext"`
+	Dns1                         string            `json:"dns1"`
+	Dns2                         string            `json:"dns2"`
+	Domain                       string            `json:"domain"`
+	Domainid                     string            `json:"domainid"`
+	Domainname                   string            `json:"domainname"`
+	Guestcidraddress             string            `json:"guestcidraddress"`
+	Hasannotations               bool              `json:"hasannotations"`
+	Icon                         interface{}       `json:"icon"`
+	Id                           string            `json:"id"`
+	Internaldns1                 string            `json:"internaldns1"`
+	Internaldns2                 string            `json:"internaldns2"`
+	Ip6dns1                      string            `json:"ip6dns1"`
+	Ip6dns2                      string            `json:"ip6dns2"`
+	JobID                        string            `json:"jobid"`
+	Jobstatus                    int               `json:"jobstatus"`
+	Localstorageenabled          bool              `json:"localstorageenabled"`
+	Name                         string            `json:"name"`
+	Networktype                  string            `json:"networktype"`
+	Resourcedetails              map[string]string `json:"resourcedetails"`
+	Routerprivateinterfacemaxmtu int               `json:"routerprivateinterfacemaxmtu"`
+	Routerpublicinterfacemaxmtu  int               `json:"routerpublicinterfacemaxmtu"`
+	Securitygroupsenabled        bool              `json:"securitygroupsenabled"`
+	Tags                         []Tags            `json:"tags"`
+	Type                         string            `json:"type"`
+	Zonetoken                    string            `json:"zonetoken"`
 }
 
 type ZoneCapacity struct {
@@ -1512,6 +1562,10 @@ func (p *ListZonesMetricsParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["id"]; found {
 		u.Set("id", v.(string))
+	}
+	if v, found := p.p["ids"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("ids", vv)
 	}
 	if v, found := p.p["keyword"]; found {
 		u.Set("keyword", v.(string))
@@ -1590,6 +1644,21 @@ func (p *ListZonesMetricsParams) GetId() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+func (p *ListZonesMetricsParams) SetIds(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["ids"] = v
+}
+
+func (p *ListZonesMetricsParams) GetIds() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ids"].([]string)
 	return value, ok
 }
 
@@ -1826,6 +1895,7 @@ type ListZonesMetricsResponse struct {
 
 type ZonesMetric struct {
 	Allocationstate                 string                `json:"allocationstate"`
+	Allowuserspecifyvrmtu           bool                  `json:"allowuserspecifyvrmtu"`
 	Capacity                        []ZonesMetricCapacity `json:"capacity"`
 	Clusters                        string                `json:"clusters"`
 	Cpuallocated                    string                `json:"cpuallocated"`
@@ -1846,7 +1916,7 @@ type ZonesMetric struct {
 	Domainname                      string                `json:"domainname"`
 	Guestcidraddress                string                `json:"guestcidraddress"`
 	Hasannotations                  bool                  `json:"hasannotations"`
-	Icon                            string                `json:"icon"`
+	Icon                            interface{}           `json:"icon"`
 	Id                              string                `json:"id"`
 	Internaldns1                    string                `json:"internaldns1"`
 	Internaldns2                    string                `json:"internaldns2"`
@@ -1866,9 +1936,12 @@ type ZonesMetric struct {
 	Name                            string                `json:"name"`
 	Networktype                     string                `json:"networktype"`
 	Resourcedetails                 map[string]string     `json:"resourcedetails"`
+	Routerprivateinterfacemaxmtu    int                   `json:"routerprivateinterfacemaxmtu"`
+	Routerpublicinterfacemaxmtu     int                   `json:"routerpublicinterfacemaxmtu"`
 	Securitygroupsenabled           bool                  `json:"securitygroupsenabled"`
 	State                           string                `json:"state"`
 	Tags                            []Tags                `json:"tags"`
+	Type                            string                `json:"type"`
 	Zonetoken                       string                `json:"zonetoken"`
 }
 
@@ -2314,33 +2387,37 @@ func (s *ZoneService) UpdateZone(p *UpdateZoneParams) (*UpdateZoneResponse, erro
 }
 
 type UpdateZoneResponse struct {
-	Allocationstate       string                       `json:"allocationstate"`
-	Capacity              []UpdateZoneResponseCapacity `json:"capacity"`
-	Description           string                       `json:"description"`
-	Dhcpprovider          string                       `json:"dhcpprovider"`
-	Displaytext           string                       `json:"displaytext"`
-	Dns1                  string                       `json:"dns1"`
-	Dns2                  string                       `json:"dns2"`
-	Domain                string                       `json:"domain"`
-	Domainid              string                       `json:"domainid"`
-	Domainname            string                       `json:"domainname"`
-	Guestcidraddress      string                       `json:"guestcidraddress"`
-	Hasannotations        bool                         `json:"hasannotations"`
-	Icon                  string                       `json:"icon"`
-	Id                    string                       `json:"id"`
-	Internaldns1          string                       `json:"internaldns1"`
-	Internaldns2          string                       `json:"internaldns2"`
-	Ip6dns1               string                       `json:"ip6dns1"`
-	Ip6dns2               string                       `json:"ip6dns2"`
-	JobID                 string                       `json:"jobid"`
-	Jobstatus             int                          `json:"jobstatus"`
-	Localstorageenabled   bool                         `json:"localstorageenabled"`
-	Name                  string                       `json:"name"`
-	Networktype           string                       `json:"networktype"`
-	Resourcedetails       map[string]string            `json:"resourcedetails"`
-	Securitygroupsenabled bool                         `json:"securitygroupsenabled"`
-	Tags                  []Tags                       `json:"tags"`
-	Zonetoken             string                       `json:"zonetoken"`
+	Allocationstate              string                       `json:"allocationstate"`
+	Allowuserspecifyvrmtu        bool                         `json:"allowuserspecifyvrmtu"`
+	Capacity                     []UpdateZoneResponseCapacity `json:"capacity"`
+	Description                  string                       `json:"description"`
+	Dhcpprovider                 string                       `json:"dhcpprovider"`
+	Displaytext                  string                       `json:"displaytext"`
+	Dns1                         string                       `json:"dns1"`
+	Dns2                         string                       `json:"dns2"`
+	Domain                       string                       `json:"domain"`
+	Domainid                     string                       `json:"domainid"`
+	Domainname                   string                       `json:"domainname"`
+	Guestcidraddress             string                       `json:"guestcidraddress"`
+	Hasannotations               bool                         `json:"hasannotations"`
+	Icon                         interface{}                  `json:"icon"`
+	Id                           string                       `json:"id"`
+	Internaldns1                 string                       `json:"internaldns1"`
+	Internaldns2                 string                       `json:"internaldns2"`
+	Ip6dns1                      string                       `json:"ip6dns1"`
+	Ip6dns2                      string                       `json:"ip6dns2"`
+	JobID                        string                       `json:"jobid"`
+	Jobstatus                    int                          `json:"jobstatus"`
+	Localstorageenabled          bool                         `json:"localstorageenabled"`
+	Name                         string                       `json:"name"`
+	Networktype                  string                       `json:"networktype"`
+	Resourcedetails              map[string]string            `json:"resourcedetails"`
+	Routerprivateinterfacemaxmtu int                          `json:"routerprivateinterfacemaxmtu"`
+	Routerpublicinterfacemaxmtu  int                          `json:"routerpublicinterfacemaxmtu"`
+	Securitygroupsenabled        bool                         `json:"securitygroupsenabled"`
+	Tags                         []Tags                       `json:"tags"`
+	Type                         string                       `json:"type"`
+	Zonetoken                    string                       `json:"zonetoken"`
 }
 
 type UpdateZoneResponseCapacity struct {

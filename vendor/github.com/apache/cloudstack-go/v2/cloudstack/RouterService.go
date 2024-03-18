@@ -141,6 +141,7 @@ type ChangeServiceForRouterResponse struct {
 	Hasannotations      bool                                               `json:"hasannotations"`
 	Healthcheckresults  []ChangeServiceForRouterResponseHealthcheckresults `json:"healthcheckresults"`
 	Healthchecksfailed  bool                                               `json:"healthchecksfailed"`
+	Hostcontrolstate    string                                             `json:"hostcontrolstate"`
 	Hostid              string                                             `json:"hostid"`
 	Hostname            string                                             `json:"hostname"`
 	Hypervisor          string                                             `json:"hypervisor"`
@@ -171,6 +172,7 @@ type ChangeServiceForRouterResponse struct {
 	Scriptsversion      string                                             `json:"scriptsversion"`
 	Serviceofferingid   string                                             `json:"serviceofferingid"`
 	Serviceofferingname string                                             `json:"serviceofferingname"`
+	Softwareversion     string                                             `json:"softwareversion"`
 	State               string                                             `json:"state"`
 	Templateid          string                                             `json:"templateid"`
 	Templatename        string                                             `json:"templatename"`
@@ -491,6 +493,7 @@ type DestroyRouterResponse struct {
 	Hasannotations      bool                                      `json:"hasannotations"`
 	Healthcheckresults  []DestroyRouterResponseHealthcheckresults `json:"healthcheckresults"`
 	Healthchecksfailed  bool                                      `json:"healthchecksfailed"`
+	Hostcontrolstate    string                                    `json:"hostcontrolstate"`
 	Hostid              string                                    `json:"hostid"`
 	Hostname            string                                    `json:"hostname"`
 	Hypervisor          string                                    `json:"hypervisor"`
@@ -521,6 +524,7 @@ type DestroyRouterResponse struct {
 	Scriptsversion      string                                    `json:"scriptsversion"`
 	Serviceofferingid   string                                    `json:"serviceofferingid"`
 	Serviceofferingname string                                    `json:"serviceofferingname"`
+	Softwareversion     string                                    `json:"softwareversion"`
 	State               string                                    `json:"state"`
 	Templateid          string                                    `json:"templateid"`
 	Templatename        string                                    `json:"templatename"`
@@ -1063,6 +1067,7 @@ type Router struct {
 	Hasannotations      bool                       `json:"hasannotations"`
 	Healthcheckresults  []RouterHealthcheckresults `json:"healthcheckresults"`
 	Healthchecksfailed  bool                       `json:"healthchecksfailed"`
+	Hostcontrolstate    string                     `json:"hostcontrolstate"`
 	Hostid              string                     `json:"hostid"`
 	Hostname            string                     `json:"hostname"`
 	Hypervisor          string                     `json:"hypervisor"`
@@ -1093,6 +1098,7 @@ type Router struct {
 	Scriptsversion      string                     `json:"scriptsversion"`
 	Serviceofferingid   string                     `json:"serviceofferingid"`
 	Serviceofferingname string                     `json:"serviceofferingname"`
+	Softwareversion     string                     `json:"softwareversion"`
 	State               string                     `json:"state"`
 	Templateid          string                     `json:"templateid"`
 	Templatename        string                     `json:"templatename"`
@@ -1417,6 +1423,7 @@ type RebootRouterResponse struct {
 	Hasannotations      bool                                     `json:"hasannotations"`
 	Healthcheckresults  []RebootRouterResponseHealthcheckresults `json:"healthcheckresults"`
 	Healthchecksfailed  bool                                     `json:"healthchecksfailed"`
+	Hostcontrolstate    string                                   `json:"hostcontrolstate"`
 	Hostid              string                                   `json:"hostid"`
 	Hostname            string                                   `json:"hostname"`
 	Hypervisor          string                                   `json:"hypervisor"`
@@ -1447,6 +1454,7 @@ type RebootRouterResponse struct {
 	Scriptsversion      string                                   `json:"scriptsversion"`
 	Serviceofferingid   string                                   `json:"serviceofferingid"`
 	Serviceofferingname string                                   `json:"serviceofferingname"`
+	Softwareversion     string                                   `json:"softwareversion"`
 	State               string                                   `json:"state"`
 	Templateid          string                                   `json:"templateid"`
 	Templatename        string                                   `json:"templatename"`
@@ -1555,6 +1563,7 @@ type StartRouterResponse struct {
 	Hasannotations      bool                                    `json:"hasannotations"`
 	Healthcheckresults  []StartRouterResponseHealthcheckresults `json:"healthcheckresults"`
 	Healthchecksfailed  bool                                    `json:"healthchecksfailed"`
+	Hostcontrolstate    string                                  `json:"hostcontrolstate"`
 	Hostid              string                                  `json:"hostid"`
 	Hostname            string                                  `json:"hostname"`
 	Hypervisor          string                                  `json:"hypervisor"`
@@ -1585,6 +1594,7 @@ type StartRouterResponse struct {
 	Scriptsversion      string                                  `json:"scriptsversion"`
 	Serviceofferingid   string                                  `json:"serviceofferingid"`
 	Serviceofferingname string                                  `json:"serviceofferingname"`
+	Softwareversion     string                                  `json:"softwareversion"`
 	State               string                                  `json:"state"`
 	Templateid          string                                  `json:"templateid"`
 	Templatename        string                                  `json:"templatename"`
@@ -1712,6 +1722,7 @@ type StopRouterResponse struct {
 	Hasannotations      bool                                   `json:"hasannotations"`
 	Healthcheckresults  []StopRouterResponseHealthcheckresults `json:"healthcheckresults"`
 	Healthchecksfailed  bool                                   `json:"healthchecksfailed"`
+	Hostcontrolstate    string                                 `json:"hostcontrolstate"`
 	Hostid              string                                 `json:"hostid"`
 	Hostname            string                                 `json:"hostname"`
 	Hypervisor          string                                 `json:"hypervisor"`
@@ -1742,6 +1753,7 @@ type StopRouterResponse struct {
 	Scriptsversion      string                                 `json:"scriptsversion"`
 	Serviceofferingid   string                                 `json:"serviceofferingid"`
 	Serviceofferingname string                                 `json:"serviceofferingname"`
+	Softwareversion     string                                 `json:"softwareversion"`
 	State               string                                 `json:"state"`
 	Templateid          string                                 `json:"templateid"`
 	Templatename        string                                 `json:"templatename"`

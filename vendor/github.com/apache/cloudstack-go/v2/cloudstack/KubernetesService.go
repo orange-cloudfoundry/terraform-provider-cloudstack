@@ -58,6 +58,10 @@ type KubernetesServiceIface interface {
 	NewUpdateKubernetesSupportedVersionParams(id string, state string) *UpdateKubernetesSupportedVersionParams
 	UpgradeKubernetesCluster(p *UpgradeKubernetesClusterParams) (*UpgradeKubernetesClusterResponse, error)
 	NewUpgradeKubernetesClusterParams(id string, kubernetesversionid string) *UpgradeKubernetesClusterParams
+	AddVirtualMachinesToKubernetesCluster(p *AddVirtualMachinesToKubernetesClusterParams) (*AddVirtualMachinesToKubernetesClusterResponse, error)
+	NewAddVirtualMachinesToKubernetesClusterParams(id string, virtualmachineids []string) *AddVirtualMachinesToKubernetesClusterParams
+	RemoveVirtualMachinesFromKubernetesCluster(p *RemoveVirtualMachinesFromKubernetesClusterParams) (*RemoveVirtualMachinesFromKubernetesClusterResponse, error)
+	NewRemoveVirtualMachinesFromKubernetesClusterParams(id string, virtualmachineids []string) *RemoveVirtualMachinesFromKubernetesClusterParams
 }
 
 type AddKubernetesSupportedVersionParams struct {
@@ -71,6 +75,10 @@ func (p *AddKubernetesSupportedVersionParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["checksum"]; found {
 		u.Set("checksum", v.(string))
+	}
+	if v, found := p.p["directdownload"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("directdownload", vv)
 	}
 	if v, found := p.p["mincpunumber"]; found {
 		vv := strconv.Itoa(v.(int))
@@ -107,6 +115,21 @@ func (p *AddKubernetesSupportedVersionParams) GetChecksum() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["checksum"].(string)
+	return value, ok
+}
+
+func (p *AddKubernetesSupportedVersionParams) SetDirectdownload(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["directdownload"] = v
+}
+
+func (p *AddKubernetesSupportedVersionParams) GetDirectdownload() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["directdownload"].(bool)
 	return value, ok
 }
 
@@ -231,6 +254,8 @@ func (s *KubernetesService) AddKubernetesSupportedVersion(p *AddKubernetesSuppor
 }
 
 type AddKubernetesSupportedVersionResponse struct {
+	Created             string `json:"created"`
+	Directdownload      bool   `json:"directdownload"`
 	Id                  string `json:"id"`
 	Isoid               string `json:"isoid"`
 	Isoname             string `json:"isoname"`
@@ -259,6 +284,9 @@ func (p *CreateKubernetesClusterParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["account"]; found {
 		u.Set("account", v.(string))
+	}
+	if v, found := p.p["clustertype"]; found {
+		u.Set("clustertype", v.(string))
 	}
 	if v, found := p.p["controlnodes"]; found {
 		vv := strconv.FormatInt(v.(int64), 10)
@@ -330,6 +358,21 @@ func (p *CreateKubernetesClusterParams) GetAccount() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["account"].(string)
+	return value, ok
+}
+
+func (p *CreateKubernetesClusterParams) SetClustertype(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["clustertype"] = v
+}
+
+func (p *CreateKubernetesClusterParams) GetClustertype() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["clustertype"].(string)
 	return value, ok
 }
 
@@ -641,9 +684,11 @@ type CreateKubernetesClusterResponse struct {
 	Account               string            `json:"account"`
 	Associatednetworkname string            `json:"associatednetworkname"`
 	Autoscalingenabled    bool              `json:"autoscalingenabled"`
+	Clustertype           string            `json:"clustertype"`
 	Consoleendpoint       string            `json:"consoleendpoint"`
 	Controlnodes          int64             `json:"controlnodes"`
 	Cpunumber             string            `json:"cpunumber"`
+	Created               string            `json:"created"`
 	Description           string            `json:"description"`
 	Domain                string            `json:"domain"`
 	Domainid              string            `json:"domainid"`
@@ -684,10 +729,48 @@ func (p *DeleteKubernetesClusterParams) toURLValues() url.Values {
 	if p.p == nil {
 		return u
 	}
+	if v, found := p.p["cleanup"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("cleanup", vv)
+	}
+	if v, found := p.p["expunge"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("expunge", vv)
+	}
 	if v, found := p.p["id"]; found {
 		u.Set("id", v.(string))
 	}
 	return u
+}
+
+func (p *DeleteKubernetesClusterParams) SetCleanup(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["cleanup"] = v
+}
+
+func (p *DeleteKubernetesClusterParams) GetCleanup() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["cleanup"].(bool)
+	return value, ok
+}
+
+func (p *DeleteKubernetesClusterParams) SetExpunge(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["expunge"] = v
+}
+
+func (p *DeleteKubernetesClusterParams) GetExpunge() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["expunge"].(bool)
+	return value, ok
 }
 
 func (p *DeleteKubernetesClusterParams) SetId(v string) {
@@ -872,10 +955,13 @@ func (s *KubernetesService) GetKubernetesClusterConfig(p *GetKubernetesClusterCo
 		return nil, err
 	}
 
-	var r GetKubernetesClusterConfigResponse
-	if err := json.Unmarshal(resp, &r); err != nil {
+	var nested struct {
+		Response GetKubernetesClusterConfigResponse `json:"clusterconfig"`
+	}
+	if err := json.Unmarshal(resp, &nested); err != nil {
 		return nil, err
 	}
+	r := nested.Response
 
 	return &r, nil
 }
@@ -899,6 +985,9 @@ func (p *ListKubernetesClustersParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["account"]; found {
 		u.Set("account", v.(string))
+	}
+	if v, found := p.p["clustertype"]; found {
+		u.Set("clustertype", v.(string))
 	}
 	if v, found := p.p["domainid"]; found {
 		u.Set("domainid", v.(string))
@@ -949,6 +1038,21 @@ func (p *ListKubernetesClustersParams) GetAccount() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["account"].(string)
+	return value, ok
+}
+
+func (p *ListKubernetesClustersParams) SetClustertype(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["clustertype"] = v
+}
+
+func (p *ListKubernetesClustersParams) GetClustertype() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["clustertype"].(string)
 	return value, ok
 }
 
@@ -1217,9 +1321,11 @@ type KubernetesCluster struct {
 	Account               string            `json:"account"`
 	Associatednetworkname string            `json:"associatednetworkname"`
 	Autoscalingenabled    bool              `json:"autoscalingenabled"`
+	Clustertype           string            `json:"clustertype"`
 	Consoleendpoint       string            `json:"consoleendpoint"`
 	Controlnodes          int64             `json:"controlnodes"`
 	Cpunumber             string            `json:"cpunumber"`
+	Created               string            `json:"created"`
 	Description           string            `json:"description"`
 	Domain                string            `json:"domain"`
 	Domainid              string            `json:"domainid"`
@@ -1503,6 +1609,8 @@ type ListKubernetesSupportedVersionsResponse struct {
 }
 
 type KubernetesSupportedVersion struct {
+	Created             string `json:"created"`
+	Directdownload      bool   `json:"directdownload"`
 	Id                  string `json:"id"`
 	Isoid               string `json:"isoid"`
 	Isoname             string `json:"isoname"`
@@ -1672,7 +1780,7 @@ func (s *KubernetesService) NewScaleKubernetesClusterParams(id string) *ScaleKub
 	return p
 }
 
-// Scales a created, running or stopped Kubernetes cluster
+// Scales a created, running or stopped CloudManaged Kubernetes cluster
 func (s *KubernetesService) ScaleKubernetesCluster(p *ScaleKubernetesClusterParams) (*ScaleKubernetesClusterResponse, error) {
 	resp, err := s.cs.newRequest("scaleKubernetesCluster", p.toURLValues())
 	if err != nil {
@@ -1711,9 +1819,11 @@ type ScaleKubernetesClusterResponse struct {
 	Account               string            `json:"account"`
 	Associatednetworkname string            `json:"associatednetworkname"`
 	Autoscalingenabled    bool              `json:"autoscalingenabled"`
+	Clustertype           string            `json:"clustertype"`
 	Consoleendpoint       string            `json:"consoleendpoint"`
 	Controlnodes          int64             `json:"controlnodes"`
 	Cpunumber             string            `json:"cpunumber"`
+	Created               string            `json:"created"`
 	Description           string            `json:"description"`
 	Domain                string            `json:"domain"`
 	Domainid              string            `json:"domainid"`
@@ -1784,7 +1894,7 @@ func (s *KubernetesService) NewStartKubernetesClusterParams(id string) *StartKub
 	return p
 }
 
-// Starts a stopped Kubernetes cluster
+// Starts a stopped CloudManaged Kubernetes cluster
 func (s *KubernetesService) StartKubernetesCluster(p *StartKubernetesClusterParams) (*StartKubernetesClusterResponse, error) {
 	resp, err := s.cs.newRequest("startKubernetesCluster", p.toURLValues())
 	if err != nil {
@@ -1823,9 +1933,11 @@ type StartKubernetesClusterResponse struct {
 	Account               string            `json:"account"`
 	Associatednetworkname string            `json:"associatednetworkname"`
 	Autoscalingenabled    bool              `json:"autoscalingenabled"`
+	Clustertype           string            `json:"clustertype"`
 	Consoleendpoint       string            `json:"consoleendpoint"`
 	Controlnodes          int64             `json:"controlnodes"`
 	Cpunumber             string            `json:"cpunumber"`
+	Created               string            `json:"created"`
 	Description           string            `json:"description"`
 	Domain                string            `json:"domain"`
 	Domainid              string            `json:"domainid"`
@@ -1896,7 +2008,7 @@ func (s *KubernetesService) NewStopKubernetesClusterParams(id string) *StopKuber
 	return p
 }
 
-// Stops a running Kubernetes cluster
+// Stops a running CloudManaged Kubernetes cluster
 func (s *KubernetesService) StopKubernetesCluster(p *StopKubernetesClusterParams) (*StopKubernetesClusterResponse, error) {
 	resp, err := s.cs.newRequest("stopKubernetesCluster", p.toURLValues())
 	if err != nil {
@@ -2007,6 +2119,8 @@ func (s *KubernetesService) UpdateKubernetesSupportedVersion(p *UpdateKubernetes
 }
 
 type UpdateKubernetesSupportedVersionResponse struct {
+	Created             string `json:"created"`
+	Directdownload      bool   `json:"directdownload"`
 	Id                  string `json:"id"`
 	Isoid               string `json:"isoid"`
 	Isoname             string `json:"isoname"`
@@ -2082,7 +2196,7 @@ func (s *KubernetesService) NewUpgradeKubernetesClusterParams(id string, kuberne
 	return p
 }
 
-// Upgrades a running Kubernetes cluster
+// Upgrades a running CloudManaged Kubernetes cluster
 func (s *KubernetesService) UpgradeKubernetesCluster(p *UpgradeKubernetesClusterParams) (*UpgradeKubernetesClusterResponse, error) {
 	resp, err := s.cs.newRequest("upgradeKubernetesCluster", p.toURLValues())
 	if err != nil {
@@ -2121,9 +2235,11 @@ type UpgradeKubernetesClusterResponse struct {
 	Account               string            `json:"account"`
 	Associatednetworkname string            `json:"associatednetworkname"`
 	Autoscalingenabled    bool              `json:"autoscalingenabled"`
+	Clustertype           string            `json:"clustertype"`
 	Consoleendpoint       string            `json:"consoleendpoint"`
 	Controlnodes          int64             `json:"controlnodes"`
 	Cpunumber             string            `json:"cpunumber"`
+	Created               string            `json:"created"`
 	Description           string            `json:"description"`
 	Domain                string            `json:"domain"`
 	Domainid              string            `json:"domainid"`
@@ -2153,4 +2269,296 @@ type UpgradeKubernetesClusterResponse struct {
 	Virtualmachines       []*VirtualMachine `json:"virtualmachines"`
 	Zoneid                string            `json:"zoneid"`
 	Zonename              string            `json:"zonename"`
+}
+
+type AddVirtualMachinesToKubernetesClusterParams struct {
+	p map[string]interface{}
+}
+
+func (p *AddVirtualMachinesToKubernetesClusterParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["id"]; found {
+		u.Set("id", v.(string))
+	}
+	if v, found := p.p["iscontrolnode"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("iscontrolnode", vv)
+	}
+	if v, found := p.p["virtualmachineids"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("virtualmachineids", vv)
+	}
+	return u
+}
+
+func (p *AddVirtualMachinesToKubernetesClusterParams) SetId(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["id"] = v
+}
+
+func (p *AddVirtualMachinesToKubernetesClusterParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+func (p *AddVirtualMachinesToKubernetesClusterParams) SetIscontrolnode(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["iscontrolnode"] = v
+}
+
+func (p *AddVirtualMachinesToKubernetesClusterParams) GetIscontrolnode() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["iscontrolnode"].(bool)
+	return value, ok
+}
+
+func (p *AddVirtualMachinesToKubernetesClusterParams) SetVirtualmachineids(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["virtualmachineids"] = v
+}
+
+func (p *AddVirtualMachinesToKubernetesClusterParams) GetVirtualmachineids() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["virtualmachineids"].([]string)
+	return value, ok
+}
+
+// You should always use this function to get a new AddVirtualMachinesToKubernetesClusterParams instance,
+// as then you are sure you have configured all required params
+func (s *KubernetesService) NewAddVirtualMachinesToKubernetesClusterParams(id string, virtualmachineids []string) *AddVirtualMachinesToKubernetesClusterParams {
+	p := &AddVirtualMachinesToKubernetesClusterParams{}
+	p.p = make(map[string]interface{})
+	p.p["id"] = id
+	p.p["virtualmachineids"] = virtualmachineids
+	return p
+}
+
+// Add VMs to an ExternalManaged kubernetes cluster. Not applicable for CloudManaged kubernetes clusters.
+func (s *KubernetesService) AddVirtualMachinesToKubernetesCluster(p *AddVirtualMachinesToKubernetesClusterParams) (*AddVirtualMachinesToKubernetesClusterResponse, error) {
+	resp, err := s.cs.newRequest("addVirtualMachinesToKubernetesCluster", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r AddVirtualMachinesToKubernetesClusterResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
+
+type AddVirtualMachinesToKubernetesClusterResponse struct {
+	Displaytext string `json:"displaytext"`
+	JobID       string `json:"jobid"`
+	Jobstatus   int    `json:"jobstatus"`
+	Success     bool   `json:"success"`
+}
+
+func (r *AddVirtualMachinesToKubernetesClusterResponse) UnmarshalJSON(b []byte) error {
+	var m map[string]interface{}
+	err := json.Unmarshal(b, &m)
+	if err != nil {
+		return err
+	}
+
+	if success, ok := m["success"].(string); ok {
+		m["success"] = success == "true"
+		b, err = json.Marshal(m)
+		if err != nil {
+			return err
+		}
+	}
+
+	if ostypeid, ok := m["ostypeid"].(float64); ok {
+		m["ostypeid"] = strconv.Itoa(int(ostypeid))
+		b, err = json.Marshal(m)
+		if err != nil {
+			return err
+		}
+	}
+
+	type alias AddVirtualMachinesToKubernetesClusterResponse
+	return json.Unmarshal(b, (*alias)(r))
+}
+
+type RemoveVirtualMachinesFromKubernetesClusterParams struct {
+	p map[string]interface{}
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["id"]; found {
+		u.Set("id", v.(string))
+	}
+	if v, found := p.p["keyword"]; found {
+		u.Set("keyword", v.(string))
+	}
+	if v, found := p.p["page"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("page", vv)
+	}
+	if v, found := p.p["pagesize"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("pagesize", vv)
+	}
+	if v, found := p.p["virtualmachineids"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("virtualmachineids", vv)
+	}
+	return u
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) SetId(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["id"] = v
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) SetKeyword(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["keyword"] = v
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) GetKeyword() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["keyword"].(string)
+	return value, ok
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) SetPage(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["page"] = v
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) GetPage() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["page"].(int)
+	return value, ok
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) SetPagesize(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["pagesize"] = v
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) GetPagesize() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["pagesize"].(int)
+	return value, ok
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) SetVirtualmachineids(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["virtualmachineids"] = v
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) GetVirtualmachineids() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["virtualmachineids"].([]string)
+	return value, ok
+}
+
+// You should always use this function to get a new RemoveVirtualMachinesFromKubernetesClusterParams instance,
+// as then you are sure you have configured all required params
+func (s *KubernetesService) NewRemoveVirtualMachinesFromKubernetesClusterParams(id string, virtualmachineids []string) *RemoveVirtualMachinesFromKubernetesClusterParams {
+	p := &RemoveVirtualMachinesFromKubernetesClusterParams{}
+	p.p = make(map[string]interface{})
+	p.p["id"] = id
+	p.p["virtualmachineids"] = virtualmachineids
+	return p
+}
+
+// Remove VMs from an ExternalManaged kubernetes cluster. Not applicable for CloudManaged kubernetes clusters.
+func (s *KubernetesService) RemoveVirtualMachinesFromKubernetesCluster(p *RemoveVirtualMachinesFromKubernetesClusterParams) (*RemoveVirtualMachinesFromKubernetesClusterResponse, error) {
+	resp, err := s.cs.newRequest("removeVirtualMachinesFromKubernetesCluster", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r RemoveVirtualMachinesFromKubernetesClusterResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
+
+type RemoveVirtualMachinesFromKubernetesClusterResponse struct {
+	Displaytext string `json:"displaytext"`
+	Id          string `json:"id"`
+	JobID       string `json:"jobid"`
+	Jobstatus   int    `json:"jobstatus"`
+	Success     bool   `json:"success"`
+}
+
+func (r *RemoveVirtualMachinesFromKubernetesClusterResponse) UnmarshalJSON(b []byte) error {
+	var m map[string]interface{}
+	err := json.Unmarshal(b, &m)
+	if err != nil {
+		return err
+	}
+
+	if success, ok := m["success"].(string); ok {
+		m["success"] = success == "true"
+		b, err = json.Marshal(m)
+		if err != nil {
+			return err
+		}
+	}
+
+	if ostypeid, ok := m["ostypeid"].(float64); ok {
+		m["ostypeid"] = strconv.Itoa(int(ostypeid))
+		b, err = json.Marshal(m)
+		if err != nil {
+			return err
+		}
+	}
+
+	type alias RemoveVirtualMachinesFromKubernetesClusterResponse
+	return json.Unmarshal(b, (*alias)(r))
 }

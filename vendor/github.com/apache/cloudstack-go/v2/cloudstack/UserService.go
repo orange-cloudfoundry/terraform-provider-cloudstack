@@ -261,30 +261,32 @@ func (s *UserService) CreateUser(p *CreateUserParams) (*CreateUserResponse, erro
 }
 
 type CreateUserResponse struct {
-	Account             string `json:"account"`
-	Accountid           string `json:"accountid"`
-	Accounttype         int    `json:"accounttype"`
-	Apikey              string `json:"apikey"`
-	Created             string `json:"created"`
-	Domain              string `json:"domain"`
-	Domainid            string `json:"domainid"`
-	Email               string `json:"email"`
-	Firstname           string `json:"firstname"`
-	Icon                string `json:"icon"`
-	Id                  string `json:"id"`
-	Iscallerchilddomain bool   `json:"iscallerchilddomain"`
-	Isdefault           bool   `json:"isdefault"`
-	JobID               string `json:"jobid"`
-	Jobstatus           int    `json:"jobstatus"`
-	Lastname            string `json:"lastname"`
-	Roleid              string `json:"roleid"`
-	Rolename            string `json:"rolename"`
-	Roletype            string `json:"roletype"`
-	Secretkey           string `json:"secretkey"`
-	State               string `json:"state"`
-	Timezone            string `json:"timezone"`
-	Username            string `json:"username"`
-	Usersource          string `json:"usersource"`
+	Account             string      `json:"account"`
+	Accountid           string      `json:"accountid"`
+	Accounttype         int         `json:"accounttype"`
+	Apikey              string      `json:"apikey"`
+	Created             string      `json:"created"`
+	Domain              string      `json:"domain"`
+	Domainid            string      `json:"domainid"`
+	Email               string      `json:"email"`
+	Firstname           string      `json:"firstname"`
+	Icon                interface{} `json:"icon"`
+	Id                  string      `json:"id"`
+	Is2faenabled        bool        `json:"is2faenabled"`
+	Is2famandated       bool        `json:"is2famandated"`
+	Iscallerchilddomain bool        `json:"iscallerchilddomain"`
+	Isdefault           bool        `json:"isdefault"`
+	JobID               string      `json:"jobid"`
+	Jobstatus           int         `json:"jobstatus"`
+	Lastname            string      `json:"lastname"`
+	Roleid              string      `json:"roleid"`
+	Rolename            string      `json:"rolename"`
+	Roletype            string      `json:"roletype"`
+	Secretkey           string      `json:"secretkey"`
+	State               string      `json:"state"`
+	Timezone            string      `json:"timezone"`
+	Username            string      `json:"username"`
+	Usersource          string      `json:"usersource"`
 }
 
 type DeleteUserParams struct {
@@ -450,30 +452,32 @@ func (s *UserService) DisableUser(p *DisableUserParams) (*DisableUserResponse, e
 }
 
 type DisableUserResponse struct {
-	Account             string `json:"account"`
-	Accountid           string `json:"accountid"`
-	Accounttype         int    `json:"accounttype"`
-	Apikey              string `json:"apikey"`
-	Created             string `json:"created"`
-	Domain              string `json:"domain"`
-	Domainid            string `json:"domainid"`
-	Email               string `json:"email"`
-	Firstname           string `json:"firstname"`
-	Icon                string `json:"icon"`
-	Id                  string `json:"id"`
-	Iscallerchilddomain bool   `json:"iscallerchilddomain"`
-	Isdefault           bool   `json:"isdefault"`
-	JobID               string `json:"jobid"`
-	Jobstatus           int    `json:"jobstatus"`
-	Lastname            string `json:"lastname"`
-	Roleid              string `json:"roleid"`
-	Rolename            string `json:"rolename"`
-	Roletype            string `json:"roletype"`
-	Secretkey           string `json:"secretkey"`
-	State               string `json:"state"`
-	Timezone            string `json:"timezone"`
-	Username            string `json:"username"`
-	Usersource          string `json:"usersource"`
+	Account             string      `json:"account"`
+	Accountid           string      `json:"accountid"`
+	Accounttype         int         `json:"accounttype"`
+	Apikey              string      `json:"apikey"`
+	Created             string      `json:"created"`
+	Domain              string      `json:"domain"`
+	Domainid            string      `json:"domainid"`
+	Email               string      `json:"email"`
+	Firstname           string      `json:"firstname"`
+	Icon                interface{} `json:"icon"`
+	Id                  string      `json:"id"`
+	Is2faenabled        bool        `json:"is2faenabled"`
+	Is2famandated       bool        `json:"is2famandated"`
+	Iscallerchilddomain bool        `json:"iscallerchilddomain"`
+	Isdefault           bool        `json:"isdefault"`
+	JobID               string      `json:"jobid"`
+	Jobstatus           int         `json:"jobstatus"`
+	Lastname            string      `json:"lastname"`
+	Roleid              string      `json:"roleid"`
+	Rolename            string      `json:"rolename"`
+	Roletype            string      `json:"roletype"`
+	Secretkey           string      `json:"secretkey"`
+	State               string      `json:"state"`
+	Timezone            string      `json:"timezone"`
+	Username            string      `json:"username"`
+	Usersource          string      `json:"usersource"`
 }
 
 type EnableUserParams struct {
@@ -535,30 +539,32 @@ func (s *UserService) EnableUser(p *EnableUserParams) (*EnableUserResponse, erro
 }
 
 type EnableUserResponse struct {
-	Account             string `json:"account"`
-	Accountid           string `json:"accountid"`
-	Accounttype         int    `json:"accounttype"`
-	Apikey              string `json:"apikey"`
-	Created             string `json:"created"`
-	Domain              string `json:"domain"`
-	Domainid            string `json:"domainid"`
-	Email               string `json:"email"`
-	Firstname           string `json:"firstname"`
-	Icon                string `json:"icon"`
-	Id                  string `json:"id"`
-	Iscallerchilddomain bool   `json:"iscallerchilddomain"`
-	Isdefault           bool   `json:"isdefault"`
-	JobID               string `json:"jobid"`
-	Jobstatus           int    `json:"jobstatus"`
-	Lastname            string `json:"lastname"`
-	Roleid              string `json:"roleid"`
-	Rolename            string `json:"rolename"`
-	Roletype            string `json:"roletype"`
-	Secretkey           string `json:"secretkey"`
-	State               string `json:"state"`
-	Timezone            string `json:"timezone"`
-	Username            string `json:"username"`
-	Usersource          string `json:"usersource"`
+	Account             string      `json:"account"`
+	Accountid           string      `json:"accountid"`
+	Accounttype         int         `json:"accounttype"`
+	Apikey              string      `json:"apikey"`
+	Created             string      `json:"created"`
+	Domain              string      `json:"domain"`
+	Domainid            string      `json:"domainid"`
+	Email               string      `json:"email"`
+	Firstname           string      `json:"firstname"`
+	Icon                interface{} `json:"icon"`
+	Id                  string      `json:"id"`
+	Is2faenabled        bool        `json:"is2faenabled"`
+	Is2famandated       bool        `json:"is2famandated"`
+	Iscallerchilddomain bool        `json:"iscallerchilddomain"`
+	Isdefault           bool        `json:"isdefault"`
+	JobID               string      `json:"jobid"`
+	Jobstatus           int         `json:"jobstatus"`
+	Lastname            string      `json:"lastname"`
+	Roleid              string      `json:"roleid"`
+	Rolename            string      `json:"rolename"`
+	Roletype            string      `json:"roletype"`
+	Secretkey           string      `json:"secretkey"`
+	State               string      `json:"state"`
+	Timezone            string      `json:"timezone"`
+	Username            string      `json:"username"`
+	Usersource          string      `json:"usersource"`
 }
 
 type GetUserParams struct {
@@ -616,30 +622,32 @@ func (s *UserService) GetUser(p *GetUserParams) (*GetUserResponse, error) {
 }
 
 type GetUserResponse struct {
-	Account             string `json:"account"`
-	Accountid           string `json:"accountid"`
-	Accounttype         int    `json:"accounttype"`
-	Apikey              string `json:"apikey"`
-	Created             string `json:"created"`
-	Domain              string `json:"domain"`
-	Domainid            string `json:"domainid"`
-	Email               string `json:"email"`
-	Firstname           string `json:"firstname"`
-	Icon                string `json:"icon"`
-	Id                  string `json:"id"`
-	Iscallerchilddomain bool   `json:"iscallerchilddomain"`
-	Isdefault           bool   `json:"isdefault"`
-	JobID               string `json:"jobid"`
-	Jobstatus           int    `json:"jobstatus"`
-	Lastname            string `json:"lastname"`
-	Roleid              string `json:"roleid"`
-	Rolename            string `json:"rolename"`
-	Roletype            string `json:"roletype"`
-	Secretkey           string `json:"secretkey"`
-	State               string `json:"state"`
-	Timezone            string `json:"timezone"`
-	Username            string `json:"username"`
-	Usersource          string `json:"usersource"`
+	Account             string      `json:"account"`
+	Accountid           string      `json:"accountid"`
+	Accounttype         int         `json:"accounttype"`
+	Apikey              string      `json:"apikey"`
+	Created             string      `json:"created"`
+	Domain              string      `json:"domain"`
+	Domainid            string      `json:"domainid"`
+	Email               string      `json:"email"`
+	Firstname           string      `json:"firstname"`
+	Icon                interface{} `json:"icon"`
+	Id                  string      `json:"id"`
+	Is2faenabled        bool        `json:"is2faenabled"`
+	Is2famandated       bool        `json:"is2famandated"`
+	Iscallerchilddomain bool        `json:"iscallerchilddomain"`
+	Isdefault           bool        `json:"isdefault"`
+	JobID               string      `json:"jobid"`
+	Jobstatus           int         `json:"jobstatus"`
+	Lastname            string      `json:"lastname"`
+	Roleid              string      `json:"roleid"`
+	Rolename            string      `json:"rolename"`
+	Roletype            string      `json:"roletype"`
+	Secretkey           string      `json:"secretkey"`
+	State               string      `json:"state"`
+	Timezone            string      `json:"timezone"`
+	Username            string      `json:"username"`
+	Usersource          string      `json:"usersource"`
 }
 
 type GetUserKeysParams struct {
@@ -785,7 +793,7 @@ func (p *ListUsersParams) toURLValues() url.Values {
 		u.Set("account", v.(string))
 	}
 	if v, found := p.p["accounttype"]; found {
-		vv := strconv.FormatInt(v.(int64), 10)
+		vv := strconv.Itoa(v.(int))
 		u.Set("accounttype", vv)
 	}
 	if v, found := p.p["domainid"]; found {
@@ -841,18 +849,18 @@ func (p *ListUsersParams) GetAccount() (string, bool) {
 	return value, ok
 }
 
-func (p *ListUsersParams) SetAccounttype(v int64) {
+func (p *ListUsersParams) SetAccounttype(v int) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["accounttype"] = v
 }
 
-func (p *ListUsersParams) GetAccounttype() (int64, bool) {
+func (p *ListUsersParams) GetAccounttype() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
-	value, ok := p.p["accounttype"].(int64)
+	value, ok := p.p["accounttype"].(int)
 	return value, ok
 }
 
@@ -1068,30 +1076,32 @@ type ListUsersResponse struct {
 }
 
 type User struct {
-	Account             string `json:"account"`
-	Accountid           string `json:"accountid"`
-	Accounttype         int    `json:"accounttype"`
-	Apikey              string `json:"apikey"`
-	Created             string `json:"created"`
-	Domain              string `json:"domain"`
-	Domainid            string `json:"domainid"`
-	Email               string `json:"email"`
-	Firstname           string `json:"firstname"`
-	Icon                string `json:"icon"`
-	Id                  string `json:"id"`
-	Iscallerchilddomain bool   `json:"iscallerchilddomain"`
-	Isdefault           bool   `json:"isdefault"`
-	JobID               string `json:"jobid"`
-	Jobstatus           int    `json:"jobstatus"`
-	Lastname            string `json:"lastname"`
-	Roleid              string `json:"roleid"`
-	Rolename            string `json:"rolename"`
-	Roletype            string `json:"roletype"`
-	Secretkey           string `json:"secretkey"`
-	State               string `json:"state"`
-	Timezone            string `json:"timezone"`
-	Username            string `json:"username"`
-	Usersource          string `json:"usersource"`
+	Account             string      `json:"account"`
+	Accountid           string      `json:"accountid"`
+	Accounttype         int         `json:"accounttype"`
+	Apikey              string      `json:"apikey"`
+	Created             string      `json:"created"`
+	Domain              string      `json:"domain"`
+	Domainid            string      `json:"domainid"`
+	Email               string      `json:"email"`
+	Firstname           string      `json:"firstname"`
+	Icon                interface{} `json:"icon"`
+	Id                  string      `json:"id"`
+	Is2faenabled        bool        `json:"is2faenabled"`
+	Is2famandated       bool        `json:"is2famandated"`
+	Iscallerchilddomain bool        `json:"iscallerchilddomain"`
+	Isdefault           bool        `json:"isdefault"`
+	JobID               string      `json:"jobid"`
+	Jobstatus           int         `json:"jobstatus"`
+	Lastname            string      `json:"lastname"`
+	Roleid              string      `json:"roleid"`
+	Rolename            string      `json:"rolename"`
+	Roletype            string      `json:"roletype"`
+	Secretkey           string      `json:"secretkey"`
+	State               string      `json:"state"`
+	Timezone            string      `json:"timezone"`
+	Username            string      `json:"username"`
+	Usersource          string      `json:"usersource"`
 }
 
 type LockUserParams struct {
@@ -1153,30 +1163,32 @@ func (s *UserService) LockUser(p *LockUserParams) (*LockUserResponse, error) {
 }
 
 type LockUserResponse struct {
-	Account             string `json:"account"`
-	Accountid           string `json:"accountid"`
-	Accounttype         int    `json:"accounttype"`
-	Apikey              string `json:"apikey"`
-	Created             string `json:"created"`
-	Domain              string `json:"domain"`
-	Domainid            string `json:"domainid"`
-	Email               string `json:"email"`
-	Firstname           string `json:"firstname"`
-	Icon                string `json:"icon"`
-	Id                  string `json:"id"`
-	Iscallerchilddomain bool   `json:"iscallerchilddomain"`
-	Isdefault           bool   `json:"isdefault"`
-	JobID               string `json:"jobid"`
-	Jobstatus           int    `json:"jobstatus"`
-	Lastname            string `json:"lastname"`
-	Roleid              string `json:"roleid"`
-	Rolename            string `json:"rolename"`
-	Roletype            string `json:"roletype"`
-	Secretkey           string `json:"secretkey"`
-	State               string `json:"state"`
-	Timezone            string `json:"timezone"`
-	Username            string `json:"username"`
-	Usersource          string `json:"usersource"`
+	Account             string      `json:"account"`
+	Accountid           string      `json:"accountid"`
+	Accounttype         int         `json:"accounttype"`
+	Apikey              string      `json:"apikey"`
+	Created             string      `json:"created"`
+	Domain              string      `json:"domain"`
+	Domainid            string      `json:"domainid"`
+	Email               string      `json:"email"`
+	Firstname           string      `json:"firstname"`
+	Icon                interface{} `json:"icon"`
+	Id                  string      `json:"id"`
+	Is2faenabled        bool        `json:"is2faenabled"`
+	Is2famandated       bool        `json:"is2famandated"`
+	Iscallerchilddomain bool        `json:"iscallerchilddomain"`
+	Isdefault           bool        `json:"isdefault"`
+	JobID               string      `json:"jobid"`
+	Jobstatus           int         `json:"jobstatus"`
+	Lastname            string      `json:"lastname"`
+	Roleid              string      `json:"roleid"`
+	Rolename            string      `json:"rolename"`
+	Roletype            string      `json:"roletype"`
+	Secretkey           string      `json:"secretkey"`
+	State               string      `json:"state"`
+	Timezone            string      `json:"timezone"`
+	Username            string      `json:"username"`
+	Usersource          string      `json:"usersource"`
 }
 
 type RegisterUserKeysParams struct {
@@ -1268,6 +1280,10 @@ func (p *UpdateUserParams) toURLValues() url.Values {
 	if v, found := p.p["lastname"]; found {
 		u.Set("lastname", v.(string))
 	}
+	if v, found := p.p["mandate2fa"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("mandate2fa", vv)
+	}
 	if v, found := p.p["password"]; found {
 		u.Set("password", v.(string))
 	}
@@ -1358,6 +1374,21 @@ func (p *UpdateUserParams) GetLastname() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["lastname"].(string)
+	return value, ok
+}
+
+func (p *UpdateUserParams) SetMandate2fa(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["mandate2fa"] = v
+}
+
+func (p *UpdateUserParams) GetMandate2fa() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["mandate2fa"].(bool)
 	return value, ok
 }
 
@@ -1461,28 +1492,30 @@ func (s *UserService) UpdateUser(p *UpdateUserParams) (*UpdateUserResponse, erro
 }
 
 type UpdateUserResponse struct {
-	Account             string `json:"account"`
-	Accountid           string `json:"accountid"`
-	Accounttype         int    `json:"accounttype"`
-	Apikey              string `json:"apikey"`
-	Created             string `json:"created"`
-	Domain              string `json:"domain"`
-	Domainid            string `json:"domainid"`
-	Email               string `json:"email"`
-	Firstname           string `json:"firstname"`
-	Icon                string `json:"icon"`
-	Id                  string `json:"id"`
-	Iscallerchilddomain bool   `json:"iscallerchilddomain"`
-	Isdefault           bool   `json:"isdefault"`
-	JobID               string `json:"jobid"`
-	Jobstatus           int    `json:"jobstatus"`
-	Lastname            string `json:"lastname"`
-	Roleid              string `json:"roleid"`
-	Rolename            string `json:"rolename"`
-	Roletype            string `json:"roletype"`
-	Secretkey           string `json:"secretkey"`
-	State               string `json:"state"`
-	Timezone            string `json:"timezone"`
-	Username            string `json:"username"`
-	Usersource          string `json:"usersource"`
+	Account             string      `json:"account"`
+	Accountid           string      `json:"accountid"`
+	Accounttype         int         `json:"accounttype"`
+	Apikey              string      `json:"apikey"`
+	Created             string      `json:"created"`
+	Domain              string      `json:"domain"`
+	Domainid            string      `json:"domainid"`
+	Email               string      `json:"email"`
+	Firstname           string      `json:"firstname"`
+	Icon                interface{} `json:"icon"`
+	Id                  string      `json:"id"`
+	Is2faenabled        bool        `json:"is2faenabled"`
+	Is2famandated       bool        `json:"is2famandated"`
+	Iscallerchilddomain bool        `json:"iscallerchilddomain"`
+	Isdefault           bool        `json:"isdefault"`
+	JobID               string      `json:"jobid"`
+	Jobstatus           int         `json:"jobstatus"`
+	Lastname            string      `json:"lastname"`
+	Roleid              string      `json:"roleid"`
+	Rolename            string      `json:"rolename"`
+	Roletype            string      `json:"roletype"`
+	Secretkey           string      `json:"secretkey"`
+	State               string      `json:"state"`
+	Timezone            string      `json:"timezone"`
+	Username            string      `json:"username"`
+	Usersource          string      `json:"usersource"`
 }

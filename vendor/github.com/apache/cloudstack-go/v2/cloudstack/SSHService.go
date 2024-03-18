@@ -40,7 +40,7 @@ type SSHServiceIface interface {
 	RegisterSSHKeyPair(p *RegisterSSHKeyPairParams) (*RegisterSSHKeyPairResponse, error)
 	NewRegisterSSHKeyPairParams(name string, publickey string) *RegisterSSHKeyPairParams
 	ResetSSHKeyForVirtualMachine(p *ResetSSHKeyForVirtualMachineParams) (*ResetSSHKeyForVirtualMachineResponse, error)
-	NewResetSSHKeyForVirtualMachineParams(id string, keypair string) *ResetSSHKeyForVirtualMachineParams
+	NewResetSSHKeyForVirtualMachineParams(id string) *ResetSSHKeyForVirtualMachineParams
 }
 
 type CreateSSHKeyPairParams struct {
@@ -166,6 +166,8 @@ type CreateSSHKeyPairResponse struct {
 	Jobstatus      int    `json:"jobstatus"`
 	Name           string `json:"name"`
 	Privatekey     string `json:"privatekey"`
+	Project        string `json:"project"`
+	Projectid      string `json:"projectid"`
 }
 
 type DeleteSSHKeyPairParams struct {
@@ -645,6 +647,8 @@ type SSHKeyPair struct {
 	JobID          string `json:"jobid"`
 	Jobstatus      int    `json:"jobstatus"`
 	Name           string `json:"name"`
+	Project        string `json:"project"`
+	Projectid      string `json:"projectid"`
 }
 
 type RegisterSSHKeyPairParams struct {
@@ -788,6 +792,8 @@ type RegisterSSHKeyPairResponse struct {
 	JobID          string `json:"jobid"`
 	Jobstatus      int    `json:"jobstatus"`
 	Name           string `json:"name"`
+	Project        string `json:"project"`
+	Projectid      string `json:"projectid"`
 }
 
 type ResetSSHKeyForVirtualMachineParams struct {
@@ -810,6 +816,10 @@ func (p *ResetSSHKeyForVirtualMachineParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["keypair"]; found {
 		u.Set("keypair", v.(string))
+	}
+	if v, found := p.p["keypairs"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("keypairs", vv)
 	}
 	if v, found := p.p["projectid"]; found {
 		u.Set("projectid", v.(string))
@@ -877,6 +887,21 @@ func (p *ResetSSHKeyForVirtualMachineParams) GetKeypair() (string, bool) {
 	return value, ok
 }
 
+func (p *ResetSSHKeyForVirtualMachineParams) SetKeypairs(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["keypairs"] = v
+}
+
+func (p *ResetSSHKeyForVirtualMachineParams) GetKeypairs() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["keypairs"].([]string)
+	return value, ok
+}
+
 func (p *ResetSSHKeyForVirtualMachineParams) SetProjectid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -894,11 +919,10 @@ func (p *ResetSSHKeyForVirtualMachineParams) GetProjectid() (string, bool) {
 
 // You should always use this function to get a new ResetSSHKeyForVirtualMachineParams instance,
 // as then you are sure you have configured all required params
-func (s *SSHService) NewResetSSHKeyForVirtualMachineParams(id string, keypair string) *ResetSSHKeyForVirtualMachineParams {
+func (s *SSHService) NewResetSSHKeyForVirtualMachineParams(id string) *ResetSSHKeyForVirtualMachineParams {
 	p := &ResetSSHKeyForVirtualMachineParams{}
 	p.p = make(map[string]interface{})
 	p.p["id"] = id
-	p.p["keypair"] = keypair
 	return p
 }
 
@@ -940,6 +964,8 @@ func (s *SSHService) ResetSSHKeyForVirtualMachine(p *ResetSSHKeyForVirtualMachin
 type ResetSSHKeyForVirtualMachineResponse struct {
 	Account               string                                              `json:"account"`
 	Affinitygroup         []ResetSSHKeyForVirtualMachineResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                                              `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                                              `json:"autoscalevmgroupname"`
 	Backupofferingid      string                                              `json:"backupofferingid"`
 	Backupofferingname    string                                              `json:"backupofferingname"`
 	Bootmode              string                                              `json:"bootmode"`
@@ -965,10 +991,11 @@ type ResetSSHKeyForVirtualMachineResponse struct {
 	Guestosid             string                                              `json:"guestosid"`
 	Haenable              bool                                                `json:"haenable"`
 	Hasannotations        bool                                                `json:"hasannotations"`
+	Hostcontrolstate      string                                              `json:"hostcontrolstate"`
 	Hostid                string                                              `json:"hostid"`
 	Hostname              string                                              `json:"hostname"`
 	Hypervisor            string                                              `json:"hypervisor"`
-	Icon                  string                                              `json:"icon"`
+	Icon                  interface{}                                         `json:"icon"`
 	Id                    string                                              `json:"id"`
 	Instancename          string                                              `json:"instancename"`
 	Isdynamicallyscalable bool                                                `json:"isdynamicallyscalable"`
@@ -977,7 +1004,7 @@ type ResetSSHKeyForVirtualMachineResponse struct {
 	Isoname               string                                              `json:"isoname"`
 	JobID                 string                                              `json:"jobid"`
 	Jobstatus             int                                                 `json:"jobstatus"`
-	Keypair               string                                              `json:"keypair"`
+	Keypairs              string                                              `json:"keypairs"`
 	Lastupdated           string                                              `json:"lastupdated"`
 	Memory                int                                                 `json:"memory"`
 	Memoryintfreekbs      int64                                               `json:"memoryintfreekbs"`
@@ -1010,9 +1037,17 @@ type ResetSSHKeyForVirtualMachineResponse struct {
 	Templatedisplaytext   string                                              `json:"templatedisplaytext"`
 	Templateid            string                                              `json:"templateid"`
 	Templatename          string                                              `json:"templatename"`
+	Templatetype          string                                              `json:"templatetype"`
+	Userdata              string                                              `json:"userdata"`
+	Userdatadetails       string                                              `json:"userdatadetails"`
+	Userdataid            string                                              `json:"userdataid"`
+	Userdataname          string                                              `json:"userdataname"`
+	Userdatapolicy        string                                              `json:"userdatapolicy"`
 	Userid                string                                              `json:"userid"`
 	Username              string                                              `json:"username"`
 	Vgpu                  string                                              `json:"vgpu"`
+	Vnfdetails            map[string]string                                   `json:"vnfdetails"`
+	Vnfnics               []string                                            `json:"vnfnics"`
 	Zoneid                string                                              `json:"zoneid"`
 	Zonename              string                                              `json:"zonename"`
 }

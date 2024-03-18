@@ -115,6 +115,7 @@ type CloudStackClient struct {
 	CloudIdentifier     CloudIdentifierServiceIface
 	Cluster             ClusterServiceIface
 	Configuration       ConfigurationServiceIface
+	ConsoleEndpoint     ConsoleEndpointServiceIface
 	Custom              CustomServiceIface
 	DiskOffering        DiskOfferingServiceIface
 	Domain              DomainServiceIface
@@ -125,6 +126,7 @@ type CloudStackClient struct {
 	Hypervisor          HypervisorServiceIface
 	ISO                 ISOServiceIface
 	ImageStore          ImageStoreServiceIface
+	InfrastructureUsage InfrastructureUsageServiceIface
 	InternalLB          InternalLBServiceIface
 	Kubernetes          KubernetesServiceIface
 	LDAP                LDAPServiceIface
@@ -220,6 +222,7 @@ func newClient(apiurl string, apikey string, secret string, async bool, verifyss
 	cs.CloudIdentifier = NewCloudIdentifierService(cs)
 	cs.Cluster = NewClusterService(cs)
 	cs.Configuration = NewConfigurationService(cs)
+	cs.ConsoleEndpoint = NewConsoleEndpointService(cs)
 	cs.Custom = NewCustomService(cs)
 	cs.DiskOffering = NewDiskOfferingService(cs)
 	cs.Domain = NewDomainService(cs)
@@ -230,6 +233,7 @@ func newClient(apiurl string, apikey string, secret string, async bool, verifyss
 	cs.Hypervisor = NewHypervisorService(cs)
 	cs.ISO = NewISOService(cs)
 	cs.ImageStore = NewImageStoreService(cs)
+	cs.InfrastructureUsage = NewInfrastructureUsageService(cs)
 	cs.InternalLB = NewInternalLBService(cs)
 	cs.Kubernetes = NewKubernetesService(cs)
 	cs.LDAP = NewLDAPService(cs)
@@ -298,6 +302,7 @@ func newMockClient(ctrl *gomock.Controller) *CloudStackClient {
 	cs.CloudIdentifier = NewMockCloudIdentifierServiceIface(ctrl)
 	cs.Cluster = NewMockClusterServiceIface(ctrl)
 	cs.Configuration = NewMockConfigurationServiceIface(ctrl)
+	cs.ConsoleEndpoint = NewMockConsoleEndpointServiceIface(ctrl)
 	cs.Custom = NewMockCustomServiceIface(ctrl)
 	cs.DiskOffering = NewMockDiskOfferingServiceIface(ctrl)
 	cs.Domain = NewMockDomainServiceIface(ctrl)
@@ -308,6 +313,7 @@ func newMockClient(ctrl *gomock.Controller) *CloudStackClient {
 	cs.Hypervisor = NewMockHypervisorServiceIface(ctrl)
 	cs.ISO = NewMockISOServiceIface(ctrl)
 	cs.ImageStore = NewMockImageStoreServiceIface(ctrl)
+	cs.InfrastructureUsage = NewMockInfrastructureUsageServiceIface(ctrl)
 	cs.InternalLB = NewMockInternalLBServiceIface(ctrl)
 	cs.Kubernetes = NewMockKubernetesServiceIface(ctrl)
 	cs.LDAP = NewMockLDAPServiceIface(ctrl)
@@ -366,7 +372,7 @@ func NewClient(apiurl string, apikey string, secret string, verifyssl bool, opti
 
 // For sync API calls this client behaves exactly the same as a standard client call, but for async API calls
 // this client will wait until the async job is finished or until the configured AsyncTimeout is reached. When the async
-// job finishes successfully it will return actual object received from the API and nil, but when the timout is
+// job finishes successfully it will return actual object received from the API and nil, but when the timeout is
 // reached it will return the initial object containing the async job ID for the running job and a warning.
 func NewAsyncClient(apiurl string, apikey string, secret string, verifyssl bool, options ...ClientOption) *CloudStackClient {
 	cs := newClient(apiurl, apikey, secret, true, verifyssl, options...)
@@ -443,29 +449,42 @@ func (cs *CloudStackClient) GetAsyncJobResult(jobid string, timeout int64) (json
 }
 
 // Execute the request against a CS API. Will return the raw JSON data returned by the API and nil if
-// no error occured. If the API returns an error the result will be nil and the HTTP error code and CS
+// no error occurred. If the API returns an error the result will be nil and the HTTP error code and CS
 // error details. If a processing (code) error occurs the result will be nil and the generated error
 func (cs *CloudStackClient) newRequest(api string, params url.Values) (json.RawMessage, error) {
+	return cs.newRawRequest(api, false, params)
+}
+
+// Execute the request against a CS API using POST. Will return the raw JSON data returned by the API and
+// nil if no error occurred. If the API returns an error the result will be nil and the HTTP error code
+// and CS error details. If a processing (code) error occurs the result will be nil and the generated error
+func (cs *CloudStackClient) newPostRequest(api string, params url.Values) (json.RawMessage, error) {
+	return cs.newRawRequest(api, true, params)
+}
+
+// Execute a raw request against a CS API. Will return the raw JSON data returned by the API and nil if
+// no error occurred. If the API returns an error the result will be nil and the HTTP error code and CS
+// error details. If a processing (code) error occurs the result will be nil and the generated error
+func (cs *CloudStackClient) newRawRequest(api string, post bool, params url.Values) (json.RawMessage, error) {
 	params.Set("apiKey", cs.apiKey)
 	params.Set("command", api)
 	params.Set("response", "json")
 
 	// Generate signature for API call
-	// * Serialize parameters, URL encoding only values and sort them by key, done by encodeValues
+	// * Serialize parameters, URL encoding only values and sort them by key, done by EncodeValues
 	// * Convert the entire argument string to lowercase
 	// * Replace all instances of '+' to '%20'
 	// * Calculate HMAC SHA1 of argument string with CloudStack secret
 	// * URL encode the string and convert to base64
-	s := encodeValues(params)
+	s := EncodeValues(params)
 	s2 := strings.ToLower(s)
-	s3 := strings.Replace(s2, "+", "%20", -1)
 	mac := hmac.New(sha1.New, []byte(cs.secret))
-	mac.Write([]byte(s3))
+	mac.Write([]byte(s2))
 	signature := base64.StdEncoding.EncodeToString(mac.Sum(nil))
 
 	var err error
 	var resp *http.Response
-	if !cs.HTTPGETOnly && (api == "deployVirtualMachine" || api == "login" || api == "updateVirtualMachine") {
+	if !cs.HTTPGETOnly && post {
 		// The deployVirtualMachine API should be called using a POST call
 		// so we don't have to worry about the userdata size
 
@@ -509,7 +528,7 @@ func (cs *CloudStackClient) newRequest(api string, params url.Values) (json.RawM
 
 // Custom version of net/url Encode that only URL escapes values
 // Unmodified portions here remain under BSD license of The Go Authors: https://go.googlesource.com/go/+/master/LICENSE
-func encodeValues(v url.Values) string {
+func EncodeValues(v url.Values) string {
 	if v == nil {
 		return ""
 	}
@@ -527,7 +546,12 @@ func encodeValues(v url.Values) string {
 				buf.WriteByte('&')
 			}
 			buf.WriteString(prefix)
-			buf.WriteString(url.QueryEscape(v))
+			escaped := url.QueryEscape(v)
+			// we need to ensure + (representing a space) is encoded as %20
+			escaped = strings.Replace(escaped, "+", "%20", -1)
+			// we need to ensure * is not escaped
+			escaped = strings.Replace(escaped, "%2A", "*", -1)
+			buf.WriteString(escaped)
 		}
 	}
 	return buf.String()
@@ -846,6 +870,14 @@ func NewConfigurationService(cs *CloudStackClient) ConfigurationServiceIface {
 	return &ConfigurationService{cs: cs}
 }
 
+type ConsoleEndpointService struct {
+	cs *CloudStackClient
+}
+
+func NewConsoleEndpointService(cs *CloudStackClient) ConsoleEndpointServiceIface {
+	return &ConsoleEndpointService{cs: cs}
+}
+
 type CustomService struct {
 	cs *CloudStackClient
 }
@@ -924,6 +956,14 @@ type ImageStoreService struct {
 
 func NewImageStoreService(cs *CloudStackClient) ImageStoreServiceIface {
 	return &ImageStoreService{cs: cs}
+}
+
+type InfrastructureUsageService struct {
+	cs *CloudStackClient
+}
+
+func NewInfrastructureUsageService(cs *CloudStackClient) InfrastructureUsageServiceIface {
+	return &InfrastructureUsageService{cs: cs}
 }
 
 type InternalLBService struct {
