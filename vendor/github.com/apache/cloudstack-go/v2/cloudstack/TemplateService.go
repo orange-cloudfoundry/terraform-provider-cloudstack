@@ -56,6 +56,11 @@ type TemplateServiceIface interface {
 	NewUpdateTemplatePermissionsParams(id string) *UpdateTemplatePermissionsParams
 	UpgradeRouterTemplate(p *UpgradeRouterTemplateParams) (*UpgradeRouterTemplateResponse, error)
 	NewUpgradeRouterTemplateParams() *UpgradeRouterTemplateParams
+	ListTemplateDirectDownloadCertificates(p *ListTemplateDirectDownloadCertificatesParams) (*ListTemplateDirectDownloadCertificatesResponse, error)
+	NewListTemplateDirectDownloadCertificatesParams() *ListTemplateDirectDownloadCertificatesParams
+	GetTemplateDirectDownloadCertificateByID(id string, opts ...OptionFunc) (*TemplateDirectDownloadCertificate, int, error)
+	ProvisionTemplateDirectDownloadCertificate(p *ProvisionTemplateDirectDownloadCertificateParams) (*ProvisionTemplateDirectDownloadCertificateResponse, error)
+	NewProvisionTemplateDirectDownloadCertificateParams(hostid string, id string) *ProvisionTemplateDirectDownloadCertificateParams
 }
 
 type CopyTemplateParams struct {
@@ -209,7 +214,7 @@ type CopyTemplateResponse struct {
 	Hostid                string              `json:"hostid"`
 	Hostname              string              `json:"hostname"`
 	Hypervisor            string              `json:"hypervisor"`
-	Icon                  string              `json:"icon"`
+	Icon                  interface{}         `json:"icon"`
 	Id                    string              `json:"id"`
 	Isdynamicallyscalable bool                `json:"isdynamicallyscalable"`
 	Isextractable         bool                `json:"isextractable"`
@@ -236,6 +241,10 @@ type CopyTemplateResponse struct {
 	Templatetag           string              `json:"templatetag"`
 	Templatetype          string              `json:"templatetype"`
 	Url                   string              `json:"url"`
+	Userdataid            string              `json:"userdataid"`
+	Userdataname          string              `json:"userdataname"`
+	Userdataparams        string              `json:"userdataparams"`
+	Userdatapolicy        string              `json:"userdatapolicy"`
 	Zoneid                string              `json:"zoneid"`
 	Zonename              string              `json:"zonename"`
 }
@@ -276,6 +285,9 @@ func (p *CreateTemplateParams) toURLValues() url.Values {
 	if p.p == nil {
 		return u
 	}
+	if v, found := p.p["account"]; found {
+		u.Set("account", v.(string))
+	}
 	if v, found := p.p["bits"]; found {
 		vv := strconv.Itoa(v.(int))
 		u.Set("bits", vv)
@@ -288,6 +300,9 @@ func (p *CreateTemplateParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["displaytext"]; found {
 		u.Set("displaytext", v.(string))
+	}
+	if v, found := p.p["domainid"]; found {
+		u.Set("domainid", v.(string))
 	}
 	if v, found := p.p["isdynamicallyscalable"]; found {
 		vv := strconv.FormatBool(v.(bool))
@@ -337,7 +352,25 @@ func (p *CreateTemplateParams) toURLValues() url.Values {
 	if v, found := p.p["volumeid"]; found {
 		u.Set("volumeid", v.(string))
 	}
+	if v, found := p.p["zoneid"]; found {
+		u.Set("zoneid", v.(string))
+	}
 	return u
+}
+
+func (p *CreateTemplateParams) SetAccount(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["account"] = v
+}
+
+func (p *CreateTemplateParams) GetAccount() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["account"].(string)
+	return value, ok
 }
 
 func (p *CreateTemplateParams) SetBits(v int) {
@@ -382,6 +415,21 @@ func (p *CreateTemplateParams) GetDisplaytext() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["displaytext"].(string)
+	return value, ok
+}
+
+func (p *CreateTemplateParams) SetDomainid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["domainid"] = v
+}
+
+func (p *CreateTemplateParams) GetDomainid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["domainid"].(string)
 	return value, ok
 }
 
@@ -595,6 +643,21 @@ func (p *CreateTemplateParams) GetVolumeid() (string, bool) {
 	return value, ok
 }
 
+func (p *CreateTemplateParams) SetZoneid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["zoneid"] = v
+}
+
+func (p *CreateTemplateParams) GetZoneid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["zoneid"].(string)
+	return value, ok
+}
+
 // You should always use this function to get a new CreateTemplateParams instance,
 // as then you are sure you have configured all required params
 func (s *TemplateService) NewCreateTemplateParams(displaytext string, name string, ostypeid string) *CreateTemplateParams {
@@ -663,7 +726,7 @@ type CreateTemplateResponse struct {
 	Hostid                string              `json:"hostid"`
 	Hostname              string              `json:"hostname"`
 	Hypervisor            string              `json:"hypervisor"`
-	Icon                  string              `json:"icon"`
+	Icon                  interface{}         `json:"icon"`
 	Id                    string              `json:"id"`
 	Isdynamicallyscalable bool                `json:"isdynamicallyscalable"`
 	Isextractable         bool                `json:"isextractable"`
@@ -690,6 +753,10 @@ type CreateTemplateResponse struct {
 	Templatetag           string              `json:"templatetag"`
 	Templatetype          string              `json:"templatetype"`
 	Url                   string              `json:"url"`
+	Userdataid            string              `json:"userdataid"`
+	Userdataname          string              `json:"userdataname"`
+	Userdataparams        string              `json:"userdataparams"`
+	Userdatapolicy        string              `json:"userdatapolicy"`
 	Zoneid                string              `json:"zoneid"`
 	Zonename              string              `json:"zonename"`
 }
@@ -1575,9 +1642,16 @@ func (p *ListTemplatesParams) toURLValues() url.Values {
 		vv := strings.Join(v.([]string), ",")
 		u.Set("ids", vv)
 	}
+	if v, found := p.p["imagestoreid"]; found {
+		u.Set("imagestoreid", v.(string))
+	}
 	if v, found := p.p["isrecursive"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("isrecursive", vv)
+	}
+	if v, found := p.p["isvnf"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("isvnf", vv)
 	}
 	if v, found := p.p["keyword"]; found {
 		u.Set("keyword", v.(string))
@@ -1615,6 +1689,9 @@ func (p *ListTemplatesParams) toURLValues() url.Values {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("showunique", vv)
 	}
+	if v, found := p.p["storageid"]; found {
+		u.Set("storageid", v.(string))
+	}
 	if v, found := p.p["tags"]; found {
 		m := v.(map[string]string)
 		for i, k := range getSortedKeysFromMap(m) {
@@ -1624,6 +1701,9 @@ func (p *ListTemplatesParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["templatefilter"]; found {
 		u.Set("templatefilter", v.(string))
+	}
+	if v, found := p.p["templatetype"]; found {
+		u.Set("templatetype", v.(string))
 	}
 	if v, found := p.p["zoneid"]; found {
 		u.Set("zoneid", v.(string))
@@ -1721,6 +1801,21 @@ func (p *ListTemplatesParams) GetIds() ([]string, bool) {
 	return value, ok
 }
 
+func (p *ListTemplatesParams) SetImagestoreid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["imagestoreid"] = v
+}
+
+func (p *ListTemplatesParams) GetImagestoreid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["imagestoreid"].(string)
+	return value, ok
+}
+
 func (p *ListTemplatesParams) SetIsrecursive(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1733,6 +1828,21 @@ func (p *ListTemplatesParams) GetIsrecursive() (bool, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["isrecursive"].(bool)
+	return value, ok
+}
+
+func (p *ListTemplatesParams) SetIsvnf(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["isvnf"] = v
+}
+
+func (p *ListTemplatesParams) GetIsvnf() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["isvnf"].(bool)
 	return value, ok
 }
 
@@ -1886,6 +1996,21 @@ func (p *ListTemplatesParams) GetShowunique() (bool, bool) {
 	return value, ok
 }
 
+func (p *ListTemplatesParams) SetStorageid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["storageid"] = v
+}
+
+func (p *ListTemplatesParams) GetStorageid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["storageid"].(string)
+	return value, ok
+}
+
 func (p *ListTemplatesParams) SetTags(v map[string]string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1913,6 +2038,21 @@ func (p *ListTemplatesParams) GetTemplatefilter() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["templatefilter"].(string)
+	return value, ok
+}
+
+func (p *ListTemplatesParams) SetTemplatetype(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["templatetype"] = v
+}
+
+func (p *ListTemplatesParams) GetTemplatetype() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["templatetype"].(string)
 	return value, ok
 }
 
@@ -2068,7 +2208,7 @@ type Template struct {
 	Hostid                string              `json:"hostid"`
 	Hostname              string              `json:"hostname"`
 	Hypervisor            string              `json:"hypervisor"`
-	Icon                  string              `json:"icon"`
+	Icon                  interface{}         `json:"icon"`
 	Id                    string              `json:"id"`
 	Isdynamicallyscalable bool                `json:"isdynamicallyscalable"`
 	Isextractable         bool                `json:"isextractable"`
@@ -2095,6 +2235,10 @@ type Template struct {
 	Templatetag           string              `json:"templatetag"`
 	Templatetype          string              `json:"templatetype"`
 	Url                   string              `json:"url"`
+	Userdataid            string              `json:"userdataid"`
+	Userdataname          string              `json:"userdataname"`
+	Userdataparams        string              `json:"userdataparams"`
+	Userdatapolicy        string              `json:"userdatapolicy"`
 	Zoneid                string              `json:"zoneid"`
 	Zonename              string              `json:"zonename"`
 }
@@ -2239,7 +2383,7 @@ type PrepareTemplateResponse struct {
 	Hostid                string              `json:"hostid"`
 	Hostname              string              `json:"hostname"`
 	Hypervisor            string              `json:"hypervisor"`
-	Icon                  string              `json:"icon"`
+	Icon                  interface{}         `json:"icon"`
 	Id                    string              `json:"id"`
 	Isdynamicallyscalable bool                `json:"isdynamicallyscalable"`
 	Isextractable         bool                `json:"isextractable"`
@@ -2266,6 +2410,10 @@ type PrepareTemplateResponse struct {
 	Templatetag           string              `json:"templatetag"`
 	Templatetype          string              `json:"templatetype"`
 	Url                   string              `json:"url"`
+	Userdataid            string              `json:"userdataid"`
+	Userdataname          string              `json:"userdataname"`
+	Userdataparams        string              `json:"userdataparams"`
+	Userdatapolicy        string              `json:"userdatapolicy"`
 	Zoneid                string              `json:"zoneid"`
 	Zonename              string              `json:"zonename"`
 }
@@ -2322,8 +2470,8 @@ func (p *RegisterTemplateParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["details"]; found {
 		m := v.(map[string]string)
-		for i, k := range getSortedKeysFromMap(m) {
-			u.Set(fmt.Sprintf("details[%d].%s", i, k), m[k])
+		for _, k := range getSortedKeysFromMap(m) {
+			u.Set(fmt.Sprintf("details[0].%s", k), m[k])
 		}
 	}
 	if v, found := p.p["directdownload"]; found {
@@ -2385,6 +2533,9 @@ func (p *RegisterTemplateParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["templatetag"]; found {
 		u.Set("templatetag", v.(string))
+	}
+	if v, found := p.p["templatetype"]; found {
+		u.Set("templatetype", v.(string))
 	}
 	if v, found := p.p["url"]; found {
 		u.Set("url", v.(string))
@@ -2729,6 +2880,21 @@ func (p *RegisterTemplateParams) GetTemplatetag() (string, bool) {
 	return value, ok
 }
 
+func (p *RegisterTemplateParams) SetTemplatetype(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["templatetype"] = v
+}
+
+func (p *RegisterTemplateParams) GetTemplatetype() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["templatetype"].(string)
+	return value, ok
+}
+
 func (p *RegisterTemplateParams) SetUrl(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2829,7 +2995,7 @@ type RegisterTemplate struct {
 	Hostid                string              `json:"hostid"`
 	Hostname              string              `json:"hostname"`
 	Hypervisor            string              `json:"hypervisor"`
-	Icon                  string              `json:"icon"`
+	Icon                  interface{}         `json:"icon"`
 	Id                    string              `json:"id"`
 	Isdynamicallyscalable bool                `json:"isdynamicallyscalable"`
 	Isextractable         bool                `json:"isextractable"`
@@ -2856,6 +3022,10 @@ type RegisterTemplate struct {
 	Templatetag           string              `json:"templatetag"`
 	Templatetype          string              `json:"templatetype"`
 	Url                   string              `json:"url"`
+	Userdataid            string              `json:"userdataid"`
+	Userdataname          string              `json:"userdataname"`
+	Userdataparams        string              `json:"userdataparams"`
+	Userdatapolicy        string              `json:"userdatapolicy"`
 	Zoneid                string              `json:"zoneid"`
 	Zonename              string              `json:"zonename"`
 }
@@ -2906,8 +3076,8 @@ func (p *UpdateTemplateParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["details"]; found {
 		m := v.(map[string]string)
-		for i, k := range getSortedKeysFromMap(m) {
-			u.Set(fmt.Sprintf("details[%d].%s", i, k), m[k])
+		for _, k := range getSortedKeysFromMap(m) {
+			u.Set(fmt.Sprintf("details[0].%s", k), m[k])
 		}
 	}
 	if v, found := p.p["displaytext"]; found {
@@ -3226,7 +3396,7 @@ type UpdateTemplateResponse struct {
 	Hostid                string              `json:"hostid"`
 	Hostname              string              `json:"hostname"`
 	Hypervisor            string              `json:"hypervisor"`
-	Icon                  string              `json:"icon"`
+	Icon                  interface{}         `json:"icon"`
 	Id                    string              `json:"id"`
 	Isdynamicallyscalable bool                `json:"isdynamicallyscalable"`
 	Isextractable         bool                `json:"isextractable"`
@@ -3253,6 +3423,10 @@ type UpdateTemplateResponse struct {
 	Templatetag           string              `json:"templatetag"`
 	Templatetype          string              `json:"templatetype"`
 	Url                   string              `json:"url"`
+	Userdataid            string              `json:"userdataid"`
+	Userdataname          string              `json:"userdataname"`
+	Userdataparams        string              `json:"userdataparams"`
+	Userdatapolicy        string              `json:"userdatapolicy"`
 	Zoneid                string              `json:"zoneid"`
 	Zonename              string              `json:"zonename"`
 }
@@ -3436,7 +3610,7 @@ func (s *TemplateService) NewUpdateTemplatePermissionsParams(id string) *UpdateT
 	return p
 }
 
-// Updates a template visibility permissions. A public template is visible to all accounts within the same domain. A private template is visible only to the owner of the template. A priviledged template is a private template with account permissions added. Only accounts specified under the template permissions are visible to them.
+// Updates a template visibility permissions. A public template is visible to all accounts within the same domain. A private template is visible only to the owner of the template. A privileged template is a private template with account permissions added. Only accounts specified under the template permissions are visible to them.
 func (s *TemplateService) UpdateTemplatePermissions(p *UpdateTemplatePermissionsParams) (*UpdateTemplatePermissionsResponse, error) {
 	resp, err := s.cs.newRequest("updateTemplatePermissions", p.toURLValues())
 	if err != nil {
@@ -3631,4 +3805,286 @@ func (s *TemplateService) UpgradeRouterTemplate(p *UpgradeRouterTemplateParams) 
 type UpgradeRouterTemplateResponse struct {
 	JobID     string `json:"jobid"`
 	Jobstatus int    `json:"jobstatus"`
+}
+
+type ListTemplateDirectDownloadCertificatesParams struct {
+	p map[string]interface{}
+}
+
+func (p *ListTemplateDirectDownloadCertificatesParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["id"]; found {
+		u.Set("id", v.(string))
+	}
+	if v, found := p.p["keyword"]; found {
+		u.Set("keyword", v.(string))
+	}
+	if v, found := p.p["listhosts"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("listhosts", vv)
+	}
+	if v, found := p.p["page"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("page", vv)
+	}
+	if v, found := p.p["pagesize"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("pagesize", vv)
+	}
+	if v, found := p.p["zoneid"]; found {
+		u.Set("zoneid", v.(string))
+	}
+	return u
+}
+
+func (p *ListTemplateDirectDownloadCertificatesParams) SetId(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["id"] = v
+}
+
+func (p *ListTemplateDirectDownloadCertificatesParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+func (p *ListTemplateDirectDownloadCertificatesParams) SetKeyword(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["keyword"] = v
+}
+
+func (p *ListTemplateDirectDownloadCertificatesParams) GetKeyword() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["keyword"].(string)
+	return value, ok
+}
+
+func (p *ListTemplateDirectDownloadCertificatesParams) SetListhosts(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["listhosts"] = v
+}
+
+func (p *ListTemplateDirectDownloadCertificatesParams) GetListhosts() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["listhosts"].(bool)
+	return value, ok
+}
+
+func (p *ListTemplateDirectDownloadCertificatesParams) SetPage(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["page"] = v
+}
+
+func (p *ListTemplateDirectDownloadCertificatesParams) GetPage() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["page"].(int)
+	return value, ok
+}
+
+func (p *ListTemplateDirectDownloadCertificatesParams) SetPagesize(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["pagesize"] = v
+}
+
+func (p *ListTemplateDirectDownloadCertificatesParams) GetPagesize() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["pagesize"].(int)
+	return value, ok
+}
+
+func (p *ListTemplateDirectDownloadCertificatesParams) SetZoneid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["zoneid"] = v
+}
+
+func (p *ListTemplateDirectDownloadCertificatesParams) GetZoneid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["zoneid"].(string)
+	return value, ok
+}
+
+// You should always use this function to get a new ListTemplateDirectDownloadCertificatesParams instance,
+// as then you are sure you have configured all required params
+func (s *TemplateService) NewListTemplateDirectDownloadCertificatesParams() *ListTemplateDirectDownloadCertificatesParams {
+	p := &ListTemplateDirectDownloadCertificatesParams{}
+	p.p = make(map[string]interface{})
+	return p
+}
+
+// This is a courtesy helper function, which in some cases may not work as expected!
+func (s *TemplateService) GetTemplateDirectDownloadCertificateByID(id string, opts ...OptionFunc) (*TemplateDirectDownloadCertificate, int, error) {
+	p := &ListTemplateDirectDownloadCertificatesParams{}
+	p.p = make(map[string]interface{})
+
+	p.p["id"] = id
+
+	for _, fn := range append(s.cs.options, opts...) {
+		if err := fn(s.cs, p); err != nil {
+			return nil, -1, err
+		}
+	}
+
+	l, err := s.ListTemplateDirectDownloadCertificates(p)
+	if err != nil {
+		if strings.Contains(err.Error(), fmt.Sprintf(
+			"Invalid parameter id value=%s due to incorrect long value format, "+
+				"or entity does not exist", id)) {
+			return nil, 0, fmt.Errorf("No match found for %s: %+v", id, l)
+		}
+		return nil, -1, err
+	}
+
+	if l.Count == 0 {
+		return nil, l.Count, fmt.Errorf("No match found for %s: %+v", id, l)
+	}
+
+	if l.Count == 1 {
+		return l.TemplateDirectDownloadCertificates[0], l.Count, nil
+	}
+	return nil, l.Count, fmt.Errorf("There is more then one result for TemplateDirectDownloadCertificate UUID: %s!", id)
+}
+
+// List the uploaded certificates for direct download templates
+func (s *TemplateService) ListTemplateDirectDownloadCertificates(p *ListTemplateDirectDownloadCertificatesParams) (*ListTemplateDirectDownloadCertificatesResponse, error) {
+	resp, err := s.cs.newRequest("listTemplateDirectDownloadCertificates", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r ListTemplateDirectDownloadCertificatesResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
+
+type ListTemplateDirectDownloadCertificatesResponse struct {
+	Count                              int                                  `json:"count"`
+	TemplateDirectDownloadCertificates []*TemplateDirectDownloadCertificate `json:"templatedirectdownloadcertificate"`
+}
+
+type TemplateDirectDownloadCertificate struct {
+	Alias      string   `json:"alias"`
+	Hostsmap   []string `json:"hostsmap"`
+	Hypervisor string   `json:"hypervisor"`
+	Id         string   `json:"id"`
+	Issuer     string   `json:"issuer"`
+	JobID      string   `json:"jobid"`
+	Jobstatus  int      `json:"jobstatus"`
+	Serialnum  string   `json:"serialnum"`
+	Subject    string   `json:"subject"`
+	Validity   string   `json:"validity"`
+	Version    string   `json:"version"`
+	Zoneid     string   `json:"zoneid"`
+	Zonename   string   `json:"zonename"`
+}
+
+type ProvisionTemplateDirectDownloadCertificateParams struct {
+	p map[string]interface{}
+}
+
+func (p *ProvisionTemplateDirectDownloadCertificateParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["hostid"]; found {
+		u.Set("hostid", v.(string))
+	}
+	if v, found := p.p["id"]; found {
+		u.Set("id", v.(string))
+	}
+	return u
+}
+
+func (p *ProvisionTemplateDirectDownloadCertificateParams) SetHostid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["hostid"] = v
+}
+
+func (p *ProvisionTemplateDirectDownloadCertificateParams) GetHostid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["hostid"].(string)
+	return value, ok
+}
+
+func (p *ProvisionTemplateDirectDownloadCertificateParams) SetId(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["id"] = v
+}
+
+func (p *ProvisionTemplateDirectDownloadCertificateParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+// You should always use this function to get a new ProvisionTemplateDirectDownloadCertificateParams instance,
+// as then you are sure you have configured all required params
+func (s *TemplateService) NewProvisionTemplateDirectDownloadCertificateParams(hostid string, id string) *ProvisionTemplateDirectDownloadCertificateParams {
+	p := &ProvisionTemplateDirectDownloadCertificateParams{}
+	p.p = make(map[string]interface{})
+	p.p["hostid"] = hostid
+	p.p["id"] = id
+	return p
+}
+
+// Provisions a host with a direct download certificate
+func (s *TemplateService) ProvisionTemplateDirectDownloadCertificate(p *ProvisionTemplateDirectDownloadCertificateParams) (*ProvisionTemplateDirectDownloadCertificateResponse, error) {
+	resp, err := s.cs.newRequest("provisionTemplateDirectDownloadCertificate", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r ProvisionTemplateDirectDownloadCertificateResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
+
+type ProvisionTemplateDirectDownloadCertificateResponse struct {
+	Details   string `json:"details"`
+	Hostid    string `json:"hostid"`
+	Hostname  string `json:"hostname"`
+	JobID     string `json:"jobid"`
+	Jobstatus int    `json:"jobstatus"`
+	Status    string `json:"status"`
 }

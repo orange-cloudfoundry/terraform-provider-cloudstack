@@ -169,6 +169,8 @@ func (s *ISOService) AttachIso(p *AttachIsoParams) (*AttachIsoResponse, error) {
 type AttachIsoResponse struct {
 	Account               string                           `json:"account"`
 	Affinitygroup         []AttachIsoResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                           `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                           `json:"autoscalevmgroupname"`
 	Backupofferingid      string                           `json:"backupofferingid"`
 	Backupofferingname    string                           `json:"backupofferingname"`
 	Bootmode              string                           `json:"bootmode"`
@@ -194,10 +196,11 @@ type AttachIsoResponse struct {
 	Guestosid             string                           `json:"guestosid"`
 	Haenable              bool                             `json:"haenable"`
 	Hasannotations        bool                             `json:"hasannotations"`
+	Hostcontrolstate      string                           `json:"hostcontrolstate"`
 	Hostid                string                           `json:"hostid"`
 	Hostname              string                           `json:"hostname"`
 	Hypervisor            string                           `json:"hypervisor"`
-	Icon                  string                           `json:"icon"`
+	Icon                  interface{}                      `json:"icon"`
 	Id                    string                           `json:"id"`
 	Instancename          string                           `json:"instancename"`
 	Isdynamicallyscalable bool                             `json:"isdynamicallyscalable"`
@@ -206,7 +209,7 @@ type AttachIsoResponse struct {
 	Isoname               string                           `json:"isoname"`
 	JobID                 string                           `json:"jobid"`
 	Jobstatus             int                              `json:"jobstatus"`
-	Keypair               string                           `json:"keypair"`
+	Keypairs              string                           `json:"keypairs"`
 	Lastupdated           string                           `json:"lastupdated"`
 	Memory                int                              `json:"memory"`
 	Memoryintfreekbs      int64                            `json:"memoryintfreekbs"`
@@ -239,9 +242,17 @@ type AttachIsoResponse struct {
 	Templatedisplaytext   string                           `json:"templatedisplaytext"`
 	Templateid            string                           `json:"templateid"`
 	Templatename          string                           `json:"templatename"`
+	Templatetype          string                           `json:"templatetype"`
+	Userdata              string                           `json:"userdata"`
+	Userdatadetails       string                           `json:"userdatadetails"`
+	Userdataid            string                           `json:"userdataid"`
+	Userdataname          string                           `json:"userdataname"`
+	Userdatapolicy        string                           `json:"userdatapolicy"`
 	Userid                string                           `json:"userid"`
 	Username              string                           `json:"username"`
 	Vgpu                  string                           `json:"vgpu"`
+	Vnfdetails            map[string]string                `json:"vnfdetails"`
+	Vnfnics               []string                         `json:"vnfnics"`
 	Zoneid                string                           `json:"zoneid"`
 	Zonename              string                           `json:"zonename"`
 }
@@ -466,7 +477,7 @@ type CopyIsoResponse struct {
 	Hostid                string              `json:"hostid"`
 	Hostname              string              `json:"hostname"`
 	Hypervisor            string              `json:"hypervisor"`
-	Icon                  string              `json:"icon"`
+	Icon                  interface{}         `json:"icon"`
 	Id                    string              `json:"id"`
 	Isdynamicallyscalable bool                `json:"isdynamicallyscalable"`
 	Isextractable         bool                `json:"isextractable"`
@@ -493,6 +504,10 @@ type CopyIsoResponse struct {
 	Templatetag           string              `json:"templatetag"`
 	Templatetype          string              `json:"templatetype"`
 	Url                   string              `json:"url"`
+	Userdataid            string              `json:"userdataid"`
+	Userdataname          string              `json:"userdataname"`
+	Userdataparams        string              `json:"userdataparams"`
+	Userdatapolicy        string              `json:"userdatapolicy"`
 	Zoneid                string              `json:"zoneid"`
 	Zonename              string              `json:"zonename"`
 }
@@ -714,6 +729,8 @@ func (s *ISOService) DetachIso(p *DetachIsoParams) (*DetachIsoResponse, error) {
 type DetachIsoResponse struct {
 	Account               string                           `json:"account"`
 	Affinitygroup         []DetachIsoResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                           `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                           `json:"autoscalevmgroupname"`
 	Backupofferingid      string                           `json:"backupofferingid"`
 	Backupofferingname    string                           `json:"backupofferingname"`
 	Bootmode              string                           `json:"bootmode"`
@@ -739,10 +756,11 @@ type DetachIsoResponse struct {
 	Guestosid             string                           `json:"guestosid"`
 	Haenable              bool                             `json:"haenable"`
 	Hasannotations        bool                             `json:"hasannotations"`
+	Hostcontrolstate      string                           `json:"hostcontrolstate"`
 	Hostid                string                           `json:"hostid"`
 	Hostname              string                           `json:"hostname"`
 	Hypervisor            string                           `json:"hypervisor"`
-	Icon                  string                           `json:"icon"`
+	Icon                  interface{}                      `json:"icon"`
 	Id                    string                           `json:"id"`
 	Instancename          string                           `json:"instancename"`
 	Isdynamicallyscalable bool                             `json:"isdynamicallyscalable"`
@@ -751,7 +769,7 @@ type DetachIsoResponse struct {
 	Isoname               string                           `json:"isoname"`
 	JobID                 string                           `json:"jobid"`
 	Jobstatus             int                              `json:"jobstatus"`
-	Keypair               string                           `json:"keypair"`
+	Keypairs              string                           `json:"keypairs"`
 	Lastupdated           string                           `json:"lastupdated"`
 	Memory                int                              `json:"memory"`
 	Memoryintfreekbs      int64                            `json:"memoryintfreekbs"`
@@ -784,9 +802,17 @@ type DetachIsoResponse struct {
 	Templatedisplaytext   string                           `json:"templatedisplaytext"`
 	Templateid            string                           `json:"templateid"`
 	Templatename          string                           `json:"templatename"`
+	Templatetype          string                           `json:"templatetype"`
+	Userdata              string                           `json:"userdata"`
+	Userdatadetails       string                           `json:"userdatadetails"`
+	Userdataid            string                           `json:"userdataid"`
+	Userdataname          string                           `json:"userdataname"`
+	Userdatapolicy        string                           `json:"userdatapolicy"`
 	Userid                string                           `json:"userid"`
 	Username              string                           `json:"username"`
 	Vgpu                  string                           `json:"vgpu"`
+	Vnfdetails            map[string]string                `json:"vnfdetails"`
+	Vnfnics               []string                         `json:"vnfnics"`
 	Zoneid                string                           `json:"zoneid"`
 	Zonename              string                           `json:"zonename"`
 }
@@ -1135,6 +1161,9 @@ func (p *ListIsosParams) toURLValues() url.Values {
 	if v, found := p.p["id"]; found {
 		u.Set("id", v.(string))
 	}
+	if v, found := p.p["imagestoreid"]; found {
+		u.Set("imagestoreid", v.(string))
+	}
 	if v, found := p.p["isofilter"]; found {
 		u.Set("isofilter", v.(string))
 	}
@@ -1182,6 +1211,9 @@ func (p *ListIsosParams) toURLValues() url.Values {
 	if v, found := p.p["showunique"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("showunique", vv)
+	}
+	if v, found := p.p["storageid"]; found {
+		u.Set("storageid", v.(string))
 	}
 	if v, found := p.p["tags"]; found {
 		m := v.(map[string]string)
@@ -1268,6 +1300,21 @@ func (p *ListIsosParams) GetId() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+func (p *ListIsosParams) SetImagestoreid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["imagestoreid"] = v
+}
+
+func (p *ListIsosParams) GetImagestoreid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["imagestoreid"].(string)
 	return value, ok
 }
 
@@ -1466,6 +1513,21 @@ func (p *ListIsosParams) GetShowunique() (bool, bool) {
 	return value, ok
 }
 
+func (p *ListIsosParams) SetStorageid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["storageid"] = v
+}
+
+func (p *ListIsosParams) GetStorageid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["storageid"].(string)
+	return value, ok
+}
+
 func (p *ListIsosParams) SetTags(v map[string]string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1631,7 +1693,7 @@ type Iso struct {
 	Hostid                string              `json:"hostid"`
 	Hostname              string              `json:"hostname"`
 	Hypervisor            string              `json:"hypervisor"`
-	Icon                  string              `json:"icon"`
+	Icon                  interface{}         `json:"icon"`
 	Id                    string              `json:"id"`
 	Isdynamicallyscalable bool                `json:"isdynamicallyscalable"`
 	Isextractable         bool                `json:"isextractable"`
@@ -1658,6 +1720,10 @@ type Iso struct {
 	Templatetag           string              `json:"templatetag"`
 	Templatetype          string              `json:"templatetype"`
 	Url                   string              `json:"url"`
+	Userdataid            string              `json:"userdataid"`
+	Userdataname          string              `json:"userdataname"`
+	Userdataparams        string              `json:"userdataparams"`
+	Userdatapolicy        string              `json:"userdatapolicy"`
 	Zoneid                string              `json:"zoneid"`
 	Zonename              string              `json:"zonename"`
 }
@@ -2067,7 +2133,7 @@ type RegisterIsoResponse struct {
 	Hostid                string              `json:"hostid"`
 	Hostname              string              `json:"hostname"`
 	Hypervisor            string              `json:"hypervisor"`
-	Icon                  string              `json:"icon"`
+	Icon                  interface{}         `json:"icon"`
 	Id                    string              `json:"id"`
 	Isdynamicallyscalable bool                `json:"isdynamicallyscalable"`
 	Isextractable         bool                `json:"isextractable"`
@@ -2094,6 +2160,10 @@ type RegisterIsoResponse struct {
 	Templatetag           string              `json:"templatetag"`
 	Templatetype          string              `json:"templatetype"`
 	Url                   string              `json:"url"`
+	Userdataid            string              `json:"userdataid"`
+	Userdataname          string              `json:"userdataname"`
+	Userdataparams        string              `json:"userdataparams"`
+	Userdatapolicy        string              `json:"userdatapolicy"`
 	Zoneid                string              `json:"zoneid"`
 	Zonename              string              `json:"zonename"`
 }
@@ -2446,7 +2516,7 @@ type UpdateIsoResponse struct {
 	Hostid                string              `json:"hostid"`
 	Hostname              string              `json:"hostname"`
 	Hypervisor            string              `json:"hypervisor"`
-	Icon                  string              `json:"icon"`
+	Icon                  interface{}         `json:"icon"`
 	Id                    string              `json:"id"`
 	Isdynamicallyscalable bool                `json:"isdynamicallyscalable"`
 	Isextractable         bool                `json:"isextractable"`
@@ -2473,6 +2543,10 @@ type UpdateIsoResponse struct {
 	Templatetag           string              `json:"templatetag"`
 	Templatetype          string              `json:"templatetype"`
 	Url                   string              `json:"url"`
+	Userdataid            string              `json:"userdataid"`
+	Userdataname          string              `json:"userdataname"`
+	Userdataparams        string              `json:"userdataparams"`
+	Userdatapolicy        string              `json:"userdatapolicy"`
 	Zoneid                string              `json:"zoneid"`
 	Zonename              string              `json:"zonename"`
 }

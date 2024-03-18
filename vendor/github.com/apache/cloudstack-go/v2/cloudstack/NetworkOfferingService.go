@@ -78,12 +78,19 @@ func (p *CreateNetworkOfferingParams) toURLValues() url.Values {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("enable", vv)
 	}
+	if v, found := p.p["fortungsten"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("fortungsten", vv)
+	}
 	if v, found := p.p["forvpc"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("forvpc", vv)
 	}
 	if v, found := p.p["guestiptype"]; found {
 		u.Set("guestiptype", v.(string))
+	}
+	if v, found := p.p["internetprotocol"]; found {
+		u.Set("internetprotocol", v.(string))
 	}
 	if v, found := p.p["ispersistent"]; found {
 		vv := strconv.FormatBool(v.(bool))
@@ -251,6 +258,21 @@ func (p *CreateNetworkOfferingParams) GetEnable() (bool, bool) {
 	return value, ok
 }
 
+func (p *CreateNetworkOfferingParams) SetFortungsten(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["fortungsten"] = v
+}
+
+func (p *CreateNetworkOfferingParams) GetFortungsten() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["fortungsten"].(bool)
+	return value, ok
+}
+
 func (p *CreateNetworkOfferingParams) SetForvpc(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -278,6 +300,21 @@ func (p *CreateNetworkOfferingParams) GetGuestiptype() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["guestiptype"].(string)
+	return value, ok
+}
+
+func (p *CreateNetworkOfferingParams) SetInternetprotocol(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["internetprotocol"] = v
+}
+
+func (p *CreateNetworkOfferingParams) GetInternetprotocol() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["internetprotocol"].(string)
 	return value, ok
 }
 
@@ -531,10 +568,12 @@ type CreateNetworkOfferingResponse struct {
 	Domain                   string                                 `json:"domain"`
 	Domainid                 string                                 `json:"domainid"`
 	Egressdefaultpolicy      bool                                   `json:"egressdefaultpolicy"`
+	Fortungsten              bool                                   `json:"fortungsten"`
 	Forvpc                   bool                                   `json:"forvpc"`
 	Guestiptype              string                                 `json:"guestiptype"`
 	Hasannotations           bool                                   `json:"hasannotations"`
 	Id                       string                                 `json:"id"`
+	Internetprotocol         string                                 `json:"internetprotocol"`
 	Isdefault                bool                                   `json:"isdefault"`
 	Ispersistent             bool                                   `json:"ispersistent"`
 	JobID                    string                                 `json:"jobid"`
@@ -1184,10 +1223,12 @@ type NetworkOffering struct {
 	Domain                   string                           `json:"domain"`
 	Domainid                 string                           `json:"domainid"`
 	Egressdefaultpolicy      bool                             `json:"egressdefaultpolicy"`
+	Fortungsten              bool                             `json:"fortungsten"`
 	Forvpc                   bool                             `json:"forvpc"`
 	Guestiptype              string                           `json:"guestiptype"`
 	Hasannotations           bool                             `json:"hasannotations"`
 	Id                       string                           `json:"id"`
+	Internetprotocol         string                           `json:"internetprotocol"`
 	Isdefault                bool                             `json:"isdefault"`
 	Ispersistent             bool                             `json:"ispersistent"`
 	JobID                    string                           `json:"jobid"`
@@ -1479,10 +1520,12 @@ type UpdateNetworkOfferingResponse struct {
 	Domain                   string                                 `json:"domain"`
 	Domainid                 string                                 `json:"domainid"`
 	Egressdefaultpolicy      bool                                   `json:"egressdefaultpolicy"`
+	Fortungsten              bool                                   `json:"fortungsten"`
 	Forvpc                   bool                                   `json:"forvpc"`
 	Guestiptype              string                                 `json:"guestiptype"`
 	Hasannotations           bool                                   `json:"hasannotations"`
 	Id                       string                                 `json:"id"`
+	Internetprotocol         string                                 `json:"internetprotocol"`
 	Isdefault                bool                                   `json:"isdefault"`
 	Ispersistent             bool                                   `json:"ispersistent"`
 	JobID                    string                                 `json:"jobid"`

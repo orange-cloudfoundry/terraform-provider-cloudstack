@@ -63,6 +63,10 @@ func (p *CreateRoleParams) toURLValues() url.Values {
 	if v, found := p.p["description"]; found {
 		u.Set("description", v.(string))
 	}
+	if v, found := p.p["ispublic"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("ispublic", vv)
+	}
 	if v, found := p.p["name"]; found {
 		u.Set("name", v.(string))
 	}
@@ -87,6 +91,21 @@ func (p *CreateRoleParams) GetDescription() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["description"].(string)
+	return value, ok
+}
+
+func (p *CreateRoleParams) SetIspublic(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["ispublic"] = v
+}
+
+func (p *CreateRoleParams) GetIspublic() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ispublic"].(bool)
 	return value, ok
 }
 
@@ -151,10 +170,13 @@ func (s *RoleService) CreateRole(p *CreateRoleParams) (*CreateRoleResponse, erro
 		return nil, err
 	}
 
-	var r CreateRoleResponse
-	if err := json.Unmarshal(resp, &r); err != nil {
+	var nested struct {
+		Response CreateRoleResponse `json:"role"`
+	}
+	if err := json.Unmarshal(resp, &nested); err != nil {
 		return nil, err
 	}
+	r := nested.Response
 
 	return &r, nil
 }
@@ -163,6 +185,7 @@ type CreateRoleResponse struct {
 	Description string `json:"description"`
 	Id          string `json:"id"`
 	Isdefault   bool   `json:"isdefault"`
+	Ispublic    bool   `json:"ispublic"`
 	JobID       string `json:"jobid"`
 	Jobstatus   int    `json:"jobstatus"`
 	Name        string `json:"name"`
@@ -271,10 +294,13 @@ func (s *RoleService) CreateRolePermission(p *CreateRolePermissionParams) (*Crea
 		return nil, err
 	}
 
-	var r CreateRolePermissionResponse
-	if err := json.Unmarshal(resp, &r); err != nil {
+	var nested struct {
+		Response CreateRolePermissionResponse `json:"rolepermission"`
+	}
+	if err := json.Unmarshal(resp, &nested); err != nil {
 		return nil, err
 	}
+	r := nested.Response
 
 	return &r, nil
 }
@@ -482,6 +508,10 @@ func (p *ImportRoleParams) toURLValues() url.Values {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("forced", vv)
 	}
+	if v, found := p.p["ispublic"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("ispublic", vv)
+	}
 	if v, found := p.p["name"]; found {
 		u.Set("name", v.(string))
 	}
@@ -525,6 +555,21 @@ func (p *ImportRoleParams) GetForced() (bool, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["forced"].(bool)
+	return value, ok
+}
+
+func (p *ImportRoleParams) SetIspublic(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["ispublic"] = v
+}
+
+func (p *ImportRoleParams) GetIspublic() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ispublic"].(bool)
 	return value, ok
 }
 
@@ -602,6 +647,7 @@ type ImportRoleResponse struct {
 	Description string `json:"description"`
 	Id          string `json:"id"`
 	Isdefault   bool   `json:"isdefault"`
+	Ispublic    bool   `json:"ispublic"`
 	JobID       string `json:"jobid"`
 	Jobstatus   int    `json:"jobstatus"`
 	Name        string `json:"name"`
@@ -914,6 +960,7 @@ type Role struct {
 	Description string `json:"description"`
 	Id          string `json:"id"`
 	Isdefault   bool   `json:"isdefault"`
+	Ispublic    bool   `json:"ispublic"`
 	JobID       string `json:"jobid"`
 	Jobstatus   int    `json:"jobstatus"`
 	Name        string `json:"name"`
@@ -937,6 +984,10 @@ func (p *UpdateRoleParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["id"]; found {
 		u.Set("id", v.(string))
+	}
+	if v, found := p.p["ispublic"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("ispublic", vv)
 	}
 	if v, found := p.p["name"]; found {
 		u.Set("name", v.(string))
@@ -974,6 +1025,21 @@ func (p *UpdateRoleParams) GetId() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+func (p *UpdateRoleParams) SetIspublic(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["ispublic"] = v
+}
+
+func (p *UpdateRoleParams) GetIspublic() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ispublic"].(bool)
 	return value, ok
 }
 
@@ -1035,6 +1101,7 @@ type UpdateRoleResponse struct {
 	Description string `json:"description"`
 	Id          string `json:"id"`
 	Isdefault   bool   `json:"isdefault"`
+	Ispublic    bool   `json:"ispublic"`
 	JobID       string `json:"jobid"`
 	Jobstatus   int    `json:"jobstatus"`
 	Name        string `json:"name"`
