@@ -29,7 +29,7 @@ import (
 
 type PodServiceIface interface {
 	CreatePod(p *CreatePodParams) (*CreatePodResponse, error)
-	NewCreatePodParams(gateway string, name string, netmask string, startip string, zoneid string) *CreatePodParams
+	NewCreatePodParams(name string, zoneid string) *CreatePodParams
 	DedicatePod(p *DedicatePodParams) (*DedicatePodResponse, error)
 	NewDedicatePodParams(domainid string, podid string) *DedicatePodParams
 	DeletePod(p *DeletePodParams) (*DeletePodResponse, error)
@@ -187,13 +187,10 @@ func (p *CreatePodParams) GetZoneid() (string, bool) {
 
 // You should always use this function to get a new CreatePodParams instance,
 // as then you are sure you have configured all required params
-func (s *PodService) NewCreatePodParams(gateway string, name string, netmask string, startip string, zoneid string) *CreatePodParams {
+func (s *PodService) NewCreatePodParams(name string, zoneid string) *CreatePodParams {
 	p := &CreatePodParams{}
 	p.p = make(map[string]interface{})
-	p.p["gateway"] = gateway
 	p.p["name"] = name
-	p.p["netmask"] = netmask
-	p.p["startip"] = startip
 	p.p["zoneid"] = zoneid
 	return p
 }
@@ -202,6 +199,10 @@ func (s *PodService) NewCreatePodParams(gateway string, name string, netmask str
 func (s *PodService) CreatePod(p *CreatePodParams) (*CreatePodResponse, error) {
 	resp, err := s.cs.newRequest("createPod", p.toURLValues())
 	if err != nil {
+		return nil, err
+	}
+
+	if resp, err = getRawValue(resp); err != nil {
 		return nil, err
 	}
 
@@ -233,8 +234,10 @@ type CreatePodResponse struct {
 }
 
 type CreatePodResponseIpranges struct {
+	Cidr         string `json:"cidr"`
 	Endip        string `json:"endip"`
 	Forsystemvms string `json:"forsystemvms"`
+	Gateway      string `json:"gateway"`
 	Startip      string `json:"startip"`
 	Vlanid       string `json:"vlanid"`
 }
@@ -933,8 +936,10 @@ type Pod struct {
 }
 
 type PodIpranges struct {
+	Cidr         string `json:"cidr"`
 	Endip        string `json:"endip"`
 	Forsystemvms string `json:"forsystemvms"`
+	Gateway      string `json:"gateway"`
 	Startip      string `json:"startip"`
 	Vlanid       string `json:"vlanid"`
 }
@@ -1212,8 +1217,10 @@ type UpdatePodResponse struct {
 }
 
 type UpdatePodResponseIpranges struct {
+	Cidr         string `json:"cidr"`
 	Endip        string `json:"endip"`
 	Forsystemvms string `json:"forsystemvms"`
+	Gateway      string `json:"gateway"`
 	Startip      string `json:"startip"`
 	Vlanid       string `json:"vlanid"`
 }

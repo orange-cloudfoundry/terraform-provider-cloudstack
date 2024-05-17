@@ -4,7 +4,6 @@ issues:
     - linters:
         - staticcheck
       text: "SA1019:"
-  max-per-linter: 0
   max-same-issues: 0
 
 linters:
@@ -18,15 +17,12 @@ linters:
     - staticcheck
     - unconvert
     - unused
-    - vet
+    - govet
     - bodyclose
 
 linters-settings:
-  errcheck:
-    ignore: os:MkdirAll,net/http:Write,fmt:.*,io:Close,github.com/hashicorp/terraform-plugin-sdk/helper/schema:ForceNew|Set|Partial|SetPartial
   gofmt:
     simplify: false
 
 run:
-  deadline: 5m
   tests: false
