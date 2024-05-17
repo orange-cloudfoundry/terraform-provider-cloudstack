@@ -891,6 +891,7 @@ type InternalLoadBalancerVM struct {
 	Hasannotations      bool                                       `json:"hasannotations"`
 	Healthcheckresults  []InternalLoadBalancerVMHealthcheckresults `json:"healthcheckresults"`
 	Healthchecksfailed  bool                                       `json:"healthchecksfailed"`
+	Hostcontrolstate    string                                     `json:"hostcontrolstate"`
 	Hostid              string                                     `json:"hostid"`
 	Hostname            string                                     `json:"hostname"`
 	Hypervisor          string                                     `json:"hypervisor"`
@@ -921,6 +922,7 @@ type InternalLoadBalancerVM struct {
 	Scriptsversion      string                                     `json:"scriptsversion"`
 	Serviceofferingid   string                                     `json:"serviceofferingid"`
 	Serviceofferingname string                                     `json:"serviceofferingname"`
+	Softwareversion     string                                     `json:"softwareversion"`
 	State               string                                     `json:"state"`
 	Templateid          string                                     `json:"templateid"`
 	Templatename        string                                     `json:"templatename"`
@@ -1029,6 +1031,7 @@ type StartInternalLoadBalancerVMResponse struct {
 	Hasannotations      bool                                                    `json:"hasannotations"`
 	Healthcheckresults  []StartInternalLoadBalancerVMResponseHealthcheckresults `json:"healthcheckresults"`
 	Healthchecksfailed  bool                                                    `json:"healthchecksfailed"`
+	Hostcontrolstate    string                                                  `json:"hostcontrolstate"`
 	Hostid              string                                                  `json:"hostid"`
 	Hostname            string                                                  `json:"hostname"`
 	Hypervisor          string                                                  `json:"hypervisor"`
@@ -1059,6 +1062,7 @@ type StartInternalLoadBalancerVMResponse struct {
 	Scriptsversion      string                                                  `json:"scriptsversion"`
 	Serviceofferingid   string                                                  `json:"serviceofferingid"`
 	Serviceofferingname string                                                  `json:"serviceofferingname"`
+	Softwareversion     string                                                  `json:"softwareversion"`
 	State               string                                                  `json:"state"`
 	Templateid          string                                                  `json:"templateid"`
 	Templatename        string                                                  `json:"templatename"`
@@ -1186,6 +1190,7 @@ type StopInternalLoadBalancerVMResponse struct {
 	Hasannotations      bool                                                   `json:"hasannotations"`
 	Healthcheckresults  []StopInternalLoadBalancerVMResponseHealthcheckresults `json:"healthcheckresults"`
 	Healthchecksfailed  bool                                                   `json:"healthchecksfailed"`
+	Hostcontrolstate    string                                                 `json:"hostcontrolstate"`
 	Hostid              string                                                 `json:"hostid"`
 	Hostname            string                                                 `json:"hostname"`
 	Hypervisor          string                                                 `json:"hypervisor"`
@@ -1216,6 +1221,7 @@ type StopInternalLoadBalancerVMResponse struct {
 	Scriptsversion      string                                                 `json:"scriptsversion"`
 	Serviceofferingid   string                                                 `json:"serviceofferingid"`
 	Serviceofferingname string                                                 `json:"serviceofferingname"`
+	Softwareversion     string                                                 `json:"softwareversion"`
 	State               string                                                 `json:"state"`
 	Templateid          string                                                 `json:"templateid"`
 	Templatename        string                                                 `json:"templatename"`

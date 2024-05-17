@@ -96,6 +96,13 @@ func (p *CreateServiceOfferingParams) toURLValues() url.Values {
 	if v, found := p.p["deploymentplanner"]; found {
 		u.Set("deploymentplanner", v.(string))
 	}
+	if v, found := p.p["diskofferingid"]; found {
+		u.Set("diskofferingid", v.(string))
+	}
+	if v, found := p.p["diskofferingstrictness"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("diskofferingstrictness", vv)
+	}
 	if v, found := p.p["displaytext"]; found {
 		u.Set("displaytext", v.(string))
 	}
@@ -106,6 +113,10 @@ func (p *CreateServiceOfferingParams) toURLValues() url.Values {
 	if v, found := p.p["dynamicscalingenabled"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("dynamicscalingenabled", vv)
+	}
+	if v, found := p.p["encryptroot"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("encryptroot", vv)
 	}
 	if v, found := p.p["hosttags"]; found {
 		u.Set("hosttags", v.(string))
@@ -402,6 +413,36 @@ func (p *CreateServiceOfferingParams) GetDeploymentplanner() (string, bool) {
 	return value, ok
 }
 
+func (p *CreateServiceOfferingParams) SetDiskofferingid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["diskofferingid"] = v
+}
+
+func (p *CreateServiceOfferingParams) GetDiskofferingid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["diskofferingid"].(string)
+	return value, ok
+}
+
+func (p *CreateServiceOfferingParams) SetDiskofferingstrictness(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["diskofferingstrictness"] = v
+}
+
+func (p *CreateServiceOfferingParams) GetDiskofferingstrictness() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["diskofferingstrictness"].(bool)
+	return value, ok
+}
+
 func (p *CreateServiceOfferingParams) SetDisplaytext(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -444,6 +485,21 @@ func (p *CreateServiceOfferingParams) GetDynamicscalingenabled() (bool, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["dynamicscalingenabled"].(bool)
+	return value, ok
+}
+
+func (p *CreateServiceOfferingParams) SetEncryptroot(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["encryptroot"] = v
+}
+
+func (p *CreateServiceOfferingParams) GetEncryptroot() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["encryptroot"].(bool)
 	return value, ok
 }
 
@@ -930,10 +986,15 @@ type CreateServiceOfferingResponse struct {
 	DiskIopsWriteRate           int64             `json:"diskIopsWriteRate"`
 	DiskIopsWriteRateMax        int64             `json:"diskIopsWriteRateMax"`
 	DiskIopsWriteRateMaxLength  int64             `json:"diskIopsWriteRateMaxLength"`
+	Diskofferingdisplaytext     string            `json:"diskofferingdisplaytext"`
+	Diskofferingid              string            `json:"diskofferingid"`
+	Diskofferingname            string            `json:"diskofferingname"`
+	Diskofferingstrictness      bool              `json:"diskofferingstrictness"`
 	Displaytext                 string            `json:"displaytext"`
 	Domain                      string            `json:"domain"`
 	Domainid                    string            `json:"domainid"`
 	Dynamicscalingenabled       bool              `json:"dynamicscalingenabled"`
+	Encryptroot                 bool              `json:"encryptroot"`
 	Hasannotations              bool              `json:"hasannotations"`
 	Hosttags                    string            `json:"hosttags"`
 	Hypervisorsnapshotreserve   int               `json:"hypervisorsnapshotreserve"`
@@ -1059,6 +1120,9 @@ func (p *ListServiceOfferingsParams) toURLValues() url.Values {
 	if p.p == nil {
 		return u
 	}
+	if v, found := p.p["account"]; found {
+		u.Set("account", v.(string))
+	}
 	if v, found := p.p["cpunumber"]; found {
 		vv := strconv.Itoa(v.(int))
 		u.Set("cpunumber", vv)
@@ -1069,6 +1133,10 @@ func (p *ListServiceOfferingsParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["domainid"]; found {
 		u.Set("domainid", v.(string))
+	}
+	if v, found := p.p["encryptroot"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("encryptroot", vv)
 	}
 	if v, found := p.p["id"]; found {
 		u.Set("id", v.(string))
@@ -1103,6 +1171,12 @@ func (p *ListServiceOfferingsParams) toURLValues() url.Values {
 		vv := strconv.Itoa(v.(int))
 		u.Set("pagesize", vv)
 	}
+	if v, found := p.p["projectid"]; found {
+		u.Set("projectid", v.(string))
+	}
+	if v, found := p.p["storagetype"]; found {
+		u.Set("storagetype", v.(string))
+	}
 	if v, found := p.p["systemvmtype"]; found {
 		u.Set("systemvmtype", v.(string))
 	}
@@ -1113,6 +1187,21 @@ func (p *ListServiceOfferingsParams) toURLValues() url.Values {
 		u.Set("zoneid", v.(string))
 	}
 	return u
+}
+
+func (p *ListServiceOfferingsParams) SetAccount(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["account"] = v
+}
+
+func (p *ListServiceOfferingsParams) GetAccount() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["account"].(string)
+	return value, ok
 }
 
 func (p *ListServiceOfferingsParams) SetCpunumber(v int) {
@@ -1157,6 +1246,21 @@ func (p *ListServiceOfferingsParams) GetDomainid() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["domainid"].(string)
+	return value, ok
+}
+
+func (p *ListServiceOfferingsParams) SetEncryptroot(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["encryptroot"] = v
+}
+
+func (p *ListServiceOfferingsParams) GetEncryptroot() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["encryptroot"].(bool)
 	return value, ok
 }
 
@@ -1292,6 +1396,36 @@ func (p *ListServiceOfferingsParams) GetPagesize() (int, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["pagesize"].(int)
+	return value, ok
+}
+
+func (p *ListServiceOfferingsParams) SetProjectid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["projectid"] = v
+}
+
+func (p *ListServiceOfferingsParams) GetProjectid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["projectid"].(string)
+	return value, ok
+}
+
+func (p *ListServiceOfferingsParams) SetStoragetype(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["storagetype"] = v
+}
+
+func (p *ListServiceOfferingsParams) GetStoragetype() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["storagetype"].(string)
 	return value, ok
 }
 
@@ -1470,10 +1604,15 @@ type ServiceOffering struct {
 	DiskIopsWriteRate           int64             `json:"diskIopsWriteRate"`
 	DiskIopsWriteRateMax        int64             `json:"diskIopsWriteRateMax"`
 	DiskIopsWriteRateMaxLength  int64             `json:"diskIopsWriteRateMaxLength"`
+	Diskofferingdisplaytext     string            `json:"diskofferingdisplaytext"`
+	Diskofferingid              string            `json:"diskofferingid"`
+	Diskofferingname            string            `json:"diskofferingname"`
+	Diskofferingstrictness      bool              `json:"diskofferingstrictness"`
 	Displaytext                 string            `json:"displaytext"`
 	Domain                      string            `json:"domain"`
 	Domainid                    string            `json:"domainid"`
 	Dynamicscalingenabled       bool              `json:"dynamicscalingenabled"`
+	Encryptroot                 bool              `json:"encryptroot"`
 	Hasannotations              bool              `json:"hasannotations"`
 	Hosttags                    string            `json:"hosttags"`
 	Hypervisorsnapshotreserve   int               `json:"hypervisorsnapshotreserve"`
@@ -1706,10 +1845,15 @@ type UpdateServiceOfferingResponse struct {
 	DiskIopsWriteRate           int64             `json:"diskIopsWriteRate"`
 	DiskIopsWriteRateMax        int64             `json:"diskIopsWriteRateMax"`
 	DiskIopsWriteRateMaxLength  int64             `json:"diskIopsWriteRateMaxLength"`
+	Diskofferingdisplaytext     string            `json:"diskofferingdisplaytext"`
+	Diskofferingid              string            `json:"diskofferingid"`
+	Diskofferingname            string            `json:"diskofferingname"`
+	Diskofferingstrictness      bool              `json:"diskofferingstrictness"`
 	Displaytext                 string            `json:"displaytext"`
 	Domain                      string            `json:"domain"`
 	Domainid                    string            `json:"domainid"`
 	Dynamicscalingenabled       bool              `json:"dynamicscalingenabled"`
+	Encryptroot                 bool              `json:"encryptroot"`
 	Hasannotations              bool              `json:"hasannotations"`
 	Hosttags                    string            `json:"hosttags"`
 	Hypervisorsnapshotreserve   int               `json:"hypervisorsnapshotreserve"`

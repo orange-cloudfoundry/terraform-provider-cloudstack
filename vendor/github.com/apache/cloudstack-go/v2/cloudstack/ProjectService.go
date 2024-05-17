@@ -150,7 +150,7 @@ type ActivateProjectResponse struct {
 	Displaytext               string              `json:"displaytext"`
 	Domain                    string              `json:"domain"`
 	Domainid                  string              `json:"domainid"`
-	Icon                      string              `json:"icon"`
+	Icon                      interface{}         `json:"icon"`
 	Id                        string              `json:"id"`
 	Ipavailable               string              `json:"ipavailable"`
 	Iplimit                   string              `json:"iplimit"`
@@ -663,7 +663,7 @@ type CreateProjectResponse struct {
 	Displaytext               string              `json:"displaytext"`
 	Domain                    string              `json:"domain"`
 	Domainid                  string              `json:"domainid"`
-	Icon                      string              `json:"icon"`
+	Icon                      interface{}         `json:"icon"`
 	Id                        string              `json:"id"`
 	Ipavailable               string              `json:"ipavailable"`
 	Iplimit                   string              `json:"iplimit"`
@@ -1786,7 +1786,7 @@ type Project struct {
 	Displaytext               string              `json:"displaytext"`
 	Domain                    string              `json:"domain"`
 	Domainid                  string              `json:"domainid"`
-	Icon                      string              `json:"icon"`
+	Icon                      interface{}         `json:"icon"`
 	Id                        string              `json:"id"`
 	Ipavailable               string              `json:"ipavailable"`
 	Iplimit                   string              `json:"iplimit"`
@@ -1911,7 +1911,7 @@ type SuspendProjectResponse struct {
 	Displaytext               string              `json:"displaytext"`
 	Domain                    string              `json:"domain"`
 	Domainid                  string              `json:"domainid"`
-	Icon                      string              `json:"icon"`
+	Icon                      interface{}         `json:"icon"`
 	Id                        string              `json:"id"`
 	Ipavailable               string              `json:"ipavailable"`
 	Iplimit                   string              `json:"iplimit"`
@@ -1972,6 +1972,9 @@ func (p *UpdateProjectParams) toURLValues() url.Values {
 	if v, found := p.p["id"]; found {
 		u.Set("id", v.(string))
 	}
+	if v, found := p.p["name"]; found {
+		u.Set("name", v.(string))
+	}
 	if v, found := p.p["roletype"]; found {
 		u.Set("roletype", v.(string))
 	}
@@ -2027,6 +2030,21 @@ func (p *UpdateProjectParams) GetId() (string, bool) {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+func (p *UpdateProjectParams) SetName(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["name"] = v
+}
+
+func (p *UpdateProjectParams) GetName() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["name"].(string)
 	return value, ok
 }
 
@@ -2127,7 +2145,7 @@ type UpdateProjectResponse struct {
 	Displaytext               string              `json:"displaytext"`
 	Domain                    string              `json:"domain"`
 	Domainid                  string              `json:"domainid"`
-	Icon                      string              `json:"icon"`
+	Icon                      interface{}         `json:"icon"`
 	Id                        string              `json:"id"`
 	Ipavailable               string              `json:"ipavailable"`
 	Iplimit                   string              `json:"iplimit"`
