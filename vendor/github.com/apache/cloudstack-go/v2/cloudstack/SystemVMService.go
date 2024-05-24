@@ -47,6 +47,8 @@ type SystemVMServiceIface interface {
 	NewStartSystemVmParams(id string) *StartSystemVmParams
 	StopSystemVm(p *StopSystemVmParams) (*StopSystemVmResponse, error)
 	NewStopSystemVmParams(id string) *StopSystemVmParams
+	PatchSystemVm(p *PatchSystemVmParams) (*PatchSystemVmResponse, error)
+	NewPatchSystemVmParams() *PatchSystemVmParams
 }
 
 type ChangeServiceForSystemVmParams struct {
@@ -80,6 +82,12 @@ func (p *ChangeServiceForSystemVmParams) SetDetails(v map[string]string) {
 	p.p["details"] = v
 }
 
+func (p *ChangeServiceForSystemVmParams) ResetDetails() {
+	if p.p != nil && p.p["details"] != nil {
+		delete(p.p, "details")
+	}
+}
+
 func (p *ChangeServiceForSystemVmParams) GetDetails() (map[string]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -95,6 +103,12 @@ func (p *ChangeServiceForSystemVmParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ChangeServiceForSystemVmParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *ChangeServiceForSystemVmParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -108,6 +122,12 @@ func (p *ChangeServiceForSystemVmParams) SetServiceofferingid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["serviceofferingid"] = v
+}
+
+func (p *ChangeServiceForSystemVmParams) ResetServiceofferingid() {
+	if p.p != nil && p.p["serviceofferingid"] != nil {
+		delete(p.p, "serviceofferingid")
+	}
 }
 
 func (p *ChangeServiceForSystemVmParams) GetServiceofferingid() (string, bool) {
@@ -153,6 +173,7 @@ type ChangeServiceForSystemVmResponse struct {
 	Gateway               string   `json:"gateway"`
 	Guestvlan             string   `json:"guestvlan"`
 	Hasannotations        bool     `json:"hasannotations"`
+	Hostcontrolstate      string   `json:"hostcontrolstate"`
 	Hostid                string   `json:"hostid"`
 	Hostname              string   `json:"hostname"`
 	Hypervisor            string   `json:"hypervisor"`
@@ -174,6 +195,8 @@ type ChangeServiceForSystemVmResponse struct {
 	Publicmacaddress      string   `json:"publicmacaddress"`
 	Publicnetmask         string   `json:"publicnetmask"`
 	Publicvlan            []string `json:"publicvlan"`
+	Serviceofferingid     string   `json:"serviceofferingid"`
+	Serviceofferingname   string   `json:"serviceofferingname"`
 	State                 string   `json:"state"`
 	Systemvmtype          string   `json:"systemvmtype"`
 	Templateid            string   `json:"templateid"`
@@ -205,6 +228,12 @@ func (p *DestroySystemVmParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *DestroySystemVmParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *DestroySystemVmParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -222,7 +251,7 @@ func (s *SystemVMService) NewDestroySystemVmParams(id string) *DestroySystemVmPa
 	return p
 }
 
-// Destroyes a system virtual machine.
+// Destroys a system virtual machine.
 func (s *SystemVMService) DestroySystemVm(p *DestroySystemVmParams) (*DestroySystemVmResponse, error) {
 	resp, err := s.cs.newRequest("destroySystemVm", p.toURLValues())
 	if err != nil {
@@ -267,6 +296,7 @@ type DestroySystemVmResponse struct {
 	Gateway               string   `json:"gateway"`
 	Guestvlan             string   `json:"guestvlan"`
 	Hasannotations        bool     `json:"hasannotations"`
+	Hostcontrolstate      string   `json:"hostcontrolstate"`
 	Hostid                string   `json:"hostid"`
 	Hostname              string   `json:"hostname"`
 	Hypervisor            string   `json:"hypervisor"`
@@ -288,6 +318,8 @@ type DestroySystemVmResponse struct {
 	Publicmacaddress      string   `json:"publicmacaddress"`
 	Publicnetmask         string   `json:"publicnetmask"`
 	Publicvlan            []string `json:"publicvlan"`
+	Serviceofferingid     string   `json:"serviceofferingid"`
+	Serviceofferingname   string   `json:"serviceofferingname"`
 	State                 string   `json:"state"`
 	Systemvmtype          string   `json:"systemvmtype"`
 	Templateid            string   `json:"templateid"`
@@ -351,6 +383,12 @@ func (p *ListSystemVmsParams) SetHostid(v string) {
 	p.p["hostid"] = v
 }
 
+func (p *ListSystemVmsParams) ResetHostid() {
+	if p.p != nil && p.p["hostid"] != nil {
+		delete(p.p, "hostid")
+	}
+}
+
 func (p *ListSystemVmsParams) GetHostid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -364,6 +402,12 @@ func (p *ListSystemVmsParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *ListSystemVmsParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *ListSystemVmsParams) GetId() (string, bool) {
@@ -381,6 +425,12 @@ func (p *ListSystemVmsParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListSystemVmsParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *ListSystemVmsParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -394,6 +444,12 @@ func (p *ListSystemVmsParams) SetName(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *ListSystemVmsParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
 }
 
 func (p *ListSystemVmsParams) GetName() (string, bool) {
@@ -411,6 +467,12 @@ func (p *ListSystemVmsParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListSystemVmsParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListSystemVmsParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -424,6 +486,12 @@ func (p *ListSystemVmsParams) SetPagesize(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ListSystemVmsParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
 }
 
 func (p *ListSystemVmsParams) GetPagesize() (int, bool) {
@@ -441,6 +509,12 @@ func (p *ListSystemVmsParams) SetPodid(v string) {
 	p.p["podid"] = v
 }
 
+func (p *ListSystemVmsParams) ResetPodid() {
+	if p.p != nil && p.p["podid"] != nil {
+		delete(p.p, "podid")
+	}
+}
+
 func (p *ListSystemVmsParams) GetPodid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -454,6 +528,12 @@ func (p *ListSystemVmsParams) SetState(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["state"] = v
+}
+
+func (p *ListSystemVmsParams) ResetState() {
+	if p.p != nil && p.p["state"] != nil {
+		delete(p.p, "state")
+	}
 }
 
 func (p *ListSystemVmsParams) GetState() (string, bool) {
@@ -471,6 +551,12 @@ func (p *ListSystemVmsParams) SetStorageid(v string) {
 	p.p["storageid"] = v
 }
 
+func (p *ListSystemVmsParams) ResetStorageid() {
+	if p.p != nil && p.p["storageid"] != nil {
+		delete(p.p, "storageid")
+	}
+}
+
 func (p *ListSystemVmsParams) GetStorageid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -486,6 +572,12 @@ func (p *ListSystemVmsParams) SetSystemvmtype(v string) {
 	p.p["systemvmtype"] = v
 }
 
+func (p *ListSystemVmsParams) ResetSystemvmtype() {
+	if p.p != nil && p.p["systemvmtype"] != nil {
+		delete(p.p, "systemvmtype")
+	}
+}
+
 func (p *ListSystemVmsParams) GetSystemvmtype() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -499,6 +591,12 @@ func (p *ListSystemVmsParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *ListSystemVmsParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *ListSystemVmsParams) GetZoneid() (string, bool) {
@@ -630,6 +728,7 @@ type SystemVm struct {
 	Gateway               string   `json:"gateway"`
 	Guestvlan             string   `json:"guestvlan"`
 	Hasannotations        bool     `json:"hasannotations"`
+	Hostcontrolstate      string   `json:"hostcontrolstate"`
 	Hostid                string   `json:"hostid"`
 	Hostname              string   `json:"hostname"`
 	Hypervisor            string   `json:"hypervisor"`
@@ -651,6 +750,8 @@ type SystemVm struct {
 	Publicmacaddress      string   `json:"publicmacaddress"`
 	Publicnetmask         string   `json:"publicnetmask"`
 	Publicvlan            []string `json:"publicvlan"`
+	Serviceofferingid     string   `json:"serviceofferingid"`
+	Serviceofferingname   string   `json:"serviceofferingname"`
 	State                 string   `json:"state"`
 	Systemvmtype          string   `json:"systemvmtype"`
 	Templateid            string   `json:"templateid"`
@@ -692,6 +793,12 @@ func (p *MigrateSystemVmParams) SetAutoselect(v bool) {
 	p.p["autoselect"] = v
 }
 
+func (p *MigrateSystemVmParams) ResetAutoselect() {
+	if p.p != nil && p.p["autoselect"] != nil {
+		delete(p.p, "autoselect")
+	}
+}
+
 func (p *MigrateSystemVmParams) GetAutoselect() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -705,6 +812,12 @@ func (p *MigrateSystemVmParams) SetHostid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["hostid"] = v
+}
+
+func (p *MigrateSystemVmParams) ResetHostid() {
+	if p.p != nil && p.p["hostid"] != nil {
+		delete(p.p, "hostid")
+	}
 }
 
 func (p *MigrateSystemVmParams) GetHostid() (string, bool) {
@@ -722,6 +835,12 @@ func (p *MigrateSystemVmParams) SetStorageid(v string) {
 	p.p["storageid"] = v
 }
 
+func (p *MigrateSystemVmParams) ResetStorageid() {
+	if p.p != nil && p.p["storageid"] != nil {
+		delete(p.p, "storageid")
+	}
+}
+
 func (p *MigrateSystemVmParams) GetStorageid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -735,6 +854,12 @@ func (p *MigrateSystemVmParams) SetVirtualmachineid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["virtualmachineid"] = v
+}
+
+func (p *MigrateSystemVmParams) ResetVirtualmachineid() {
+	if p.p != nil && p.p["virtualmachineid"] != nil {
+		delete(p.p, "virtualmachineid")
+	}
 }
 
 func (p *MigrateSystemVmParams) GetVirtualmachineid() (string, bool) {
@@ -799,6 +924,7 @@ type MigrateSystemVmResponse struct {
 	Gateway               string   `json:"gateway"`
 	Guestvlan             string   `json:"guestvlan"`
 	Hasannotations        bool     `json:"hasannotations"`
+	Hostcontrolstate      string   `json:"hostcontrolstate"`
 	Hostid                string   `json:"hostid"`
 	Hostname              string   `json:"hostname"`
 	Hypervisor            string   `json:"hypervisor"`
@@ -820,6 +946,8 @@ type MigrateSystemVmResponse struct {
 	Publicmacaddress      string   `json:"publicmacaddress"`
 	Publicnetmask         string   `json:"publicnetmask"`
 	Publicvlan            []string `json:"publicvlan"`
+	Serviceofferingid     string   `json:"serviceofferingid"`
+	Serviceofferingname   string   `json:"serviceofferingname"`
 	State                 string   `json:"state"`
 	Systemvmtype          string   `json:"systemvmtype"`
 	Templateid            string   `json:"templateid"`
@@ -855,6 +983,12 @@ func (p *RebootSystemVmParams) SetForced(v bool) {
 	p.p["forced"] = v
 }
 
+func (p *RebootSystemVmParams) ResetForced() {
+	if p.p != nil && p.p["forced"] != nil {
+		delete(p.p, "forced")
+	}
+}
+
 func (p *RebootSystemVmParams) GetForced() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -868,6 +1002,12 @@ func (p *RebootSystemVmParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *RebootSystemVmParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *RebootSystemVmParams) GetId() (string, bool) {
@@ -932,6 +1072,7 @@ type RebootSystemVmResponse struct {
 	Gateway               string   `json:"gateway"`
 	Guestvlan             string   `json:"guestvlan"`
 	Hasannotations        bool     `json:"hasannotations"`
+	Hostcontrolstate      string   `json:"hostcontrolstate"`
 	Hostid                string   `json:"hostid"`
 	Hostname              string   `json:"hostname"`
 	Hypervisor            string   `json:"hypervisor"`
@@ -953,6 +1094,8 @@ type RebootSystemVmResponse struct {
 	Publicmacaddress      string   `json:"publicmacaddress"`
 	Publicnetmask         string   `json:"publicnetmask"`
 	Publicvlan            []string `json:"publicvlan"`
+	Serviceofferingid     string   `json:"serviceofferingid"`
+	Serviceofferingname   string   `json:"serviceofferingname"`
 	State                 string   `json:"state"`
 	Systemvmtype          string   `json:"systemvmtype"`
 	Templateid            string   `json:"templateid"`
@@ -993,6 +1136,12 @@ func (p *ScaleSystemVmParams) SetDetails(v map[string]string) {
 	p.p["details"] = v
 }
 
+func (p *ScaleSystemVmParams) ResetDetails() {
+	if p.p != nil && p.p["details"] != nil {
+		delete(p.p, "details")
+	}
+}
+
 func (p *ScaleSystemVmParams) GetDetails() (map[string]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1008,6 +1157,12 @@ func (p *ScaleSystemVmParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ScaleSystemVmParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *ScaleSystemVmParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1021,6 +1176,12 @@ func (p *ScaleSystemVmParams) SetServiceofferingid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["serviceofferingid"] = v
+}
+
+func (p *ScaleSystemVmParams) ResetServiceofferingid() {
+	if p.p != nil && p.p["serviceofferingid"] != nil {
+		delete(p.p, "serviceofferingid")
+	}
 }
 
 func (p *ScaleSystemVmParams) GetServiceofferingid() (string, bool) {
@@ -1086,6 +1247,7 @@ type ScaleSystemVmResponse struct {
 	Gateway               string   `json:"gateway"`
 	Guestvlan             string   `json:"guestvlan"`
 	Hasannotations        bool     `json:"hasannotations"`
+	Hostcontrolstate      string   `json:"hostcontrolstate"`
 	Hostid                string   `json:"hostid"`
 	Hostname              string   `json:"hostname"`
 	Hypervisor            string   `json:"hypervisor"`
@@ -1107,6 +1269,8 @@ type ScaleSystemVmResponse struct {
 	Publicmacaddress      string   `json:"publicmacaddress"`
 	Publicnetmask         string   `json:"publicnetmask"`
 	Publicvlan            []string `json:"publicvlan"`
+	Serviceofferingid     string   `json:"serviceofferingid"`
+	Serviceofferingname   string   `json:"serviceofferingname"`
 	State                 string   `json:"state"`
 	Systemvmtype          string   `json:"systemvmtype"`
 	Templateid            string   `json:"templateid"`
@@ -1136,6 +1300,12 @@ func (p *StartSystemVmParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *StartSystemVmParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *StartSystemVmParams) GetId() (string, bool) {
@@ -1200,6 +1370,7 @@ type StartSystemVmResponse struct {
 	Gateway               string   `json:"gateway"`
 	Guestvlan             string   `json:"guestvlan"`
 	Hasannotations        bool     `json:"hasannotations"`
+	Hostcontrolstate      string   `json:"hostcontrolstate"`
 	Hostid                string   `json:"hostid"`
 	Hostname              string   `json:"hostname"`
 	Hypervisor            string   `json:"hypervisor"`
@@ -1221,6 +1392,8 @@ type StartSystemVmResponse struct {
 	Publicmacaddress      string   `json:"publicmacaddress"`
 	Publicnetmask         string   `json:"publicnetmask"`
 	Publicvlan            []string `json:"publicvlan"`
+	Serviceofferingid     string   `json:"serviceofferingid"`
+	Serviceofferingname   string   `json:"serviceofferingname"`
 	State                 string   `json:"state"`
 	Systemvmtype          string   `json:"systemvmtype"`
 	Templateid            string   `json:"templateid"`
@@ -1256,6 +1429,12 @@ func (p *StopSystemVmParams) SetForced(v bool) {
 	p.p["forced"] = v
 }
 
+func (p *StopSystemVmParams) ResetForced() {
+	if p.p != nil && p.p["forced"] != nil {
+		delete(p.p, "forced")
+	}
+}
+
 func (p *StopSystemVmParams) GetForced() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1269,6 +1448,12 @@ func (p *StopSystemVmParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *StopSystemVmParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *StopSystemVmParams) GetId() (string, bool) {
@@ -1333,6 +1518,7 @@ type StopSystemVmResponse struct {
 	Gateway               string   `json:"gateway"`
 	Guestvlan             string   `json:"guestvlan"`
 	Hasannotations        bool     `json:"hasannotations"`
+	Hostcontrolstate      string   `json:"hostcontrolstate"`
 	Hostid                string   `json:"hostid"`
 	Hostname              string   `json:"hostname"`
 	Hypervisor            string   `json:"hypervisor"`
@@ -1354,6 +1540,8 @@ type StopSystemVmResponse struct {
 	Publicmacaddress      string   `json:"publicmacaddress"`
 	Publicnetmask         string   `json:"publicnetmask"`
 	Publicvlan            []string `json:"publicvlan"`
+	Serviceofferingid     string   `json:"serviceofferingid"`
+	Serviceofferingname   string   `json:"serviceofferingname"`
 	State                 string   `json:"state"`
 	Systemvmtype          string   `json:"systemvmtype"`
 	Templateid            string   `json:"templateid"`
@@ -1361,4 +1549,110 @@ type StopSystemVmResponse struct {
 	Version               string   `json:"version"`
 	Zoneid                string   `json:"zoneid"`
 	Zonename              string   `json:"zonename"`
+}
+
+type PatchSystemVmParams struct {
+	p map[string]interface{}
+}
+
+func (p *PatchSystemVmParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["forced"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("forced", vv)
+	}
+	if v, found := p.p["id"]; found {
+		u.Set("id", v.(string))
+	}
+	return u
+}
+
+func (p *PatchSystemVmParams) SetForced(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["forced"] = v
+}
+
+func (p *PatchSystemVmParams) ResetForced() {
+	if p.p != nil && p.p["forced"] != nil {
+		delete(p.p, "forced")
+	}
+}
+
+func (p *PatchSystemVmParams) GetForced() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["forced"].(bool)
+	return value, ok
+}
+
+func (p *PatchSystemVmParams) SetId(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["id"] = v
+}
+
+func (p *PatchSystemVmParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
+func (p *PatchSystemVmParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+// You should always use this function to get a new PatchSystemVmParams instance,
+// as then you are sure you have configured all required params
+func (s *SystemVMService) NewPatchSystemVmParams() *PatchSystemVmParams {
+	p := &PatchSystemVmParams{}
+	p.p = make(map[string]interface{})
+	return p
+}
+
+// Attempts to live patch systemVMs - CPVM, SSVM
+func (s *SystemVMService) PatchSystemVm(p *PatchSystemVmParams) (*PatchSystemVmResponse, error) {
+	resp, err := s.cs.newRequest("patchSystemVm", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r PatchSystemVmResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	// If we have a async client, we need to wait for the async result
+	if s.cs.async {
+		b, err := s.cs.GetAsyncJobResult(r.JobID, s.cs.timeout)
+		if err != nil {
+			if err == AsyncTimeoutErr {
+				return &r, err
+			}
+			return nil, err
+		}
+
+		if err := json.Unmarshal(b, &r); err != nil {
+			return nil, err
+		}
+	}
+
+	return &r, nil
+}
+
+type PatchSystemVmResponse struct {
+	Displaytext string `json:"displaytext"`
+	JobID       string `json:"jobid"`
+	Jobstatus   int    `json:"jobstatus"`
+	Success     bool   `json:"success"`
 }

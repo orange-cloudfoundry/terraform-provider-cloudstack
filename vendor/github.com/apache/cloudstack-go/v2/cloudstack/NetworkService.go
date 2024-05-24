@@ -33,7 +33,7 @@ type NetworkServiceIface interface {
 	AddOpenDaylightController(p *AddOpenDaylightControllerParams) (*AddOpenDaylightControllerResponse, error)
 	NewAddOpenDaylightControllerParams(password string, physicalnetworkid string, url string, username string) *AddOpenDaylightControllerParams
 	CreateNetwork(p *CreateNetworkParams) (*CreateNetworkResponse, error)
-	NewCreateNetworkParams(displaytext string, name string, networkofferingid string, zoneid string) *CreateNetworkParams
+	NewCreateNetworkParams(name string, networkofferingid string, zoneid string) *CreateNetworkParams
 	CreatePhysicalNetwork(p *CreatePhysicalNetworkParams) (*CreatePhysicalNetworkResponse, error)
 	NewCreatePhysicalNetworkParams(name string, zoneid string) *CreatePhysicalNetworkParams
 	CreateServiceInstance(p *CreateServiceInstanceParams) (*CreateServiceInstanceResponse, error)
@@ -96,6 +96,21 @@ type NetworkServiceIface interface {
 	NewUpdatePhysicalNetworkParams(id string) *UpdatePhysicalNetworkParams
 	UpdateStorageNetworkIpRange(p *UpdateStorageNetworkIpRangeParams) (*UpdateStorageNetworkIpRangeResponse, error)
 	NewUpdateStorageNetworkIpRangeParams(id string) *UpdateStorageNetworkIpRangeParams
+	DeleteGuestNetworkIpv6Prefix(p *DeleteGuestNetworkIpv6PrefixParams) (*DeleteGuestNetworkIpv6PrefixResponse, error)
+	NewDeleteGuestNetworkIpv6PrefixParams(id string) *DeleteGuestNetworkIpv6PrefixParams
+	CreateGuestNetworkIpv6Prefix(p *CreateGuestNetworkIpv6PrefixParams) (*CreateGuestNetworkIpv6PrefixResponse, error)
+	NewCreateGuestNetworkIpv6PrefixParams(prefix string, zoneid string) *CreateGuestNetworkIpv6PrefixParams
+	ListGuestNetworkIpv6Prefixes(p *ListGuestNetworkIpv6PrefixesParams) (*ListGuestNetworkIpv6PrefixesResponse, error)
+	NewListGuestNetworkIpv6PrefixesParams() *ListGuestNetworkIpv6PrefixesParams
+	GetGuestNetworkIpv6PrefixeByID(id string, opts ...OptionFunc) (*GuestNetworkIpv6Prefixe, int, error)
+	CreateNetworkPermissions(p *CreateNetworkPermissionsParams) (*CreateNetworkPermissionsResponse, error)
+	NewCreateNetworkPermissionsParams(networkid string) *CreateNetworkPermissionsParams
+	ResetNetworkPermissions(p *ResetNetworkPermissionsParams) (*ResetNetworkPermissionsResponse, error)
+	NewResetNetworkPermissionsParams(networkid string) *ResetNetworkPermissionsParams
+	ListNetworkPermissions(p *ListNetworkPermissionsParams) (*ListNetworkPermissionsResponse, error)
+	NewListNetworkPermissionsParams(networkid string) *ListNetworkPermissionsParams
+	RemoveNetworkPermissions(p *RemoveNetworkPermissionsParams) (*RemoveNetworkPermissionsResponse, error)
+	NewRemoveNetworkPermissionsParams(networkid string) *RemoveNetworkPermissionsParams
 }
 
 type AddNetworkServiceProviderParams struct {
@@ -130,6 +145,12 @@ func (p *AddNetworkServiceProviderParams) SetDestinationphysicalnetworkid(v stri
 	p.p["destinationphysicalnetworkid"] = v
 }
 
+func (p *AddNetworkServiceProviderParams) ResetDestinationphysicalnetworkid() {
+	if p.p != nil && p.p["destinationphysicalnetworkid"] != nil {
+		delete(p.p, "destinationphysicalnetworkid")
+	}
+}
+
 func (p *AddNetworkServiceProviderParams) GetDestinationphysicalnetworkid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -143,6 +164,12 @@ func (p *AddNetworkServiceProviderParams) SetName(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *AddNetworkServiceProviderParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
 }
 
 func (p *AddNetworkServiceProviderParams) GetName() (string, bool) {
@@ -160,6 +187,12 @@ func (p *AddNetworkServiceProviderParams) SetPhysicalnetworkid(v string) {
 	p.p["physicalnetworkid"] = v
 }
 
+func (p *AddNetworkServiceProviderParams) ResetPhysicalnetworkid() {
+	if p.p != nil && p.p["physicalnetworkid"] != nil {
+		delete(p.p, "physicalnetworkid")
+	}
+}
+
 func (p *AddNetworkServiceProviderParams) GetPhysicalnetworkid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -173,6 +206,12 @@ func (p *AddNetworkServiceProviderParams) SetServicelist(v []string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["servicelist"] = v
+}
+
+func (p *AddNetworkServiceProviderParams) ResetServicelist() {
+	if p.p != nil && p.p["servicelist"] != nil {
+		delete(p.p, "servicelist")
+	}
 }
 
 func (p *AddNetworkServiceProviderParams) GetServicelist() ([]string, bool) {
@@ -271,6 +310,12 @@ func (p *AddOpenDaylightControllerParams) SetPassword(v string) {
 	p.p["password"] = v
 }
 
+func (p *AddOpenDaylightControllerParams) ResetPassword() {
+	if p.p != nil && p.p["password"] != nil {
+		delete(p.p, "password")
+	}
+}
+
 func (p *AddOpenDaylightControllerParams) GetPassword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -284,6 +329,12 @@ func (p *AddOpenDaylightControllerParams) SetPhysicalnetworkid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["physicalnetworkid"] = v
+}
+
+func (p *AddOpenDaylightControllerParams) ResetPhysicalnetworkid() {
+	if p.p != nil && p.p["physicalnetworkid"] != nil {
+		delete(p.p, "physicalnetworkid")
+	}
 }
 
 func (p *AddOpenDaylightControllerParams) GetPhysicalnetworkid() (string, bool) {
@@ -301,6 +352,12 @@ func (p *AddOpenDaylightControllerParams) SetUrl(v string) {
 	p.p["url"] = v
 }
 
+func (p *AddOpenDaylightControllerParams) ResetUrl() {
+	if p.p != nil && p.p["url"] != nil {
+		delete(p.p, "url")
+	}
+}
+
 func (p *AddOpenDaylightControllerParams) GetUrl() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -314,6 +371,12 @@ func (p *AddOpenDaylightControllerParams) SetUsername(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["username"] = v
+}
+
+func (p *AddOpenDaylightControllerParams) ResetUsername() {
+	if p.p != nil && p.p["username"] != nil {
+		delete(p.p, "username")
+	}
 }
 
 func (p *AddOpenDaylightControllerParams) GetUsername() (string, bool) {
@@ -399,6 +462,9 @@ func (p *CreateNetworkParams) toURLValues() url.Values {
 	if v, found := p.p["acltype"]; found {
 		u.Set("acltype", v.(string))
 	}
+	if v, found := p.p["associatednetworkid"]; found {
+		u.Set("associatednetworkid", v.(string))
+	}
 	if v, found := p.p["bypassvlanoverlapcheck"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("bypassvlanoverlapcheck", vv)
@@ -409,6 +475,12 @@ func (p *CreateNetworkParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["displaytext"]; found {
 		u.Set("displaytext", v.(string))
+	}
+	if v, found := p.p["dns1"]; found {
+		u.Set("dns1", v.(string))
+	}
+	if v, found := p.p["dns2"]; found {
+		u.Set("dns2", v.(string))
 	}
 	if v, found := p.p["domainid"]; found {
 		u.Set("domainid", v.(string))
@@ -431,6 +503,12 @@ func (p *CreateNetworkParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["ip6cidr"]; found {
 		u.Set("ip6cidr", v.(string))
+	}
+	if v, found := p.p["ip6dns1"]; found {
+		u.Set("ip6dns1", v.(string))
+	}
+	if v, found := p.p["ip6dns2"]; found {
+		u.Set("ip6dns2", v.(string))
 	}
 	if v, found := p.p["ip6gateway"]; found {
 		u.Set("ip6gateway", v.(string))
@@ -456,14 +534,25 @@ func (p *CreateNetworkParams) toURLValues() url.Values {
 	if v, found := p.p["physicalnetworkid"]; found {
 		u.Set("physicalnetworkid", v.(string))
 	}
+	if v, found := p.p["privatemtu"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("privatemtu", vv)
+	}
 	if v, found := p.p["projectid"]; found {
 		u.Set("projectid", v.(string))
+	}
+	if v, found := p.p["publicmtu"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("publicmtu", vv)
 	}
 	if v, found := p.p["routerip"]; found {
 		u.Set("routerip", v.(string))
 	}
 	if v, found := p.p["routeripv6"]; found {
 		u.Set("routeripv6", v.(string))
+	}
+	if v, found := p.p["sourcenatipaddress"]; found {
+		u.Set("sourcenatipaddress", v.(string))
 	}
 	if v, found := p.p["startip"]; found {
 		u.Set("startip", v.(string))
@@ -474,6 +563,9 @@ func (p *CreateNetworkParams) toURLValues() url.Values {
 	if v, found := p.p["subdomainaccess"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("subdomainaccess", vv)
+	}
+	if v, found := p.p["tungstenvirtualrouteruuid"]; found {
+		u.Set("tungstenvirtualrouteruuid", v.(string))
 	}
 	if v, found := p.p["vlan"]; found {
 		u.Set("vlan", v.(string))
@@ -494,6 +586,12 @@ func (p *CreateNetworkParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *CreateNetworkParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *CreateNetworkParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -507,6 +605,12 @@ func (p *CreateNetworkParams) SetAclid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["aclid"] = v
+}
+
+func (p *CreateNetworkParams) ResetAclid() {
+	if p.p != nil && p.p["aclid"] != nil {
+		delete(p.p, "aclid")
+	}
 }
 
 func (p *CreateNetworkParams) GetAclid() (string, bool) {
@@ -524,6 +628,12 @@ func (p *CreateNetworkParams) SetAcltype(v string) {
 	p.p["acltype"] = v
 }
 
+func (p *CreateNetworkParams) ResetAcltype() {
+	if p.p != nil && p.p["acltype"] != nil {
+		delete(p.p, "acltype")
+	}
+}
+
 func (p *CreateNetworkParams) GetAcltype() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -532,11 +642,38 @@ func (p *CreateNetworkParams) GetAcltype() (string, bool) {
 	return value, ok
 }
 
+func (p *CreateNetworkParams) SetAssociatednetworkid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["associatednetworkid"] = v
+}
+
+func (p *CreateNetworkParams) ResetAssociatednetworkid() {
+	if p.p != nil && p.p["associatednetworkid"] != nil {
+		delete(p.p, "associatednetworkid")
+	}
+}
+
+func (p *CreateNetworkParams) GetAssociatednetworkid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["associatednetworkid"].(string)
+	return value, ok
+}
+
 func (p *CreateNetworkParams) SetBypassvlanoverlapcheck(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["bypassvlanoverlapcheck"] = v
+}
+
+func (p *CreateNetworkParams) ResetBypassvlanoverlapcheck() {
+	if p.p != nil && p.p["bypassvlanoverlapcheck"] != nil {
+		delete(p.p, "bypassvlanoverlapcheck")
+	}
 }
 
 func (p *CreateNetworkParams) GetBypassvlanoverlapcheck() (bool, bool) {
@@ -554,6 +691,12 @@ func (p *CreateNetworkParams) SetDisplaynetwork(v bool) {
 	p.p["displaynetwork"] = v
 }
 
+func (p *CreateNetworkParams) ResetDisplaynetwork() {
+	if p.p != nil && p.p["displaynetwork"] != nil {
+		delete(p.p, "displaynetwork")
+	}
+}
+
 func (p *CreateNetworkParams) GetDisplaynetwork() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -569,6 +712,12 @@ func (p *CreateNetworkParams) SetDisplaytext(v string) {
 	p.p["displaytext"] = v
 }
 
+func (p *CreateNetworkParams) ResetDisplaytext() {
+	if p.p != nil && p.p["displaytext"] != nil {
+		delete(p.p, "displaytext")
+	}
+}
+
 func (p *CreateNetworkParams) GetDisplaytext() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -577,11 +726,59 @@ func (p *CreateNetworkParams) GetDisplaytext() (string, bool) {
 	return value, ok
 }
 
+func (p *CreateNetworkParams) SetDns1(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["dns1"] = v
+}
+
+func (p *CreateNetworkParams) ResetDns1() {
+	if p.p != nil && p.p["dns1"] != nil {
+		delete(p.p, "dns1")
+	}
+}
+
+func (p *CreateNetworkParams) GetDns1() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["dns1"].(string)
+	return value, ok
+}
+
+func (p *CreateNetworkParams) SetDns2(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["dns2"] = v
+}
+
+func (p *CreateNetworkParams) ResetDns2() {
+	if p.p != nil && p.p["dns2"] != nil {
+		delete(p.p, "dns2")
+	}
+}
+
+func (p *CreateNetworkParams) GetDns2() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["dns2"].(string)
+	return value, ok
+}
+
 func (p *CreateNetworkParams) SetDomainid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *CreateNetworkParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *CreateNetworkParams) GetDomainid() (string, bool) {
@@ -599,6 +796,12 @@ func (p *CreateNetworkParams) SetEndip(v string) {
 	p.p["endip"] = v
 }
 
+func (p *CreateNetworkParams) ResetEndip() {
+	if p.p != nil && p.p["endip"] != nil {
+		delete(p.p, "endip")
+	}
+}
+
 func (p *CreateNetworkParams) GetEndip() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -612,6 +815,12 @@ func (p *CreateNetworkParams) SetEndipv6(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["endipv6"] = v
+}
+
+func (p *CreateNetworkParams) ResetEndipv6() {
+	if p.p != nil && p.p["endipv6"] != nil {
+		delete(p.p, "endipv6")
+	}
 }
 
 func (p *CreateNetworkParams) GetEndipv6() (string, bool) {
@@ -629,6 +838,12 @@ func (p *CreateNetworkParams) SetExternalid(v string) {
 	p.p["externalid"] = v
 }
 
+func (p *CreateNetworkParams) ResetExternalid() {
+	if p.p != nil && p.p["externalid"] != nil {
+		delete(p.p, "externalid")
+	}
+}
+
 func (p *CreateNetworkParams) GetExternalid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -642,6 +857,12 @@ func (p *CreateNetworkParams) SetGateway(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["gateway"] = v
+}
+
+func (p *CreateNetworkParams) ResetGateway() {
+	if p.p != nil && p.p["gateway"] != nil {
+		delete(p.p, "gateway")
+	}
 }
 
 func (p *CreateNetworkParams) GetGateway() (string, bool) {
@@ -659,6 +880,12 @@ func (p *CreateNetworkParams) SetHideipaddressusage(v bool) {
 	p.p["hideipaddressusage"] = v
 }
 
+func (p *CreateNetworkParams) ResetHideipaddressusage() {
+	if p.p != nil && p.p["hideipaddressusage"] != nil {
+		delete(p.p, "hideipaddressusage")
+	}
+}
+
 func (p *CreateNetworkParams) GetHideipaddressusage() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -674,6 +901,12 @@ func (p *CreateNetworkParams) SetIp6cidr(v string) {
 	p.p["ip6cidr"] = v
 }
 
+func (p *CreateNetworkParams) ResetIp6cidr() {
+	if p.p != nil && p.p["ip6cidr"] != nil {
+		delete(p.p, "ip6cidr")
+	}
+}
+
 func (p *CreateNetworkParams) GetIp6cidr() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -682,11 +915,59 @@ func (p *CreateNetworkParams) GetIp6cidr() (string, bool) {
 	return value, ok
 }
 
+func (p *CreateNetworkParams) SetIp6dns1(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["ip6dns1"] = v
+}
+
+func (p *CreateNetworkParams) ResetIp6dns1() {
+	if p.p != nil && p.p["ip6dns1"] != nil {
+		delete(p.p, "ip6dns1")
+	}
+}
+
+func (p *CreateNetworkParams) GetIp6dns1() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ip6dns1"].(string)
+	return value, ok
+}
+
+func (p *CreateNetworkParams) SetIp6dns2(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["ip6dns2"] = v
+}
+
+func (p *CreateNetworkParams) ResetIp6dns2() {
+	if p.p != nil && p.p["ip6dns2"] != nil {
+		delete(p.p, "ip6dns2")
+	}
+}
+
+func (p *CreateNetworkParams) GetIp6dns2() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ip6dns2"].(string)
+	return value, ok
+}
+
 func (p *CreateNetworkParams) SetIp6gateway(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["ip6gateway"] = v
+}
+
+func (p *CreateNetworkParams) ResetIp6gateway() {
+	if p.p != nil && p.p["ip6gateway"] != nil {
+		delete(p.p, "ip6gateway")
+	}
 }
 
 func (p *CreateNetworkParams) GetIp6gateway() (string, bool) {
@@ -704,6 +985,12 @@ func (p *CreateNetworkParams) SetIsolatedpvlan(v string) {
 	p.p["isolatedpvlan"] = v
 }
 
+func (p *CreateNetworkParams) ResetIsolatedpvlan() {
+	if p.p != nil && p.p["isolatedpvlan"] != nil {
+		delete(p.p, "isolatedpvlan")
+	}
+}
+
 func (p *CreateNetworkParams) GetIsolatedpvlan() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -717,6 +1004,12 @@ func (p *CreateNetworkParams) SetIsolatedpvlantype(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isolatedpvlantype"] = v
+}
+
+func (p *CreateNetworkParams) ResetIsolatedpvlantype() {
+	if p.p != nil && p.p["isolatedpvlantype"] != nil {
+		delete(p.p, "isolatedpvlantype")
+	}
 }
 
 func (p *CreateNetworkParams) GetIsolatedpvlantype() (string, bool) {
@@ -734,6 +1027,12 @@ func (p *CreateNetworkParams) SetName(v string) {
 	p.p["name"] = v
 }
 
+func (p *CreateNetworkParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
+}
+
 func (p *CreateNetworkParams) GetName() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -747,6 +1046,12 @@ func (p *CreateNetworkParams) SetNetmask(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["netmask"] = v
+}
+
+func (p *CreateNetworkParams) ResetNetmask() {
+	if p.p != nil && p.p["netmask"] != nil {
+		delete(p.p, "netmask")
+	}
 }
 
 func (p *CreateNetworkParams) GetNetmask() (string, bool) {
@@ -764,6 +1069,12 @@ func (p *CreateNetworkParams) SetNetworkdomain(v string) {
 	p.p["networkdomain"] = v
 }
 
+func (p *CreateNetworkParams) ResetNetworkdomain() {
+	if p.p != nil && p.p["networkdomain"] != nil {
+		delete(p.p, "networkdomain")
+	}
+}
+
 func (p *CreateNetworkParams) GetNetworkdomain() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -777,6 +1088,12 @@ func (p *CreateNetworkParams) SetNetworkofferingid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["networkofferingid"] = v
+}
+
+func (p *CreateNetworkParams) ResetNetworkofferingid() {
+	if p.p != nil && p.p["networkofferingid"] != nil {
+		delete(p.p, "networkofferingid")
+	}
 }
 
 func (p *CreateNetworkParams) GetNetworkofferingid() (string, bool) {
@@ -794,11 +1111,38 @@ func (p *CreateNetworkParams) SetPhysicalnetworkid(v string) {
 	p.p["physicalnetworkid"] = v
 }
 
+func (p *CreateNetworkParams) ResetPhysicalnetworkid() {
+	if p.p != nil && p.p["physicalnetworkid"] != nil {
+		delete(p.p, "physicalnetworkid")
+	}
+}
+
 func (p *CreateNetworkParams) GetPhysicalnetworkid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["physicalnetworkid"].(string)
+	return value, ok
+}
+
+func (p *CreateNetworkParams) SetPrivatemtu(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["privatemtu"] = v
+}
+
+func (p *CreateNetworkParams) ResetPrivatemtu() {
+	if p.p != nil && p.p["privatemtu"] != nil {
+		delete(p.p, "privatemtu")
+	}
+}
+
+func (p *CreateNetworkParams) GetPrivatemtu() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["privatemtu"].(int)
 	return value, ok
 }
 
@@ -809,6 +1153,12 @@ func (p *CreateNetworkParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *CreateNetworkParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
+}
+
 func (p *CreateNetworkParams) GetProjectid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -817,11 +1167,38 @@ func (p *CreateNetworkParams) GetProjectid() (string, bool) {
 	return value, ok
 }
 
+func (p *CreateNetworkParams) SetPublicmtu(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["publicmtu"] = v
+}
+
+func (p *CreateNetworkParams) ResetPublicmtu() {
+	if p.p != nil && p.p["publicmtu"] != nil {
+		delete(p.p, "publicmtu")
+	}
+}
+
+func (p *CreateNetworkParams) GetPublicmtu() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["publicmtu"].(int)
+	return value, ok
+}
+
 func (p *CreateNetworkParams) SetRouterip(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["routerip"] = v
+}
+
+func (p *CreateNetworkParams) ResetRouterip() {
+	if p.p != nil && p.p["routerip"] != nil {
+		delete(p.p, "routerip")
+	}
 }
 
 func (p *CreateNetworkParams) GetRouterip() (string, bool) {
@@ -839,6 +1216,12 @@ func (p *CreateNetworkParams) SetRouteripv6(v string) {
 	p.p["routeripv6"] = v
 }
 
+func (p *CreateNetworkParams) ResetRouteripv6() {
+	if p.p != nil && p.p["routeripv6"] != nil {
+		delete(p.p, "routeripv6")
+	}
+}
+
 func (p *CreateNetworkParams) GetRouteripv6() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -847,11 +1230,38 @@ func (p *CreateNetworkParams) GetRouteripv6() (string, bool) {
 	return value, ok
 }
 
+func (p *CreateNetworkParams) SetSourcenatipaddress(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["sourcenatipaddress"] = v
+}
+
+func (p *CreateNetworkParams) ResetSourcenatipaddress() {
+	if p.p != nil && p.p["sourcenatipaddress"] != nil {
+		delete(p.p, "sourcenatipaddress")
+	}
+}
+
+func (p *CreateNetworkParams) GetSourcenatipaddress() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["sourcenatipaddress"].(string)
+	return value, ok
+}
+
 func (p *CreateNetworkParams) SetStartip(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["startip"] = v
+}
+
+func (p *CreateNetworkParams) ResetStartip() {
+	if p.p != nil && p.p["startip"] != nil {
+		delete(p.p, "startip")
+	}
 }
 
 func (p *CreateNetworkParams) GetStartip() (string, bool) {
@@ -869,6 +1279,12 @@ func (p *CreateNetworkParams) SetStartipv6(v string) {
 	p.p["startipv6"] = v
 }
 
+func (p *CreateNetworkParams) ResetStartipv6() {
+	if p.p != nil && p.p["startipv6"] != nil {
+		delete(p.p, "startipv6")
+	}
+}
+
 func (p *CreateNetworkParams) GetStartipv6() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -884,6 +1300,12 @@ func (p *CreateNetworkParams) SetSubdomainaccess(v bool) {
 	p.p["subdomainaccess"] = v
 }
 
+func (p *CreateNetworkParams) ResetSubdomainaccess() {
+	if p.p != nil && p.p["subdomainaccess"] != nil {
+		delete(p.p, "subdomainaccess")
+	}
+}
+
 func (p *CreateNetworkParams) GetSubdomainaccess() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -892,11 +1314,38 @@ func (p *CreateNetworkParams) GetSubdomainaccess() (bool, bool) {
 	return value, ok
 }
 
+func (p *CreateNetworkParams) SetTungstenvirtualrouteruuid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["tungstenvirtualrouteruuid"] = v
+}
+
+func (p *CreateNetworkParams) ResetTungstenvirtualrouteruuid() {
+	if p.p != nil && p.p["tungstenvirtualrouteruuid"] != nil {
+		delete(p.p, "tungstenvirtualrouteruuid")
+	}
+}
+
+func (p *CreateNetworkParams) GetTungstenvirtualrouteruuid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["tungstenvirtualrouteruuid"].(string)
+	return value, ok
+}
+
 func (p *CreateNetworkParams) SetVlan(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["vlan"] = v
+}
+
+func (p *CreateNetworkParams) ResetVlan() {
+	if p.p != nil && p.p["vlan"] != nil {
+		delete(p.p, "vlan")
+	}
 }
 
 func (p *CreateNetworkParams) GetVlan() (string, bool) {
@@ -914,6 +1363,12 @@ func (p *CreateNetworkParams) SetVpcid(v string) {
 	p.p["vpcid"] = v
 }
 
+func (p *CreateNetworkParams) ResetVpcid() {
+	if p.p != nil && p.p["vpcid"] != nil {
+		delete(p.p, "vpcid")
+	}
+}
+
 func (p *CreateNetworkParams) GetVpcid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -929,6 +1384,12 @@ func (p *CreateNetworkParams) SetZoneid(v string) {
 	p.p["zoneid"] = v
 }
 
+func (p *CreateNetworkParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
+}
+
 func (p *CreateNetworkParams) GetZoneid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -939,10 +1400,9 @@ func (p *CreateNetworkParams) GetZoneid() (string, bool) {
 
 // You should always use this function to get a new CreateNetworkParams instance,
 // as then you are sure you have configured all required params
-func (s *NetworkService) NewCreateNetworkParams(displaytext string, name string, networkofferingid string, zoneid string) *CreateNetworkParams {
+func (s *NetworkService) NewCreateNetworkParams(name string, networkofferingid string, zoneid string) *CreateNetworkParams {
 	p := &CreateNetworkParams{}
 	p.p = make(map[string]interface{})
-	p.p["displaytext"] = displaytext
 	p.p["name"] = name
 	p.p["networkofferingid"] = networkofferingid
 	p.p["zoneid"] = zoneid
@@ -973,6 +1433,8 @@ type CreateNetworkResponse struct {
 	Aclid                       string                         `json:"aclid"`
 	Aclname                     string                         `json:"aclname"`
 	Acltype                     string                         `json:"acltype"`
+	Associatednetwork           string                         `json:"associatednetwork"`
+	Associatednetworkid         string                         `json:"associatednetworkid"`
 	Broadcastdomaintype         string                         `json:"broadcastdomaintype"`
 	Broadcasturi                string                         `json:"broadcasturi"`
 	Canusefordeploy             bool                           `json:"canusefordeploy"`
@@ -985,13 +1447,20 @@ type CreateNetworkResponse struct {
 	Dns2                        string                         `json:"dns2"`
 	Domain                      string                         `json:"domain"`
 	Domainid                    string                         `json:"domainid"`
+	Domainpath                  string                         `json:"domainpath"`
+	Egressdefaultpolicy         bool                           `json:"egressdefaultpolicy"`
 	Externalid                  string                         `json:"externalid"`
 	Gateway                     string                         `json:"gateway"`
 	Hasannotations              bool                           `json:"hasannotations"`
-	Icon                        string                         `json:"icon"`
+	Icon                        interface{}                    `json:"icon"`
 	Id                          string                         `json:"id"`
+	Internetprotocol            string                         `json:"internetprotocol"`
 	Ip6cidr                     string                         `json:"ip6cidr"`
+	Ip6dns1                     string                         `json:"ip6dns1"`
+	Ip6dns2                     string                         `json:"ip6dns2"`
 	Ip6gateway                  string                         `json:"ip6gateway"`
+	Ip6routes                   []interface{}                  `json:"ip6routes"`
+	Ip6routing                  string                         `json:"ip6routing"`
 	Isdefault                   bool                           `json:"isdefault"`
 	Ispersistent                bool                           `json:"ispersistent"`
 	Issystem                    bool                           `json:"issystem"`
@@ -1007,8 +1476,10 @@ type CreateNetworkResponse struct {
 	Networkofferingid           string                         `json:"networkofferingid"`
 	Networkofferingname         string                         `json:"networkofferingname"`
 	Physicalnetworkid           string                         `json:"physicalnetworkid"`
+	Privatemtu                  int                            `json:"privatemtu"`
 	Project                     string                         `json:"project"`
 	Projectid                   string                         `json:"projectid"`
+	Publicmtu                   int                            `json:"publicmtu"`
 	Receivedbytes               int64                          `json:"receivedbytes"`
 	Redundantrouter             bool                           `json:"redundantrouter"`
 	Related                     string                         `json:"related"`
@@ -1020,8 +1491,10 @@ type CreateNetworkResponse struct {
 	State                       string                         `json:"state"`
 	Strechedl2subnet            bool                           `json:"strechedl2subnet"`
 	Subdomainaccess             bool                           `json:"subdomainaccess"`
+	Supportsvmautoscaling       bool                           `json:"supportsvmautoscaling"`
 	Tags                        []Tags                         `json:"tags"`
 	Traffictype                 string                         `json:"traffictype"`
+	Tungstenvirtualrouteruuid   string                         `json:"tungstenvirtualrouteruuid"`
 	Type                        string                         `json:"type"`
 	Vlan                        string                         `json:"vlan"`
 	Vpcid                       string                         `json:"vpcid"`
@@ -1098,6 +1571,12 @@ func (p *CreatePhysicalNetworkParams) SetBroadcastdomainrange(v string) {
 	p.p["broadcastdomainrange"] = v
 }
 
+func (p *CreatePhysicalNetworkParams) ResetBroadcastdomainrange() {
+	if p.p != nil && p.p["broadcastdomainrange"] != nil {
+		delete(p.p, "broadcastdomainrange")
+	}
+}
+
 func (p *CreatePhysicalNetworkParams) GetBroadcastdomainrange() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1111,6 +1590,12 @@ func (p *CreatePhysicalNetworkParams) SetDomainid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *CreatePhysicalNetworkParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *CreatePhysicalNetworkParams) GetDomainid() (string, bool) {
@@ -1128,6 +1613,12 @@ func (p *CreatePhysicalNetworkParams) SetIsolationmethods(v []string) {
 	p.p["isolationmethods"] = v
 }
 
+func (p *CreatePhysicalNetworkParams) ResetIsolationmethods() {
+	if p.p != nil && p.p["isolationmethods"] != nil {
+		delete(p.p, "isolationmethods")
+	}
+}
+
 func (p *CreatePhysicalNetworkParams) GetIsolationmethods() ([]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1141,6 +1632,12 @@ func (p *CreatePhysicalNetworkParams) SetName(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *CreatePhysicalNetworkParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
 }
 
 func (p *CreatePhysicalNetworkParams) GetName() (string, bool) {
@@ -1158,6 +1655,12 @@ func (p *CreatePhysicalNetworkParams) SetNetworkspeed(v string) {
 	p.p["networkspeed"] = v
 }
 
+func (p *CreatePhysicalNetworkParams) ResetNetworkspeed() {
+	if p.p != nil && p.p["networkspeed"] != nil {
+		delete(p.p, "networkspeed")
+	}
+}
+
 func (p *CreatePhysicalNetworkParams) GetNetworkspeed() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1171,6 +1674,12 @@ func (p *CreatePhysicalNetworkParams) SetTags(v []string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["tags"] = v
+}
+
+func (p *CreatePhysicalNetworkParams) ResetTags() {
+	if p.p != nil && p.p["tags"] != nil {
+		delete(p.p, "tags")
+	}
 }
 
 func (p *CreatePhysicalNetworkParams) GetTags() ([]string, bool) {
@@ -1188,6 +1697,12 @@ func (p *CreatePhysicalNetworkParams) SetVlan(v string) {
 	p.p["vlan"] = v
 }
 
+func (p *CreatePhysicalNetworkParams) ResetVlan() {
+	if p.p != nil && p.p["vlan"] != nil {
+		delete(p.p, "vlan")
+	}
+}
+
 func (p *CreatePhysicalNetworkParams) GetVlan() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1201,6 +1716,12 @@ func (p *CreatePhysicalNetworkParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *CreatePhysicalNetworkParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *CreatePhysicalNetworkParams) GetZoneid() (string, bool) {
@@ -1318,6 +1839,12 @@ func (p *CreateServiceInstanceParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *CreateServiceInstanceParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *CreateServiceInstanceParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1331,6 +1858,12 @@ func (p *CreateServiceInstanceParams) SetDomainid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *CreateServiceInstanceParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *CreateServiceInstanceParams) GetDomainid() (string, bool) {
@@ -1348,6 +1881,12 @@ func (p *CreateServiceInstanceParams) SetLeftnetworkid(v string) {
 	p.p["leftnetworkid"] = v
 }
 
+func (p *CreateServiceInstanceParams) ResetLeftnetworkid() {
+	if p.p != nil && p.p["leftnetworkid"] != nil {
+		delete(p.p, "leftnetworkid")
+	}
+}
+
 func (p *CreateServiceInstanceParams) GetLeftnetworkid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1361,6 +1900,12 @@ func (p *CreateServiceInstanceParams) SetName(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *CreateServiceInstanceParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
 }
 
 func (p *CreateServiceInstanceParams) GetName() (string, bool) {
@@ -1378,6 +1923,12 @@ func (p *CreateServiceInstanceParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *CreateServiceInstanceParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
+}
+
 func (p *CreateServiceInstanceParams) GetProjectid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1391,6 +1942,12 @@ func (p *CreateServiceInstanceParams) SetRightnetworkid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["rightnetworkid"] = v
+}
+
+func (p *CreateServiceInstanceParams) ResetRightnetworkid() {
+	if p.p != nil && p.p["rightnetworkid"] != nil {
+		delete(p.p, "rightnetworkid")
+	}
 }
 
 func (p *CreateServiceInstanceParams) GetRightnetworkid() (string, bool) {
@@ -1408,6 +1965,12 @@ func (p *CreateServiceInstanceParams) SetServiceofferingid(v string) {
 	p.p["serviceofferingid"] = v
 }
 
+func (p *CreateServiceInstanceParams) ResetServiceofferingid() {
+	if p.p != nil && p.p["serviceofferingid"] != nil {
+		delete(p.p, "serviceofferingid")
+	}
+}
+
 func (p *CreateServiceInstanceParams) GetServiceofferingid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1423,6 +1986,12 @@ func (p *CreateServiceInstanceParams) SetTemplateid(v string) {
 	p.p["templateid"] = v
 }
 
+func (p *CreateServiceInstanceParams) ResetTemplateid() {
+	if p.p != nil && p.p["templateid"] != nil {
+		delete(p.p, "templateid")
+	}
+}
+
 func (p *CreateServiceInstanceParams) GetTemplateid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1436,6 +2005,12 @@ func (p *CreateServiceInstanceParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *CreateServiceInstanceParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *CreateServiceInstanceParams) GetZoneid() (string, bool) {
@@ -1546,6 +2121,12 @@ func (p *CreateStorageNetworkIpRangeParams) SetEndip(v string) {
 	p.p["endip"] = v
 }
 
+func (p *CreateStorageNetworkIpRangeParams) ResetEndip() {
+	if p.p != nil && p.p["endip"] != nil {
+		delete(p.p, "endip")
+	}
+}
+
 func (p *CreateStorageNetworkIpRangeParams) GetEndip() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1559,6 +2140,12 @@ func (p *CreateStorageNetworkIpRangeParams) SetGateway(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["gateway"] = v
+}
+
+func (p *CreateStorageNetworkIpRangeParams) ResetGateway() {
+	if p.p != nil && p.p["gateway"] != nil {
+		delete(p.p, "gateway")
+	}
 }
 
 func (p *CreateStorageNetworkIpRangeParams) GetGateway() (string, bool) {
@@ -1576,6 +2163,12 @@ func (p *CreateStorageNetworkIpRangeParams) SetNetmask(v string) {
 	p.p["netmask"] = v
 }
 
+func (p *CreateStorageNetworkIpRangeParams) ResetNetmask() {
+	if p.p != nil && p.p["netmask"] != nil {
+		delete(p.p, "netmask")
+	}
+}
+
 func (p *CreateStorageNetworkIpRangeParams) GetNetmask() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1589,6 +2182,12 @@ func (p *CreateStorageNetworkIpRangeParams) SetPodid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["podid"] = v
+}
+
+func (p *CreateStorageNetworkIpRangeParams) ResetPodid() {
+	if p.p != nil && p.p["podid"] != nil {
+		delete(p.p, "podid")
+	}
 }
 
 func (p *CreateStorageNetworkIpRangeParams) GetPodid() (string, bool) {
@@ -1606,6 +2205,12 @@ func (p *CreateStorageNetworkIpRangeParams) SetStartip(v string) {
 	p.p["startip"] = v
 }
 
+func (p *CreateStorageNetworkIpRangeParams) ResetStartip() {
+	if p.p != nil && p.p["startip"] != nil {
+		delete(p.p, "startip")
+	}
+}
+
 func (p *CreateStorageNetworkIpRangeParams) GetStartip() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1619,6 +2224,12 @@ func (p *CreateStorageNetworkIpRangeParams) SetVlan(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["vlan"] = v
+}
+
+func (p *CreateStorageNetworkIpRangeParams) ResetVlan() {
+	if p.p != nil && p.p["vlan"] != nil {
+		delete(p.p, "vlan")
+	}
 }
 
 func (p *CreateStorageNetworkIpRangeParams) GetVlan() (int, bool) {
@@ -1721,6 +2332,12 @@ func (p *DedicatePublicIpRangeParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *DedicatePublicIpRangeParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *DedicatePublicIpRangeParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1734,6 +2351,12 @@ func (p *DedicatePublicIpRangeParams) SetDomainid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *DedicatePublicIpRangeParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *DedicatePublicIpRangeParams) GetDomainid() (string, bool) {
@@ -1751,6 +2374,12 @@ func (p *DedicatePublicIpRangeParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *DedicatePublicIpRangeParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *DedicatePublicIpRangeParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1764,6 +2393,12 @@ func (p *DedicatePublicIpRangeParams) SetProjectid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["projectid"] = v
+}
+
+func (p *DedicatePublicIpRangeParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
 }
 
 func (p *DedicatePublicIpRangeParams) GetProjectid() (string, bool) {
@@ -1801,6 +2436,7 @@ func (s *NetworkService) DedicatePublicIpRange(p *DedicatePublicIpRangeParams) (
 
 type DedicatePublicIpRangeResponse struct {
 	Account           string `json:"account"`
+	Cidr              string `json:"cidr"`
 	Description       string `json:"description"`
 	Domain            string `json:"domain"`
 	Domainid          string `json:"domainid"`
@@ -1853,6 +2489,12 @@ func (p *DeleteNetworkParams) SetForced(v bool) {
 	p.p["forced"] = v
 }
 
+func (p *DeleteNetworkParams) ResetForced() {
+	if p.p != nil && p.p["forced"] != nil {
+		delete(p.p, "forced")
+	}
+}
+
 func (p *DeleteNetworkParams) GetForced() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1866,6 +2508,12 @@ func (p *DeleteNetworkParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *DeleteNetworkParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *DeleteNetworkParams) GetId() (string, bool) {
@@ -1944,6 +2592,12 @@ func (p *DeleteNetworkServiceProviderParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *DeleteNetworkServiceProviderParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *DeleteNetworkServiceProviderParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2018,6 +2672,12 @@ func (p *DeleteOpenDaylightControllerParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *DeleteOpenDaylightControllerParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *DeleteOpenDaylightControllerParams) GetId() (string, bool) {
@@ -2104,6 +2764,12 @@ func (p *DeletePhysicalNetworkParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *DeletePhysicalNetworkParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *DeletePhysicalNetworkParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2178,6 +2844,12 @@ func (p *DeleteStorageNetworkIpRangeParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *DeleteStorageNetworkIpRangeParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *DeleteStorageNetworkIpRangeParams) GetId() (string, bool) {
@@ -2267,6 +2939,12 @@ func (p *ListNetscalerLoadBalancerNetworksParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListNetscalerLoadBalancerNetworksParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *ListNetscalerLoadBalancerNetworksParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2280,6 +2958,12 @@ func (p *ListNetscalerLoadBalancerNetworksParams) SetLbdeviceid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["lbdeviceid"] = v
+}
+
+func (p *ListNetscalerLoadBalancerNetworksParams) ResetLbdeviceid() {
+	if p.p != nil && p.p["lbdeviceid"] != nil {
+		delete(p.p, "lbdeviceid")
+	}
 }
 
 func (p *ListNetscalerLoadBalancerNetworksParams) GetLbdeviceid() (string, bool) {
@@ -2297,6 +2981,12 @@ func (p *ListNetscalerLoadBalancerNetworksParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListNetscalerLoadBalancerNetworksParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListNetscalerLoadBalancerNetworksParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2310,6 +3000,12 @@ func (p *ListNetscalerLoadBalancerNetworksParams) SetPagesize(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ListNetscalerLoadBalancerNetworksParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
 }
 
 func (p *ListNetscalerLoadBalancerNetworksParams) GetPagesize() (int, bool) {
@@ -2391,6 +3087,8 @@ type NetscalerLoadBalancerNetwork struct {
 	Aclid                       string                                `json:"aclid"`
 	Aclname                     string                                `json:"aclname"`
 	Acltype                     string                                `json:"acltype"`
+	Associatednetwork           string                                `json:"associatednetwork"`
+	Associatednetworkid         string                                `json:"associatednetworkid"`
 	Broadcastdomaintype         string                                `json:"broadcastdomaintype"`
 	Broadcasturi                string                                `json:"broadcasturi"`
 	Canusefordeploy             bool                                  `json:"canusefordeploy"`
@@ -2403,13 +3101,20 @@ type NetscalerLoadBalancerNetwork struct {
 	Dns2                        string                                `json:"dns2"`
 	Domain                      string                                `json:"domain"`
 	Domainid                    string                                `json:"domainid"`
+	Domainpath                  string                                `json:"domainpath"`
+	Egressdefaultpolicy         bool                                  `json:"egressdefaultpolicy"`
 	Externalid                  string                                `json:"externalid"`
 	Gateway                     string                                `json:"gateway"`
 	Hasannotations              bool                                  `json:"hasannotations"`
-	Icon                        string                                `json:"icon"`
+	Icon                        interface{}                           `json:"icon"`
 	Id                          string                                `json:"id"`
+	Internetprotocol            string                                `json:"internetprotocol"`
 	Ip6cidr                     string                                `json:"ip6cidr"`
+	Ip6dns1                     string                                `json:"ip6dns1"`
+	Ip6dns2                     string                                `json:"ip6dns2"`
 	Ip6gateway                  string                                `json:"ip6gateway"`
+	Ip6routes                   []interface{}                         `json:"ip6routes"`
+	Ip6routing                  string                                `json:"ip6routing"`
 	Isdefault                   bool                                  `json:"isdefault"`
 	Ispersistent                bool                                  `json:"ispersistent"`
 	Issystem                    bool                                  `json:"issystem"`
@@ -2425,8 +3130,10 @@ type NetscalerLoadBalancerNetwork struct {
 	Networkofferingid           string                                `json:"networkofferingid"`
 	Networkofferingname         string                                `json:"networkofferingname"`
 	Physicalnetworkid           string                                `json:"physicalnetworkid"`
+	Privatemtu                  int                                   `json:"privatemtu"`
 	Project                     string                                `json:"project"`
 	Projectid                   string                                `json:"projectid"`
+	Publicmtu                   int                                   `json:"publicmtu"`
 	Receivedbytes               int64                                 `json:"receivedbytes"`
 	Redundantrouter             bool                                  `json:"redundantrouter"`
 	Related                     string                                `json:"related"`
@@ -2438,8 +3145,10 @@ type NetscalerLoadBalancerNetwork struct {
 	State                       string                                `json:"state"`
 	Strechedl2subnet            bool                                  `json:"strechedl2subnet"`
 	Subdomainaccess             bool                                  `json:"subdomainaccess"`
+	Supportsvmautoscaling       bool                                  `json:"supportsvmautoscaling"`
 	Tags                        []Tags                                `json:"tags"`
 	Traffictype                 string                                `json:"traffictype"`
+	Tungstenvirtualrouteruuid   string                                `json:"tungstenvirtualrouteruuid"`
 	Type                        string                                `json:"type"`
 	Vlan                        string                                `json:"vlan"`
 	Vpcid                       string                                `json:"vpcid"`
@@ -2501,6 +3210,12 @@ func (p *ListNetworkIsolationMethodsParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListNetworkIsolationMethodsParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *ListNetworkIsolationMethodsParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2516,6 +3231,12 @@ func (p *ListNetworkIsolationMethodsParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListNetworkIsolationMethodsParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListNetworkIsolationMethodsParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2529,6 +3250,12 @@ func (p *ListNetworkIsolationMethodsParams) SetPagesize(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ListNetworkIsolationMethodsParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
 }
 
 func (p *ListNetworkIsolationMethodsParams) GetPagesize() (int, bool) {
@@ -2612,6 +3339,12 @@ func (p *ListNetworkServiceProvidersParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListNetworkServiceProvidersParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *ListNetworkServiceProvidersParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2625,6 +3358,12 @@ func (p *ListNetworkServiceProvidersParams) SetName(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *ListNetworkServiceProvidersParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
 }
 
 func (p *ListNetworkServiceProvidersParams) GetName() (string, bool) {
@@ -2642,6 +3381,12 @@ func (p *ListNetworkServiceProvidersParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListNetworkServiceProvidersParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListNetworkServiceProvidersParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2655,6 +3400,12 @@ func (p *ListNetworkServiceProvidersParams) SetPagesize(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ListNetworkServiceProvidersParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
 }
 
 func (p *ListNetworkServiceProvidersParams) GetPagesize() (int, bool) {
@@ -2672,6 +3423,12 @@ func (p *ListNetworkServiceProvidersParams) SetPhysicalnetworkid(v string) {
 	p.p["physicalnetworkid"] = v
 }
 
+func (p *ListNetworkServiceProvidersParams) ResetPhysicalnetworkid() {
+	if p.p != nil && p.p["physicalnetworkid"] != nil {
+		delete(p.p, "physicalnetworkid")
+	}
+}
+
 func (p *ListNetworkServiceProvidersParams) GetPhysicalnetworkid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2685,6 +3442,12 @@ func (p *ListNetworkServiceProvidersParams) SetState(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["state"] = v
+}
+
+func (p *ListNetworkServiceProvidersParams) ResetState() {
+	if p.p != nil && p.p["state"] != nil {
+		delete(p.p, "state")
+	}
 }
 
 func (p *ListNetworkServiceProvidersParams) GetState() (string, bool) {
@@ -2786,6 +3549,9 @@ func (p *ListNetworksParams) toURLValues() url.Values {
 	if v, found := p.p["acltype"]; found {
 		u.Set("acltype", v.(string))
 	}
+	if v, found := p.p["associatednetworkid"]; found {
+		u.Set("associatednetworkid", v.(string))
+	}
 	if v, found := p.p["canusefordeploy"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("canusefordeploy", vv)
@@ -2819,6 +3585,9 @@ func (p *ListNetworksParams) toURLValues() url.Values {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("listall", vv)
 	}
+	if v, found := p.p["networkfilter"]; found {
+		u.Set("networkfilter", v.(string))
+	}
 	if v, found := p.p["networkofferingid"]; found {
 		u.Set("networkofferingid", v.(string))
 	}
@@ -2839,6 +3608,10 @@ func (p *ListNetworksParams) toURLValues() url.Values {
 	if v, found := p.p["restartrequired"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("restartrequired", vv)
+	}
+	if v, found := p.p["retrieveonlyresourcecount"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("retrieveonlyresourcecount", vv)
 	}
 	if v, found := p.p["showicon"]; found {
 		vv := strconv.FormatBool(v.(bool))
@@ -2865,6 +3638,9 @@ func (p *ListNetworksParams) toURLValues() url.Values {
 	if v, found := p.p["type"]; found {
 		u.Set("type", v.(string))
 	}
+	if v, found := p.p["vlan"]; found {
+		u.Set("vlan", v.(string))
+	}
 	if v, found := p.p["vpcid"]; found {
 		u.Set("vpcid", v.(string))
 	}
@@ -2879,6 +3655,12 @@ func (p *ListNetworksParams) SetAccount(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["account"] = v
+}
+
+func (p *ListNetworksParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
 }
 
 func (p *ListNetworksParams) GetAccount() (string, bool) {
@@ -2896,6 +3678,12 @@ func (p *ListNetworksParams) SetAcltype(v string) {
 	p.p["acltype"] = v
 }
 
+func (p *ListNetworksParams) ResetAcltype() {
+	if p.p != nil && p.p["acltype"] != nil {
+		delete(p.p, "acltype")
+	}
+}
+
 func (p *ListNetworksParams) GetAcltype() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2904,11 +3692,38 @@ func (p *ListNetworksParams) GetAcltype() (string, bool) {
 	return value, ok
 }
 
+func (p *ListNetworksParams) SetAssociatednetworkid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["associatednetworkid"] = v
+}
+
+func (p *ListNetworksParams) ResetAssociatednetworkid() {
+	if p.p != nil && p.p["associatednetworkid"] != nil {
+		delete(p.p, "associatednetworkid")
+	}
+}
+
+func (p *ListNetworksParams) GetAssociatednetworkid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["associatednetworkid"].(string)
+	return value, ok
+}
+
 func (p *ListNetworksParams) SetCanusefordeploy(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["canusefordeploy"] = v
+}
+
+func (p *ListNetworksParams) ResetCanusefordeploy() {
+	if p.p != nil && p.p["canusefordeploy"] != nil {
+		delete(p.p, "canusefordeploy")
+	}
 }
 
 func (p *ListNetworksParams) GetCanusefordeploy() (bool, bool) {
@@ -2926,6 +3741,12 @@ func (p *ListNetworksParams) SetDisplaynetwork(v bool) {
 	p.p["displaynetwork"] = v
 }
 
+func (p *ListNetworksParams) ResetDisplaynetwork() {
+	if p.p != nil && p.p["displaynetwork"] != nil {
+		delete(p.p, "displaynetwork")
+	}
+}
+
 func (p *ListNetworksParams) GetDisplaynetwork() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2939,6 +3760,12 @@ func (p *ListNetworksParams) SetDomainid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *ListNetworksParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *ListNetworksParams) GetDomainid() (string, bool) {
@@ -2956,6 +3783,12 @@ func (p *ListNetworksParams) SetForvpc(v bool) {
 	p.p["forvpc"] = v
 }
 
+func (p *ListNetworksParams) ResetForvpc() {
+	if p.p != nil && p.p["forvpc"] != nil {
+		delete(p.p, "forvpc")
+	}
+}
+
 func (p *ListNetworksParams) GetForvpc() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2969,6 +3802,12 @@ func (p *ListNetworksParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *ListNetworksParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *ListNetworksParams) GetId() (string, bool) {
@@ -2986,6 +3825,12 @@ func (p *ListNetworksParams) SetIsrecursive(v bool) {
 	p.p["isrecursive"] = v
 }
 
+func (p *ListNetworksParams) ResetIsrecursive() {
+	if p.p != nil && p.p["isrecursive"] != nil {
+		delete(p.p, "isrecursive")
+	}
+}
+
 func (p *ListNetworksParams) GetIsrecursive() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2999,6 +3844,12 @@ func (p *ListNetworksParams) SetIssystem(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["issystem"] = v
+}
+
+func (p *ListNetworksParams) ResetIssystem() {
+	if p.p != nil && p.p["issystem"] != nil {
+		delete(p.p, "issystem")
+	}
 }
 
 func (p *ListNetworksParams) GetIssystem() (bool, bool) {
@@ -3016,6 +3867,12 @@ func (p *ListNetworksParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListNetworksParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *ListNetworksParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3031,6 +3888,12 @@ func (p *ListNetworksParams) SetListall(v bool) {
 	p.p["listall"] = v
 }
 
+func (p *ListNetworksParams) ResetListall() {
+	if p.p != nil && p.p["listall"] != nil {
+		delete(p.p, "listall")
+	}
+}
+
 func (p *ListNetworksParams) GetListall() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3039,11 +3902,38 @@ func (p *ListNetworksParams) GetListall() (bool, bool) {
 	return value, ok
 }
 
+func (p *ListNetworksParams) SetNetworkfilter(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["networkfilter"] = v
+}
+
+func (p *ListNetworksParams) ResetNetworkfilter() {
+	if p.p != nil && p.p["networkfilter"] != nil {
+		delete(p.p, "networkfilter")
+	}
+}
+
+func (p *ListNetworksParams) GetNetworkfilter() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["networkfilter"].(string)
+	return value, ok
+}
+
 func (p *ListNetworksParams) SetNetworkofferingid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["networkofferingid"] = v
+}
+
+func (p *ListNetworksParams) ResetNetworkofferingid() {
+	if p.p != nil && p.p["networkofferingid"] != nil {
+		delete(p.p, "networkofferingid")
+	}
 }
 
 func (p *ListNetworksParams) GetNetworkofferingid() (string, bool) {
@@ -3061,6 +3951,12 @@ func (p *ListNetworksParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListNetworksParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListNetworksParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3074,6 +3970,12 @@ func (p *ListNetworksParams) SetPagesize(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ListNetworksParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
 }
 
 func (p *ListNetworksParams) GetPagesize() (int, bool) {
@@ -3091,6 +3993,12 @@ func (p *ListNetworksParams) SetPhysicalnetworkid(v string) {
 	p.p["physicalnetworkid"] = v
 }
 
+func (p *ListNetworksParams) ResetPhysicalnetworkid() {
+	if p.p != nil && p.p["physicalnetworkid"] != nil {
+		delete(p.p, "physicalnetworkid")
+	}
+}
+
 func (p *ListNetworksParams) GetPhysicalnetworkid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3104,6 +4012,12 @@ func (p *ListNetworksParams) SetProjectid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["projectid"] = v
+}
+
+func (p *ListNetworksParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
 }
 
 func (p *ListNetworksParams) GetProjectid() (string, bool) {
@@ -3121,6 +4035,12 @@ func (p *ListNetworksParams) SetRestartrequired(v bool) {
 	p.p["restartrequired"] = v
 }
 
+func (p *ListNetworksParams) ResetRestartrequired() {
+	if p.p != nil && p.p["restartrequired"] != nil {
+		delete(p.p, "restartrequired")
+	}
+}
+
 func (p *ListNetworksParams) GetRestartrequired() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3129,11 +4049,38 @@ func (p *ListNetworksParams) GetRestartrequired() (bool, bool) {
 	return value, ok
 }
 
+func (p *ListNetworksParams) SetRetrieveonlyresourcecount(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["retrieveonlyresourcecount"] = v
+}
+
+func (p *ListNetworksParams) ResetRetrieveonlyresourcecount() {
+	if p.p != nil && p.p["retrieveonlyresourcecount"] != nil {
+		delete(p.p, "retrieveonlyresourcecount")
+	}
+}
+
+func (p *ListNetworksParams) GetRetrieveonlyresourcecount() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["retrieveonlyresourcecount"].(bool)
+	return value, ok
+}
+
 func (p *ListNetworksParams) SetShowicon(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["showicon"] = v
+}
+
+func (p *ListNetworksParams) ResetShowicon() {
+	if p.p != nil && p.p["showicon"] != nil {
+		delete(p.p, "showicon")
+	}
 }
 
 func (p *ListNetworksParams) GetShowicon() (bool, bool) {
@@ -3151,6 +4098,12 @@ func (p *ListNetworksParams) SetSpecifyipranges(v bool) {
 	p.p["specifyipranges"] = v
 }
 
+func (p *ListNetworksParams) ResetSpecifyipranges() {
+	if p.p != nil && p.p["specifyipranges"] != nil {
+		delete(p.p, "specifyipranges")
+	}
+}
+
 func (p *ListNetworksParams) GetSpecifyipranges() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3164,6 +4117,12 @@ func (p *ListNetworksParams) SetSupportedservices(v []string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["supportedservices"] = v
+}
+
+func (p *ListNetworksParams) ResetSupportedservices() {
+	if p.p != nil && p.p["supportedservices"] != nil {
+		delete(p.p, "supportedservices")
+	}
 }
 
 func (p *ListNetworksParams) GetSupportedservices() ([]string, bool) {
@@ -3181,6 +4140,12 @@ func (p *ListNetworksParams) SetTags(v map[string]string) {
 	p.p["tags"] = v
 }
 
+func (p *ListNetworksParams) ResetTags() {
+	if p.p != nil && p.p["tags"] != nil {
+		delete(p.p, "tags")
+	}
+}
+
 func (p *ListNetworksParams) GetTags() (map[string]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3194,6 +4159,12 @@ func (p *ListNetworksParams) SetTraffictype(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["traffictype"] = v
+}
+
+func (p *ListNetworksParams) ResetTraffictype() {
+	if p.p != nil && p.p["traffictype"] != nil {
+		delete(p.p, "traffictype")
+	}
 }
 
 func (p *ListNetworksParams) GetTraffictype() (string, bool) {
@@ -3211,6 +4182,12 @@ func (p *ListNetworksParams) SetType(v string) {
 	p.p["type"] = v
 }
 
+func (p *ListNetworksParams) ResetType() {
+	if p.p != nil && p.p["type"] != nil {
+		delete(p.p, "type")
+	}
+}
+
 func (p *ListNetworksParams) GetType() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3219,11 +4196,38 @@ func (p *ListNetworksParams) GetType() (string, bool) {
 	return value, ok
 }
 
+func (p *ListNetworksParams) SetVlan(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["vlan"] = v
+}
+
+func (p *ListNetworksParams) ResetVlan() {
+	if p.p != nil && p.p["vlan"] != nil {
+		delete(p.p, "vlan")
+	}
+}
+
+func (p *ListNetworksParams) GetVlan() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["vlan"].(string)
+	return value, ok
+}
+
 func (p *ListNetworksParams) SetVpcid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["vpcid"] = v
+}
+
+func (p *ListNetworksParams) ResetVpcid() {
+	if p.p != nil && p.p["vpcid"] != nil {
+		delete(p.p, "vpcid")
+	}
 }
 
 func (p *ListNetworksParams) GetVpcid() (string, bool) {
@@ -3239,6 +4243,12 @@ func (p *ListNetworksParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *ListNetworksParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *ListNetworksParams) GetZoneid() (string, bool) {
@@ -3365,6 +4375,8 @@ type Network struct {
 	Aclid                       string                   `json:"aclid"`
 	Aclname                     string                   `json:"aclname"`
 	Acltype                     string                   `json:"acltype"`
+	Associatednetwork           string                   `json:"associatednetwork"`
+	Associatednetworkid         string                   `json:"associatednetworkid"`
 	Broadcastdomaintype         string                   `json:"broadcastdomaintype"`
 	Broadcasturi                string                   `json:"broadcasturi"`
 	Canusefordeploy             bool                     `json:"canusefordeploy"`
@@ -3377,13 +4389,20 @@ type Network struct {
 	Dns2                        string                   `json:"dns2"`
 	Domain                      string                   `json:"domain"`
 	Domainid                    string                   `json:"domainid"`
+	Domainpath                  string                   `json:"domainpath"`
+	Egressdefaultpolicy         bool                     `json:"egressdefaultpolicy"`
 	Externalid                  string                   `json:"externalid"`
 	Gateway                     string                   `json:"gateway"`
 	Hasannotations              bool                     `json:"hasannotations"`
-	Icon                        string                   `json:"icon"`
+	Icon                        interface{}              `json:"icon"`
 	Id                          string                   `json:"id"`
+	Internetprotocol            string                   `json:"internetprotocol"`
 	Ip6cidr                     string                   `json:"ip6cidr"`
+	Ip6dns1                     string                   `json:"ip6dns1"`
+	Ip6dns2                     string                   `json:"ip6dns2"`
 	Ip6gateway                  string                   `json:"ip6gateway"`
+	Ip6routes                   []interface{}            `json:"ip6routes"`
+	Ip6routing                  string                   `json:"ip6routing"`
 	Isdefault                   bool                     `json:"isdefault"`
 	Ispersistent                bool                     `json:"ispersistent"`
 	Issystem                    bool                     `json:"issystem"`
@@ -3399,8 +4418,10 @@ type Network struct {
 	Networkofferingid           string                   `json:"networkofferingid"`
 	Networkofferingname         string                   `json:"networkofferingname"`
 	Physicalnetworkid           string                   `json:"physicalnetworkid"`
+	Privatemtu                  int                      `json:"privatemtu"`
 	Project                     string                   `json:"project"`
 	Projectid                   string                   `json:"projectid"`
+	Publicmtu                   int                      `json:"publicmtu"`
 	Receivedbytes               int64                    `json:"receivedbytes"`
 	Redundantrouter             bool                     `json:"redundantrouter"`
 	Related                     string                   `json:"related"`
@@ -3412,8 +4433,10 @@ type Network struct {
 	State                       string                   `json:"state"`
 	Strechedl2subnet            bool                     `json:"strechedl2subnet"`
 	Subdomainaccess             bool                     `json:"subdomainaccess"`
+	Supportsvmautoscaling       bool                     `json:"supportsvmautoscaling"`
 	Tags                        []Tags                   `json:"tags"`
 	Traffictype                 string                   `json:"traffictype"`
+	Tungstenvirtualrouteruuid   string                   `json:"tungstenvirtualrouteruuid"`
 	Type                        string                   `json:"type"`
 	Vlan                        string                   `json:"vlan"`
 	Vpcid                       string                   `json:"vpcid"`
@@ -3478,6 +4501,12 @@ func (p *ListNiciraNvpDeviceNetworksParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListNiciraNvpDeviceNetworksParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *ListNiciraNvpDeviceNetworksParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3491,6 +4520,12 @@ func (p *ListNiciraNvpDeviceNetworksParams) SetNvpdeviceid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["nvpdeviceid"] = v
+}
+
+func (p *ListNiciraNvpDeviceNetworksParams) ResetNvpdeviceid() {
+	if p.p != nil && p.p["nvpdeviceid"] != nil {
+		delete(p.p, "nvpdeviceid")
+	}
 }
 
 func (p *ListNiciraNvpDeviceNetworksParams) GetNvpdeviceid() (string, bool) {
@@ -3508,6 +4543,12 @@ func (p *ListNiciraNvpDeviceNetworksParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListNiciraNvpDeviceNetworksParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListNiciraNvpDeviceNetworksParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3521,6 +4562,12 @@ func (p *ListNiciraNvpDeviceNetworksParams) SetPagesize(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ListNiciraNvpDeviceNetworksParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
 }
 
 func (p *ListNiciraNvpDeviceNetworksParams) GetPagesize() (int, bool) {
@@ -3602,6 +4649,8 @@ type NiciraNvpDeviceNetwork struct {
 	Aclid                       string                          `json:"aclid"`
 	Aclname                     string                          `json:"aclname"`
 	Acltype                     string                          `json:"acltype"`
+	Associatednetwork           string                          `json:"associatednetwork"`
+	Associatednetworkid         string                          `json:"associatednetworkid"`
 	Broadcastdomaintype         string                          `json:"broadcastdomaintype"`
 	Broadcasturi                string                          `json:"broadcasturi"`
 	Canusefordeploy             bool                            `json:"canusefordeploy"`
@@ -3614,13 +4663,20 @@ type NiciraNvpDeviceNetwork struct {
 	Dns2                        string                          `json:"dns2"`
 	Domain                      string                          `json:"domain"`
 	Domainid                    string                          `json:"domainid"`
+	Domainpath                  string                          `json:"domainpath"`
+	Egressdefaultpolicy         bool                            `json:"egressdefaultpolicy"`
 	Externalid                  string                          `json:"externalid"`
 	Gateway                     string                          `json:"gateway"`
 	Hasannotations              bool                            `json:"hasannotations"`
-	Icon                        string                          `json:"icon"`
+	Icon                        interface{}                     `json:"icon"`
 	Id                          string                          `json:"id"`
+	Internetprotocol            string                          `json:"internetprotocol"`
 	Ip6cidr                     string                          `json:"ip6cidr"`
+	Ip6dns1                     string                          `json:"ip6dns1"`
+	Ip6dns2                     string                          `json:"ip6dns2"`
 	Ip6gateway                  string                          `json:"ip6gateway"`
+	Ip6routes                   []interface{}                   `json:"ip6routes"`
+	Ip6routing                  string                          `json:"ip6routing"`
 	Isdefault                   bool                            `json:"isdefault"`
 	Ispersistent                bool                            `json:"ispersistent"`
 	Issystem                    bool                            `json:"issystem"`
@@ -3636,8 +4692,10 @@ type NiciraNvpDeviceNetwork struct {
 	Networkofferingid           string                          `json:"networkofferingid"`
 	Networkofferingname         string                          `json:"networkofferingname"`
 	Physicalnetworkid           string                          `json:"physicalnetworkid"`
+	Privatemtu                  int                             `json:"privatemtu"`
 	Project                     string                          `json:"project"`
 	Projectid                   string                          `json:"projectid"`
+	Publicmtu                   int                             `json:"publicmtu"`
 	Receivedbytes               int64                           `json:"receivedbytes"`
 	Redundantrouter             bool                            `json:"redundantrouter"`
 	Related                     string                          `json:"related"`
@@ -3649,8 +4707,10 @@ type NiciraNvpDeviceNetwork struct {
 	State                       string                          `json:"state"`
 	Strechedl2subnet            bool                            `json:"strechedl2subnet"`
 	Subdomainaccess             bool                            `json:"subdomainaccess"`
+	Supportsvmautoscaling       bool                            `json:"supportsvmautoscaling"`
 	Tags                        []Tags                          `json:"tags"`
 	Traffictype                 string                          `json:"traffictype"`
+	Tungstenvirtualrouteruuid   string                          `json:"tungstenvirtualrouteruuid"`
 	Type                        string                          `json:"type"`
 	Vlan                        string                          `json:"vlan"`
 	Vpcid                       string                          `json:"vpcid"`
@@ -3707,6 +4767,12 @@ func (p *ListOpenDaylightControllersParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ListOpenDaylightControllersParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *ListOpenDaylightControllersParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3720,6 +4786,12 @@ func (p *ListOpenDaylightControllersParams) SetPhysicalnetworkid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["physicalnetworkid"] = v
+}
+
+func (p *ListOpenDaylightControllersParams) ResetPhysicalnetworkid() {
+	if p.p != nil && p.p["physicalnetworkid"] != nil {
+		delete(p.p, "physicalnetworkid")
+	}
 }
 
 func (p *ListOpenDaylightControllersParams) GetPhysicalnetworkid() (string, bool) {
@@ -3834,6 +4906,12 @@ func (p *ListPaloAltoFirewallNetworksParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListPaloAltoFirewallNetworksParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *ListPaloAltoFirewallNetworksParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3847,6 +4925,12 @@ func (p *ListPaloAltoFirewallNetworksParams) SetLbdeviceid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["lbdeviceid"] = v
+}
+
+func (p *ListPaloAltoFirewallNetworksParams) ResetLbdeviceid() {
+	if p.p != nil && p.p["lbdeviceid"] != nil {
+		delete(p.p, "lbdeviceid")
+	}
 }
 
 func (p *ListPaloAltoFirewallNetworksParams) GetLbdeviceid() (string, bool) {
@@ -3864,6 +4948,12 @@ func (p *ListPaloAltoFirewallNetworksParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListPaloAltoFirewallNetworksParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListPaloAltoFirewallNetworksParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3877,6 +4967,12 @@ func (p *ListPaloAltoFirewallNetworksParams) SetPagesize(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ListPaloAltoFirewallNetworksParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
 }
 
 func (p *ListPaloAltoFirewallNetworksParams) GetPagesize() (int, bool) {
@@ -3958,6 +5054,8 @@ type PaloAltoFirewallNetwork struct {
 	Aclid                       string                           `json:"aclid"`
 	Aclname                     string                           `json:"aclname"`
 	Acltype                     string                           `json:"acltype"`
+	Associatednetwork           string                           `json:"associatednetwork"`
+	Associatednetworkid         string                           `json:"associatednetworkid"`
 	Broadcastdomaintype         string                           `json:"broadcastdomaintype"`
 	Broadcasturi                string                           `json:"broadcasturi"`
 	Canusefordeploy             bool                             `json:"canusefordeploy"`
@@ -3970,13 +5068,20 @@ type PaloAltoFirewallNetwork struct {
 	Dns2                        string                           `json:"dns2"`
 	Domain                      string                           `json:"domain"`
 	Domainid                    string                           `json:"domainid"`
+	Domainpath                  string                           `json:"domainpath"`
+	Egressdefaultpolicy         bool                             `json:"egressdefaultpolicy"`
 	Externalid                  string                           `json:"externalid"`
 	Gateway                     string                           `json:"gateway"`
 	Hasannotations              bool                             `json:"hasannotations"`
-	Icon                        string                           `json:"icon"`
+	Icon                        interface{}                      `json:"icon"`
 	Id                          string                           `json:"id"`
+	Internetprotocol            string                           `json:"internetprotocol"`
 	Ip6cidr                     string                           `json:"ip6cidr"`
+	Ip6dns1                     string                           `json:"ip6dns1"`
+	Ip6dns2                     string                           `json:"ip6dns2"`
 	Ip6gateway                  string                           `json:"ip6gateway"`
+	Ip6routes                   []interface{}                    `json:"ip6routes"`
+	Ip6routing                  string                           `json:"ip6routing"`
 	Isdefault                   bool                             `json:"isdefault"`
 	Ispersistent                bool                             `json:"ispersistent"`
 	Issystem                    bool                             `json:"issystem"`
@@ -3992,8 +5097,10 @@ type PaloAltoFirewallNetwork struct {
 	Networkofferingid           string                           `json:"networkofferingid"`
 	Networkofferingname         string                           `json:"networkofferingname"`
 	Physicalnetworkid           string                           `json:"physicalnetworkid"`
+	Privatemtu                  int                              `json:"privatemtu"`
 	Project                     string                           `json:"project"`
 	Projectid                   string                           `json:"projectid"`
+	Publicmtu                   int                              `json:"publicmtu"`
 	Receivedbytes               int64                            `json:"receivedbytes"`
 	Redundantrouter             bool                             `json:"redundantrouter"`
 	Related                     string                           `json:"related"`
@@ -4005,8 +5112,10 @@ type PaloAltoFirewallNetwork struct {
 	State                       string                           `json:"state"`
 	Strechedl2subnet            bool                             `json:"strechedl2subnet"`
 	Subdomainaccess             bool                             `json:"subdomainaccess"`
+	Supportsvmautoscaling       bool                             `json:"supportsvmautoscaling"`
 	Tags                        []Tags                           `json:"tags"`
 	Traffictype                 string                           `json:"traffictype"`
+	Tungstenvirtualrouteruuid   string                           `json:"tungstenvirtualrouteruuid"`
 	Type                        string                           `json:"type"`
 	Vlan                        string                           `json:"vlan"`
 	Vpcid                       string                           `json:"vpcid"`
@@ -4077,6 +5186,12 @@ func (p *ListPhysicalNetworksParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ListPhysicalNetworksParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *ListPhysicalNetworksParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -4090,6 +5205,12 @@ func (p *ListPhysicalNetworksParams) SetKeyword(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["keyword"] = v
+}
+
+func (p *ListPhysicalNetworksParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
 }
 
 func (p *ListPhysicalNetworksParams) GetKeyword() (string, bool) {
@@ -4107,6 +5228,12 @@ func (p *ListPhysicalNetworksParams) SetName(v string) {
 	p.p["name"] = v
 }
 
+func (p *ListPhysicalNetworksParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
+}
+
 func (p *ListPhysicalNetworksParams) GetName() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -4120,6 +5247,12 @@ func (p *ListPhysicalNetworksParams) SetPage(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["page"] = v
+}
+
+func (p *ListPhysicalNetworksParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
 }
 
 func (p *ListPhysicalNetworksParams) GetPage() (int, bool) {
@@ -4137,6 +5270,12 @@ func (p *ListPhysicalNetworksParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListPhysicalNetworksParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
 func (p *ListPhysicalNetworksParams) GetPagesize() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -4150,6 +5289,12 @@ func (p *ListPhysicalNetworksParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *ListPhysicalNetworksParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *ListPhysicalNetworksParams) GetZoneid() (string, bool) {
@@ -4326,6 +5471,12 @@ func (p *ListStorageNetworkIpRangeParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ListStorageNetworkIpRangeParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *ListStorageNetworkIpRangeParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -4339,6 +5490,12 @@ func (p *ListStorageNetworkIpRangeParams) SetKeyword(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["keyword"] = v
+}
+
+func (p *ListStorageNetworkIpRangeParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
 }
 
 func (p *ListStorageNetworkIpRangeParams) GetKeyword() (string, bool) {
@@ -4356,6 +5513,12 @@ func (p *ListStorageNetworkIpRangeParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListStorageNetworkIpRangeParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListStorageNetworkIpRangeParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -4369,6 +5532,12 @@ func (p *ListStorageNetworkIpRangeParams) SetPagesize(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ListStorageNetworkIpRangeParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
 }
 
 func (p *ListStorageNetworkIpRangeParams) GetPagesize() (int, bool) {
@@ -4386,6 +5555,12 @@ func (p *ListStorageNetworkIpRangeParams) SetPodid(v string) {
 	p.p["podid"] = v
 }
 
+func (p *ListStorageNetworkIpRangeParams) ResetPodid() {
+	if p.p != nil && p.p["podid"] != nil {
+		delete(p.p, "podid")
+	}
+}
+
 func (p *ListStorageNetworkIpRangeParams) GetPodid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -4399,6 +5574,12 @@ func (p *ListStorageNetworkIpRangeParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *ListStorageNetworkIpRangeParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *ListStorageNetworkIpRangeParams) GetZoneid() (string, bool) {
@@ -4520,6 +5701,12 @@ func (p *ListSupportedNetworkServicesParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListSupportedNetworkServicesParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *ListSupportedNetworkServicesParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -4533,6 +5720,12 @@ func (p *ListSupportedNetworkServicesParams) SetPage(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["page"] = v
+}
+
+func (p *ListSupportedNetworkServicesParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
 }
 
 func (p *ListSupportedNetworkServicesParams) GetPage() (int, bool) {
@@ -4550,6 +5743,12 @@ func (p *ListSupportedNetworkServicesParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListSupportedNetworkServicesParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
 func (p *ListSupportedNetworkServicesParams) GetPagesize() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -4565,6 +5764,12 @@ func (p *ListSupportedNetworkServicesParams) SetProvider(v string) {
 	p.p["provider"] = v
 }
 
+func (p *ListSupportedNetworkServicesParams) ResetProvider() {
+	if p.p != nil && p.p["provider"] != nil {
+		delete(p.p, "provider")
+	}
+}
+
 func (p *ListSupportedNetworkServicesParams) GetProvider() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -4578,6 +5783,12 @@ func (p *ListSupportedNetworkServicesParams) SetService(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["service"] = v
+}
+
+func (p *ListSupportedNetworkServicesParams) ResetService() {
+	if p.p != nil && p.p["service"] != nil {
+		delete(p.p, "service")
+	}
 }
 
 func (p *ListSupportedNetworkServicesParams) GetService() (string, bool) {
@@ -4662,6 +5873,12 @@ func (p *ReleasePublicIpRangeParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ReleasePublicIpRangeParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *ReleasePublicIpRangeParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -4744,6 +5961,10 @@ func (p *RestartNetworkParams) toURLValues() url.Values {
 	if v, found := p.p["id"]; found {
 		u.Set("id", v.(string))
 	}
+	if v, found := p.p["livepatch"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("livepatch", vv)
+	}
 	if v, found := p.p["makeredundant"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("makeredundant", vv)
@@ -4756,6 +5977,12 @@ func (p *RestartNetworkParams) SetCleanup(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["cleanup"] = v
+}
+
+func (p *RestartNetworkParams) ResetCleanup() {
+	if p.p != nil && p.p["cleanup"] != nil {
+		delete(p.p, "cleanup")
+	}
 }
 
 func (p *RestartNetworkParams) GetCleanup() (bool, bool) {
@@ -4773,6 +6000,12 @@ func (p *RestartNetworkParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *RestartNetworkParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *RestartNetworkParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -4781,11 +6014,38 @@ func (p *RestartNetworkParams) GetId() (string, bool) {
 	return value, ok
 }
 
+func (p *RestartNetworkParams) SetLivepatch(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["livepatch"] = v
+}
+
+func (p *RestartNetworkParams) ResetLivepatch() {
+	if p.p != nil && p.p["livepatch"] != nil {
+		delete(p.p, "livepatch")
+	}
+}
+
+func (p *RestartNetworkParams) GetLivepatch() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["livepatch"].(bool)
+	return value, ok
+}
+
 func (p *RestartNetworkParams) SetMakeredundant(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["makeredundant"] = v
+}
+
+func (p *RestartNetworkParams) ResetMakeredundant() {
+	if p.p != nil && p.p["makeredundant"] != nil {
+		delete(p.p, "makeredundant")
+	}
 }
 
 func (p *RestartNetworkParams) GetMakeredundant() (bool, bool) {
@@ -4865,6 +6125,12 @@ func (p *UpdateNetworkParams) toURLValues() url.Values {
 	if v, found := p.p["displaytext"]; found {
 		u.Set("displaytext", v.(string))
 	}
+	if v, found := p.p["dns1"]; found {
+		u.Set("dns1", v.(string))
+	}
+	if v, found := p.p["dns2"]; found {
+		u.Set("dns2", v.(string))
+	}
 	if v, found := p.p["forced"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("forced", vv)
@@ -4879,6 +6145,12 @@ func (p *UpdateNetworkParams) toURLValues() url.Values {
 	if v, found := p.p["id"]; found {
 		u.Set("id", v.(string))
 	}
+	if v, found := p.p["ip6dns1"]; found {
+		u.Set("ip6dns1", v.(string))
+	}
+	if v, found := p.p["ip6dns2"]; found {
+		u.Set("ip6dns2", v.(string))
+	}
 	if v, found := p.p["name"]; found {
 		u.Set("name", v.(string))
 	}
@@ -4887,6 +6159,17 @@ func (p *UpdateNetworkParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["networkofferingid"]; found {
 		u.Set("networkofferingid", v.(string))
+	}
+	if v, found := p.p["privatemtu"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("privatemtu", vv)
+	}
+	if v, found := p.p["publicmtu"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("publicmtu", vv)
+	}
+	if v, found := p.p["sourcenatipaddress"]; found {
+		u.Set("sourcenatipaddress", v.(string))
 	}
 	if v, found := p.p["updateinsequence"]; found {
 		vv := strconv.FormatBool(v.(bool))
@@ -4900,6 +6183,12 @@ func (p *UpdateNetworkParams) SetChangecidr(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["changecidr"] = v
+}
+
+func (p *UpdateNetworkParams) ResetChangecidr() {
+	if p.p != nil && p.p["changecidr"] != nil {
+		delete(p.p, "changecidr")
+	}
 }
 
 func (p *UpdateNetworkParams) GetChangecidr() (bool, bool) {
@@ -4917,6 +6206,12 @@ func (p *UpdateNetworkParams) SetCustomid(v string) {
 	p.p["customid"] = v
 }
 
+func (p *UpdateNetworkParams) ResetCustomid() {
+	if p.p != nil && p.p["customid"] != nil {
+		delete(p.p, "customid")
+	}
+}
+
 func (p *UpdateNetworkParams) GetCustomid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -4930,6 +6225,12 @@ func (p *UpdateNetworkParams) SetDisplaynetwork(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["displaynetwork"] = v
+}
+
+func (p *UpdateNetworkParams) ResetDisplaynetwork() {
+	if p.p != nil && p.p["displaynetwork"] != nil {
+		delete(p.p, "displaynetwork")
+	}
 }
 
 func (p *UpdateNetworkParams) GetDisplaynetwork() (bool, bool) {
@@ -4947,6 +6248,12 @@ func (p *UpdateNetworkParams) SetDisplaytext(v string) {
 	p.p["displaytext"] = v
 }
 
+func (p *UpdateNetworkParams) ResetDisplaytext() {
+	if p.p != nil && p.p["displaytext"] != nil {
+		delete(p.p, "displaytext")
+	}
+}
+
 func (p *UpdateNetworkParams) GetDisplaytext() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -4955,11 +6262,59 @@ func (p *UpdateNetworkParams) GetDisplaytext() (string, bool) {
 	return value, ok
 }
 
+func (p *UpdateNetworkParams) SetDns1(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["dns1"] = v
+}
+
+func (p *UpdateNetworkParams) ResetDns1() {
+	if p.p != nil && p.p["dns1"] != nil {
+		delete(p.p, "dns1")
+	}
+}
+
+func (p *UpdateNetworkParams) GetDns1() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["dns1"].(string)
+	return value, ok
+}
+
+func (p *UpdateNetworkParams) SetDns2(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["dns2"] = v
+}
+
+func (p *UpdateNetworkParams) ResetDns2() {
+	if p.p != nil && p.p["dns2"] != nil {
+		delete(p.p, "dns2")
+	}
+}
+
+func (p *UpdateNetworkParams) GetDns2() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["dns2"].(string)
+	return value, ok
+}
+
 func (p *UpdateNetworkParams) SetForced(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["forced"] = v
+}
+
+func (p *UpdateNetworkParams) ResetForced() {
+	if p.p != nil && p.p["forced"] != nil {
+		delete(p.p, "forced")
+	}
 }
 
 func (p *UpdateNetworkParams) GetForced() (bool, bool) {
@@ -4977,6 +6332,12 @@ func (p *UpdateNetworkParams) SetGuestvmcidr(v string) {
 	p.p["guestvmcidr"] = v
 }
 
+func (p *UpdateNetworkParams) ResetGuestvmcidr() {
+	if p.p != nil && p.p["guestvmcidr"] != nil {
+		delete(p.p, "guestvmcidr")
+	}
+}
+
 func (p *UpdateNetworkParams) GetGuestvmcidr() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -4990,6 +6351,12 @@ func (p *UpdateNetworkParams) SetHideipaddressusage(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["hideipaddressusage"] = v
+}
+
+func (p *UpdateNetworkParams) ResetHideipaddressusage() {
+	if p.p != nil && p.p["hideipaddressusage"] != nil {
+		delete(p.p, "hideipaddressusage")
+	}
 }
 
 func (p *UpdateNetworkParams) GetHideipaddressusage() (bool, bool) {
@@ -5007,6 +6374,12 @@ func (p *UpdateNetworkParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *UpdateNetworkParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *UpdateNetworkParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -5015,11 +6388,59 @@ func (p *UpdateNetworkParams) GetId() (string, bool) {
 	return value, ok
 }
 
+func (p *UpdateNetworkParams) SetIp6dns1(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["ip6dns1"] = v
+}
+
+func (p *UpdateNetworkParams) ResetIp6dns1() {
+	if p.p != nil && p.p["ip6dns1"] != nil {
+		delete(p.p, "ip6dns1")
+	}
+}
+
+func (p *UpdateNetworkParams) GetIp6dns1() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ip6dns1"].(string)
+	return value, ok
+}
+
+func (p *UpdateNetworkParams) SetIp6dns2(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["ip6dns2"] = v
+}
+
+func (p *UpdateNetworkParams) ResetIp6dns2() {
+	if p.p != nil && p.p["ip6dns2"] != nil {
+		delete(p.p, "ip6dns2")
+	}
+}
+
+func (p *UpdateNetworkParams) GetIp6dns2() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ip6dns2"].(string)
+	return value, ok
+}
+
 func (p *UpdateNetworkParams) SetName(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *UpdateNetworkParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
 }
 
 func (p *UpdateNetworkParams) GetName() (string, bool) {
@@ -5037,6 +6458,12 @@ func (p *UpdateNetworkParams) SetNetworkdomain(v string) {
 	p.p["networkdomain"] = v
 }
 
+func (p *UpdateNetworkParams) ResetNetworkdomain() {
+	if p.p != nil && p.p["networkdomain"] != nil {
+		delete(p.p, "networkdomain")
+	}
+}
+
 func (p *UpdateNetworkParams) GetNetworkdomain() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -5052,6 +6479,12 @@ func (p *UpdateNetworkParams) SetNetworkofferingid(v string) {
 	p.p["networkofferingid"] = v
 }
 
+func (p *UpdateNetworkParams) ResetNetworkofferingid() {
+	if p.p != nil && p.p["networkofferingid"] != nil {
+		delete(p.p, "networkofferingid")
+	}
+}
+
 func (p *UpdateNetworkParams) GetNetworkofferingid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -5060,11 +6493,80 @@ func (p *UpdateNetworkParams) GetNetworkofferingid() (string, bool) {
 	return value, ok
 }
 
+func (p *UpdateNetworkParams) SetPrivatemtu(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["privatemtu"] = v
+}
+
+func (p *UpdateNetworkParams) ResetPrivatemtu() {
+	if p.p != nil && p.p["privatemtu"] != nil {
+		delete(p.p, "privatemtu")
+	}
+}
+
+func (p *UpdateNetworkParams) GetPrivatemtu() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["privatemtu"].(int)
+	return value, ok
+}
+
+func (p *UpdateNetworkParams) SetPublicmtu(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["publicmtu"] = v
+}
+
+func (p *UpdateNetworkParams) ResetPublicmtu() {
+	if p.p != nil && p.p["publicmtu"] != nil {
+		delete(p.p, "publicmtu")
+	}
+}
+
+func (p *UpdateNetworkParams) GetPublicmtu() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["publicmtu"].(int)
+	return value, ok
+}
+
+func (p *UpdateNetworkParams) SetSourcenatipaddress(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["sourcenatipaddress"] = v
+}
+
+func (p *UpdateNetworkParams) ResetSourcenatipaddress() {
+	if p.p != nil && p.p["sourcenatipaddress"] != nil {
+		delete(p.p, "sourcenatipaddress")
+	}
+}
+
+func (p *UpdateNetworkParams) GetSourcenatipaddress() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["sourcenatipaddress"].(string)
+	return value, ok
+}
+
 func (p *UpdateNetworkParams) SetUpdateinsequence(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["updateinsequence"] = v
+}
+
+func (p *UpdateNetworkParams) ResetUpdateinsequence() {
+	if p.p != nil && p.p["updateinsequence"] != nil {
+		delete(p.p, "updateinsequence")
+	}
 }
 
 func (p *UpdateNetworkParams) GetUpdateinsequence() (bool, bool) {
@@ -5124,6 +6626,8 @@ type UpdateNetworkResponse struct {
 	Aclid                       string                         `json:"aclid"`
 	Aclname                     string                         `json:"aclname"`
 	Acltype                     string                         `json:"acltype"`
+	Associatednetwork           string                         `json:"associatednetwork"`
+	Associatednetworkid         string                         `json:"associatednetworkid"`
 	Broadcastdomaintype         string                         `json:"broadcastdomaintype"`
 	Broadcasturi                string                         `json:"broadcasturi"`
 	Canusefordeploy             bool                           `json:"canusefordeploy"`
@@ -5136,13 +6640,20 @@ type UpdateNetworkResponse struct {
 	Dns2                        string                         `json:"dns2"`
 	Domain                      string                         `json:"domain"`
 	Domainid                    string                         `json:"domainid"`
+	Domainpath                  string                         `json:"domainpath"`
+	Egressdefaultpolicy         bool                           `json:"egressdefaultpolicy"`
 	Externalid                  string                         `json:"externalid"`
 	Gateway                     string                         `json:"gateway"`
 	Hasannotations              bool                           `json:"hasannotations"`
-	Icon                        string                         `json:"icon"`
+	Icon                        interface{}                    `json:"icon"`
 	Id                          string                         `json:"id"`
+	Internetprotocol            string                         `json:"internetprotocol"`
 	Ip6cidr                     string                         `json:"ip6cidr"`
+	Ip6dns1                     string                         `json:"ip6dns1"`
+	Ip6dns2                     string                         `json:"ip6dns2"`
 	Ip6gateway                  string                         `json:"ip6gateway"`
+	Ip6routes                   []interface{}                  `json:"ip6routes"`
+	Ip6routing                  string                         `json:"ip6routing"`
 	Isdefault                   bool                           `json:"isdefault"`
 	Ispersistent                bool                           `json:"ispersistent"`
 	Issystem                    bool                           `json:"issystem"`
@@ -5158,8 +6669,10 @@ type UpdateNetworkResponse struct {
 	Networkofferingid           string                         `json:"networkofferingid"`
 	Networkofferingname         string                         `json:"networkofferingname"`
 	Physicalnetworkid           string                         `json:"physicalnetworkid"`
+	Privatemtu                  int                            `json:"privatemtu"`
 	Project                     string                         `json:"project"`
 	Projectid                   string                         `json:"projectid"`
+	Publicmtu                   int                            `json:"publicmtu"`
 	Receivedbytes               int64                          `json:"receivedbytes"`
 	Redundantrouter             bool                           `json:"redundantrouter"`
 	Related                     string                         `json:"related"`
@@ -5171,8 +6684,10 @@ type UpdateNetworkResponse struct {
 	State                       string                         `json:"state"`
 	Strechedl2subnet            bool                           `json:"strechedl2subnet"`
 	Subdomainaccess             bool                           `json:"subdomainaccess"`
+	Supportsvmautoscaling       bool                           `json:"supportsvmautoscaling"`
 	Tags                        []Tags                         `json:"tags"`
 	Traffictype                 string                         `json:"traffictype"`
+	Tungstenvirtualrouteruuid   string                         `json:"tungstenvirtualrouteruuid"`
 	Type                        string                         `json:"type"`
 	Vlan                        string                         `json:"vlan"`
 	Vpcid                       string                         `json:"vpcid"`
@@ -5233,6 +6748,12 @@ func (p *UpdateNetworkServiceProviderParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *UpdateNetworkServiceProviderParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *UpdateNetworkServiceProviderParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -5248,6 +6769,12 @@ func (p *UpdateNetworkServiceProviderParams) SetServicelist(v []string) {
 	p.p["servicelist"] = v
 }
 
+func (p *UpdateNetworkServiceProviderParams) ResetServicelist() {
+	if p.p != nil && p.p["servicelist"] != nil {
+		delete(p.p, "servicelist")
+	}
+}
+
 func (p *UpdateNetworkServiceProviderParams) GetServicelist() ([]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -5261,6 +6788,12 @@ func (p *UpdateNetworkServiceProviderParams) SetState(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["state"] = v
+}
+
+func (p *UpdateNetworkServiceProviderParams) ResetState() {
+	if p.p != nil && p.p["state"] != nil {
+		delete(p.p, "state")
+	}
 }
 
 func (p *UpdateNetworkServiceProviderParams) GetState() (string, bool) {
@@ -5362,6 +6895,12 @@ func (p *UpdatePhysicalNetworkParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *UpdatePhysicalNetworkParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *UpdatePhysicalNetworkParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -5375,6 +6914,12 @@ func (p *UpdatePhysicalNetworkParams) SetNetworkspeed(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["networkspeed"] = v
+}
+
+func (p *UpdatePhysicalNetworkParams) ResetNetworkspeed() {
+	if p.p != nil && p.p["networkspeed"] != nil {
+		delete(p.p, "networkspeed")
+	}
 }
 
 func (p *UpdatePhysicalNetworkParams) GetNetworkspeed() (string, bool) {
@@ -5392,6 +6937,12 @@ func (p *UpdatePhysicalNetworkParams) SetState(v string) {
 	p.p["state"] = v
 }
 
+func (p *UpdatePhysicalNetworkParams) ResetState() {
+	if p.p != nil && p.p["state"] != nil {
+		delete(p.p, "state")
+	}
+}
+
 func (p *UpdatePhysicalNetworkParams) GetState() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -5407,6 +6958,12 @@ func (p *UpdatePhysicalNetworkParams) SetTags(v []string) {
 	p.p["tags"] = v
 }
 
+func (p *UpdatePhysicalNetworkParams) ResetTags() {
+	if p.p != nil && p.p["tags"] != nil {
+		delete(p.p, "tags")
+	}
+}
+
 func (p *UpdatePhysicalNetworkParams) GetTags() ([]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -5420,6 +6977,12 @@ func (p *UpdatePhysicalNetworkParams) SetVlan(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["vlan"] = v
+}
+
+func (p *UpdatePhysicalNetworkParams) ResetVlan() {
+	if p.p != nil && p.p["vlan"] != nil {
+		delete(p.p, "vlan")
+	}
 }
 
 func (p *UpdatePhysicalNetworkParams) GetVlan() (string, bool) {
@@ -5525,6 +7088,12 @@ func (p *UpdateStorageNetworkIpRangeParams) SetEndip(v string) {
 	p.p["endip"] = v
 }
 
+func (p *UpdateStorageNetworkIpRangeParams) ResetEndip() {
+	if p.p != nil && p.p["endip"] != nil {
+		delete(p.p, "endip")
+	}
+}
+
 func (p *UpdateStorageNetworkIpRangeParams) GetEndip() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -5538,6 +7107,12 @@ func (p *UpdateStorageNetworkIpRangeParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *UpdateStorageNetworkIpRangeParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *UpdateStorageNetworkIpRangeParams) GetId() (string, bool) {
@@ -5555,6 +7130,12 @@ func (p *UpdateStorageNetworkIpRangeParams) SetNetmask(v string) {
 	p.p["netmask"] = v
 }
 
+func (p *UpdateStorageNetworkIpRangeParams) ResetNetmask() {
+	if p.p != nil && p.p["netmask"] != nil {
+		delete(p.p, "netmask")
+	}
+}
+
 func (p *UpdateStorageNetworkIpRangeParams) GetNetmask() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -5570,6 +7151,12 @@ func (p *UpdateStorageNetworkIpRangeParams) SetStartip(v string) {
 	p.p["startip"] = v
 }
 
+func (p *UpdateStorageNetworkIpRangeParams) ResetStartip() {
+	if p.p != nil && p.p["startip"] != nil {
+		delete(p.p, "startip")
+	}
+}
+
 func (p *UpdateStorageNetworkIpRangeParams) GetStartip() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -5583,6 +7170,12 @@ func (p *UpdateStorageNetworkIpRangeParams) SetVlan(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["vlan"] = v
+}
+
+func (p *UpdateStorageNetworkIpRangeParams) ResetVlan() {
+	if p.p != nil && p.p["vlan"] != nil {
+		delete(p.p, "vlan")
+	}
 }
 
 func (p *UpdateStorageNetworkIpRangeParams) GetVlan() (int, bool) {
@@ -5649,4 +7242,919 @@ type UpdateStorageNetworkIpRangeResponse struct {
 	Startip   string `json:"startip"`
 	Vlan      int    `json:"vlan"`
 	Zoneid    string `json:"zoneid"`
+}
+
+type DeleteGuestNetworkIpv6PrefixParams struct {
+	p map[string]interface{}
+}
+
+func (p *DeleteGuestNetworkIpv6PrefixParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["id"]; found {
+		u.Set("id", v.(string))
+	}
+	return u
+}
+
+func (p *DeleteGuestNetworkIpv6PrefixParams) SetId(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["id"] = v
+}
+
+func (p *DeleteGuestNetworkIpv6PrefixParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
+func (p *DeleteGuestNetworkIpv6PrefixParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+// You should always use this function to get a new DeleteGuestNetworkIpv6PrefixParams instance,
+// as then you are sure you have configured all required params
+func (s *NetworkService) NewDeleteGuestNetworkIpv6PrefixParams(id string) *DeleteGuestNetworkIpv6PrefixParams {
+	p := &DeleteGuestNetworkIpv6PrefixParams{}
+	p.p = make(map[string]interface{})
+	p.p["id"] = id
+	return p
+}
+
+// Deletes an existing guest network IPv6 prefix.
+func (s *NetworkService) DeleteGuestNetworkIpv6Prefix(p *DeleteGuestNetworkIpv6PrefixParams) (*DeleteGuestNetworkIpv6PrefixResponse, error) {
+	resp, err := s.cs.newRequest("deleteGuestNetworkIpv6Prefix", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r DeleteGuestNetworkIpv6PrefixResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	// If we have a async client, we need to wait for the async result
+	if s.cs.async {
+		b, err := s.cs.GetAsyncJobResult(r.JobID, s.cs.timeout)
+		if err != nil {
+			if err == AsyncTimeoutErr {
+				return &r, err
+			}
+			return nil, err
+		}
+
+		if err := json.Unmarshal(b, &r); err != nil {
+			return nil, err
+		}
+	}
+
+	return &r, nil
+}
+
+type DeleteGuestNetworkIpv6PrefixResponse struct {
+	Displaytext string `json:"displaytext"`
+	JobID       string `json:"jobid"`
+	Jobstatus   int    `json:"jobstatus"`
+	Success     bool   `json:"success"`
+}
+
+type CreateGuestNetworkIpv6PrefixParams struct {
+	p map[string]interface{}
+}
+
+func (p *CreateGuestNetworkIpv6PrefixParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["prefix"]; found {
+		u.Set("prefix", v.(string))
+	}
+	if v, found := p.p["zoneid"]; found {
+		u.Set("zoneid", v.(string))
+	}
+	return u
+}
+
+func (p *CreateGuestNetworkIpv6PrefixParams) SetPrefix(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["prefix"] = v
+}
+
+func (p *CreateGuestNetworkIpv6PrefixParams) ResetPrefix() {
+	if p.p != nil && p.p["prefix"] != nil {
+		delete(p.p, "prefix")
+	}
+}
+
+func (p *CreateGuestNetworkIpv6PrefixParams) GetPrefix() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["prefix"].(string)
+	return value, ok
+}
+
+func (p *CreateGuestNetworkIpv6PrefixParams) SetZoneid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["zoneid"] = v
+}
+
+func (p *CreateGuestNetworkIpv6PrefixParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
+}
+
+func (p *CreateGuestNetworkIpv6PrefixParams) GetZoneid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["zoneid"].(string)
+	return value, ok
+}
+
+// You should always use this function to get a new CreateGuestNetworkIpv6PrefixParams instance,
+// as then you are sure you have configured all required params
+func (s *NetworkService) NewCreateGuestNetworkIpv6PrefixParams(prefix string, zoneid string) *CreateGuestNetworkIpv6PrefixParams {
+	p := &CreateGuestNetworkIpv6PrefixParams{}
+	p.p = make(map[string]interface{})
+	p.p["prefix"] = prefix
+	p.p["zoneid"] = zoneid
+	return p
+}
+
+// Creates a guest network IPv6 prefix.
+func (s *NetworkService) CreateGuestNetworkIpv6Prefix(p *CreateGuestNetworkIpv6PrefixParams) (*CreateGuestNetworkIpv6PrefixResponse, error) {
+	resp, err := s.cs.newRequest("createGuestNetworkIpv6Prefix", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r CreateGuestNetworkIpv6PrefixResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	// If we have a async client, we need to wait for the async result
+	if s.cs.async {
+		b, err := s.cs.GetAsyncJobResult(r.JobID, s.cs.timeout)
+		if err != nil {
+			if err == AsyncTimeoutErr {
+				return &r, err
+			}
+			return nil, err
+		}
+
+		b, err = getRawValue(b)
+		if err != nil {
+			return nil, err
+		}
+
+		if err := json.Unmarshal(b, &r); err != nil {
+			return nil, err
+		}
+	}
+
+	return &r, nil
+}
+
+type CreateGuestNetworkIpv6PrefixResponse struct {
+	Availablesubnets int    `json:"availablesubnets"`
+	Created          string `json:"created"`
+	Id               string `json:"id"`
+	JobID            string `json:"jobid"`
+	Jobstatus        int    `json:"jobstatus"`
+	Prefix           string `json:"prefix"`
+	Totalsubnets     int    `json:"totalsubnets"`
+	Usedsubnets      int    `json:"usedsubnets"`
+	Zoneid           string `json:"zoneid"`
+}
+
+type ListGuestNetworkIpv6PrefixesParams struct {
+	p map[string]interface{}
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["id"]; found {
+		u.Set("id", v.(string))
+	}
+	if v, found := p.p["keyword"]; found {
+		u.Set("keyword", v.(string))
+	}
+	if v, found := p.p["page"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("page", vv)
+	}
+	if v, found := p.p["pagesize"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("pagesize", vv)
+	}
+	if v, found := p.p["zoneid"]; found {
+		u.Set("zoneid", v.(string))
+	}
+	return u
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) SetId(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["id"] = v
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) SetKeyword(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["keyword"] = v
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) GetKeyword() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["keyword"].(string)
+	return value, ok
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) SetPage(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["page"] = v
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) GetPage() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["page"].(int)
+	return value, ok
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) SetPagesize(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["pagesize"] = v
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) GetPagesize() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["pagesize"].(int)
+	return value, ok
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) SetZoneid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["zoneid"] = v
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
+}
+
+func (p *ListGuestNetworkIpv6PrefixesParams) GetZoneid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["zoneid"].(string)
+	return value, ok
+}
+
+// You should always use this function to get a new ListGuestNetworkIpv6PrefixesParams instance,
+// as then you are sure you have configured all required params
+func (s *NetworkService) NewListGuestNetworkIpv6PrefixesParams() *ListGuestNetworkIpv6PrefixesParams {
+	p := &ListGuestNetworkIpv6PrefixesParams{}
+	p.p = make(map[string]interface{})
+	return p
+}
+
+// This is a courtesy helper function, which in some cases may not work as expected!
+func (s *NetworkService) GetGuestNetworkIpv6PrefixeByID(id string, opts ...OptionFunc) (*GuestNetworkIpv6Prefixe, int, error) {
+	p := &ListGuestNetworkIpv6PrefixesParams{}
+	p.p = make(map[string]interface{})
+
+	p.p["id"] = id
+
+	for _, fn := range append(s.cs.options, opts...) {
+		if err := fn(s.cs, p); err != nil {
+			return nil, -1, err
+		}
+	}
+
+	l, err := s.ListGuestNetworkIpv6Prefixes(p)
+	if err != nil {
+		if strings.Contains(err.Error(), fmt.Sprintf(
+			"Invalid parameter id value=%s due to incorrect long value format, "+
+				"or entity does not exist", id)) {
+			return nil, 0, fmt.Errorf("No match found for %s: %+v", id, l)
+		}
+		return nil, -1, err
+	}
+
+	if l.Count == 0 {
+		return nil, l.Count, fmt.Errorf("No match found for %s: %+v", id, l)
+	}
+
+	if l.Count == 1 {
+		return l.GuestNetworkIpv6Prefixes[0], l.Count, nil
+	}
+	return nil, l.Count, fmt.Errorf("There is more then one result for GuestNetworkIpv6Prefixe UUID: %s!", id)
+}
+
+// Lists guest network IPv6 prefixes
+func (s *NetworkService) ListGuestNetworkIpv6Prefixes(p *ListGuestNetworkIpv6PrefixesParams) (*ListGuestNetworkIpv6PrefixesResponse, error) {
+	resp, err := s.cs.newRequest("listGuestNetworkIpv6Prefixes", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r ListGuestNetworkIpv6PrefixesResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
+
+type ListGuestNetworkIpv6PrefixesResponse struct {
+	Count                    int                        `json:"count"`
+	GuestNetworkIpv6Prefixes []*GuestNetworkIpv6Prefixe `json:"guestnetworkipv6prefixe"`
+}
+
+type GuestNetworkIpv6Prefixe struct {
+	Availablesubnets int    `json:"availablesubnets"`
+	Created          string `json:"created"`
+	Id               string `json:"id"`
+	JobID            string `json:"jobid"`
+	Jobstatus        int    `json:"jobstatus"`
+	Prefix           string `json:"prefix"`
+	Totalsubnets     int    `json:"totalsubnets"`
+	Usedsubnets      int    `json:"usedsubnets"`
+	Zoneid           string `json:"zoneid"`
+}
+
+type CreateNetworkPermissionsParams struct {
+	p map[string]interface{}
+}
+
+func (p *CreateNetworkPermissionsParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["accountids"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("accountids", vv)
+	}
+	if v, found := p.p["accounts"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("accounts", vv)
+	}
+	if v, found := p.p["networkid"]; found {
+		u.Set("networkid", v.(string))
+	}
+	if v, found := p.p["projectids"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("projectids", vv)
+	}
+	return u
+}
+
+func (p *CreateNetworkPermissionsParams) SetAccountids(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["accountids"] = v
+}
+
+func (p *CreateNetworkPermissionsParams) ResetAccountids() {
+	if p.p != nil && p.p["accountids"] != nil {
+		delete(p.p, "accountids")
+	}
+}
+
+func (p *CreateNetworkPermissionsParams) GetAccountids() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["accountids"].([]string)
+	return value, ok
+}
+
+func (p *CreateNetworkPermissionsParams) SetAccounts(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["accounts"] = v
+}
+
+func (p *CreateNetworkPermissionsParams) ResetAccounts() {
+	if p.p != nil && p.p["accounts"] != nil {
+		delete(p.p, "accounts")
+	}
+}
+
+func (p *CreateNetworkPermissionsParams) GetAccounts() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["accounts"].([]string)
+	return value, ok
+}
+
+func (p *CreateNetworkPermissionsParams) SetNetworkid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["networkid"] = v
+}
+
+func (p *CreateNetworkPermissionsParams) ResetNetworkid() {
+	if p.p != nil && p.p["networkid"] != nil {
+		delete(p.p, "networkid")
+	}
+}
+
+func (p *CreateNetworkPermissionsParams) GetNetworkid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["networkid"].(string)
+	return value, ok
+}
+
+func (p *CreateNetworkPermissionsParams) SetProjectids(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["projectids"] = v
+}
+
+func (p *CreateNetworkPermissionsParams) ResetProjectids() {
+	if p.p != nil && p.p["projectids"] != nil {
+		delete(p.p, "projectids")
+	}
+}
+
+func (p *CreateNetworkPermissionsParams) GetProjectids() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["projectids"].([]string)
+	return value, ok
+}
+
+// You should always use this function to get a new CreateNetworkPermissionsParams instance,
+// as then you are sure you have configured all required params
+func (s *NetworkService) NewCreateNetworkPermissionsParams(networkid string) *CreateNetworkPermissionsParams {
+	p := &CreateNetworkPermissionsParams{}
+	p.p = make(map[string]interface{})
+	p.p["networkid"] = networkid
+	return p
+}
+
+// Updates network permissions.
+func (s *NetworkService) CreateNetworkPermissions(p *CreateNetworkPermissionsParams) (*CreateNetworkPermissionsResponse, error) {
+	resp, err := s.cs.newRequest("createNetworkPermissions", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r CreateNetworkPermissionsResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
+
+type CreateNetworkPermissionsResponse struct {
+	Displaytext string `json:"displaytext"`
+	JobID       string `json:"jobid"`
+	Jobstatus   int    `json:"jobstatus"`
+	Success     bool   `json:"success"`
+}
+
+func (r *CreateNetworkPermissionsResponse) UnmarshalJSON(b []byte) error {
+	var m map[string]interface{}
+	err := json.Unmarshal(b, &m)
+	if err != nil {
+		return err
+	}
+
+	if success, ok := m["success"].(string); ok {
+		m["success"] = success == "true"
+		b, err = json.Marshal(m)
+		if err != nil {
+			return err
+		}
+	}
+
+	if ostypeid, ok := m["ostypeid"].(float64); ok {
+		m["ostypeid"] = strconv.Itoa(int(ostypeid))
+		b, err = json.Marshal(m)
+		if err != nil {
+			return err
+		}
+	}
+
+	type alias CreateNetworkPermissionsResponse
+	return json.Unmarshal(b, (*alias)(r))
+}
+
+type ResetNetworkPermissionsParams struct {
+	p map[string]interface{}
+}
+
+func (p *ResetNetworkPermissionsParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["networkid"]; found {
+		u.Set("networkid", v.(string))
+	}
+	return u
+}
+
+func (p *ResetNetworkPermissionsParams) SetNetworkid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["networkid"] = v
+}
+
+func (p *ResetNetworkPermissionsParams) ResetNetworkid() {
+	if p.p != nil && p.p["networkid"] != nil {
+		delete(p.p, "networkid")
+	}
+}
+
+func (p *ResetNetworkPermissionsParams) GetNetworkid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["networkid"].(string)
+	return value, ok
+}
+
+// You should always use this function to get a new ResetNetworkPermissionsParams instance,
+// as then you are sure you have configured all required params
+func (s *NetworkService) NewResetNetworkPermissionsParams(networkid string) *ResetNetworkPermissionsParams {
+	p := &ResetNetworkPermissionsParams{}
+	p.p = make(map[string]interface{})
+	p.p["networkid"] = networkid
+	return p
+}
+
+// Resets network permissions.
+func (s *NetworkService) ResetNetworkPermissions(p *ResetNetworkPermissionsParams) (*ResetNetworkPermissionsResponse, error) {
+	resp, err := s.cs.newRequest("resetNetworkPermissions", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r ResetNetworkPermissionsResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
+
+type ResetNetworkPermissionsResponse struct {
+	Displaytext string `json:"displaytext"`
+	JobID       string `json:"jobid"`
+	Jobstatus   int    `json:"jobstatus"`
+	Success     bool   `json:"success"`
+}
+
+func (r *ResetNetworkPermissionsResponse) UnmarshalJSON(b []byte) error {
+	var m map[string]interface{}
+	err := json.Unmarshal(b, &m)
+	if err != nil {
+		return err
+	}
+
+	if success, ok := m["success"].(string); ok {
+		m["success"] = success == "true"
+		b, err = json.Marshal(m)
+		if err != nil {
+			return err
+		}
+	}
+
+	if ostypeid, ok := m["ostypeid"].(float64); ok {
+		m["ostypeid"] = strconv.Itoa(int(ostypeid))
+		b, err = json.Marshal(m)
+		if err != nil {
+			return err
+		}
+	}
+
+	type alias ResetNetworkPermissionsResponse
+	return json.Unmarshal(b, (*alias)(r))
+}
+
+type ListNetworkPermissionsParams struct {
+	p map[string]interface{}
+}
+
+func (p *ListNetworkPermissionsParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["networkid"]; found {
+		u.Set("networkid", v.(string))
+	}
+	return u
+}
+
+func (p *ListNetworkPermissionsParams) SetNetworkid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["networkid"] = v
+}
+
+func (p *ListNetworkPermissionsParams) ResetNetworkid() {
+	if p.p != nil && p.p["networkid"] != nil {
+		delete(p.p, "networkid")
+	}
+}
+
+func (p *ListNetworkPermissionsParams) GetNetworkid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["networkid"].(string)
+	return value, ok
+}
+
+// You should always use this function to get a new ListNetworkPermissionsParams instance,
+// as then you are sure you have configured all required params
+func (s *NetworkService) NewListNetworkPermissionsParams(networkid string) *ListNetworkPermissionsParams {
+	p := &ListNetworkPermissionsParams{}
+	p.p = make(map[string]interface{})
+	p.p["networkid"] = networkid
+	return p
+}
+
+// List network visibility and all accounts that have permissions to view this network.
+func (s *NetworkService) ListNetworkPermissions(p *ListNetworkPermissionsParams) (*ListNetworkPermissionsResponse, error) {
+	resp, err := s.cs.newRequest("listNetworkPermissions", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r ListNetworkPermissionsResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
+
+type ListNetworkPermissionsResponse struct {
+	Count              int                  `json:"count"`
+	NetworkPermissions []*NetworkPermission `json:"networkpermission"`
+}
+
+type NetworkPermission struct {
+	Account   string `json:"account"`
+	Accountid string `json:"accountid"`
+	Domain    string `json:"domain"`
+	Domainid  string `json:"domainid"`
+	JobID     string `json:"jobid"`
+	Jobstatus int    `json:"jobstatus"`
+	Networkid string `json:"networkid"`
+	Project   string `json:"project"`
+	Projectid string `json:"projectid"`
+}
+
+type RemoveNetworkPermissionsParams struct {
+	p map[string]interface{}
+}
+
+func (p *RemoveNetworkPermissionsParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["accountids"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("accountids", vv)
+	}
+	if v, found := p.p["accounts"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("accounts", vv)
+	}
+	if v, found := p.p["networkid"]; found {
+		u.Set("networkid", v.(string))
+	}
+	if v, found := p.p["projectids"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("projectids", vv)
+	}
+	return u
+}
+
+func (p *RemoveNetworkPermissionsParams) SetAccountids(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["accountids"] = v
+}
+
+func (p *RemoveNetworkPermissionsParams) ResetAccountids() {
+	if p.p != nil && p.p["accountids"] != nil {
+		delete(p.p, "accountids")
+	}
+}
+
+func (p *RemoveNetworkPermissionsParams) GetAccountids() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["accountids"].([]string)
+	return value, ok
+}
+
+func (p *RemoveNetworkPermissionsParams) SetAccounts(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["accounts"] = v
+}
+
+func (p *RemoveNetworkPermissionsParams) ResetAccounts() {
+	if p.p != nil && p.p["accounts"] != nil {
+		delete(p.p, "accounts")
+	}
+}
+
+func (p *RemoveNetworkPermissionsParams) GetAccounts() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["accounts"].([]string)
+	return value, ok
+}
+
+func (p *RemoveNetworkPermissionsParams) SetNetworkid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["networkid"] = v
+}
+
+func (p *RemoveNetworkPermissionsParams) ResetNetworkid() {
+	if p.p != nil && p.p["networkid"] != nil {
+		delete(p.p, "networkid")
+	}
+}
+
+func (p *RemoveNetworkPermissionsParams) GetNetworkid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["networkid"].(string)
+	return value, ok
+}
+
+func (p *RemoveNetworkPermissionsParams) SetProjectids(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["projectids"] = v
+}
+
+func (p *RemoveNetworkPermissionsParams) ResetProjectids() {
+	if p.p != nil && p.p["projectids"] != nil {
+		delete(p.p, "projectids")
+	}
+}
+
+func (p *RemoveNetworkPermissionsParams) GetProjectids() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["projectids"].([]string)
+	return value, ok
+}
+
+// You should always use this function to get a new RemoveNetworkPermissionsParams instance,
+// as then you are sure you have configured all required params
+func (s *NetworkService) NewRemoveNetworkPermissionsParams(networkid string) *RemoveNetworkPermissionsParams {
+	p := &RemoveNetworkPermissionsParams{}
+	p.p = make(map[string]interface{})
+	p.p["networkid"] = networkid
+	return p
+}
+
+// Removes network permissions.
+func (s *NetworkService) RemoveNetworkPermissions(p *RemoveNetworkPermissionsParams) (*RemoveNetworkPermissionsResponse, error) {
+	resp, err := s.cs.newRequest("removeNetworkPermissions", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r RemoveNetworkPermissionsResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
+
+type RemoveNetworkPermissionsResponse struct {
+	Displaytext string `json:"displaytext"`
+	JobID       string `json:"jobid"`
+	Jobstatus   int    `json:"jobstatus"`
+	Success     bool   `json:"success"`
+}
+
+func (r *RemoveNetworkPermissionsResponse) UnmarshalJSON(b []byte) error {
+	var m map[string]interface{}
+	err := json.Unmarshal(b, &m)
+	if err != nil {
+		return err
+	}
+
+	if success, ok := m["success"].(string); ok {
+		m["success"] = success == "true"
+		b, err = json.Marshal(m)
+		if err != nil {
+			return err
+		}
+	}
+
+	if ostypeid, ok := m["ostypeid"].(float64); ok {
+		m["ostypeid"] = strconv.Itoa(int(ostypeid))
+		b, err = json.Marshal(m)
+		if err != nil {
+			return err
+		}
+	}
+
+	type alias RemoveNetworkPermissionsResponse
+	return json.Unmarshal(b, (*alias)(r))
 }

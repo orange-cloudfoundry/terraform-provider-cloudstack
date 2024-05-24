@@ -29,7 +29,7 @@ import (
 
 type VPCServiceIface interface {
 	CreatePrivateGateway(p *CreatePrivateGatewayParams) (*CreatePrivateGatewayResponse, error)
-	NewCreatePrivateGatewayParams(gateway string, ipaddress string, netmask string, vlan string, vpcid string) *CreatePrivateGatewayParams
+	NewCreatePrivateGatewayParams(gateway string, ipaddress string, netmask string, vpcid string) *CreatePrivateGatewayParams
 	CreateStaticRoute(p *CreateStaticRouteParams) (*CreateStaticRouteResponse, error)
 	NewCreateStaticRouteParams(cidr string, gatewayid string) *CreateStaticRouteParams
 	CreateVPC(p *CreateVPCParams) (*CreateVPCResponse, error)
@@ -80,6 +80,9 @@ func (p *CreatePrivateGatewayParams) toURLValues() url.Values {
 	if v, found := p.p["aclid"]; found {
 		u.Set("aclid", v.(string))
 	}
+	if v, found := p.p["associatednetworkid"]; found {
+		u.Set("associatednetworkid", v.(string))
+	}
 	if v, found := p.p["bypassvlanoverlapcheck"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("bypassvlanoverlapcheck", vv)
@@ -119,6 +122,12 @@ func (p *CreatePrivateGatewayParams) SetAclid(v string) {
 	p.p["aclid"] = v
 }
 
+func (p *CreatePrivateGatewayParams) ResetAclid() {
+	if p.p != nil && p.p["aclid"] != nil {
+		delete(p.p, "aclid")
+	}
+}
+
 func (p *CreatePrivateGatewayParams) GetAclid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -127,11 +136,38 @@ func (p *CreatePrivateGatewayParams) GetAclid() (string, bool) {
 	return value, ok
 }
 
+func (p *CreatePrivateGatewayParams) SetAssociatednetworkid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["associatednetworkid"] = v
+}
+
+func (p *CreatePrivateGatewayParams) ResetAssociatednetworkid() {
+	if p.p != nil && p.p["associatednetworkid"] != nil {
+		delete(p.p, "associatednetworkid")
+	}
+}
+
+func (p *CreatePrivateGatewayParams) GetAssociatednetworkid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["associatednetworkid"].(string)
+	return value, ok
+}
+
 func (p *CreatePrivateGatewayParams) SetBypassvlanoverlapcheck(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["bypassvlanoverlapcheck"] = v
+}
+
+func (p *CreatePrivateGatewayParams) ResetBypassvlanoverlapcheck() {
+	if p.p != nil && p.p["bypassvlanoverlapcheck"] != nil {
+		delete(p.p, "bypassvlanoverlapcheck")
+	}
 }
 
 func (p *CreatePrivateGatewayParams) GetBypassvlanoverlapcheck() (bool, bool) {
@@ -149,6 +185,12 @@ func (p *CreatePrivateGatewayParams) SetGateway(v string) {
 	p.p["gateway"] = v
 }
 
+func (p *CreatePrivateGatewayParams) ResetGateway() {
+	if p.p != nil && p.p["gateway"] != nil {
+		delete(p.p, "gateway")
+	}
+}
+
 func (p *CreatePrivateGatewayParams) GetGateway() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -162,6 +204,12 @@ func (p *CreatePrivateGatewayParams) SetIpaddress(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["ipaddress"] = v
+}
+
+func (p *CreatePrivateGatewayParams) ResetIpaddress() {
+	if p.p != nil && p.p["ipaddress"] != nil {
+		delete(p.p, "ipaddress")
+	}
 }
 
 func (p *CreatePrivateGatewayParams) GetIpaddress() (string, bool) {
@@ -179,6 +227,12 @@ func (p *CreatePrivateGatewayParams) SetNetmask(v string) {
 	p.p["netmask"] = v
 }
 
+func (p *CreatePrivateGatewayParams) ResetNetmask() {
+	if p.p != nil && p.p["netmask"] != nil {
+		delete(p.p, "netmask")
+	}
+}
+
 func (p *CreatePrivateGatewayParams) GetNetmask() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -192,6 +246,12 @@ func (p *CreatePrivateGatewayParams) SetNetworkofferingid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["networkofferingid"] = v
+}
+
+func (p *CreatePrivateGatewayParams) ResetNetworkofferingid() {
+	if p.p != nil && p.p["networkofferingid"] != nil {
+		delete(p.p, "networkofferingid")
+	}
 }
 
 func (p *CreatePrivateGatewayParams) GetNetworkofferingid() (string, bool) {
@@ -209,6 +269,12 @@ func (p *CreatePrivateGatewayParams) SetPhysicalnetworkid(v string) {
 	p.p["physicalnetworkid"] = v
 }
 
+func (p *CreatePrivateGatewayParams) ResetPhysicalnetworkid() {
+	if p.p != nil && p.p["physicalnetworkid"] != nil {
+		delete(p.p, "physicalnetworkid")
+	}
+}
+
 func (p *CreatePrivateGatewayParams) GetPhysicalnetworkid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -222,6 +288,12 @@ func (p *CreatePrivateGatewayParams) SetSourcenatsupported(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["sourcenatsupported"] = v
+}
+
+func (p *CreatePrivateGatewayParams) ResetSourcenatsupported() {
+	if p.p != nil && p.p["sourcenatsupported"] != nil {
+		delete(p.p, "sourcenatsupported")
+	}
 }
 
 func (p *CreatePrivateGatewayParams) GetSourcenatsupported() (bool, bool) {
@@ -239,6 +311,12 @@ func (p *CreatePrivateGatewayParams) SetVlan(v string) {
 	p.p["vlan"] = v
 }
 
+func (p *CreatePrivateGatewayParams) ResetVlan() {
+	if p.p != nil && p.p["vlan"] != nil {
+		delete(p.p, "vlan")
+	}
+}
+
 func (p *CreatePrivateGatewayParams) GetVlan() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -254,6 +332,12 @@ func (p *CreatePrivateGatewayParams) SetVpcid(v string) {
 	p.p["vpcid"] = v
 }
 
+func (p *CreatePrivateGatewayParams) ResetVpcid() {
+	if p.p != nil && p.p["vpcid"] != nil {
+		delete(p.p, "vpcid")
+	}
+}
+
 func (p *CreatePrivateGatewayParams) GetVpcid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -264,13 +348,12 @@ func (p *CreatePrivateGatewayParams) GetVpcid() (string, bool) {
 
 // You should always use this function to get a new CreatePrivateGatewayParams instance,
 // as then you are sure you have configured all required params
-func (s *VPCService) NewCreatePrivateGatewayParams(gateway string, ipaddress string, netmask string, vlan string, vpcid string) *CreatePrivateGatewayParams {
+func (s *VPCService) NewCreatePrivateGatewayParams(gateway string, ipaddress string, netmask string, vpcid string) *CreatePrivateGatewayParams {
 	p := &CreatePrivateGatewayParams{}
 	p.p = make(map[string]interface{})
 	p.p["gateway"] = gateway
 	p.p["ipaddress"] = ipaddress
 	p.p["netmask"] = netmask
-	p.p["vlan"] = vlan
 	p.p["vpcid"] = vpcid
 	return p
 }
@@ -311,27 +394,30 @@ func (s *VPCService) CreatePrivateGateway(p *CreatePrivateGatewayParams) (*Creat
 }
 
 type CreatePrivateGatewayResponse struct {
-	Account            string `json:"account"`
-	Aclid              string `json:"aclid"`
-	Aclname            string `json:"aclname"`
-	Domain             string `json:"domain"`
-	Domainid           string `json:"domainid"`
-	Gateway            string `json:"gateway"`
-	Id                 string `json:"id"`
-	Ipaddress          string `json:"ipaddress"`
-	JobID              string `json:"jobid"`
-	Jobstatus          int    `json:"jobstatus"`
-	Netmask            string `json:"netmask"`
-	Physicalnetworkid  string `json:"physicalnetworkid"`
-	Project            string `json:"project"`
-	Projectid          string `json:"projectid"`
-	Sourcenatsupported bool   `json:"sourcenatsupported"`
-	State              string `json:"state"`
-	Vlan               string `json:"vlan"`
-	Vpcid              string `json:"vpcid"`
-	Vpcname            string `json:"vpcname"`
-	Zoneid             string `json:"zoneid"`
-	Zonename           string `json:"zonename"`
+	Account             string `json:"account"`
+	Aclid               string `json:"aclid"`
+	Aclname             string `json:"aclname"`
+	Associatednetwork   string `json:"associatednetwork"`
+	Associatednetworkid string `json:"associatednetworkid"`
+	Domain              string `json:"domain"`
+	Domainid            string `json:"domainid"`
+	Gateway             string `json:"gateway"`
+	Hasannotations      bool   `json:"hasannotations"`
+	Id                  string `json:"id"`
+	Ipaddress           string `json:"ipaddress"`
+	JobID               string `json:"jobid"`
+	Jobstatus           int    `json:"jobstatus"`
+	Netmask             string `json:"netmask"`
+	Physicalnetworkid   string `json:"physicalnetworkid"`
+	Project             string `json:"project"`
+	Projectid           string `json:"projectid"`
+	Sourcenatsupported  bool   `json:"sourcenatsupported"`
+	State               string `json:"state"`
+	Vlan                string `json:"vlan"`
+	Vpcid               string `json:"vpcid"`
+	Vpcname             string `json:"vpcname"`
+	Zoneid              string `json:"zoneid"`
+	Zonename            string `json:"zonename"`
 }
 
 type CreateStaticRouteParams struct {
@@ -359,6 +445,12 @@ func (p *CreateStaticRouteParams) SetCidr(v string) {
 	p.p["cidr"] = v
 }
 
+func (p *CreateStaticRouteParams) ResetCidr() {
+	if p.p != nil && p.p["cidr"] != nil {
+		delete(p.p, "cidr")
+	}
+}
+
 func (p *CreateStaticRouteParams) GetCidr() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -372,6 +464,12 @@ func (p *CreateStaticRouteParams) SetGatewayid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["gatewayid"] = v
+}
+
+func (p *CreateStaticRouteParams) ResetGatewayid() {
+	if p.p != nil && p.p["gatewayid"] != nil {
+		delete(p.p, "gatewayid")
+	}
 }
 
 func (p *CreateStaticRouteParams) GetGatewayid() (string, bool) {
@@ -461,12 +559,24 @@ func (p *CreateVPCParams) toURLValues() url.Values {
 	if v, found := p.p["displaytext"]; found {
 		u.Set("displaytext", v.(string))
 	}
+	if v, found := p.p["dns1"]; found {
+		u.Set("dns1", v.(string))
+	}
+	if v, found := p.p["dns2"]; found {
+		u.Set("dns2", v.(string))
+	}
 	if v, found := p.p["domainid"]; found {
 		u.Set("domainid", v.(string))
 	}
 	if v, found := p.p["fordisplay"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("fordisplay", vv)
+	}
+	if v, found := p.p["ip6dns1"]; found {
+		u.Set("ip6dns1", v.(string))
+	}
+	if v, found := p.p["ip6dns2"]; found {
+		u.Set("ip6dns2", v.(string))
 	}
 	if v, found := p.p["name"]; found {
 		u.Set("name", v.(string))
@@ -476,6 +586,13 @@ func (p *CreateVPCParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["projectid"]; found {
 		u.Set("projectid", v.(string))
+	}
+	if v, found := p.p["publicmtu"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("publicmtu", vv)
+	}
+	if v, found := p.p["sourcenatipaddress"]; found {
+		u.Set("sourcenatipaddress", v.(string))
 	}
 	if v, found := p.p["start"]; found {
 		vv := strconv.FormatBool(v.(bool))
@@ -497,6 +614,12 @@ func (p *CreateVPCParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *CreateVPCParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *CreateVPCParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -510,6 +633,12 @@ func (p *CreateVPCParams) SetCidr(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["cidr"] = v
+}
+
+func (p *CreateVPCParams) ResetCidr() {
+	if p.p != nil && p.p["cidr"] != nil {
+		delete(p.p, "cidr")
+	}
 }
 
 func (p *CreateVPCParams) GetCidr() (string, bool) {
@@ -527,6 +656,12 @@ func (p *CreateVPCParams) SetDisplaytext(v string) {
 	p.p["displaytext"] = v
 }
 
+func (p *CreateVPCParams) ResetDisplaytext() {
+	if p.p != nil && p.p["displaytext"] != nil {
+		delete(p.p, "displaytext")
+	}
+}
+
 func (p *CreateVPCParams) GetDisplaytext() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -535,11 +670,59 @@ func (p *CreateVPCParams) GetDisplaytext() (string, bool) {
 	return value, ok
 }
 
+func (p *CreateVPCParams) SetDns1(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["dns1"] = v
+}
+
+func (p *CreateVPCParams) ResetDns1() {
+	if p.p != nil && p.p["dns1"] != nil {
+		delete(p.p, "dns1")
+	}
+}
+
+func (p *CreateVPCParams) GetDns1() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["dns1"].(string)
+	return value, ok
+}
+
+func (p *CreateVPCParams) SetDns2(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["dns2"] = v
+}
+
+func (p *CreateVPCParams) ResetDns2() {
+	if p.p != nil && p.p["dns2"] != nil {
+		delete(p.p, "dns2")
+	}
+}
+
+func (p *CreateVPCParams) GetDns2() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["dns2"].(string)
+	return value, ok
+}
+
 func (p *CreateVPCParams) SetDomainid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *CreateVPCParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *CreateVPCParams) GetDomainid() (string, bool) {
@@ -557,6 +740,12 @@ func (p *CreateVPCParams) SetFordisplay(v bool) {
 	p.p["fordisplay"] = v
 }
 
+func (p *CreateVPCParams) ResetFordisplay() {
+	if p.p != nil && p.p["fordisplay"] != nil {
+		delete(p.p, "fordisplay")
+	}
+}
+
 func (p *CreateVPCParams) GetFordisplay() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -565,11 +754,59 @@ func (p *CreateVPCParams) GetFordisplay() (bool, bool) {
 	return value, ok
 }
 
+func (p *CreateVPCParams) SetIp6dns1(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["ip6dns1"] = v
+}
+
+func (p *CreateVPCParams) ResetIp6dns1() {
+	if p.p != nil && p.p["ip6dns1"] != nil {
+		delete(p.p, "ip6dns1")
+	}
+}
+
+func (p *CreateVPCParams) GetIp6dns1() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ip6dns1"].(string)
+	return value, ok
+}
+
+func (p *CreateVPCParams) SetIp6dns2(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["ip6dns2"] = v
+}
+
+func (p *CreateVPCParams) ResetIp6dns2() {
+	if p.p != nil && p.p["ip6dns2"] != nil {
+		delete(p.p, "ip6dns2")
+	}
+}
+
+func (p *CreateVPCParams) GetIp6dns2() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ip6dns2"].(string)
+	return value, ok
+}
+
 func (p *CreateVPCParams) SetName(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *CreateVPCParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
 }
 
 func (p *CreateVPCParams) GetName() (string, bool) {
@@ -587,6 +824,12 @@ func (p *CreateVPCParams) SetNetworkdomain(v string) {
 	p.p["networkdomain"] = v
 }
 
+func (p *CreateVPCParams) ResetNetworkdomain() {
+	if p.p != nil && p.p["networkdomain"] != nil {
+		delete(p.p, "networkdomain")
+	}
+}
+
 func (p *CreateVPCParams) GetNetworkdomain() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -602,6 +845,12 @@ func (p *CreateVPCParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *CreateVPCParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
+}
+
 func (p *CreateVPCParams) GetProjectid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -610,11 +859,59 @@ func (p *CreateVPCParams) GetProjectid() (string, bool) {
 	return value, ok
 }
 
+func (p *CreateVPCParams) SetPublicmtu(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["publicmtu"] = v
+}
+
+func (p *CreateVPCParams) ResetPublicmtu() {
+	if p.p != nil && p.p["publicmtu"] != nil {
+		delete(p.p, "publicmtu")
+	}
+}
+
+func (p *CreateVPCParams) GetPublicmtu() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["publicmtu"].(int)
+	return value, ok
+}
+
+func (p *CreateVPCParams) SetSourcenatipaddress(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["sourcenatipaddress"] = v
+}
+
+func (p *CreateVPCParams) ResetSourcenatipaddress() {
+	if p.p != nil && p.p["sourcenatipaddress"] != nil {
+		delete(p.p, "sourcenatipaddress")
+	}
+}
+
+func (p *CreateVPCParams) GetSourcenatipaddress() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["sourcenatipaddress"].(string)
+	return value, ok
+}
+
 func (p *CreateVPCParams) SetStart(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["start"] = v
+}
+
+func (p *CreateVPCParams) ResetStart() {
+	if p.p != nil && p.p["start"] != nil {
+		delete(p.p, "start")
+	}
 }
 
 func (p *CreateVPCParams) GetStart() (bool, bool) {
@@ -632,6 +929,12 @@ func (p *CreateVPCParams) SetVpcofferingid(v string) {
 	p.p["vpcofferingid"] = v
 }
 
+func (p *CreateVPCParams) ResetVpcofferingid() {
+	if p.p != nil && p.p["vpcofferingid"] != nil {
+		delete(p.p, "vpcofferingid")
+	}
+}
+
 func (p *CreateVPCParams) GetVpcofferingid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -645,6 +948,12 @@ func (p *CreateVPCParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *CreateVPCParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *CreateVPCParams) GetZoneid() (string, bool) {
@@ -709,12 +1018,17 @@ type CreateVPCResponse struct {
 	Created              string                     `json:"created"`
 	Displaytext          string                     `json:"displaytext"`
 	Distributedvpcrouter bool                       `json:"distributedvpcrouter"`
+	Dns1                 string                     `json:"dns1"`
+	Dns2                 string                     `json:"dns2"`
 	Domain               string                     `json:"domain"`
 	Domainid             string                     `json:"domainid"`
 	Fordisplay           bool                       `json:"fordisplay"`
 	Hasannotations       bool                       `json:"hasannotations"`
-	Icon                 string                     `json:"icon"`
+	Icon                 interface{}                `json:"icon"`
 	Id                   string                     `json:"id"`
+	Ip6dns1              string                     `json:"ip6dns1"`
+	Ip6dns2              string                     `json:"ip6dns2"`
+	Ip6routes            []interface{}              `json:"ip6routes"`
 	JobID                string                     `json:"jobid"`
 	Jobstatus            int                        `json:"jobstatus"`
 	Name                 string                     `json:"name"`
@@ -722,6 +1036,7 @@ type CreateVPCResponse struct {
 	Networkdomain        string                     `json:"networkdomain"`
 	Project              string                     `json:"project"`
 	Projectid            string                     `json:"projectid"`
+	Publicmtu            int                        `json:"publicmtu"`
 	Redundantvpcrouter   bool                       `json:"redundantvpcrouter"`
 	Regionlevelvpc       bool                       `json:"regionlevelvpc"`
 	Restartrequired      bool                       `json:"restartrequired"`
@@ -776,6 +1091,9 @@ func (p *CreateVPCOfferingParams) toURLValues() url.Values {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("enable", vv)
 	}
+	if v, found := p.p["internetprotocol"]; found {
+		u.Set("internetprotocol", v.(string))
+	}
 	if v, found := p.p["name"]; found {
 		u.Set("name", v.(string))
 	}
@@ -814,6 +1132,12 @@ func (p *CreateVPCOfferingParams) SetDisplaytext(v string) {
 	p.p["displaytext"] = v
 }
 
+func (p *CreateVPCOfferingParams) ResetDisplaytext() {
+	if p.p != nil && p.p["displaytext"] != nil {
+		delete(p.p, "displaytext")
+	}
+}
+
 func (p *CreateVPCOfferingParams) GetDisplaytext() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -827,6 +1151,12 @@ func (p *CreateVPCOfferingParams) SetDomainid(v []string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *CreateVPCOfferingParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *CreateVPCOfferingParams) GetDomainid() ([]string, bool) {
@@ -844,6 +1174,12 @@ func (p *CreateVPCOfferingParams) SetEnable(v bool) {
 	p.p["enable"] = v
 }
 
+func (p *CreateVPCOfferingParams) ResetEnable() {
+	if p.p != nil && p.p["enable"] != nil {
+		delete(p.p, "enable")
+	}
+}
+
 func (p *CreateVPCOfferingParams) GetEnable() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -852,11 +1188,38 @@ func (p *CreateVPCOfferingParams) GetEnable() (bool, bool) {
 	return value, ok
 }
 
+func (p *CreateVPCOfferingParams) SetInternetprotocol(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["internetprotocol"] = v
+}
+
+func (p *CreateVPCOfferingParams) ResetInternetprotocol() {
+	if p.p != nil && p.p["internetprotocol"] != nil {
+		delete(p.p, "internetprotocol")
+	}
+}
+
+func (p *CreateVPCOfferingParams) GetInternetprotocol() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["internetprotocol"].(string)
+	return value, ok
+}
+
 func (p *CreateVPCOfferingParams) SetName(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *CreateVPCOfferingParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
 }
 
 func (p *CreateVPCOfferingParams) GetName() (string, bool) {
@@ -874,6 +1237,12 @@ func (p *CreateVPCOfferingParams) SetServicecapabilitylist(v map[string]string) 
 	p.p["servicecapabilitylist"] = v
 }
 
+func (p *CreateVPCOfferingParams) ResetServicecapabilitylist() {
+	if p.p != nil && p.p["servicecapabilitylist"] != nil {
+		delete(p.p, "servicecapabilitylist")
+	}
+}
+
 func (p *CreateVPCOfferingParams) GetServicecapabilitylist() (map[string]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -887,6 +1256,12 @@ func (p *CreateVPCOfferingParams) SetServiceofferingid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["serviceofferingid"] = v
+}
+
+func (p *CreateVPCOfferingParams) ResetServiceofferingid() {
+	if p.p != nil && p.p["serviceofferingid"] != nil {
+		delete(p.p, "serviceofferingid")
+	}
 }
 
 func (p *CreateVPCOfferingParams) GetServiceofferingid() (string, bool) {
@@ -904,6 +1279,12 @@ func (p *CreateVPCOfferingParams) SetServiceproviderlist(v map[string]string) {
 	p.p["serviceproviderlist"] = v
 }
 
+func (p *CreateVPCOfferingParams) ResetServiceproviderlist() {
+	if p.p != nil && p.p["serviceproviderlist"] != nil {
+		delete(p.p, "serviceproviderlist")
+	}
+}
+
 func (p *CreateVPCOfferingParams) GetServiceproviderlist() (map[string]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -919,6 +1300,12 @@ func (p *CreateVPCOfferingParams) SetSupportedservices(v []string) {
 	p.p["supportedservices"] = v
 }
 
+func (p *CreateVPCOfferingParams) ResetSupportedservices() {
+	if p.p != nil && p.p["supportedservices"] != nil {
+		delete(p.p, "supportedservices")
+	}
+}
+
 func (p *CreateVPCOfferingParams) GetSupportedservices() ([]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -932,6 +1319,12 @@ func (p *CreateVPCOfferingParams) SetZoneid(v []string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *CreateVPCOfferingParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *CreateVPCOfferingParams) GetZoneid() ([]string, bool) {
@@ -995,6 +1388,7 @@ type CreateVPCOfferingResponse struct {
 	Domain                 string                             `json:"domain"`
 	Domainid               string                             `json:"domainid"`
 	Id                     string                             `json:"id"`
+	Internetprotocol       string                             `json:"internetprotocol"`
 	Isdefault              bool                               `json:"isdefault"`
 	JobID                  string                             `json:"jobid"`
 	Jobstatus              int                                `json:"jobstatus"`
@@ -1048,6 +1442,12 @@ func (p *DeletePrivateGatewayParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *DeletePrivateGatewayParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *DeletePrivateGatewayParams) GetId() (string, bool) {
@@ -1126,6 +1526,12 @@ func (p *DeleteStaticRouteParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *DeleteStaticRouteParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *DeleteStaticRouteParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1202,6 +1608,12 @@ func (p *DeleteVPCParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *DeleteVPCParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *DeleteVPCParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1276,6 +1688,12 @@ func (p *DeleteVPCOfferingParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *DeleteVPCOfferingParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *DeleteVPCOfferingParams) GetId() (string, bool) {
@@ -1394,6 +1812,12 @@ func (p *ListPrivateGatewaysParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *ListPrivateGatewaysParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *ListPrivateGatewaysParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1407,6 +1831,12 @@ func (p *ListPrivateGatewaysParams) SetDomainid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *ListPrivateGatewaysParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *ListPrivateGatewaysParams) GetDomainid() (string, bool) {
@@ -1424,6 +1854,12 @@ func (p *ListPrivateGatewaysParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ListPrivateGatewaysParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *ListPrivateGatewaysParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1437,6 +1873,12 @@ func (p *ListPrivateGatewaysParams) SetIpaddress(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["ipaddress"] = v
+}
+
+func (p *ListPrivateGatewaysParams) ResetIpaddress() {
+	if p.p != nil && p.p["ipaddress"] != nil {
+		delete(p.p, "ipaddress")
+	}
 }
 
 func (p *ListPrivateGatewaysParams) GetIpaddress() (string, bool) {
@@ -1454,6 +1896,12 @@ func (p *ListPrivateGatewaysParams) SetIsrecursive(v bool) {
 	p.p["isrecursive"] = v
 }
 
+func (p *ListPrivateGatewaysParams) ResetIsrecursive() {
+	if p.p != nil && p.p["isrecursive"] != nil {
+		delete(p.p, "isrecursive")
+	}
+}
+
 func (p *ListPrivateGatewaysParams) GetIsrecursive() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1467,6 +1915,12 @@ func (p *ListPrivateGatewaysParams) SetKeyword(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["keyword"] = v
+}
+
+func (p *ListPrivateGatewaysParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
 }
 
 func (p *ListPrivateGatewaysParams) GetKeyword() (string, bool) {
@@ -1484,6 +1938,12 @@ func (p *ListPrivateGatewaysParams) SetListall(v bool) {
 	p.p["listall"] = v
 }
 
+func (p *ListPrivateGatewaysParams) ResetListall() {
+	if p.p != nil && p.p["listall"] != nil {
+		delete(p.p, "listall")
+	}
+}
+
 func (p *ListPrivateGatewaysParams) GetListall() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1497,6 +1957,12 @@ func (p *ListPrivateGatewaysParams) SetPage(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["page"] = v
+}
+
+func (p *ListPrivateGatewaysParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
 }
 
 func (p *ListPrivateGatewaysParams) GetPage() (int, bool) {
@@ -1514,6 +1980,12 @@ func (p *ListPrivateGatewaysParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListPrivateGatewaysParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
 func (p *ListPrivateGatewaysParams) GetPagesize() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1527,6 +1999,12 @@ func (p *ListPrivateGatewaysParams) SetProjectid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["projectid"] = v
+}
+
+func (p *ListPrivateGatewaysParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
 }
 
 func (p *ListPrivateGatewaysParams) GetProjectid() (string, bool) {
@@ -1544,6 +2022,12 @@ func (p *ListPrivateGatewaysParams) SetState(v string) {
 	p.p["state"] = v
 }
 
+func (p *ListPrivateGatewaysParams) ResetState() {
+	if p.p != nil && p.p["state"] != nil {
+		delete(p.p, "state")
+	}
+}
+
 func (p *ListPrivateGatewaysParams) GetState() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1559,6 +2043,12 @@ func (p *ListPrivateGatewaysParams) SetVlan(v string) {
 	p.p["vlan"] = v
 }
 
+func (p *ListPrivateGatewaysParams) ResetVlan() {
+	if p.p != nil && p.p["vlan"] != nil {
+		delete(p.p, "vlan")
+	}
+}
+
 func (p *ListPrivateGatewaysParams) GetVlan() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1572,6 +2062,12 @@ func (p *ListPrivateGatewaysParams) SetVpcid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["vpcid"] = v
+}
+
+func (p *ListPrivateGatewaysParams) ResetVpcid() {
+	if p.p != nil && p.p["vpcid"] != nil {
+		delete(p.p, "vpcid")
+	}
 }
 
 func (p *ListPrivateGatewaysParams) GetVpcid() (string, bool) {
@@ -1644,27 +2140,30 @@ type ListPrivateGatewaysResponse struct {
 }
 
 type PrivateGateway struct {
-	Account            string `json:"account"`
-	Aclid              string `json:"aclid"`
-	Aclname            string `json:"aclname"`
-	Domain             string `json:"domain"`
-	Domainid           string `json:"domainid"`
-	Gateway            string `json:"gateway"`
-	Id                 string `json:"id"`
-	Ipaddress          string `json:"ipaddress"`
-	JobID              string `json:"jobid"`
-	Jobstatus          int    `json:"jobstatus"`
-	Netmask            string `json:"netmask"`
-	Physicalnetworkid  string `json:"physicalnetworkid"`
-	Project            string `json:"project"`
-	Projectid          string `json:"projectid"`
-	Sourcenatsupported bool   `json:"sourcenatsupported"`
-	State              string `json:"state"`
-	Vlan               string `json:"vlan"`
-	Vpcid              string `json:"vpcid"`
-	Vpcname            string `json:"vpcname"`
-	Zoneid             string `json:"zoneid"`
-	Zonename           string `json:"zonename"`
+	Account             string `json:"account"`
+	Aclid               string `json:"aclid"`
+	Aclname             string `json:"aclname"`
+	Associatednetwork   string `json:"associatednetwork"`
+	Associatednetworkid string `json:"associatednetworkid"`
+	Domain              string `json:"domain"`
+	Domainid            string `json:"domainid"`
+	Gateway             string `json:"gateway"`
+	Hasannotations      bool   `json:"hasannotations"`
+	Id                  string `json:"id"`
+	Ipaddress           string `json:"ipaddress"`
+	JobID               string `json:"jobid"`
+	Jobstatus           int    `json:"jobstatus"`
+	Netmask             string `json:"netmask"`
+	Physicalnetworkid   string `json:"physicalnetworkid"`
+	Project             string `json:"project"`
+	Projectid           string `json:"projectid"`
+	Sourcenatsupported  bool   `json:"sourcenatsupported"`
+	State               string `json:"state"`
+	Vlan                string `json:"vlan"`
+	Vpcid               string `json:"vpcid"`
+	Vpcname             string `json:"vpcname"`
+	Zoneid              string `json:"zoneid"`
+	Zonename            string `json:"zonename"`
 }
 
 type ListStaticRoutesParams struct {
@@ -1733,6 +2232,12 @@ func (p *ListStaticRoutesParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *ListStaticRoutesParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *ListStaticRoutesParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1746,6 +2251,12 @@ func (p *ListStaticRoutesParams) SetDomainid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *ListStaticRoutesParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *ListStaticRoutesParams) GetDomainid() (string, bool) {
@@ -1763,6 +2274,12 @@ func (p *ListStaticRoutesParams) SetGatewayid(v string) {
 	p.p["gatewayid"] = v
 }
 
+func (p *ListStaticRoutesParams) ResetGatewayid() {
+	if p.p != nil && p.p["gatewayid"] != nil {
+		delete(p.p, "gatewayid")
+	}
+}
+
 func (p *ListStaticRoutesParams) GetGatewayid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1776,6 +2293,12 @@ func (p *ListStaticRoutesParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *ListStaticRoutesParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *ListStaticRoutesParams) GetId() (string, bool) {
@@ -1793,6 +2316,12 @@ func (p *ListStaticRoutesParams) SetIsrecursive(v bool) {
 	p.p["isrecursive"] = v
 }
 
+func (p *ListStaticRoutesParams) ResetIsrecursive() {
+	if p.p != nil && p.p["isrecursive"] != nil {
+		delete(p.p, "isrecursive")
+	}
+}
+
 func (p *ListStaticRoutesParams) GetIsrecursive() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1806,6 +2335,12 @@ func (p *ListStaticRoutesParams) SetKeyword(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["keyword"] = v
+}
+
+func (p *ListStaticRoutesParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
 }
 
 func (p *ListStaticRoutesParams) GetKeyword() (string, bool) {
@@ -1823,6 +2358,12 @@ func (p *ListStaticRoutesParams) SetListall(v bool) {
 	p.p["listall"] = v
 }
 
+func (p *ListStaticRoutesParams) ResetListall() {
+	if p.p != nil && p.p["listall"] != nil {
+		delete(p.p, "listall")
+	}
+}
+
 func (p *ListStaticRoutesParams) GetListall() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1836,6 +2377,12 @@ func (p *ListStaticRoutesParams) SetPage(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["page"] = v
+}
+
+func (p *ListStaticRoutesParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
 }
 
 func (p *ListStaticRoutesParams) GetPage() (int, bool) {
@@ -1853,6 +2400,12 @@ func (p *ListStaticRoutesParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListStaticRoutesParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
 func (p *ListStaticRoutesParams) GetPagesize() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1866,6 +2419,12 @@ func (p *ListStaticRoutesParams) SetProjectid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["projectid"] = v
+}
+
+func (p *ListStaticRoutesParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
 }
 
 func (p *ListStaticRoutesParams) GetProjectid() (string, bool) {
@@ -1883,6 +2442,12 @@ func (p *ListStaticRoutesParams) SetState(v string) {
 	p.p["state"] = v
 }
 
+func (p *ListStaticRoutesParams) ResetState() {
+	if p.p != nil && p.p["state"] != nil {
+		delete(p.p, "state")
+	}
+}
+
 func (p *ListStaticRoutesParams) GetState() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1898,6 +2463,12 @@ func (p *ListStaticRoutesParams) SetTags(v map[string]string) {
 	p.p["tags"] = v
 }
 
+func (p *ListStaticRoutesParams) ResetTags() {
+	if p.p != nil && p.p["tags"] != nil {
+		delete(p.p, "tags")
+	}
+}
+
 func (p *ListStaticRoutesParams) GetTags() (map[string]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1911,6 +2482,12 @@ func (p *ListStaticRoutesParams) SetVpcid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["vpcid"] = v
+}
+
+func (p *ListStaticRoutesParams) ResetVpcid() {
+	if p.p != nil && p.p["vpcid"] != nil {
+		delete(p.p, "vpcid")
+	}
 }
 
 func (p *ListStaticRoutesParams) GetVpcid() (string, bool) {
@@ -2010,6 +2587,9 @@ func (p *ListVPCOfferingsParams) toURLValues() url.Values {
 	if v, found := p.p["displaytext"]; found {
 		u.Set("displaytext", v.(string))
 	}
+	if v, found := p.p["domainid"]; found {
+		u.Set("domainid", v.(string))
+	}
 	if v, found := p.p["id"]; found {
 		u.Set("id", v.(string))
 	}
@@ -2051,6 +2631,12 @@ func (p *ListVPCOfferingsParams) SetDisplaytext(v string) {
 	p.p["displaytext"] = v
 }
 
+func (p *ListVPCOfferingsParams) ResetDisplaytext() {
+	if p.p != nil && p.p["displaytext"] != nil {
+		delete(p.p, "displaytext")
+	}
+}
+
 func (p *ListVPCOfferingsParams) GetDisplaytext() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2059,11 +2645,38 @@ func (p *ListVPCOfferingsParams) GetDisplaytext() (string, bool) {
 	return value, ok
 }
 
+func (p *ListVPCOfferingsParams) SetDomainid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["domainid"] = v
+}
+
+func (p *ListVPCOfferingsParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
+}
+
+func (p *ListVPCOfferingsParams) GetDomainid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["domainid"].(string)
+	return value, ok
+}
+
 func (p *ListVPCOfferingsParams) SetId(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *ListVPCOfferingsParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *ListVPCOfferingsParams) GetId() (string, bool) {
@@ -2081,6 +2694,12 @@ func (p *ListVPCOfferingsParams) SetIsdefault(v bool) {
 	p.p["isdefault"] = v
 }
 
+func (p *ListVPCOfferingsParams) ResetIsdefault() {
+	if p.p != nil && p.p["isdefault"] != nil {
+		delete(p.p, "isdefault")
+	}
+}
+
 func (p *ListVPCOfferingsParams) GetIsdefault() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2094,6 +2713,12 @@ func (p *ListVPCOfferingsParams) SetKeyword(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["keyword"] = v
+}
+
+func (p *ListVPCOfferingsParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
 }
 
 func (p *ListVPCOfferingsParams) GetKeyword() (string, bool) {
@@ -2111,6 +2736,12 @@ func (p *ListVPCOfferingsParams) SetName(v string) {
 	p.p["name"] = v
 }
 
+func (p *ListVPCOfferingsParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
+}
+
 func (p *ListVPCOfferingsParams) GetName() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2124,6 +2755,12 @@ func (p *ListVPCOfferingsParams) SetPage(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["page"] = v
+}
+
+func (p *ListVPCOfferingsParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
 }
 
 func (p *ListVPCOfferingsParams) GetPage() (int, bool) {
@@ -2141,6 +2778,12 @@ func (p *ListVPCOfferingsParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListVPCOfferingsParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
 func (p *ListVPCOfferingsParams) GetPagesize() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2154,6 +2797,12 @@ func (p *ListVPCOfferingsParams) SetState(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["state"] = v
+}
+
+func (p *ListVPCOfferingsParams) ResetState() {
+	if p.p != nil && p.p["state"] != nil {
+		delete(p.p, "state")
+	}
 }
 
 func (p *ListVPCOfferingsParams) GetState() (string, bool) {
@@ -2171,6 +2820,12 @@ func (p *ListVPCOfferingsParams) SetSupportedservices(v []string) {
 	p.p["supportedservices"] = v
 }
 
+func (p *ListVPCOfferingsParams) ResetSupportedservices() {
+	if p.p != nil && p.p["supportedservices"] != nil {
+		delete(p.p, "supportedservices")
+	}
+}
+
 func (p *ListVPCOfferingsParams) GetSupportedservices() ([]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2184,6 +2839,12 @@ func (p *ListVPCOfferingsParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *ListVPCOfferingsParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *ListVPCOfferingsParams) GetZoneid() (string, bool) {
@@ -2312,6 +2973,7 @@ type VPCOffering struct {
 	Domain                 string               `json:"domain"`
 	Domainid               string               `json:"domainid"`
 	Id                     string               `json:"id"`
+	Internetprotocol       string               `json:"internetprotocol"`
 	Isdefault              bool                 `json:"isdefault"`
 	JobID                  string               `json:"jobid"`
 	Jobstatus              int                  `json:"jobstatus"`
@@ -2436,6 +3098,12 @@ func (p *ListVPCsParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *ListVPCsParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *ListVPCsParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2449,6 +3117,12 @@ func (p *ListVPCsParams) SetCidr(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["cidr"] = v
+}
+
+func (p *ListVPCsParams) ResetCidr() {
+	if p.p != nil && p.p["cidr"] != nil {
+		delete(p.p, "cidr")
+	}
 }
 
 func (p *ListVPCsParams) GetCidr() (string, bool) {
@@ -2466,6 +3140,12 @@ func (p *ListVPCsParams) SetDisplaytext(v string) {
 	p.p["displaytext"] = v
 }
 
+func (p *ListVPCsParams) ResetDisplaytext() {
+	if p.p != nil && p.p["displaytext"] != nil {
+		delete(p.p, "displaytext")
+	}
+}
+
 func (p *ListVPCsParams) GetDisplaytext() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2479,6 +3159,12 @@ func (p *ListVPCsParams) SetDomainid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *ListVPCsParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *ListVPCsParams) GetDomainid() (string, bool) {
@@ -2496,6 +3182,12 @@ func (p *ListVPCsParams) SetFordisplay(v bool) {
 	p.p["fordisplay"] = v
 }
 
+func (p *ListVPCsParams) ResetFordisplay() {
+	if p.p != nil && p.p["fordisplay"] != nil {
+		delete(p.p, "fordisplay")
+	}
+}
+
 func (p *ListVPCsParams) GetFordisplay() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2509,6 +3201,12 @@ func (p *ListVPCsParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *ListVPCsParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *ListVPCsParams) GetId() (string, bool) {
@@ -2526,6 +3224,12 @@ func (p *ListVPCsParams) SetIsrecursive(v bool) {
 	p.p["isrecursive"] = v
 }
 
+func (p *ListVPCsParams) ResetIsrecursive() {
+	if p.p != nil && p.p["isrecursive"] != nil {
+		delete(p.p, "isrecursive")
+	}
+}
+
 func (p *ListVPCsParams) GetIsrecursive() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2539,6 +3243,12 @@ func (p *ListVPCsParams) SetKeyword(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["keyword"] = v
+}
+
+func (p *ListVPCsParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
 }
 
 func (p *ListVPCsParams) GetKeyword() (string, bool) {
@@ -2556,6 +3266,12 @@ func (p *ListVPCsParams) SetListall(v bool) {
 	p.p["listall"] = v
 }
 
+func (p *ListVPCsParams) ResetListall() {
+	if p.p != nil && p.p["listall"] != nil {
+		delete(p.p, "listall")
+	}
+}
+
 func (p *ListVPCsParams) GetListall() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2569,6 +3285,12 @@ func (p *ListVPCsParams) SetName(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *ListVPCsParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
 }
 
 func (p *ListVPCsParams) GetName() (string, bool) {
@@ -2586,6 +3308,12 @@ func (p *ListVPCsParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListVPCsParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListVPCsParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2599,6 +3327,12 @@ func (p *ListVPCsParams) SetPagesize(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ListVPCsParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
 }
 
 func (p *ListVPCsParams) GetPagesize() (int, bool) {
@@ -2616,6 +3350,12 @@ func (p *ListVPCsParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *ListVPCsParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
+}
+
 func (p *ListVPCsParams) GetProjectid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2629,6 +3369,12 @@ func (p *ListVPCsParams) SetRestartrequired(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["restartrequired"] = v
+}
+
+func (p *ListVPCsParams) ResetRestartrequired() {
+	if p.p != nil && p.p["restartrequired"] != nil {
+		delete(p.p, "restartrequired")
+	}
 }
 
 func (p *ListVPCsParams) GetRestartrequired() (bool, bool) {
@@ -2646,6 +3392,12 @@ func (p *ListVPCsParams) SetShowicon(v bool) {
 	p.p["showicon"] = v
 }
 
+func (p *ListVPCsParams) ResetShowicon() {
+	if p.p != nil && p.p["showicon"] != nil {
+		delete(p.p, "showicon")
+	}
+}
+
 func (p *ListVPCsParams) GetShowicon() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2659,6 +3411,12 @@ func (p *ListVPCsParams) SetState(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["state"] = v
+}
+
+func (p *ListVPCsParams) ResetState() {
+	if p.p != nil && p.p["state"] != nil {
+		delete(p.p, "state")
+	}
 }
 
 func (p *ListVPCsParams) GetState() (string, bool) {
@@ -2676,6 +3434,12 @@ func (p *ListVPCsParams) SetSupportedservices(v []string) {
 	p.p["supportedservices"] = v
 }
 
+func (p *ListVPCsParams) ResetSupportedservices() {
+	if p.p != nil && p.p["supportedservices"] != nil {
+		delete(p.p, "supportedservices")
+	}
+}
+
 func (p *ListVPCsParams) GetSupportedservices() ([]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2689,6 +3453,12 @@ func (p *ListVPCsParams) SetTags(v map[string]string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["tags"] = v
+}
+
+func (p *ListVPCsParams) ResetTags() {
+	if p.p != nil && p.p["tags"] != nil {
+		delete(p.p, "tags")
+	}
 }
 
 func (p *ListVPCsParams) GetTags() (map[string]string, bool) {
@@ -2706,6 +3476,12 @@ func (p *ListVPCsParams) SetVpcofferingid(v string) {
 	p.p["vpcofferingid"] = v
 }
 
+func (p *ListVPCsParams) ResetVpcofferingid() {
+	if p.p != nil && p.p["vpcofferingid"] != nil {
+		delete(p.p, "vpcofferingid")
+	}
+}
+
 func (p *ListVPCsParams) GetVpcofferingid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2719,6 +3495,12 @@ func (p *ListVPCsParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *ListVPCsParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *ListVPCsParams) GetZoneid() (string, bool) {
@@ -2846,12 +3628,17 @@ type VPC struct {
 	Created              string               `json:"created"`
 	Displaytext          string               `json:"displaytext"`
 	Distributedvpcrouter bool                 `json:"distributedvpcrouter"`
+	Dns1                 string               `json:"dns1"`
+	Dns2                 string               `json:"dns2"`
 	Domain               string               `json:"domain"`
 	Domainid             string               `json:"domainid"`
 	Fordisplay           bool                 `json:"fordisplay"`
 	Hasannotations       bool                 `json:"hasannotations"`
-	Icon                 string               `json:"icon"`
+	Icon                 interface{}          `json:"icon"`
 	Id                   string               `json:"id"`
+	Ip6dns1              string               `json:"ip6dns1"`
+	Ip6dns2              string               `json:"ip6dns2"`
+	Ip6routes            []interface{}        `json:"ip6routes"`
 	JobID                string               `json:"jobid"`
 	Jobstatus            int                  `json:"jobstatus"`
 	Name                 string               `json:"name"`
@@ -2859,6 +3646,7 @@ type VPC struct {
 	Networkdomain        string               `json:"networkdomain"`
 	Project              string               `json:"project"`
 	Projectid            string               `json:"projectid"`
+	Publicmtu            int                  `json:"publicmtu"`
 	Redundantvpcrouter   bool                 `json:"redundantvpcrouter"`
 	Regionlevelvpc       bool                 `json:"regionlevelvpc"`
 	Restartrequired      bool                 `json:"restartrequired"`
@@ -2909,6 +3697,10 @@ func (p *RestartVPCParams) toURLValues() url.Values {
 	if v, found := p.p["id"]; found {
 		u.Set("id", v.(string))
 	}
+	if v, found := p.p["livepatch"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("livepatch", vv)
+	}
 	if v, found := p.p["makeredundant"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("makeredundant", vv)
@@ -2921,6 +3713,12 @@ func (p *RestartVPCParams) SetCleanup(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["cleanup"] = v
+}
+
+func (p *RestartVPCParams) ResetCleanup() {
+	if p.p != nil && p.p["cleanup"] != nil {
+		delete(p.p, "cleanup")
+	}
 }
 
 func (p *RestartVPCParams) GetCleanup() (bool, bool) {
@@ -2938,6 +3736,12 @@ func (p *RestartVPCParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *RestartVPCParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *RestartVPCParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2946,11 +3750,38 @@ func (p *RestartVPCParams) GetId() (string, bool) {
 	return value, ok
 }
 
+func (p *RestartVPCParams) SetLivepatch(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["livepatch"] = v
+}
+
+func (p *RestartVPCParams) ResetLivepatch() {
+	if p.p != nil && p.p["livepatch"] != nil {
+		delete(p.p, "livepatch")
+	}
+}
+
+func (p *RestartVPCParams) GetLivepatch() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["livepatch"].(bool)
+	return value, ok
+}
+
 func (p *RestartVPCParams) SetMakeredundant(v bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["makeredundant"] = v
+}
+
+func (p *RestartVPCParams) ResetMakeredundant() {
+	if p.p != nil && p.p["makeredundant"] != nil {
+		delete(p.p, "makeredundant")
+	}
 }
 
 func (p *RestartVPCParams) GetMakeredundant() (bool, bool) {
@@ -3032,6 +3863,13 @@ func (p *UpdateVPCParams) toURLValues() url.Values {
 	if v, found := p.p["name"]; found {
 		u.Set("name", v.(string))
 	}
+	if v, found := p.p["publicmtu"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("publicmtu", vv)
+	}
+	if v, found := p.p["sourcenatipaddress"]; found {
+		u.Set("sourcenatipaddress", v.(string))
+	}
 	return u
 }
 
@@ -3040,6 +3878,12 @@ func (p *UpdateVPCParams) SetCustomid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["customid"] = v
+}
+
+func (p *UpdateVPCParams) ResetCustomid() {
+	if p.p != nil && p.p["customid"] != nil {
+		delete(p.p, "customid")
+	}
 }
 
 func (p *UpdateVPCParams) GetCustomid() (string, bool) {
@@ -3057,6 +3901,12 @@ func (p *UpdateVPCParams) SetDisplaytext(v string) {
 	p.p["displaytext"] = v
 }
 
+func (p *UpdateVPCParams) ResetDisplaytext() {
+	if p.p != nil && p.p["displaytext"] != nil {
+		delete(p.p, "displaytext")
+	}
+}
+
 func (p *UpdateVPCParams) GetDisplaytext() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3070,6 +3920,12 @@ func (p *UpdateVPCParams) SetFordisplay(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["fordisplay"] = v
+}
+
+func (p *UpdateVPCParams) ResetFordisplay() {
+	if p.p != nil && p.p["fordisplay"] != nil {
+		delete(p.p, "fordisplay")
+	}
 }
 
 func (p *UpdateVPCParams) GetFordisplay() (bool, bool) {
@@ -3087,6 +3943,12 @@ func (p *UpdateVPCParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *UpdateVPCParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *UpdateVPCParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3102,11 +3964,59 @@ func (p *UpdateVPCParams) SetName(v string) {
 	p.p["name"] = v
 }
 
+func (p *UpdateVPCParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
+}
+
 func (p *UpdateVPCParams) GetName() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["name"].(string)
+	return value, ok
+}
+
+func (p *UpdateVPCParams) SetPublicmtu(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["publicmtu"] = v
+}
+
+func (p *UpdateVPCParams) ResetPublicmtu() {
+	if p.p != nil && p.p["publicmtu"] != nil {
+		delete(p.p, "publicmtu")
+	}
+}
+
+func (p *UpdateVPCParams) GetPublicmtu() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["publicmtu"].(int)
+	return value, ok
+}
+
+func (p *UpdateVPCParams) SetSourcenatipaddress(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["sourcenatipaddress"] = v
+}
+
+func (p *UpdateVPCParams) ResetSourcenatipaddress() {
+	if p.p != nil && p.p["sourcenatipaddress"] != nil {
+		delete(p.p, "sourcenatipaddress")
+	}
+}
+
+func (p *UpdateVPCParams) GetSourcenatipaddress() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["sourcenatipaddress"].(string)
 	return value, ok
 }
 
@@ -3160,12 +4070,17 @@ type UpdateVPCResponse struct {
 	Created              string                     `json:"created"`
 	Displaytext          string                     `json:"displaytext"`
 	Distributedvpcrouter bool                       `json:"distributedvpcrouter"`
+	Dns1                 string                     `json:"dns1"`
+	Dns2                 string                     `json:"dns2"`
 	Domain               string                     `json:"domain"`
 	Domainid             string                     `json:"domainid"`
 	Fordisplay           bool                       `json:"fordisplay"`
 	Hasannotations       bool                       `json:"hasannotations"`
-	Icon                 string                     `json:"icon"`
+	Icon                 interface{}                `json:"icon"`
 	Id                   string                     `json:"id"`
+	Ip6dns1              string                     `json:"ip6dns1"`
+	Ip6dns2              string                     `json:"ip6dns2"`
+	Ip6routes            []interface{}              `json:"ip6routes"`
 	JobID                string                     `json:"jobid"`
 	Jobstatus            int                        `json:"jobstatus"`
 	Name                 string                     `json:"name"`
@@ -3173,6 +4088,7 @@ type UpdateVPCResponse struct {
 	Networkdomain        string                     `json:"networkdomain"`
 	Project              string                     `json:"project"`
 	Projectid            string                     `json:"projectid"`
+	Publicmtu            int                        `json:"publicmtu"`
 	Redundantvpcrouter   bool                       `json:"redundantvpcrouter"`
 	Regionlevelvpc       bool                       `json:"regionlevelvpc"`
 	Restartrequired      bool                       `json:"restartrequired"`
@@ -3248,6 +4164,12 @@ func (p *UpdateVPCOfferingParams) SetDisplaytext(v string) {
 	p.p["displaytext"] = v
 }
 
+func (p *UpdateVPCOfferingParams) ResetDisplaytext() {
+	if p.p != nil && p.p["displaytext"] != nil {
+		delete(p.p, "displaytext")
+	}
+}
+
 func (p *UpdateVPCOfferingParams) GetDisplaytext() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3261,6 +4183,12 @@ func (p *UpdateVPCOfferingParams) SetDomainid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *UpdateVPCOfferingParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *UpdateVPCOfferingParams) GetDomainid() (string, bool) {
@@ -3278,6 +4206,12 @@ func (p *UpdateVPCOfferingParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *UpdateVPCOfferingParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *UpdateVPCOfferingParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3291,6 +4225,12 @@ func (p *UpdateVPCOfferingParams) SetName(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *UpdateVPCOfferingParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
 }
 
 func (p *UpdateVPCOfferingParams) GetName() (string, bool) {
@@ -3308,6 +4248,12 @@ func (p *UpdateVPCOfferingParams) SetSortkey(v int) {
 	p.p["sortkey"] = v
 }
 
+func (p *UpdateVPCOfferingParams) ResetSortkey() {
+	if p.p != nil && p.p["sortkey"] != nil {
+		delete(p.p, "sortkey")
+	}
+}
+
 func (p *UpdateVPCOfferingParams) GetSortkey() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3323,6 +4269,12 @@ func (p *UpdateVPCOfferingParams) SetState(v string) {
 	p.p["state"] = v
 }
 
+func (p *UpdateVPCOfferingParams) ResetState() {
+	if p.p != nil && p.p["state"] != nil {
+		delete(p.p, "state")
+	}
+}
+
 func (p *UpdateVPCOfferingParams) GetState() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3336,6 +4288,12 @@ func (p *UpdateVPCOfferingParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *UpdateVPCOfferingParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *UpdateVPCOfferingParams) GetZoneid() (string, bool) {
@@ -3397,6 +4355,7 @@ type UpdateVPCOfferingResponse struct {
 	Domain                 string                             `json:"domain"`
 	Domainid               string                             `json:"domainid"`
 	Id                     string                             `json:"id"`
+	Internetprotocol       string                             `json:"internetprotocol"`
 	Isdefault              bool                               `json:"isdefault"`
 	JobID                  string                             `json:"jobid"`
 	Jobstatus              int                                `json:"jobstatus"`
