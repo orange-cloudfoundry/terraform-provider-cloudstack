@@ -113,6 +113,15 @@ type FirewallServiceIface interface {
 	NewUpdateFirewallRuleParams(id string) *UpdateFirewallRuleParams
 	UpdatePortForwardingRule(p *UpdatePortForwardingRuleParams) (*UpdatePortForwardingRuleResponse, error)
 	NewUpdatePortForwardingRuleParams(id string) *UpdatePortForwardingRuleParams
+	ListIpv6FirewallRules(p *ListIpv6FirewallRulesParams) (*ListIpv6FirewallRulesResponse, error)
+	NewListIpv6FirewallRulesParams() *ListIpv6FirewallRulesParams
+	GetIpv6FirewallRuleByID(id string, opts ...OptionFunc) (*Ipv6FirewallRule, int, error)
+	CreateIpv6FirewallRule(p *CreateIpv6FirewallRuleParams) (*CreateIpv6FirewallRuleResponse, error)
+	NewCreateIpv6FirewallRuleParams(networkid string, protocol string) *CreateIpv6FirewallRuleParams
+	UpdateIpv6FirewallRule(p *UpdateIpv6FirewallRuleParams) (*UpdateIpv6FirewallRuleResponse, error)
+	NewUpdateIpv6FirewallRuleParams(id string) *UpdateIpv6FirewallRuleParams
+	DeleteIpv6FirewallRule(p *DeleteIpv6FirewallRuleParams) (*DeleteIpv6FirewallRuleResponse, error)
+	NewDeleteIpv6FirewallRuleParams(id string) *DeleteIpv6FirewallRuleParams
 }
 
 type AddPaloAltoFirewallParams struct {
@@ -149,6 +158,12 @@ func (p *AddPaloAltoFirewallParams) SetNetworkdevicetype(v string) {
 	p.p["networkdevicetype"] = v
 }
 
+func (p *AddPaloAltoFirewallParams) ResetNetworkdevicetype() {
+	if p.p != nil && p.p["networkdevicetype"] != nil {
+		delete(p.p, "networkdevicetype")
+	}
+}
+
 func (p *AddPaloAltoFirewallParams) GetNetworkdevicetype() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -162,6 +177,12 @@ func (p *AddPaloAltoFirewallParams) SetPassword(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["password"] = v
+}
+
+func (p *AddPaloAltoFirewallParams) ResetPassword() {
+	if p.p != nil && p.p["password"] != nil {
+		delete(p.p, "password")
+	}
 }
 
 func (p *AddPaloAltoFirewallParams) GetPassword() (string, bool) {
@@ -179,6 +200,12 @@ func (p *AddPaloAltoFirewallParams) SetPhysicalnetworkid(v string) {
 	p.p["physicalnetworkid"] = v
 }
 
+func (p *AddPaloAltoFirewallParams) ResetPhysicalnetworkid() {
+	if p.p != nil && p.p["physicalnetworkid"] != nil {
+		delete(p.p, "physicalnetworkid")
+	}
+}
+
 func (p *AddPaloAltoFirewallParams) GetPhysicalnetworkid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -194,6 +221,12 @@ func (p *AddPaloAltoFirewallParams) SetUrl(v string) {
 	p.p["url"] = v
 }
 
+func (p *AddPaloAltoFirewallParams) ResetUrl() {
+	if p.p != nil && p.p["url"] != nil {
+		delete(p.p, "url")
+	}
+}
+
 func (p *AddPaloAltoFirewallParams) GetUrl() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -207,6 +240,12 @@ func (p *AddPaloAltoFirewallParams) SetUsername(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["username"] = v
+}
+
+func (p *AddPaloAltoFirewallParams) ResetUsername() {
+	if p.p != nil && p.p["username"] != nil {
+		delete(p.p, "username")
+	}
 }
 
 func (p *AddPaloAltoFirewallParams) GetUsername() (string, bool) {
@@ -317,6 +356,12 @@ func (p *ConfigurePaloAltoFirewallParams) SetFwdevicecapacity(v int64) {
 	p.p["fwdevicecapacity"] = v
 }
 
+func (p *ConfigurePaloAltoFirewallParams) ResetFwdevicecapacity() {
+	if p.p != nil && p.p["fwdevicecapacity"] != nil {
+		delete(p.p, "fwdevicecapacity")
+	}
+}
+
 func (p *ConfigurePaloAltoFirewallParams) GetFwdevicecapacity() (int64, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -330,6 +375,12 @@ func (p *ConfigurePaloAltoFirewallParams) SetFwdeviceid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["fwdeviceid"] = v
+}
+
+func (p *ConfigurePaloAltoFirewallParams) ResetFwdeviceid() {
+	if p.p != nil && p.p["fwdeviceid"] != nil {
+		delete(p.p, "fwdeviceid")
+	}
 }
 
 func (p *ConfigurePaloAltoFirewallParams) GetFwdeviceid() (string, bool) {
@@ -466,6 +517,12 @@ func (p *CreateEgressFirewallRuleParams) SetCidrlist(v []string) {
 	p.p["cidrlist"] = v
 }
 
+func (p *CreateEgressFirewallRuleParams) ResetCidrlist() {
+	if p.p != nil && p.p["cidrlist"] != nil {
+		delete(p.p, "cidrlist")
+	}
+}
+
 func (p *CreateEgressFirewallRuleParams) GetCidrlist() ([]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -479,6 +536,12 @@ func (p *CreateEgressFirewallRuleParams) SetDestcidrlist(v []string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["destcidrlist"] = v
+}
+
+func (p *CreateEgressFirewallRuleParams) ResetDestcidrlist() {
+	if p.p != nil && p.p["destcidrlist"] != nil {
+		delete(p.p, "destcidrlist")
+	}
 }
 
 func (p *CreateEgressFirewallRuleParams) GetDestcidrlist() ([]string, bool) {
@@ -496,6 +559,12 @@ func (p *CreateEgressFirewallRuleParams) SetEndport(v int) {
 	p.p["endport"] = v
 }
 
+func (p *CreateEgressFirewallRuleParams) ResetEndport() {
+	if p.p != nil && p.p["endport"] != nil {
+		delete(p.p, "endport")
+	}
+}
+
 func (p *CreateEgressFirewallRuleParams) GetEndport() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -509,6 +578,12 @@ func (p *CreateEgressFirewallRuleParams) SetFordisplay(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["fordisplay"] = v
+}
+
+func (p *CreateEgressFirewallRuleParams) ResetFordisplay() {
+	if p.p != nil && p.p["fordisplay"] != nil {
+		delete(p.p, "fordisplay")
+	}
 }
 
 func (p *CreateEgressFirewallRuleParams) GetFordisplay() (bool, bool) {
@@ -526,6 +601,12 @@ func (p *CreateEgressFirewallRuleParams) SetIcmpcode(v int) {
 	p.p["icmpcode"] = v
 }
 
+func (p *CreateEgressFirewallRuleParams) ResetIcmpcode() {
+	if p.p != nil && p.p["icmpcode"] != nil {
+		delete(p.p, "icmpcode")
+	}
+}
+
 func (p *CreateEgressFirewallRuleParams) GetIcmpcode() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -539,6 +620,12 @@ func (p *CreateEgressFirewallRuleParams) SetIcmptype(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["icmptype"] = v
+}
+
+func (p *CreateEgressFirewallRuleParams) ResetIcmptype() {
+	if p.p != nil && p.p["icmptype"] != nil {
+		delete(p.p, "icmptype")
+	}
 }
 
 func (p *CreateEgressFirewallRuleParams) GetIcmptype() (int, bool) {
@@ -556,6 +643,12 @@ func (p *CreateEgressFirewallRuleParams) SetNetworkid(v string) {
 	p.p["networkid"] = v
 }
 
+func (p *CreateEgressFirewallRuleParams) ResetNetworkid() {
+	if p.p != nil && p.p["networkid"] != nil {
+		delete(p.p, "networkid")
+	}
+}
+
 func (p *CreateEgressFirewallRuleParams) GetNetworkid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -569,6 +662,12 @@ func (p *CreateEgressFirewallRuleParams) SetProtocol(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["protocol"] = v
+}
+
+func (p *CreateEgressFirewallRuleParams) ResetProtocol() {
+	if p.p != nil && p.p["protocol"] != nil {
+		delete(p.p, "protocol")
+	}
 }
 
 func (p *CreateEgressFirewallRuleParams) GetProtocol() (string, bool) {
@@ -586,6 +685,12 @@ func (p *CreateEgressFirewallRuleParams) SetStartport(v int) {
 	p.p["startport"] = v
 }
 
+func (p *CreateEgressFirewallRuleParams) ResetStartport() {
+	if p.p != nil && p.p["startport"] != nil {
+		delete(p.p, "startport")
+	}
+}
+
 func (p *CreateEgressFirewallRuleParams) GetStartport() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -599,6 +704,12 @@ func (p *CreateEgressFirewallRuleParams) SetType(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["type"] = v
+}
+
+func (p *CreateEgressFirewallRuleParams) ResetType() {
+	if p.p != nil && p.p["type"] != nil {
+		delete(p.p, "type")
+	}
 }
 
 func (p *CreateEgressFirewallRuleParams) GetType() (string, bool) {
@@ -676,6 +787,7 @@ type CreateEgressFirewallRuleResponse struct {
 	Startport    int    `json:"startport"`
 	State        string `json:"state"`
 	Tags         []Tags `json:"tags"`
+	Traffictype  string `json:"traffictype"`
 }
 
 type CreateFirewallRuleParams struct {
@@ -730,6 +842,12 @@ func (p *CreateFirewallRuleParams) SetCidrlist(v []string) {
 	p.p["cidrlist"] = v
 }
 
+func (p *CreateFirewallRuleParams) ResetCidrlist() {
+	if p.p != nil && p.p["cidrlist"] != nil {
+		delete(p.p, "cidrlist")
+	}
+}
+
 func (p *CreateFirewallRuleParams) GetCidrlist() ([]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -743,6 +861,12 @@ func (p *CreateFirewallRuleParams) SetEndport(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["endport"] = v
+}
+
+func (p *CreateFirewallRuleParams) ResetEndport() {
+	if p.p != nil && p.p["endport"] != nil {
+		delete(p.p, "endport")
+	}
 }
 
 func (p *CreateFirewallRuleParams) GetEndport() (int, bool) {
@@ -760,6 +884,12 @@ func (p *CreateFirewallRuleParams) SetFordisplay(v bool) {
 	p.p["fordisplay"] = v
 }
 
+func (p *CreateFirewallRuleParams) ResetFordisplay() {
+	if p.p != nil && p.p["fordisplay"] != nil {
+		delete(p.p, "fordisplay")
+	}
+}
+
 func (p *CreateFirewallRuleParams) GetFordisplay() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -773,6 +903,12 @@ func (p *CreateFirewallRuleParams) SetIcmpcode(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["icmpcode"] = v
+}
+
+func (p *CreateFirewallRuleParams) ResetIcmpcode() {
+	if p.p != nil && p.p["icmpcode"] != nil {
+		delete(p.p, "icmpcode")
+	}
 }
 
 func (p *CreateFirewallRuleParams) GetIcmpcode() (int, bool) {
@@ -790,6 +926,12 @@ func (p *CreateFirewallRuleParams) SetIcmptype(v int) {
 	p.p["icmptype"] = v
 }
 
+func (p *CreateFirewallRuleParams) ResetIcmptype() {
+	if p.p != nil && p.p["icmptype"] != nil {
+		delete(p.p, "icmptype")
+	}
+}
+
 func (p *CreateFirewallRuleParams) GetIcmptype() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -803,6 +945,12 @@ func (p *CreateFirewallRuleParams) SetIpaddressid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["ipaddressid"] = v
+}
+
+func (p *CreateFirewallRuleParams) ResetIpaddressid() {
+	if p.p != nil && p.p["ipaddressid"] != nil {
+		delete(p.p, "ipaddressid")
+	}
 }
 
 func (p *CreateFirewallRuleParams) GetIpaddressid() (string, bool) {
@@ -820,6 +968,12 @@ func (p *CreateFirewallRuleParams) SetProtocol(v string) {
 	p.p["protocol"] = v
 }
 
+func (p *CreateFirewallRuleParams) ResetProtocol() {
+	if p.p != nil && p.p["protocol"] != nil {
+		delete(p.p, "protocol")
+	}
+}
+
 func (p *CreateFirewallRuleParams) GetProtocol() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -835,6 +989,12 @@ func (p *CreateFirewallRuleParams) SetStartport(v int) {
 	p.p["startport"] = v
 }
 
+func (p *CreateFirewallRuleParams) ResetStartport() {
+	if p.p != nil && p.p["startport"] != nil {
+		delete(p.p, "startport")
+	}
+}
+
 func (p *CreateFirewallRuleParams) GetStartport() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -848,6 +1008,12 @@ func (p *CreateFirewallRuleParams) SetType(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["type"] = v
+}
+
+func (p *CreateFirewallRuleParams) ResetType() {
+	if p.p != nil && p.p["type"] != nil {
+		delete(p.p, "type")
+	}
 }
 
 func (p *CreateFirewallRuleParams) GetType() (string, bool) {
@@ -925,6 +1091,7 @@ type CreateFirewallRuleResponse struct {
 	Startport    int    `json:"startport"`
 	State        string `json:"state"`
 	Tags         []Tags `json:"tags"`
+	Traffictype  string `json:"traffictype"`
 }
 
 type CreatePortForwardingRuleParams struct {
@@ -989,6 +1156,12 @@ func (p *CreatePortForwardingRuleParams) SetCidrlist(v []string) {
 	p.p["cidrlist"] = v
 }
 
+func (p *CreatePortForwardingRuleParams) ResetCidrlist() {
+	if p.p != nil && p.p["cidrlist"] != nil {
+		delete(p.p, "cidrlist")
+	}
+}
+
 func (p *CreatePortForwardingRuleParams) GetCidrlist() ([]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1002,6 +1175,12 @@ func (p *CreatePortForwardingRuleParams) SetFordisplay(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["fordisplay"] = v
+}
+
+func (p *CreatePortForwardingRuleParams) ResetFordisplay() {
+	if p.p != nil && p.p["fordisplay"] != nil {
+		delete(p.p, "fordisplay")
+	}
 }
 
 func (p *CreatePortForwardingRuleParams) GetFordisplay() (bool, bool) {
@@ -1019,6 +1198,12 @@ func (p *CreatePortForwardingRuleParams) SetIpaddressid(v string) {
 	p.p["ipaddressid"] = v
 }
 
+func (p *CreatePortForwardingRuleParams) ResetIpaddressid() {
+	if p.p != nil && p.p["ipaddressid"] != nil {
+		delete(p.p, "ipaddressid")
+	}
+}
+
 func (p *CreatePortForwardingRuleParams) GetIpaddressid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1032,6 +1217,12 @@ func (p *CreatePortForwardingRuleParams) SetNetworkid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["networkid"] = v
+}
+
+func (p *CreatePortForwardingRuleParams) ResetNetworkid() {
+	if p.p != nil && p.p["networkid"] != nil {
+		delete(p.p, "networkid")
+	}
 }
 
 func (p *CreatePortForwardingRuleParams) GetNetworkid() (string, bool) {
@@ -1049,6 +1240,12 @@ func (p *CreatePortForwardingRuleParams) SetOpenfirewall(v bool) {
 	p.p["openfirewall"] = v
 }
 
+func (p *CreatePortForwardingRuleParams) ResetOpenfirewall() {
+	if p.p != nil && p.p["openfirewall"] != nil {
+		delete(p.p, "openfirewall")
+	}
+}
+
 func (p *CreatePortForwardingRuleParams) GetOpenfirewall() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1062,6 +1259,12 @@ func (p *CreatePortForwardingRuleParams) SetPrivateendport(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["privateendport"] = v
+}
+
+func (p *CreatePortForwardingRuleParams) ResetPrivateendport() {
+	if p.p != nil && p.p["privateendport"] != nil {
+		delete(p.p, "privateendport")
+	}
 }
 
 func (p *CreatePortForwardingRuleParams) GetPrivateendport() (int, bool) {
@@ -1079,6 +1282,12 @@ func (p *CreatePortForwardingRuleParams) SetPrivateport(v int) {
 	p.p["privateport"] = v
 }
 
+func (p *CreatePortForwardingRuleParams) ResetPrivateport() {
+	if p.p != nil && p.p["privateport"] != nil {
+		delete(p.p, "privateport")
+	}
+}
+
 func (p *CreatePortForwardingRuleParams) GetPrivateport() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1092,6 +1301,12 @@ func (p *CreatePortForwardingRuleParams) SetProtocol(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["protocol"] = v
+}
+
+func (p *CreatePortForwardingRuleParams) ResetProtocol() {
+	if p.p != nil && p.p["protocol"] != nil {
+		delete(p.p, "protocol")
+	}
 }
 
 func (p *CreatePortForwardingRuleParams) GetProtocol() (string, bool) {
@@ -1109,6 +1324,12 @@ func (p *CreatePortForwardingRuleParams) SetPublicendport(v int) {
 	p.p["publicendport"] = v
 }
 
+func (p *CreatePortForwardingRuleParams) ResetPublicendport() {
+	if p.p != nil && p.p["publicendport"] != nil {
+		delete(p.p, "publicendport")
+	}
+}
+
 func (p *CreatePortForwardingRuleParams) GetPublicendport() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1122,6 +1343,12 @@ func (p *CreatePortForwardingRuleParams) SetPublicport(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["publicport"] = v
+}
+
+func (p *CreatePortForwardingRuleParams) ResetPublicport() {
+	if p.p != nil && p.p["publicport"] != nil {
+		delete(p.p, "publicport")
+	}
 }
 
 func (p *CreatePortForwardingRuleParams) GetPublicport() (int, bool) {
@@ -1139,6 +1366,12 @@ func (p *CreatePortForwardingRuleParams) SetVirtualmachineid(v string) {
 	p.p["virtualmachineid"] = v
 }
 
+func (p *CreatePortForwardingRuleParams) ResetVirtualmachineid() {
+	if p.p != nil && p.p["virtualmachineid"] != nil {
+		delete(p.p, "virtualmachineid")
+	}
+}
+
 func (p *CreatePortForwardingRuleParams) GetVirtualmachineid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1152,6 +1385,12 @@ func (p *CreatePortForwardingRuleParams) SetVmguestip(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["vmguestip"] = v
+}
+
+func (p *CreatePortForwardingRuleParams) ResetVmguestip() {
+	if p.p != nil && p.p["vmguestip"] != nil {
+		delete(p.p, "vmguestip")
+	}
 }
 
 func (p *CreatePortForwardingRuleParams) GetVmguestip() (string, bool) {
@@ -1259,6 +1498,12 @@ func (p *DeleteEgressFirewallRuleParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *DeleteEgressFirewallRuleParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *DeleteEgressFirewallRuleParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1338,6 +1583,12 @@ func (p *DeleteFirewallRuleParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *DeleteFirewallRuleParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *DeleteFirewallRuleParams) GetId() (string, bool) {
@@ -1421,6 +1672,12 @@ func (p *DeletePaloAltoFirewallParams) SetFwdeviceid(v string) {
 	p.p["fwdeviceid"] = v
 }
 
+func (p *DeletePaloAltoFirewallParams) ResetFwdeviceid() {
+	if p.p != nil && p.p["fwdeviceid"] != nil {
+		delete(p.p, "fwdeviceid")
+	}
+}
+
 func (p *DeletePaloAltoFirewallParams) GetFwdeviceid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1438,7 +1695,7 @@ func (s *FirewallService) NewDeletePaloAltoFirewallParams(fwdeviceid string) *De
 	return p
 }
 
-//  delete a Palo Alto firewall device
+// delete a Palo Alto firewall device
 func (s *FirewallService) DeletePaloAltoFirewall(p *DeletePaloAltoFirewallParams) (*DeletePaloAltoFirewallResponse, error) {
 	resp, err := s.cs.newRequest("deletePaloAltoFirewall", p.toURLValues())
 	if err != nil {
@@ -1500,6 +1757,12 @@ func (p *DeletePortForwardingRuleParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *DeletePortForwardingRuleParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *DeletePortForwardingRuleParams) GetId() (string, bool) {
@@ -1628,6 +1891,12 @@ func (p *ListEgressFirewallRulesParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *ListEgressFirewallRulesParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *ListEgressFirewallRulesParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1641,6 +1910,12 @@ func (p *ListEgressFirewallRulesParams) SetDomainid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *ListEgressFirewallRulesParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *ListEgressFirewallRulesParams) GetDomainid() (string, bool) {
@@ -1658,6 +1933,12 @@ func (p *ListEgressFirewallRulesParams) SetFordisplay(v bool) {
 	p.p["fordisplay"] = v
 }
 
+func (p *ListEgressFirewallRulesParams) ResetFordisplay() {
+	if p.p != nil && p.p["fordisplay"] != nil {
+		delete(p.p, "fordisplay")
+	}
+}
+
 func (p *ListEgressFirewallRulesParams) GetFordisplay() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1671,6 +1952,12 @@ func (p *ListEgressFirewallRulesParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *ListEgressFirewallRulesParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *ListEgressFirewallRulesParams) GetId() (string, bool) {
@@ -1688,6 +1975,12 @@ func (p *ListEgressFirewallRulesParams) SetIpaddressid(v string) {
 	p.p["ipaddressid"] = v
 }
 
+func (p *ListEgressFirewallRulesParams) ResetIpaddressid() {
+	if p.p != nil && p.p["ipaddressid"] != nil {
+		delete(p.p, "ipaddressid")
+	}
+}
+
 func (p *ListEgressFirewallRulesParams) GetIpaddressid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1701,6 +1994,12 @@ func (p *ListEgressFirewallRulesParams) SetIsrecursive(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isrecursive"] = v
+}
+
+func (p *ListEgressFirewallRulesParams) ResetIsrecursive() {
+	if p.p != nil && p.p["isrecursive"] != nil {
+		delete(p.p, "isrecursive")
+	}
 }
 
 func (p *ListEgressFirewallRulesParams) GetIsrecursive() (bool, bool) {
@@ -1718,6 +2017,12 @@ func (p *ListEgressFirewallRulesParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListEgressFirewallRulesParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *ListEgressFirewallRulesParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1731,6 +2036,12 @@ func (p *ListEgressFirewallRulesParams) SetListall(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["listall"] = v
+}
+
+func (p *ListEgressFirewallRulesParams) ResetListall() {
+	if p.p != nil && p.p["listall"] != nil {
+		delete(p.p, "listall")
+	}
 }
 
 func (p *ListEgressFirewallRulesParams) GetListall() (bool, bool) {
@@ -1748,6 +2059,12 @@ func (p *ListEgressFirewallRulesParams) SetNetworkid(v string) {
 	p.p["networkid"] = v
 }
 
+func (p *ListEgressFirewallRulesParams) ResetNetworkid() {
+	if p.p != nil && p.p["networkid"] != nil {
+		delete(p.p, "networkid")
+	}
+}
+
 func (p *ListEgressFirewallRulesParams) GetNetworkid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1761,6 +2078,12 @@ func (p *ListEgressFirewallRulesParams) SetPage(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["page"] = v
+}
+
+func (p *ListEgressFirewallRulesParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
 }
 
 func (p *ListEgressFirewallRulesParams) GetPage() (int, bool) {
@@ -1778,6 +2101,12 @@ func (p *ListEgressFirewallRulesParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListEgressFirewallRulesParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
 func (p *ListEgressFirewallRulesParams) GetPagesize() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1793,6 +2122,12 @@ func (p *ListEgressFirewallRulesParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *ListEgressFirewallRulesParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
+}
+
 func (p *ListEgressFirewallRulesParams) GetProjectid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1806,6 +2141,12 @@ func (p *ListEgressFirewallRulesParams) SetTags(v map[string]string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["tags"] = v
+}
+
+func (p *ListEgressFirewallRulesParams) ResetTags() {
+	if p.p != nil && p.p["tags"] != nil {
+		delete(p.p, "tags")
+	}
 }
 
 func (p *ListEgressFirewallRulesParams) GetTags() (map[string]string, bool) {
@@ -1899,6 +2240,7 @@ type EgressFirewallRule struct {
 	Startport    int    `json:"startport"`
 	State        string `json:"state"`
 	Tags         []Tags `json:"tags"`
+	Traffictype  string `json:"traffictype"`
 }
 
 type ListFirewallRulesParams struct {
@@ -1968,6 +2310,12 @@ func (p *ListFirewallRulesParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *ListFirewallRulesParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *ListFirewallRulesParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1981,6 +2329,12 @@ func (p *ListFirewallRulesParams) SetDomainid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *ListFirewallRulesParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *ListFirewallRulesParams) GetDomainid() (string, bool) {
@@ -1998,6 +2352,12 @@ func (p *ListFirewallRulesParams) SetFordisplay(v bool) {
 	p.p["fordisplay"] = v
 }
 
+func (p *ListFirewallRulesParams) ResetFordisplay() {
+	if p.p != nil && p.p["fordisplay"] != nil {
+		delete(p.p, "fordisplay")
+	}
+}
+
 func (p *ListFirewallRulesParams) GetFordisplay() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2011,6 +2371,12 @@ func (p *ListFirewallRulesParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *ListFirewallRulesParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *ListFirewallRulesParams) GetId() (string, bool) {
@@ -2028,6 +2394,12 @@ func (p *ListFirewallRulesParams) SetIpaddressid(v string) {
 	p.p["ipaddressid"] = v
 }
 
+func (p *ListFirewallRulesParams) ResetIpaddressid() {
+	if p.p != nil && p.p["ipaddressid"] != nil {
+		delete(p.p, "ipaddressid")
+	}
+}
+
 func (p *ListFirewallRulesParams) GetIpaddressid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2041,6 +2413,12 @@ func (p *ListFirewallRulesParams) SetIsrecursive(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isrecursive"] = v
+}
+
+func (p *ListFirewallRulesParams) ResetIsrecursive() {
+	if p.p != nil && p.p["isrecursive"] != nil {
+		delete(p.p, "isrecursive")
+	}
 }
 
 func (p *ListFirewallRulesParams) GetIsrecursive() (bool, bool) {
@@ -2058,6 +2436,12 @@ func (p *ListFirewallRulesParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListFirewallRulesParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *ListFirewallRulesParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2071,6 +2455,12 @@ func (p *ListFirewallRulesParams) SetListall(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["listall"] = v
+}
+
+func (p *ListFirewallRulesParams) ResetListall() {
+	if p.p != nil && p.p["listall"] != nil {
+		delete(p.p, "listall")
+	}
 }
 
 func (p *ListFirewallRulesParams) GetListall() (bool, bool) {
@@ -2088,6 +2478,12 @@ func (p *ListFirewallRulesParams) SetNetworkid(v string) {
 	p.p["networkid"] = v
 }
 
+func (p *ListFirewallRulesParams) ResetNetworkid() {
+	if p.p != nil && p.p["networkid"] != nil {
+		delete(p.p, "networkid")
+	}
+}
+
 func (p *ListFirewallRulesParams) GetNetworkid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2101,6 +2497,12 @@ func (p *ListFirewallRulesParams) SetPage(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["page"] = v
+}
+
+func (p *ListFirewallRulesParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
 }
 
 func (p *ListFirewallRulesParams) GetPage() (int, bool) {
@@ -2118,6 +2520,12 @@ func (p *ListFirewallRulesParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListFirewallRulesParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
 func (p *ListFirewallRulesParams) GetPagesize() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2133,6 +2541,12 @@ func (p *ListFirewallRulesParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *ListFirewallRulesParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
+}
+
 func (p *ListFirewallRulesParams) GetProjectid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2146,6 +2560,12 @@ func (p *ListFirewallRulesParams) SetTags(v map[string]string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["tags"] = v
+}
+
+func (p *ListFirewallRulesParams) ResetTags() {
+	if p.p != nil && p.p["tags"] != nil {
+		delete(p.p, "tags")
+	}
 }
 
 func (p *ListFirewallRulesParams) GetTags() (map[string]string, bool) {
@@ -2239,6 +2659,7 @@ type FirewallRule struct {
 	Startport    int    `json:"startport"`
 	State        string `json:"state"`
 	Tags         []Tags `json:"tags"`
+	Traffictype  string `json:"traffictype"`
 }
 
 type ListPaloAltoFirewallsParams struct {
@@ -2277,6 +2698,12 @@ func (p *ListPaloAltoFirewallsParams) SetFwdeviceid(v string) {
 	p.p["fwdeviceid"] = v
 }
 
+func (p *ListPaloAltoFirewallsParams) ResetFwdeviceid() {
+	if p.p != nil && p.p["fwdeviceid"] != nil {
+		delete(p.p, "fwdeviceid")
+	}
+}
+
 func (p *ListPaloAltoFirewallsParams) GetFwdeviceid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2290,6 +2717,12 @@ func (p *ListPaloAltoFirewallsParams) SetKeyword(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["keyword"] = v
+}
+
+func (p *ListPaloAltoFirewallsParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
 }
 
 func (p *ListPaloAltoFirewallsParams) GetKeyword() (string, bool) {
@@ -2307,6 +2740,12 @@ func (p *ListPaloAltoFirewallsParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListPaloAltoFirewallsParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListPaloAltoFirewallsParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2322,6 +2761,12 @@ func (p *ListPaloAltoFirewallsParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListPaloAltoFirewallsParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
 func (p *ListPaloAltoFirewallsParams) GetPagesize() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2335,6 +2780,12 @@ func (p *ListPaloAltoFirewallsParams) SetPhysicalnetworkid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["physicalnetworkid"] = v
+}
+
+func (p *ListPaloAltoFirewallsParams) ResetPhysicalnetworkid() {
+	if p.p != nil && p.p["physicalnetworkid"] != nil {
+		delete(p.p, "physicalnetworkid")
+	}
 }
 
 func (p *ListPaloAltoFirewallsParams) GetPhysicalnetworkid() (string, bool) {
@@ -2466,6 +2917,12 @@ func (p *ListPortForwardingRulesParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *ListPortForwardingRulesParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *ListPortForwardingRulesParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2479,6 +2936,12 @@ func (p *ListPortForwardingRulesParams) SetDomainid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *ListPortForwardingRulesParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *ListPortForwardingRulesParams) GetDomainid() (string, bool) {
@@ -2496,6 +2959,12 @@ func (p *ListPortForwardingRulesParams) SetFordisplay(v bool) {
 	p.p["fordisplay"] = v
 }
 
+func (p *ListPortForwardingRulesParams) ResetFordisplay() {
+	if p.p != nil && p.p["fordisplay"] != nil {
+		delete(p.p, "fordisplay")
+	}
+}
+
 func (p *ListPortForwardingRulesParams) GetFordisplay() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2509,6 +2978,12 @@ func (p *ListPortForwardingRulesParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *ListPortForwardingRulesParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *ListPortForwardingRulesParams) GetId() (string, bool) {
@@ -2526,6 +3001,12 @@ func (p *ListPortForwardingRulesParams) SetIpaddressid(v string) {
 	p.p["ipaddressid"] = v
 }
 
+func (p *ListPortForwardingRulesParams) ResetIpaddressid() {
+	if p.p != nil && p.p["ipaddressid"] != nil {
+		delete(p.p, "ipaddressid")
+	}
+}
+
 func (p *ListPortForwardingRulesParams) GetIpaddressid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2539,6 +3020,12 @@ func (p *ListPortForwardingRulesParams) SetIsrecursive(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isrecursive"] = v
+}
+
+func (p *ListPortForwardingRulesParams) ResetIsrecursive() {
+	if p.p != nil && p.p["isrecursive"] != nil {
+		delete(p.p, "isrecursive")
+	}
 }
 
 func (p *ListPortForwardingRulesParams) GetIsrecursive() (bool, bool) {
@@ -2556,6 +3043,12 @@ func (p *ListPortForwardingRulesParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListPortForwardingRulesParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *ListPortForwardingRulesParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2569,6 +3062,12 @@ func (p *ListPortForwardingRulesParams) SetListall(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["listall"] = v
+}
+
+func (p *ListPortForwardingRulesParams) ResetListall() {
+	if p.p != nil && p.p["listall"] != nil {
+		delete(p.p, "listall")
+	}
 }
 
 func (p *ListPortForwardingRulesParams) GetListall() (bool, bool) {
@@ -2586,6 +3085,12 @@ func (p *ListPortForwardingRulesParams) SetNetworkid(v string) {
 	p.p["networkid"] = v
 }
 
+func (p *ListPortForwardingRulesParams) ResetNetworkid() {
+	if p.p != nil && p.p["networkid"] != nil {
+		delete(p.p, "networkid")
+	}
+}
+
 func (p *ListPortForwardingRulesParams) GetNetworkid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2599,6 +3104,12 @@ func (p *ListPortForwardingRulesParams) SetPage(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["page"] = v
+}
+
+func (p *ListPortForwardingRulesParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
 }
 
 func (p *ListPortForwardingRulesParams) GetPage() (int, bool) {
@@ -2616,6 +3127,12 @@ func (p *ListPortForwardingRulesParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListPortForwardingRulesParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
 func (p *ListPortForwardingRulesParams) GetPagesize() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2631,6 +3148,12 @@ func (p *ListPortForwardingRulesParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *ListPortForwardingRulesParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
+}
+
 func (p *ListPortForwardingRulesParams) GetProjectid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2644,6 +3167,12 @@ func (p *ListPortForwardingRulesParams) SetTags(v map[string]string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["tags"] = v
+}
+
+func (p *ListPortForwardingRulesParams) ResetTags() {
+	if p.p != nil && p.p["tags"] != nil {
+		delete(p.p, "tags")
+	}
 }
 
 func (p *ListPortForwardingRulesParams) GetTags() (map[string]string, bool) {
@@ -2771,6 +3300,12 @@ func (p *UpdateEgressFirewallRuleParams) SetCustomid(v string) {
 	p.p["customid"] = v
 }
 
+func (p *UpdateEgressFirewallRuleParams) ResetCustomid() {
+	if p.p != nil && p.p["customid"] != nil {
+		delete(p.p, "customid")
+	}
+}
+
 func (p *UpdateEgressFirewallRuleParams) GetCustomid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2786,6 +3321,12 @@ func (p *UpdateEgressFirewallRuleParams) SetFordisplay(v bool) {
 	p.p["fordisplay"] = v
 }
 
+func (p *UpdateEgressFirewallRuleParams) ResetFordisplay() {
+	if p.p != nil && p.p["fordisplay"] != nil {
+		delete(p.p, "fordisplay")
+	}
+}
+
 func (p *UpdateEgressFirewallRuleParams) GetFordisplay() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2799,6 +3340,12 @@ func (p *UpdateEgressFirewallRuleParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *UpdateEgressFirewallRuleParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *UpdateEgressFirewallRuleParams) GetId() (string, bool) {
@@ -2875,6 +3422,7 @@ type UpdateEgressFirewallRuleResponse struct {
 	Startport    int    `json:"startport"`
 	State        string `json:"state"`
 	Tags         []Tags `json:"tags"`
+	Traffictype  string `json:"traffictype"`
 }
 
 type UpdateFirewallRuleParams struct {
@@ -2906,6 +3454,12 @@ func (p *UpdateFirewallRuleParams) SetCustomid(v string) {
 	p.p["customid"] = v
 }
 
+func (p *UpdateFirewallRuleParams) ResetCustomid() {
+	if p.p != nil && p.p["customid"] != nil {
+		delete(p.p, "customid")
+	}
+}
+
 func (p *UpdateFirewallRuleParams) GetCustomid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2921,6 +3475,12 @@ func (p *UpdateFirewallRuleParams) SetFordisplay(v bool) {
 	p.p["fordisplay"] = v
 }
 
+func (p *UpdateFirewallRuleParams) ResetFordisplay() {
+	if p.p != nil && p.p["fordisplay"] != nil {
+		delete(p.p, "fordisplay")
+	}
+}
+
 func (p *UpdateFirewallRuleParams) GetFordisplay() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2934,6 +3494,12 @@ func (p *UpdateFirewallRuleParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *UpdateFirewallRuleParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *UpdateFirewallRuleParams) GetId() (string, bool) {
@@ -3010,6 +3576,7 @@ type UpdateFirewallRuleResponse struct {
 	Startport    int    `json:"startport"`
 	State        string `json:"state"`
 	Tags         []Tags `json:"tags"`
+	Traffictype  string `json:"traffictype"`
 }
 
 type UpdatePortForwardingRuleParams struct {
@@ -3055,6 +3622,12 @@ func (p *UpdatePortForwardingRuleParams) SetCustomid(v string) {
 	p.p["customid"] = v
 }
 
+func (p *UpdatePortForwardingRuleParams) ResetCustomid() {
+	if p.p != nil && p.p["customid"] != nil {
+		delete(p.p, "customid")
+	}
+}
+
 func (p *UpdatePortForwardingRuleParams) GetCustomid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3068,6 +3641,12 @@ func (p *UpdatePortForwardingRuleParams) SetFordisplay(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["fordisplay"] = v
+}
+
+func (p *UpdatePortForwardingRuleParams) ResetFordisplay() {
+	if p.p != nil && p.p["fordisplay"] != nil {
+		delete(p.p, "fordisplay")
+	}
 }
 
 func (p *UpdatePortForwardingRuleParams) GetFordisplay() (bool, bool) {
@@ -3085,6 +3664,12 @@ func (p *UpdatePortForwardingRuleParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *UpdatePortForwardingRuleParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *UpdatePortForwardingRuleParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3098,6 +3683,12 @@ func (p *UpdatePortForwardingRuleParams) SetPrivateendport(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["privateendport"] = v
+}
+
+func (p *UpdatePortForwardingRuleParams) ResetPrivateendport() {
+	if p.p != nil && p.p["privateendport"] != nil {
+		delete(p.p, "privateendport")
+	}
 }
 
 func (p *UpdatePortForwardingRuleParams) GetPrivateendport() (int, bool) {
@@ -3115,6 +3706,12 @@ func (p *UpdatePortForwardingRuleParams) SetPrivateport(v int) {
 	p.p["privateport"] = v
 }
 
+func (p *UpdatePortForwardingRuleParams) ResetPrivateport() {
+	if p.p != nil && p.p["privateport"] != nil {
+		delete(p.p, "privateport")
+	}
+}
+
 func (p *UpdatePortForwardingRuleParams) GetPrivateport() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3130,6 +3727,12 @@ func (p *UpdatePortForwardingRuleParams) SetVirtualmachineid(v string) {
 	p.p["virtualmachineid"] = v
 }
 
+func (p *UpdatePortForwardingRuleParams) ResetVirtualmachineid() {
+	if p.p != nil && p.p["virtualmachineid"] != nil {
+		delete(p.p, "virtualmachineid")
+	}
+}
+
 func (p *UpdatePortForwardingRuleParams) GetVirtualmachineid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3143,6 +3746,12 @@ func (p *UpdatePortForwardingRuleParams) SetVmguestip(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["vmguestip"] = v
+}
+
+func (p *UpdatePortForwardingRuleParams) ResetVmguestip() {
+	if p.p != nil && p.p["vmguestip"] != nil {
+		delete(p.p, "vmguestip")
+	}
 }
 
 func (p *UpdatePortForwardingRuleParams) GetVmguestip() (string, bool) {
@@ -3222,4 +3831,1172 @@ type UpdatePortForwardingRuleResponse struct {
 	Virtualmachineid          string `json:"virtualmachineid"`
 	Virtualmachinename        string `json:"virtualmachinename"`
 	Vmguestip                 string `json:"vmguestip"`
+}
+
+type ListIpv6FirewallRulesParams struct {
+	p map[string]interface{}
+}
+
+func (p *ListIpv6FirewallRulesParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["account"]; found {
+		u.Set("account", v.(string))
+	}
+	if v, found := p.p["domainid"]; found {
+		u.Set("domainid", v.(string))
+	}
+	if v, found := p.p["fordisplay"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("fordisplay", vv)
+	}
+	if v, found := p.p["id"]; found {
+		u.Set("id", v.(string))
+	}
+	if v, found := p.p["isrecursive"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("isrecursive", vv)
+	}
+	if v, found := p.p["keyword"]; found {
+		u.Set("keyword", v.(string))
+	}
+	if v, found := p.p["listall"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("listall", vv)
+	}
+	if v, found := p.p["networkid"]; found {
+		u.Set("networkid", v.(string))
+	}
+	if v, found := p.p["page"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("page", vv)
+	}
+	if v, found := p.p["pagesize"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("pagesize", vv)
+	}
+	if v, found := p.p["projectid"]; found {
+		u.Set("projectid", v.(string))
+	}
+	if v, found := p.p["tags"]; found {
+		m := v.(map[string]string)
+		for i, k := range getSortedKeysFromMap(m) {
+			u.Set(fmt.Sprintf("tags[%d].key", i), k)
+			u.Set(fmt.Sprintf("tags[%d].value", i), m[k])
+		}
+	}
+	if v, found := p.p["traffictype"]; found {
+		u.Set("traffictype", v.(string))
+	}
+	return u
+}
+
+func (p *ListIpv6FirewallRulesParams) SetAccount(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["account"] = v
+}
+
+func (p *ListIpv6FirewallRulesParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
+func (p *ListIpv6FirewallRulesParams) GetAccount() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["account"].(string)
+	return value, ok
+}
+
+func (p *ListIpv6FirewallRulesParams) SetDomainid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["domainid"] = v
+}
+
+func (p *ListIpv6FirewallRulesParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
+}
+
+func (p *ListIpv6FirewallRulesParams) GetDomainid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["domainid"].(string)
+	return value, ok
+}
+
+func (p *ListIpv6FirewallRulesParams) SetFordisplay(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["fordisplay"] = v
+}
+
+func (p *ListIpv6FirewallRulesParams) ResetFordisplay() {
+	if p.p != nil && p.p["fordisplay"] != nil {
+		delete(p.p, "fordisplay")
+	}
+}
+
+func (p *ListIpv6FirewallRulesParams) GetFordisplay() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["fordisplay"].(bool)
+	return value, ok
+}
+
+func (p *ListIpv6FirewallRulesParams) SetId(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["id"] = v
+}
+
+func (p *ListIpv6FirewallRulesParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
+func (p *ListIpv6FirewallRulesParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+func (p *ListIpv6FirewallRulesParams) SetIsrecursive(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["isrecursive"] = v
+}
+
+func (p *ListIpv6FirewallRulesParams) ResetIsrecursive() {
+	if p.p != nil && p.p["isrecursive"] != nil {
+		delete(p.p, "isrecursive")
+	}
+}
+
+func (p *ListIpv6FirewallRulesParams) GetIsrecursive() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["isrecursive"].(bool)
+	return value, ok
+}
+
+func (p *ListIpv6FirewallRulesParams) SetKeyword(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["keyword"] = v
+}
+
+func (p *ListIpv6FirewallRulesParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
+func (p *ListIpv6FirewallRulesParams) GetKeyword() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["keyword"].(string)
+	return value, ok
+}
+
+func (p *ListIpv6FirewallRulesParams) SetListall(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["listall"] = v
+}
+
+func (p *ListIpv6FirewallRulesParams) ResetListall() {
+	if p.p != nil && p.p["listall"] != nil {
+		delete(p.p, "listall")
+	}
+}
+
+func (p *ListIpv6FirewallRulesParams) GetListall() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["listall"].(bool)
+	return value, ok
+}
+
+func (p *ListIpv6FirewallRulesParams) SetNetworkid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["networkid"] = v
+}
+
+func (p *ListIpv6FirewallRulesParams) ResetNetworkid() {
+	if p.p != nil && p.p["networkid"] != nil {
+		delete(p.p, "networkid")
+	}
+}
+
+func (p *ListIpv6FirewallRulesParams) GetNetworkid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["networkid"].(string)
+	return value, ok
+}
+
+func (p *ListIpv6FirewallRulesParams) SetPage(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["page"] = v
+}
+
+func (p *ListIpv6FirewallRulesParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
+func (p *ListIpv6FirewallRulesParams) GetPage() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["page"].(int)
+	return value, ok
+}
+
+func (p *ListIpv6FirewallRulesParams) SetPagesize(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["pagesize"] = v
+}
+
+func (p *ListIpv6FirewallRulesParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
+func (p *ListIpv6FirewallRulesParams) GetPagesize() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["pagesize"].(int)
+	return value, ok
+}
+
+func (p *ListIpv6FirewallRulesParams) SetProjectid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["projectid"] = v
+}
+
+func (p *ListIpv6FirewallRulesParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
+}
+
+func (p *ListIpv6FirewallRulesParams) GetProjectid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["projectid"].(string)
+	return value, ok
+}
+
+func (p *ListIpv6FirewallRulesParams) SetTags(v map[string]string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["tags"] = v
+}
+
+func (p *ListIpv6FirewallRulesParams) ResetTags() {
+	if p.p != nil && p.p["tags"] != nil {
+		delete(p.p, "tags")
+	}
+}
+
+func (p *ListIpv6FirewallRulesParams) GetTags() (map[string]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["tags"].(map[string]string)
+	return value, ok
+}
+
+func (p *ListIpv6FirewallRulesParams) SetTraffictype(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["traffictype"] = v
+}
+
+func (p *ListIpv6FirewallRulesParams) ResetTraffictype() {
+	if p.p != nil && p.p["traffictype"] != nil {
+		delete(p.p, "traffictype")
+	}
+}
+
+func (p *ListIpv6FirewallRulesParams) GetTraffictype() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["traffictype"].(string)
+	return value, ok
+}
+
+// You should always use this function to get a new ListIpv6FirewallRulesParams instance,
+// as then you are sure you have configured all required params
+func (s *FirewallService) NewListIpv6FirewallRulesParams() *ListIpv6FirewallRulesParams {
+	p := &ListIpv6FirewallRulesParams{}
+	p.p = make(map[string]interface{})
+	return p
+}
+
+// This is a courtesy helper function, which in some cases may not work as expected!
+func (s *FirewallService) GetIpv6FirewallRuleByID(id string, opts ...OptionFunc) (*Ipv6FirewallRule, int, error) {
+	p := &ListIpv6FirewallRulesParams{}
+	p.p = make(map[string]interface{})
+
+	p.p["id"] = id
+
+	for _, fn := range append(s.cs.options, opts...) {
+		if err := fn(s.cs, p); err != nil {
+			return nil, -1, err
+		}
+	}
+
+	l, err := s.ListIpv6FirewallRules(p)
+	if err != nil {
+		if strings.Contains(err.Error(), fmt.Sprintf(
+			"Invalid parameter id value=%s due to incorrect long value format, "+
+				"or entity does not exist", id)) {
+			return nil, 0, fmt.Errorf("No match found for %s: %+v", id, l)
+		}
+		return nil, -1, err
+	}
+
+	if l.Count == 0 {
+		return nil, l.Count, fmt.Errorf("No match found for %s: %+v", id, l)
+	}
+
+	if l.Count == 1 {
+		return l.Ipv6FirewallRules[0], l.Count, nil
+	}
+	return nil, l.Count, fmt.Errorf("There is more then one result for Ipv6FirewallRule UUID: %s!", id)
+}
+
+// Lists all IPv6 firewall rules
+func (s *FirewallService) ListIpv6FirewallRules(p *ListIpv6FirewallRulesParams) (*ListIpv6FirewallRulesResponse, error) {
+	resp, err := s.cs.newRequest("listIpv6FirewallRules", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err = convertFirewallServiceResponse(resp)
+	if err != nil {
+		return nil, err
+	}
+
+	var r ListIpv6FirewallRulesResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
+
+type ListIpv6FirewallRulesResponse struct {
+	Count             int                 `json:"count"`
+	Ipv6FirewallRules []*Ipv6FirewallRule `json:"ipv6firewallrule"`
+}
+
+type Ipv6FirewallRule struct {
+	Cidrlist                  string `json:"cidrlist"`
+	Fordisplay                bool   `json:"fordisplay"`
+	Id                        string `json:"id"`
+	Ipaddress                 string `json:"ipaddress"`
+	Ipaddressid               string `json:"ipaddressid"`
+	JobID                     string `json:"jobid"`
+	Jobstatus                 int    `json:"jobstatus"`
+	Networkid                 string `json:"networkid"`
+	Privateendport            string `json:"privateendport"`
+	Privateport               string `json:"privateport"`
+	Protocol                  string `json:"protocol"`
+	Publicendport             string `json:"publicendport"`
+	Publicport                string `json:"publicport"`
+	State                     string `json:"state"`
+	Tags                      []Tags `json:"tags"`
+	Virtualmachinedisplayname string `json:"virtualmachinedisplayname"`
+	Virtualmachineid          string `json:"virtualmachineid"`
+	Virtualmachinename        string `json:"virtualmachinename"`
+	Vmguestip                 string `json:"vmguestip"`
+}
+
+type CreateIpv6FirewallRuleParams struct {
+	p map[string]interface{}
+}
+
+func (p *CreateIpv6FirewallRuleParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["cidrlist"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("cidrlist", vv)
+	}
+	if v, found := p.p["destcidrlist"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("destcidrlist", vv)
+	}
+	if v, found := p.p["endport"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("endport", vv)
+	}
+	if v, found := p.p["fordisplay"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("fordisplay", vv)
+	}
+	if v, found := p.p["icmpcode"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("icmpcode", vv)
+	}
+	if v, found := p.p["icmptype"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("icmptype", vv)
+	}
+	if v, found := p.p["networkid"]; found {
+		u.Set("networkid", v.(string))
+	}
+	if v, found := p.p["protocol"]; found {
+		u.Set("protocol", v.(string))
+	}
+	if v, found := p.p["startport"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("startport", vv)
+	}
+	if v, found := p.p["traffictype"]; found {
+		u.Set("traffictype", v.(string))
+	}
+	return u
+}
+
+func (p *CreateIpv6FirewallRuleParams) SetCidrlist(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["cidrlist"] = v
+}
+
+func (p *CreateIpv6FirewallRuleParams) ResetCidrlist() {
+	if p.p != nil && p.p["cidrlist"] != nil {
+		delete(p.p, "cidrlist")
+	}
+}
+
+func (p *CreateIpv6FirewallRuleParams) GetCidrlist() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["cidrlist"].([]string)
+	return value, ok
+}
+
+func (p *CreateIpv6FirewallRuleParams) SetDestcidrlist(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["destcidrlist"] = v
+}
+
+func (p *CreateIpv6FirewallRuleParams) ResetDestcidrlist() {
+	if p.p != nil && p.p["destcidrlist"] != nil {
+		delete(p.p, "destcidrlist")
+	}
+}
+
+func (p *CreateIpv6FirewallRuleParams) GetDestcidrlist() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["destcidrlist"].([]string)
+	return value, ok
+}
+
+func (p *CreateIpv6FirewallRuleParams) SetEndport(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["endport"] = v
+}
+
+func (p *CreateIpv6FirewallRuleParams) ResetEndport() {
+	if p.p != nil && p.p["endport"] != nil {
+		delete(p.p, "endport")
+	}
+}
+
+func (p *CreateIpv6FirewallRuleParams) GetEndport() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["endport"].(int)
+	return value, ok
+}
+
+func (p *CreateIpv6FirewallRuleParams) SetFordisplay(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["fordisplay"] = v
+}
+
+func (p *CreateIpv6FirewallRuleParams) ResetFordisplay() {
+	if p.p != nil && p.p["fordisplay"] != nil {
+		delete(p.p, "fordisplay")
+	}
+}
+
+func (p *CreateIpv6FirewallRuleParams) GetFordisplay() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["fordisplay"].(bool)
+	return value, ok
+}
+
+func (p *CreateIpv6FirewallRuleParams) SetIcmpcode(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["icmpcode"] = v
+}
+
+func (p *CreateIpv6FirewallRuleParams) ResetIcmpcode() {
+	if p.p != nil && p.p["icmpcode"] != nil {
+		delete(p.p, "icmpcode")
+	}
+}
+
+func (p *CreateIpv6FirewallRuleParams) GetIcmpcode() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["icmpcode"].(int)
+	return value, ok
+}
+
+func (p *CreateIpv6FirewallRuleParams) SetIcmptype(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["icmptype"] = v
+}
+
+func (p *CreateIpv6FirewallRuleParams) ResetIcmptype() {
+	if p.p != nil && p.p["icmptype"] != nil {
+		delete(p.p, "icmptype")
+	}
+}
+
+func (p *CreateIpv6FirewallRuleParams) GetIcmptype() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["icmptype"].(int)
+	return value, ok
+}
+
+func (p *CreateIpv6FirewallRuleParams) SetNetworkid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["networkid"] = v
+}
+
+func (p *CreateIpv6FirewallRuleParams) ResetNetworkid() {
+	if p.p != nil && p.p["networkid"] != nil {
+		delete(p.p, "networkid")
+	}
+}
+
+func (p *CreateIpv6FirewallRuleParams) GetNetworkid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["networkid"].(string)
+	return value, ok
+}
+
+func (p *CreateIpv6FirewallRuleParams) SetProtocol(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["protocol"] = v
+}
+
+func (p *CreateIpv6FirewallRuleParams) ResetProtocol() {
+	if p.p != nil && p.p["protocol"] != nil {
+		delete(p.p, "protocol")
+	}
+}
+
+func (p *CreateIpv6FirewallRuleParams) GetProtocol() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["protocol"].(string)
+	return value, ok
+}
+
+func (p *CreateIpv6FirewallRuleParams) SetStartport(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["startport"] = v
+}
+
+func (p *CreateIpv6FirewallRuleParams) ResetStartport() {
+	if p.p != nil && p.p["startport"] != nil {
+		delete(p.p, "startport")
+	}
+}
+
+func (p *CreateIpv6FirewallRuleParams) GetStartport() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["startport"].(int)
+	return value, ok
+}
+
+func (p *CreateIpv6FirewallRuleParams) SetTraffictype(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["traffictype"] = v
+}
+
+func (p *CreateIpv6FirewallRuleParams) ResetTraffictype() {
+	if p.p != nil && p.p["traffictype"] != nil {
+		delete(p.p, "traffictype")
+	}
+}
+
+func (p *CreateIpv6FirewallRuleParams) GetTraffictype() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["traffictype"].(string)
+	return value, ok
+}
+
+// You should always use this function to get a new CreateIpv6FirewallRuleParams instance,
+// as then you are sure you have configured all required params
+func (s *FirewallService) NewCreateIpv6FirewallRuleParams(networkid string, protocol string) *CreateIpv6FirewallRuleParams {
+	p := &CreateIpv6FirewallRuleParams{}
+	p.p = make(map[string]interface{})
+	p.p["networkid"] = networkid
+	p.p["protocol"] = protocol
+	return p
+}
+
+// Creates an Ipv6 firewall rule in the given network (the network has to belong to VPC)
+func (s *FirewallService) CreateIpv6FirewallRule(p *CreateIpv6FirewallRuleParams) (*CreateIpv6FirewallRuleResponse, error) {
+	resp, err := s.cs.newRequest("createIpv6FirewallRule", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r CreateIpv6FirewallRuleResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	// If we have a async client, we need to wait for the async result
+	if s.cs.async {
+		b, err := s.cs.GetAsyncJobResult(r.JobID, s.cs.timeout)
+		if err != nil {
+			if err == AsyncTimeoutErr {
+				return &r, err
+			}
+			return nil, err
+		}
+
+		b, err = getRawValue(b)
+		if err != nil {
+			return nil, err
+		}
+
+		b, err = convertFirewallServiceResponse(b)
+		if err != nil {
+			return nil, err
+		}
+
+		if err := json.Unmarshal(b, &r); err != nil {
+			return nil, err
+		}
+	}
+
+	return &r, nil
+}
+
+type CreateIpv6FirewallRuleResponse struct {
+	Cidrlist                  string `json:"cidrlist"`
+	Fordisplay                bool   `json:"fordisplay"`
+	Id                        string `json:"id"`
+	Ipaddress                 string `json:"ipaddress"`
+	Ipaddressid               string `json:"ipaddressid"`
+	JobID                     string `json:"jobid"`
+	Jobstatus                 int    `json:"jobstatus"`
+	Networkid                 string `json:"networkid"`
+	Privateendport            string `json:"privateendport"`
+	Privateport               string `json:"privateport"`
+	Protocol                  string `json:"protocol"`
+	Publicendport             string `json:"publicendport"`
+	Publicport                string `json:"publicport"`
+	State                     string `json:"state"`
+	Tags                      []Tags `json:"tags"`
+	Virtualmachinedisplayname string `json:"virtualmachinedisplayname"`
+	Virtualmachineid          string `json:"virtualmachineid"`
+	Virtualmachinename        string `json:"virtualmachinename"`
+	Vmguestip                 string `json:"vmguestip"`
+}
+
+type UpdateIpv6FirewallRuleParams struct {
+	p map[string]interface{}
+}
+
+func (p *UpdateIpv6FirewallRuleParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["cidrlist"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("cidrlist", vv)
+	}
+	if v, found := p.p["customid"]; found {
+		u.Set("customid", v.(string))
+	}
+	if v, found := p.p["endport"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("endport", vv)
+	}
+	if v, found := p.p["fordisplay"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("fordisplay", vv)
+	}
+	if v, found := p.p["icmpcode"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("icmpcode", vv)
+	}
+	if v, found := p.p["icmptype"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("icmptype", vv)
+	}
+	if v, found := p.p["id"]; found {
+		u.Set("id", v.(string))
+	}
+	if v, found := p.p["protocol"]; found {
+		u.Set("protocol", v.(string))
+	}
+	if v, found := p.p["startport"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("startport", vv)
+	}
+	if v, found := p.p["traffictype"]; found {
+		u.Set("traffictype", v.(string))
+	}
+	return u
+}
+
+func (p *UpdateIpv6FirewallRuleParams) SetCidrlist(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["cidrlist"] = v
+}
+
+func (p *UpdateIpv6FirewallRuleParams) ResetCidrlist() {
+	if p.p != nil && p.p["cidrlist"] != nil {
+		delete(p.p, "cidrlist")
+	}
+}
+
+func (p *UpdateIpv6FirewallRuleParams) GetCidrlist() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["cidrlist"].([]string)
+	return value, ok
+}
+
+func (p *UpdateIpv6FirewallRuleParams) SetCustomid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["customid"] = v
+}
+
+func (p *UpdateIpv6FirewallRuleParams) ResetCustomid() {
+	if p.p != nil && p.p["customid"] != nil {
+		delete(p.p, "customid")
+	}
+}
+
+func (p *UpdateIpv6FirewallRuleParams) GetCustomid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["customid"].(string)
+	return value, ok
+}
+
+func (p *UpdateIpv6FirewallRuleParams) SetEndport(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["endport"] = v
+}
+
+func (p *UpdateIpv6FirewallRuleParams) ResetEndport() {
+	if p.p != nil && p.p["endport"] != nil {
+		delete(p.p, "endport")
+	}
+}
+
+func (p *UpdateIpv6FirewallRuleParams) GetEndport() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["endport"].(int)
+	return value, ok
+}
+
+func (p *UpdateIpv6FirewallRuleParams) SetFordisplay(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["fordisplay"] = v
+}
+
+func (p *UpdateIpv6FirewallRuleParams) ResetFordisplay() {
+	if p.p != nil && p.p["fordisplay"] != nil {
+		delete(p.p, "fordisplay")
+	}
+}
+
+func (p *UpdateIpv6FirewallRuleParams) GetFordisplay() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["fordisplay"].(bool)
+	return value, ok
+}
+
+func (p *UpdateIpv6FirewallRuleParams) SetIcmpcode(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["icmpcode"] = v
+}
+
+func (p *UpdateIpv6FirewallRuleParams) ResetIcmpcode() {
+	if p.p != nil && p.p["icmpcode"] != nil {
+		delete(p.p, "icmpcode")
+	}
+}
+
+func (p *UpdateIpv6FirewallRuleParams) GetIcmpcode() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["icmpcode"].(int)
+	return value, ok
+}
+
+func (p *UpdateIpv6FirewallRuleParams) SetIcmptype(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["icmptype"] = v
+}
+
+func (p *UpdateIpv6FirewallRuleParams) ResetIcmptype() {
+	if p.p != nil && p.p["icmptype"] != nil {
+		delete(p.p, "icmptype")
+	}
+}
+
+func (p *UpdateIpv6FirewallRuleParams) GetIcmptype() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["icmptype"].(int)
+	return value, ok
+}
+
+func (p *UpdateIpv6FirewallRuleParams) SetId(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["id"] = v
+}
+
+func (p *UpdateIpv6FirewallRuleParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
+func (p *UpdateIpv6FirewallRuleParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+func (p *UpdateIpv6FirewallRuleParams) SetProtocol(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["protocol"] = v
+}
+
+func (p *UpdateIpv6FirewallRuleParams) ResetProtocol() {
+	if p.p != nil && p.p["protocol"] != nil {
+		delete(p.p, "protocol")
+	}
+}
+
+func (p *UpdateIpv6FirewallRuleParams) GetProtocol() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["protocol"].(string)
+	return value, ok
+}
+
+func (p *UpdateIpv6FirewallRuleParams) SetStartport(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["startport"] = v
+}
+
+func (p *UpdateIpv6FirewallRuleParams) ResetStartport() {
+	if p.p != nil && p.p["startport"] != nil {
+		delete(p.p, "startport")
+	}
+}
+
+func (p *UpdateIpv6FirewallRuleParams) GetStartport() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["startport"].(int)
+	return value, ok
+}
+
+func (p *UpdateIpv6FirewallRuleParams) SetTraffictype(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["traffictype"] = v
+}
+
+func (p *UpdateIpv6FirewallRuleParams) ResetTraffictype() {
+	if p.p != nil && p.p["traffictype"] != nil {
+		delete(p.p, "traffictype")
+	}
+}
+
+func (p *UpdateIpv6FirewallRuleParams) GetTraffictype() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["traffictype"].(string)
+	return value, ok
+}
+
+// You should always use this function to get a new UpdateIpv6FirewallRuleParams instance,
+// as then you are sure you have configured all required params
+func (s *FirewallService) NewUpdateIpv6FirewallRuleParams(id string) *UpdateIpv6FirewallRuleParams {
+	p := &UpdateIpv6FirewallRuleParams{}
+	p.p = make(map[string]interface{})
+	p.p["id"] = id
+	return p
+}
+
+// Updates Ipv6 firewall rule with specified ID
+func (s *FirewallService) UpdateIpv6FirewallRule(p *UpdateIpv6FirewallRuleParams) (*UpdateIpv6FirewallRuleResponse, error) {
+	resp, err := s.cs.newRequest("updateIpv6FirewallRule", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r UpdateIpv6FirewallRuleResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	// If we have a async client, we need to wait for the async result
+	if s.cs.async {
+		b, err := s.cs.GetAsyncJobResult(r.JobID, s.cs.timeout)
+		if err != nil {
+			if err == AsyncTimeoutErr {
+				return &r, err
+			}
+			return nil, err
+		}
+
+		b, err = getRawValue(b)
+		if err != nil {
+			return nil, err
+		}
+
+		b, err = convertFirewallServiceResponse(b)
+		if err != nil {
+			return nil, err
+		}
+
+		if err := json.Unmarshal(b, &r); err != nil {
+			return nil, err
+		}
+	}
+
+	return &r, nil
+}
+
+type UpdateIpv6FirewallRuleResponse struct {
+	Cidrlist                  string `json:"cidrlist"`
+	Fordisplay                bool   `json:"fordisplay"`
+	Id                        string `json:"id"`
+	Ipaddress                 string `json:"ipaddress"`
+	Ipaddressid               string `json:"ipaddressid"`
+	JobID                     string `json:"jobid"`
+	Jobstatus                 int    `json:"jobstatus"`
+	Networkid                 string `json:"networkid"`
+	Privateendport            string `json:"privateendport"`
+	Privateport               string `json:"privateport"`
+	Protocol                  string `json:"protocol"`
+	Publicendport             string `json:"publicendport"`
+	Publicport                string `json:"publicport"`
+	State                     string `json:"state"`
+	Tags                      []Tags `json:"tags"`
+	Virtualmachinedisplayname string `json:"virtualmachinedisplayname"`
+	Virtualmachineid          string `json:"virtualmachineid"`
+	Virtualmachinename        string `json:"virtualmachinename"`
+	Vmguestip                 string `json:"vmguestip"`
+}
+
+type DeleteIpv6FirewallRuleParams struct {
+	p map[string]interface{}
+}
+
+func (p *DeleteIpv6FirewallRuleParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["id"]; found {
+		u.Set("id", v.(string))
+	}
+	return u
+}
+
+func (p *DeleteIpv6FirewallRuleParams) SetId(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["id"] = v
+}
+
+func (p *DeleteIpv6FirewallRuleParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
+func (p *DeleteIpv6FirewallRuleParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+// You should always use this function to get a new DeleteIpv6FirewallRuleParams instance,
+// as then you are sure you have configured all required params
+func (s *FirewallService) NewDeleteIpv6FirewallRuleParams(id string) *DeleteIpv6FirewallRuleParams {
+	p := &DeleteIpv6FirewallRuleParams{}
+	p.p = make(map[string]interface{})
+	p.p["id"] = id
+	return p
+}
+
+// Deletes a IPv6 firewall rule
+func (s *FirewallService) DeleteIpv6FirewallRule(p *DeleteIpv6FirewallRuleParams) (*DeleteIpv6FirewallRuleResponse, error) {
+	resp, err := s.cs.newRequest("deleteIpv6FirewallRule", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r DeleteIpv6FirewallRuleResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	// If we have a async client, we need to wait for the async result
+	if s.cs.async {
+		b, err := s.cs.GetAsyncJobResult(r.JobID, s.cs.timeout)
+		if err != nil {
+			if err == AsyncTimeoutErr {
+				return &r, err
+			}
+			return nil, err
+		}
+
+		b, err = convertFirewallServiceResponse(b)
+		if err != nil {
+			return nil, err
+		}
+
+		if err := json.Unmarshal(b, &r); err != nil {
+			return nil, err
+		}
+	}
+
+	return &r, nil
+}
+
+type DeleteIpv6FirewallRuleResponse struct {
+	Displaytext string `json:"displaytext"`
+	JobID       string `json:"jobid"`
+	Jobstatus   int    `json:"jobstatus"`
+	Success     bool   `json:"success"`
 }
