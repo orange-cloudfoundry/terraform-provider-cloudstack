@@ -1,6 +1,6 @@
 module github.com/terraform-providers/terraform-provider-cloudstack
 
-go 1.21
+go 1.22.3
 
 exclude github.com/apache/cloudstack-go/v2 v2.15.0
 
