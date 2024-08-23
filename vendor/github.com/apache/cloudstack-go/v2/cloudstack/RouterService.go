@@ -77,6 +77,12 @@ func (p *ChangeServiceForRouterParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ChangeServiceForRouterParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *ChangeServiceForRouterParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -90,6 +96,12 @@ func (p *ChangeServiceForRouterParams) SetServiceofferingid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["serviceofferingid"] = v
+}
+
+func (p *ChangeServiceForRouterParams) ResetServiceofferingid() {
+	if p.p != nil && p.p["serviceofferingid"] != nil {
+		delete(p.p, "serviceofferingid")
+	}
 }
 
 func (p *ChangeServiceForRouterParams) GetServiceofferingid() (string, bool) {
@@ -141,6 +153,7 @@ type ChangeServiceForRouterResponse struct {
 	Hasannotations      bool                                               `json:"hasannotations"`
 	Healthcheckresults  []ChangeServiceForRouterResponseHealthcheckresults `json:"healthcheckresults"`
 	Healthchecksfailed  bool                                               `json:"healthchecksfailed"`
+	Hostcontrolstate    string                                             `json:"hostcontrolstate"`
 	Hostid              string                                             `json:"hostid"`
 	Hostname            string                                             `json:"hostname"`
 	Hypervisor          string                                             `json:"hypervisor"`
@@ -171,6 +184,7 @@ type ChangeServiceForRouterResponse struct {
 	Scriptsversion      string                                             `json:"scriptsversion"`
 	Serviceofferingid   string                                             `json:"serviceofferingid"`
 	Serviceofferingname string                                             `json:"serviceofferingname"`
+	Softwareversion     string                                             `json:"softwareversion"`
 	State               string                                             `json:"state"`
 	Templateid          string                                             `json:"templateid"`
 	Templatename        string                                             `json:"templatename"`
@@ -215,6 +229,12 @@ func (p *ConfigureVirtualRouterElementParams) SetEnabled(v bool) {
 	p.p["enabled"] = v
 }
 
+func (p *ConfigureVirtualRouterElementParams) ResetEnabled() {
+	if p.p != nil && p.p["enabled"] != nil {
+		delete(p.p, "enabled")
+	}
+}
+
 func (p *ConfigureVirtualRouterElementParams) GetEnabled() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -228,6 +248,12 @@ func (p *ConfigureVirtualRouterElementParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *ConfigureVirtualRouterElementParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *ConfigureVirtualRouterElementParams) GetId() (string, bool) {
@@ -321,6 +347,12 @@ func (p *CreateVirtualRouterElementParams) SetNspid(v string) {
 	p.p["nspid"] = v
 }
 
+func (p *CreateVirtualRouterElementParams) ResetNspid() {
+	if p.p != nil && p.p["nspid"] != nil {
+		delete(p.p, "nspid")
+	}
+}
+
 func (p *CreateVirtualRouterElementParams) GetNspid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -334,6 +366,12 @@ func (p *CreateVirtualRouterElementParams) SetProvidertype(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["providertype"] = v
+}
+
+func (p *CreateVirtualRouterElementParams) ResetProvidertype() {
+	if p.p != nil && p.p["providertype"] != nil {
+		delete(p.p, "providertype")
+	}
 }
 
 func (p *CreateVirtualRouterElementParams) GetProvidertype() (string, bool) {
@@ -423,6 +461,12 @@ func (p *DestroyRouterParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *DestroyRouterParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *DestroyRouterParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -491,6 +535,7 @@ type DestroyRouterResponse struct {
 	Hasannotations      bool                                      `json:"hasannotations"`
 	Healthcheckresults  []DestroyRouterResponseHealthcheckresults `json:"healthcheckresults"`
 	Healthchecksfailed  bool                                      `json:"healthchecksfailed"`
+	Hostcontrolstate    string                                    `json:"hostcontrolstate"`
 	Hostid              string                                    `json:"hostid"`
 	Hostname            string                                    `json:"hostname"`
 	Hypervisor          string                                    `json:"hypervisor"`
@@ -521,6 +566,7 @@ type DestroyRouterResponse struct {
 	Scriptsversion      string                                    `json:"scriptsversion"`
 	Serviceofferingid   string                                    `json:"serviceofferingid"`
 	Serviceofferingname string                                    `json:"serviceofferingname"`
+	Softwareversion     string                                    `json:"softwareversion"`
 	State               string                                    `json:"state"`
 	Templateid          string                                    `json:"templateid"`
 	Templatename        string                                    `json:"templatename"`
@@ -628,6 +674,12 @@ func (p *ListRoutersParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *ListRoutersParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *ListRoutersParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -641,6 +693,12 @@ func (p *ListRoutersParams) SetClusterid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["clusterid"] = v
+}
+
+func (p *ListRoutersParams) ResetClusterid() {
+	if p.p != nil && p.p["clusterid"] != nil {
+		delete(p.p, "clusterid")
+	}
 }
 
 func (p *ListRoutersParams) GetClusterid() (string, bool) {
@@ -658,6 +716,12 @@ func (p *ListRoutersParams) SetDomainid(v string) {
 	p.p["domainid"] = v
 }
 
+func (p *ListRoutersParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
+}
+
 func (p *ListRoutersParams) GetDomainid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -671,6 +735,12 @@ func (p *ListRoutersParams) SetFetchhealthcheckresults(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["fetchhealthcheckresults"] = v
+}
+
+func (p *ListRoutersParams) ResetFetchhealthcheckresults() {
+	if p.p != nil && p.p["fetchhealthcheckresults"] != nil {
+		delete(p.p, "fetchhealthcheckresults")
+	}
 }
 
 func (p *ListRoutersParams) GetFetchhealthcheckresults() (bool, bool) {
@@ -688,6 +758,12 @@ func (p *ListRoutersParams) SetForvpc(v bool) {
 	p.p["forvpc"] = v
 }
 
+func (p *ListRoutersParams) ResetForvpc() {
+	if p.p != nil && p.p["forvpc"] != nil {
+		delete(p.p, "forvpc")
+	}
+}
+
 func (p *ListRoutersParams) GetForvpc() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -701,6 +777,12 @@ func (p *ListRoutersParams) SetHealthchecksfailed(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["healthchecksfailed"] = v
+}
+
+func (p *ListRoutersParams) ResetHealthchecksfailed() {
+	if p.p != nil && p.p["healthchecksfailed"] != nil {
+		delete(p.p, "healthchecksfailed")
+	}
 }
 
 func (p *ListRoutersParams) GetHealthchecksfailed() (bool, bool) {
@@ -718,6 +800,12 @@ func (p *ListRoutersParams) SetHostid(v string) {
 	p.p["hostid"] = v
 }
 
+func (p *ListRoutersParams) ResetHostid() {
+	if p.p != nil && p.p["hostid"] != nil {
+		delete(p.p, "hostid")
+	}
+}
+
 func (p *ListRoutersParams) GetHostid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -731,6 +819,12 @@ func (p *ListRoutersParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *ListRoutersParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *ListRoutersParams) GetId() (string, bool) {
@@ -748,6 +842,12 @@ func (p *ListRoutersParams) SetIsrecursive(v bool) {
 	p.p["isrecursive"] = v
 }
 
+func (p *ListRoutersParams) ResetIsrecursive() {
+	if p.p != nil && p.p["isrecursive"] != nil {
+		delete(p.p, "isrecursive")
+	}
+}
+
 func (p *ListRoutersParams) GetIsrecursive() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -761,6 +861,12 @@ func (p *ListRoutersParams) SetKeyword(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["keyword"] = v
+}
+
+func (p *ListRoutersParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
 }
 
 func (p *ListRoutersParams) GetKeyword() (string, bool) {
@@ -778,6 +884,12 @@ func (p *ListRoutersParams) SetListall(v bool) {
 	p.p["listall"] = v
 }
 
+func (p *ListRoutersParams) ResetListall() {
+	if p.p != nil && p.p["listall"] != nil {
+		delete(p.p, "listall")
+	}
+}
+
 func (p *ListRoutersParams) GetListall() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -791,6 +903,12 @@ func (p *ListRoutersParams) SetName(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *ListRoutersParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
 }
 
 func (p *ListRoutersParams) GetName() (string, bool) {
@@ -808,6 +926,12 @@ func (p *ListRoutersParams) SetNetworkid(v string) {
 	p.p["networkid"] = v
 }
 
+func (p *ListRoutersParams) ResetNetworkid() {
+	if p.p != nil && p.p["networkid"] != nil {
+		delete(p.p, "networkid")
+	}
+}
+
 func (p *ListRoutersParams) GetNetworkid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -821,6 +945,12 @@ func (p *ListRoutersParams) SetPage(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["page"] = v
+}
+
+func (p *ListRoutersParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
 }
 
 func (p *ListRoutersParams) GetPage() (int, bool) {
@@ -838,6 +968,12 @@ func (p *ListRoutersParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListRoutersParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
 func (p *ListRoutersParams) GetPagesize() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -851,6 +987,12 @@ func (p *ListRoutersParams) SetPodid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["podid"] = v
+}
+
+func (p *ListRoutersParams) ResetPodid() {
+	if p.p != nil && p.p["podid"] != nil {
+		delete(p.p, "podid")
+	}
 }
 
 func (p *ListRoutersParams) GetPodid() (string, bool) {
@@ -868,6 +1010,12 @@ func (p *ListRoutersParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *ListRoutersParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
+}
+
 func (p *ListRoutersParams) GetProjectid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -881,6 +1029,12 @@ func (p *ListRoutersParams) SetState(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["state"] = v
+}
+
+func (p *ListRoutersParams) ResetState() {
+	if p.p != nil && p.p["state"] != nil {
+		delete(p.p, "state")
+	}
 }
 
 func (p *ListRoutersParams) GetState() (string, bool) {
@@ -898,6 +1052,12 @@ func (p *ListRoutersParams) SetVersion(v string) {
 	p.p["version"] = v
 }
 
+func (p *ListRoutersParams) ResetVersion() {
+	if p.p != nil && p.p["version"] != nil {
+		delete(p.p, "version")
+	}
+}
+
 func (p *ListRoutersParams) GetVersion() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -913,6 +1073,12 @@ func (p *ListRoutersParams) SetVpcid(v string) {
 	p.p["vpcid"] = v
 }
 
+func (p *ListRoutersParams) ResetVpcid() {
+	if p.p != nil && p.p["vpcid"] != nil {
+		delete(p.p, "vpcid")
+	}
+}
+
 func (p *ListRoutersParams) GetVpcid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -926,6 +1092,12 @@ func (p *ListRoutersParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *ListRoutersParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *ListRoutersParams) GetZoneid() (string, bool) {
@@ -1063,6 +1235,7 @@ type Router struct {
 	Hasannotations      bool                       `json:"hasannotations"`
 	Healthcheckresults  []RouterHealthcheckresults `json:"healthcheckresults"`
 	Healthchecksfailed  bool                       `json:"healthchecksfailed"`
+	Hostcontrolstate    string                     `json:"hostcontrolstate"`
 	Hostid              string                     `json:"hostid"`
 	Hostname            string                     `json:"hostname"`
 	Hypervisor          string                     `json:"hypervisor"`
@@ -1093,6 +1266,7 @@ type Router struct {
 	Scriptsversion      string                     `json:"scriptsversion"`
 	Serviceofferingid   string                     `json:"serviceofferingid"`
 	Serviceofferingname string                     `json:"serviceofferingname"`
+	Softwareversion     string                     `json:"softwareversion"`
 	State               string                     `json:"state"`
 	Templateid          string                     `json:"templateid"`
 	Templatename        string                     `json:"templatename"`
@@ -1151,6 +1325,12 @@ func (p *ListVirtualRouterElementsParams) SetEnabled(v bool) {
 	p.p["enabled"] = v
 }
 
+func (p *ListVirtualRouterElementsParams) ResetEnabled() {
+	if p.p != nil && p.p["enabled"] != nil {
+		delete(p.p, "enabled")
+	}
+}
+
 func (p *ListVirtualRouterElementsParams) GetEnabled() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1164,6 +1344,12 @@ func (p *ListVirtualRouterElementsParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *ListVirtualRouterElementsParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *ListVirtualRouterElementsParams) GetId() (string, bool) {
@@ -1181,6 +1367,12 @@ func (p *ListVirtualRouterElementsParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListVirtualRouterElementsParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *ListVirtualRouterElementsParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1194,6 +1386,12 @@ func (p *ListVirtualRouterElementsParams) SetNspid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["nspid"] = v
+}
+
+func (p *ListVirtualRouterElementsParams) ResetNspid() {
+	if p.p != nil && p.p["nspid"] != nil {
+		delete(p.p, "nspid")
+	}
 }
 
 func (p *ListVirtualRouterElementsParams) GetNspid() (string, bool) {
@@ -1211,6 +1409,12 @@ func (p *ListVirtualRouterElementsParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListVirtualRouterElementsParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListVirtualRouterElementsParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1224,6 +1428,12 @@ func (p *ListVirtualRouterElementsParams) SetPagesize(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ListVirtualRouterElementsParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
 }
 
 func (p *ListVirtualRouterElementsParams) GetPagesize() (int, bool) {
@@ -1334,6 +1544,12 @@ func (p *RebootRouterParams) SetForced(v bool) {
 	p.p["forced"] = v
 }
 
+func (p *RebootRouterParams) ResetForced() {
+	if p.p != nil && p.p["forced"] != nil {
+		delete(p.p, "forced")
+	}
+}
+
 func (p *RebootRouterParams) GetForced() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1347,6 +1563,12 @@ func (p *RebootRouterParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *RebootRouterParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *RebootRouterParams) GetId() (string, bool) {
@@ -1417,6 +1639,7 @@ type RebootRouterResponse struct {
 	Hasannotations      bool                                     `json:"hasannotations"`
 	Healthcheckresults  []RebootRouterResponseHealthcheckresults `json:"healthcheckresults"`
 	Healthchecksfailed  bool                                     `json:"healthchecksfailed"`
+	Hostcontrolstate    string                                   `json:"hostcontrolstate"`
 	Hostid              string                                   `json:"hostid"`
 	Hostname            string                                   `json:"hostname"`
 	Hypervisor          string                                   `json:"hypervisor"`
@@ -1447,6 +1670,7 @@ type RebootRouterResponse struct {
 	Scriptsversion      string                                   `json:"scriptsversion"`
 	Serviceofferingid   string                                   `json:"serviceofferingid"`
 	Serviceofferingname string                                   `json:"serviceofferingname"`
+	Softwareversion     string                                   `json:"softwareversion"`
 	State               string                                   `json:"state"`
 	Templateid          string                                   `json:"templateid"`
 	Templatename        string                                   `json:"templatename"`
@@ -1485,6 +1709,12 @@ func (p *StartRouterParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *StartRouterParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *StartRouterParams) GetId() (string, bool) {
@@ -1555,6 +1785,7 @@ type StartRouterResponse struct {
 	Hasannotations      bool                                    `json:"hasannotations"`
 	Healthcheckresults  []StartRouterResponseHealthcheckresults `json:"healthcheckresults"`
 	Healthchecksfailed  bool                                    `json:"healthchecksfailed"`
+	Hostcontrolstate    string                                  `json:"hostcontrolstate"`
 	Hostid              string                                  `json:"hostid"`
 	Hostname            string                                  `json:"hostname"`
 	Hypervisor          string                                  `json:"hypervisor"`
@@ -1585,6 +1816,7 @@ type StartRouterResponse struct {
 	Scriptsversion      string                                  `json:"scriptsversion"`
 	Serviceofferingid   string                                  `json:"serviceofferingid"`
 	Serviceofferingname string                                  `json:"serviceofferingname"`
+	Softwareversion     string                                  `json:"softwareversion"`
 	State               string                                  `json:"state"`
 	Templateid          string                                  `json:"templateid"`
 	Templatename        string                                  `json:"templatename"`
@@ -1629,6 +1861,12 @@ func (p *StopRouterParams) SetForced(v bool) {
 	p.p["forced"] = v
 }
 
+func (p *StopRouterParams) ResetForced() {
+	if p.p != nil && p.p["forced"] != nil {
+		delete(p.p, "forced")
+	}
+}
+
 func (p *StopRouterParams) GetForced() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1642,6 +1880,12 @@ func (p *StopRouterParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *StopRouterParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *StopRouterParams) GetId() (string, bool) {
@@ -1712,6 +1956,7 @@ type StopRouterResponse struct {
 	Hasannotations      bool                                   `json:"hasannotations"`
 	Healthcheckresults  []StopRouterResponseHealthcheckresults `json:"healthcheckresults"`
 	Healthchecksfailed  bool                                   `json:"healthchecksfailed"`
+	Hostcontrolstate    string                                 `json:"hostcontrolstate"`
 	Hostid              string                                 `json:"hostid"`
 	Hostname            string                                 `json:"hostname"`
 	Hypervisor          string                                 `json:"hypervisor"`
@@ -1742,6 +1987,7 @@ type StopRouterResponse struct {
 	Scriptsversion      string                                 `json:"scriptsversion"`
 	Serviceofferingid   string                                 `json:"serviceofferingid"`
 	Serviceofferingname string                                 `json:"serviceofferingname"`
+	Softwareversion     string                                 `json:"softwareversion"`
 	State               string                                 `json:"state"`
 	Templateid          string                                 `json:"templateid"`
 	Templatename        string                                 `json:"templatename"`

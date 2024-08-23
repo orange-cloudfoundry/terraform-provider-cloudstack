@@ -68,6 +68,8 @@ type VolumeServiceIface interface {
 	NewUpdateVolumeParams() *UpdateVolumeParams
 	UploadVolume(p *UploadVolumeParams) (*UploadVolumeResponse, error)
 	NewUploadVolumeParams(format string, name string, url string, zoneid string) *UploadVolumeParams
+	ChangeOfferingForVolume(p *ChangeOfferingForVolumeParams) (*ChangeOfferingForVolumeResponse, error)
+	NewChangeOfferingForVolumeParams(diskofferingid string, id string) *ChangeOfferingForVolumeParams
 }
 
 type AttachVolumeParams struct {
@@ -99,6 +101,12 @@ func (p *AttachVolumeParams) SetDeviceid(v int64) {
 	p.p["deviceid"] = v
 }
 
+func (p *AttachVolumeParams) ResetDeviceid() {
+	if p.p != nil && p.p["deviceid"] != nil {
+		delete(p.p, "deviceid")
+	}
+}
+
 func (p *AttachVolumeParams) GetDeviceid() (int64, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -114,6 +122,12 @@ func (p *AttachVolumeParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *AttachVolumeParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *AttachVolumeParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -127,6 +141,12 @@ func (p *AttachVolumeParams) SetVirtualmachineid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["virtualmachineid"] = v
+}
+
+func (p *AttachVolumeParams) ResetVirtualmachineid() {
+	if p.p != nil && p.p["virtualmachineid"] != nil {
+		delete(p.p, "virtualmachineid")
+	}
 }
 
 func (p *AttachVolumeParams) GetVirtualmachineid() (string, bool) {
@@ -205,6 +225,7 @@ type AttachVolumeResponse struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -247,6 +268,7 @@ type AttachVolumeResponse struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }
@@ -313,6 +335,12 @@ func (p *CreateVolumeParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *CreateVolumeParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *CreateVolumeParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -326,6 +354,12 @@ func (p *CreateVolumeParams) SetCustomid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["customid"] = v
+}
+
+func (p *CreateVolumeParams) ResetCustomid() {
+	if p.p != nil && p.p["customid"] != nil {
+		delete(p.p, "customid")
+	}
 }
 
 func (p *CreateVolumeParams) GetCustomid() (string, bool) {
@@ -343,6 +377,12 @@ func (p *CreateVolumeParams) SetDiskofferingid(v string) {
 	p.p["diskofferingid"] = v
 }
 
+func (p *CreateVolumeParams) ResetDiskofferingid() {
+	if p.p != nil && p.p["diskofferingid"] != nil {
+		delete(p.p, "diskofferingid")
+	}
+}
+
 func (p *CreateVolumeParams) GetDiskofferingid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -356,6 +396,12 @@ func (p *CreateVolumeParams) SetDisplayvolume(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["displayvolume"] = v
+}
+
+func (p *CreateVolumeParams) ResetDisplayvolume() {
+	if p.p != nil && p.p["displayvolume"] != nil {
+		delete(p.p, "displayvolume")
+	}
 }
 
 func (p *CreateVolumeParams) GetDisplayvolume() (bool, bool) {
@@ -373,6 +419,12 @@ func (p *CreateVolumeParams) SetDomainid(v string) {
 	p.p["domainid"] = v
 }
 
+func (p *CreateVolumeParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
+}
+
 func (p *CreateVolumeParams) GetDomainid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -386,6 +438,12 @@ func (p *CreateVolumeParams) SetMaxiops(v int64) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["maxiops"] = v
+}
+
+func (p *CreateVolumeParams) ResetMaxiops() {
+	if p.p != nil && p.p["maxiops"] != nil {
+		delete(p.p, "maxiops")
+	}
 }
 
 func (p *CreateVolumeParams) GetMaxiops() (int64, bool) {
@@ -403,6 +461,12 @@ func (p *CreateVolumeParams) SetMiniops(v int64) {
 	p.p["miniops"] = v
 }
 
+func (p *CreateVolumeParams) ResetMiniops() {
+	if p.p != nil && p.p["miniops"] != nil {
+		delete(p.p, "miniops")
+	}
+}
+
 func (p *CreateVolumeParams) GetMiniops() (int64, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -416,6 +480,12 @@ func (p *CreateVolumeParams) SetName(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *CreateVolumeParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
 }
 
 func (p *CreateVolumeParams) GetName() (string, bool) {
@@ -433,6 +503,12 @@ func (p *CreateVolumeParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *CreateVolumeParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
+}
+
 func (p *CreateVolumeParams) GetProjectid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -446,6 +522,12 @@ func (p *CreateVolumeParams) SetSize(v int64) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["size"] = v
+}
+
+func (p *CreateVolumeParams) ResetSize() {
+	if p.p != nil && p.p["size"] != nil {
+		delete(p.p, "size")
+	}
 }
 
 func (p *CreateVolumeParams) GetSize() (int64, bool) {
@@ -463,6 +545,12 @@ func (p *CreateVolumeParams) SetSnapshotid(v string) {
 	p.p["snapshotid"] = v
 }
 
+func (p *CreateVolumeParams) ResetSnapshotid() {
+	if p.p != nil && p.p["snapshotid"] != nil {
+		delete(p.p, "snapshotid")
+	}
+}
+
 func (p *CreateVolumeParams) GetSnapshotid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -478,6 +566,12 @@ func (p *CreateVolumeParams) SetVirtualmachineid(v string) {
 	p.p["virtualmachineid"] = v
 }
 
+func (p *CreateVolumeParams) ResetVirtualmachineid() {
+	if p.p != nil && p.p["virtualmachineid"] != nil {
+		delete(p.p, "virtualmachineid")
+	}
+}
+
 func (p *CreateVolumeParams) GetVirtualmachineid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -491,6 +585,12 @@ func (p *CreateVolumeParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *CreateVolumeParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *CreateVolumeParams) GetZoneid() (string, bool) {
@@ -567,6 +667,7 @@ type CreateVolumeResponse struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -609,6 +710,7 @@ type CreateVolumeResponse struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }
@@ -633,6 +735,12 @@ func (p *DeleteVolumeParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *DeleteVolumeParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *DeleteVolumeParams) GetId() (string, bool) {
@@ -727,6 +835,12 @@ func (p *DestroyVolumeParams) SetExpunge(v bool) {
 	p.p["expunge"] = v
 }
 
+func (p *DestroyVolumeParams) ResetExpunge() {
+	if p.p != nil && p.p["expunge"] != nil {
+		delete(p.p, "expunge")
+	}
+}
+
 func (p *DestroyVolumeParams) GetExpunge() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -740,6 +854,12 @@ func (p *DestroyVolumeParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *DestroyVolumeParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *DestroyVolumeParams) GetId() (string, bool) {
@@ -817,6 +937,7 @@ type DestroyVolumeResponse struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -859,6 +980,7 @@ type DestroyVolumeResponse struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }
@@ -892,6 +1014,12 @@ func (p *DetachVolumeParams) SetDeviceid(v int64) {
 	p.p["deviceid"] = v
 }
 
+func (p *DetachVolumeParams) ResetDeviceid() {
+	if p.p != nil && p.p["deviceid"] != nil {
+		delete(p.p, "deviceid")
+	}
+}
+
 func (p *DetachVolumeParams) GetDeviceid() (int64, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -907,6 +1035,12 @@ func (p *DetachVolumeParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *DetachVolumeParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *DetachVolumeParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -920,6 +1054,12 @@ func (p *DetachVolumeParams) SetVirtualmachineid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["virtualmachineid"] = v
+}
+
+func (p *DetachVolumeParams) ResetVirtualmachineid() {
+	if p.p != nil && p.p["virtualmachineid"] != nil {
+		delete(p.p, "virtualmachineid")
+	}
 }
 
 func (p *DetachVolumeParams) GetVirtualmachineid() (string, bool) {
@@ -996,6 +1136,7 @@ type DetachVolumeResponse struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -1038,6 +1179,7 @@ type DetachVolumeResponse struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }
@@ -1073,6 +1215,12 @@ func (p *ExtractVolumeParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ExtractVolumeParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *ExtractVolumeParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1086,6 +1234,12 @@ func (p *ExtractVolumeParams) SetMode(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["mode"] = v
+}
+
+func (p *ExtractVolumeParams) ResetMode() {
+	if p.p != nil && p.p["mode"] != nil {
+		delete(p.p, "mode")
+	}
 }
 
 func (p *ExtractVolumeParams) GetMode() (string, bool) {
@@ -1103,6 +1257,12 @@ func (p *ExtractVolumeParams) SetUrl(v string) {
 	p.p["url"] = v
 }
 
+func (p *ExtractVolumeParams) ResetUrl() {
+	if p.p != nil && p.p["url"] != nil {
+		delete(p.p, "url")
+	}
+}
+
 func (p *ExtractVolumeParams) GetUrl() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1116,6 +1276,12 @@ func (p *ExtractVolumeParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *ExtractVolumeParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *ExtractVolumeParams) GetZoneid() (string, bool) {
@@ -1213,6 +1379,12 @@ func (p *GetPathForVolumeParams) SetVolumeid(v string) {
 	p.p["volumeid"] = v
 }
 
+func (p *GetPathForVolumeParams) ResetVolumeid() {
+	if p.p != nil && p.p["volumeid"] != nil {
+		delete(p.p, "volumeid")
+	}
+}
+
 func (p *GetPathForVolumeParams) GetVolumeid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1237,10 +1409,13 @@ func (s *VolumeService) GetPathForVolume(p *GetPathForVolumeParams) (*GetPathFor
 		return nil, err
 	}
 
-	var r GetPathForVolumeResponse
-	if err := json.Unmarshal(resp, &r); err != nil {
+	var nested struct {
+		Response GetPathForVolumeResponse `json:"apipathforvolume"`
+	}
+	if err := json.Unmarshal(resp, &nested); err != nil {
 		return nil, err
 	}
+	r := nested.Response
 
 	return &r, nil
 }
@@ -1271,6 +1446,12 @@ func (p *GetSolidFireVolumeSizeParams) SetVolumeid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["volumeid"] = v
+}
+
+func (p *GetSolidFireVolumeSizeParams) ResetVolumeid() {
+	if p.p != nil && p.p["volumeid"] != nil {
+		delete(p.p, "volumeid")
+	}
 }
 
 func (p *GetSolidFireVolumeSizeParams) GetVolumeid() (string, bool) {
@@ -1357,6 +1538,12 @@ func (p *GetUploadParamsForVolumeParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *GetUploadParamsForVolumeParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *GetUploadParamsForVolumeParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1370,6 +1557,12 @@ func (p *GetUploadParamsForVolumeParams) SetChecksum(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["checksum"] = v
+}
+
+func (p *GetUploadParamsForVolumeParams) ResetChecksum() {
+	if p.p != nil && p.p["checksum"] != nil {
+		delete(p.p, "checksum")
+	}
 }
 
 func (p *GetUploadParamsForVolumeParams) GetChecksum() (string, bool) {
@@ -1387,6 +1580,12 @@ func (p *GetUploadParamsForVolumeParams) SetDiskofferingid(v string) {
 	p.p["diskofferingid"] = v
 }
 
+func (p *GetUploadParamsForVolumeParams) ResetDiskofferingid() {
+	if p.p != nil && p.p["diskofferingid"] != nil {
+		delete(p.p, "diskofferingid")
+	}
+}
+
 func (p *GetUploadParamsForVolumeParams) GetDiskofferingid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1400,6 +1599,12 @@ func (p *GetUploadParamsForVolumeParams) SetDomainid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *GetUploadParamsForVolumeParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *GetUploadParamsForVolumeParams) GetDomainid() (string, bool) {
@@ -1417,6 +1622,12 @@ func (p *GetUploadParamsForVolumeParams) SetFormat(v string) {
 	p.p["format"] = v
 }
 
+func (p *GetUploadParamsForVolumeParams) ResetFormat() {
+	if p.p != nil && p.p["format"] != nil {
+		delete(p.p, "format")
+	}
+}
+
 func (p *GetUploadParamsForVolumeParams) GetFormat() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1430,6 +1641,12 @@ func (p *GetUploadParamsForVolumeParams) SetImagestoreuuid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["imagestoreuuid"] = v
+}
+
+func (p *GetUploadParamsForVolumeParams) ResetImagestoreuuid() {
+	if p.p != nil && p.p["imagestoreuuid"] != nil {
+		delete(p.p, "imagestoreuuid")
+	}
 }
 
 func (p *GetUploadParamsForVolumeParams) GetImagestoreuuid() (string, bool) {
@@ -1447,6 +1664,12 @@ func (p *GetUploadParamsForVolumeParams) SetName(v string) {
 	p.p["name"] = v
 }
 
+func (p *GetUploadParamsForVolumeParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
+}
+
 func (p *GetUploadParamsForVolumeParams) GetName() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1462,6 +1685,12 @@ func (p *GetUploadParamsForVolumeParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *GetUploadParamsForVolumeParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
+}
+
 func (p *GetUploadParamsForVolumeParams) GetProjectid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1475,6 +1704,12 @@ func (p *GetUploadParamsForVolumeParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *GetUploadParamsForVolumeParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *GetUploadParamsForVolumeParams) GetZoneid() (string, bool) {
@@ -1544,6 +1779,12 @@ func (p *GetVolumeiScsiNameParams) SetVolumeid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["volumeid"] = v
+}
+
+func (p *GetVolumeiScsiNameParams) ResetVolumeid() {
+	if p.p != nil && p.p["volumeid"] != nil {
+		delete(p.p, "volumeid")
+	}
 }
 
 func (p *GetVolumeiScsiNameParams) GetVolumeid() (string, bool) {
@@ -1630,6 +1871,10 @@ func (p *ListVolumesParams) toURLValues() url.Values {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("listall", vv)
 	}
+	if v, found := p.p["listsystemvms"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("listsystemvms", vv)
+	}
 	if v, found := p.p["name"]; found {
 		u.Set("name", v.(string))
 	}
@@ -1646,6 +1891,10 @@ func (p *ListVolumesParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["projectid"]; found {
 		u.Set("projectid", v.(string))
+	}
+	if v, found := p.p["retrieveonlyresourcecount"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("retrieveonlyresourcecount", vv)
 	}
 	if v, found := p.p["state"]; found {
 		u.Set("state", v.(string))
@@ -1679,6 +1928,12 @@ func (p *ListVolumesParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *ListVolumesParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *ListVolumesParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1692,6 +1947,12 @@ func (p *ListVolumesParams) SetClusterid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["clusterid"] = v
+}
+
+func (p *ListVolumesParams) ResetClusterid() {
+	if p.p != nil && p.p["clusterid"] != nil {
+		delete(p.p, "clusterid")
+	}
 }
 
 func (p *ListVolumesParams) GetClusterid() (string, bool) {
@@ -1709,6 +1970,12 @@ func (p *ListVolumesParams) SetDiskofferingid(v string) {
 	p.p["diskofferingid"] = v
 }
 
+func (p *ListVolumesParams) ResetDiskofferingid() {
+	if p.p != nil && p.p["diskofferingid"] != nil {
+		delete(p.p, "diskofferingid")
+	}
+}
+
 func (p *ListVolumesParams) GetDiskofferingid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1722,6 +1989,12 @@ func (p *ListVolumesParams) SetDisplayvolume(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["displayvolume"] = v
+}
+
+func (p *ListVolumesParams) ResetDisplayvolume() {
+	if p.p != nil && p.p["displayvolume"] != nil {
+		delete(p.p, "displayvolume")
+	}
 }
 
 func (p *ListVolumesParams) GetDisplayvolume() (bool, bool) {
@@ -1739,6 +2012,12 @@ func (p *ListVolumesParams) SetDomainid(v string) {
 	p.p["domainid"] = v
 }
 
+func (p *ListVolumesParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
+}
+
 func (p *ListVolumesParams) GetDomainid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1752,6 +2031,12 @@ func (p *ListVolumesParams) SetHostid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["hostid"] = v
+}
+
+func (p *ListVolumesParams) ResetHostid() {
+	if p.p != nil && p.p["hostid"] != nil {
+		delete(p.p, "hostid")
+	}
 }
 
 func (p *ListVolumesParams) GetHostid() (string, bool) {
@@ -1769,6 +2054,12 @@ func (p *ListVolumesParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ListVolumesParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *ListVolumesParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1782,6 +2073,12 @@ func (p *ListVolumesParams) SetIds(v []string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["ids"] = v
+}
+
+func (p *ListVolumesParams) ResetIds() {
+	if p.p != nil && p.p["ids"] != nil {
+		delete(p.p, "ids")
+	}
 }
 
 func (p *ListVolumesParams) GetIds() ([]string, bool) {
@@ -1799,6 +2096,12 @@ func (p *ListVolumesParams) SetIsrecursive(v bool) {
 	p.p["isrecursive"] = v
 }
 
+func (p *ListVolumesParams) ResetIsrecursive() {
+	if p.p != nil && p.p["isrecursive"] != nil {
+		delete(p.p, "isrecursive")
+	}
+}
+
 func (p *ListVolumesParams) GetIsrecursive() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1812,6 +2115,12 @@ func (p *ListVolumesParams) SetKeyword(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["keyword"] = v
+}
+
+func (p *ListVolumesParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
 }
 
 func (p *ListVolumesParams) GetKeyword() (string, bool) {
@@ -1829,6 +2138,12 @@ func (p *ListVolumesParams) SetListall(v bool) {
 	p.p["listall"] = v
 }
 
+func (p *ListVolumesParams) ResetListall() {
+	if p.p != nil && p.p["listall"] != nil {
+		delete(p.p, "listall")
+	}
+}
+
 func (p *ListVolumesParams) GetListall() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1837,11 +2152,38 @@ func (p *ListVolumesParams) GetListall() (bool, bool) {
 	return value, ok
 }
 
+func (p *ListVolumesParams) SetListsystemvms(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["listsystemvms"] = v
+}
+
+func (p *ListVolumesParams) ResetListsystemvms() {
+	if p.p != nil && p.p["listsystemvms"] != nil {
+		delete(p.p, "listsystemvms")
+	}
+}
+
+func (p *ListVolumesParams) GetListsystemvms() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["listsystemvms"].(bool)
+	return value, ok
+}
+
 func (p *ListVolumesParams) SetName(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *ListVolumesParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
 }
 
 func (p *ListVolumesParams) GetName() (string, bool) {
@@ -1859,6 +2201,12 @@ func (p *ListVolumesParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListVolumesParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListVolumesParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1872,6 +2220,12 @@ func (p *ListVolumesParams) SetPagesize(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ListVolumesParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
 }
 
 func (p *ListVolumesParams) GetPagesize() (int, bool) {
@@ -1889,6 +2243,12 @@ func (p *ListVolumesParams) SetPodid(v string) {
 	p.p["podid"] = v
 }
 
+func (p *ListVolumesParams) ResetPodid() {
+	if p.p != nil && p.p["podid"] != nil {
+		delete(p.p, "podid")
+	}
+}
+
 func (p *ListVolumesParams) GetPodid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1904,6 +2264,12 @@ func (p *ListVolumesParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *ListVolumesParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
+}
+
 func (p *ListVolumesParams) GetProjectid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1912,11 +2278,38 @@ func (p *ListVolumesParams) GetProjectid() (string, bool) {
 	return value, ok
 }
 
+func (p *ListVolumesParams) SetRetrieveonlyresourcecount(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["retrieveonlyresourcecount"] = v
+}
+
+func (p *ListVolumesParams) ResetRetrieveonlyresourcecount() {
+	if p.p != nil && p.p["retrieveonlyresourcecount"] != nil {
+		delete(p.p, "retrieveonlyresourcecount")
+	}
+}
+
+func (p *ListVolumesParams) GetRetrieveonlyresourcecount() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["retrieveonlyresourcecount"].(bool)
+	return value, ok
+}
+
 func (p *ListVolumesParams) SetState(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["state"] = v
+}
+
+func (p *ListVolumesParams) ResetState() {
+	if p.p != nil && p.p["state"] != nil {
+		delete(p.p, "state")
+	}
 }
 
 func (p *ListVolumesParams) GetState() (string, bool) {
@@ -1934,6 +2327,12 @@ func (p *ListVolumesParams) SetStorageid(v string) {
 	p.p["storageid"] = v
 }
 
+func (p *ListVolumesParams) ResetStorageid() {
+	if p.p != nil && p.p["storageid"] != nil {
+		delete(p.p, "storageid")
+	}
+}
+
 func (p *ListVolumesParams) GetStorageid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1947,6 +2346,12 @@ func (p *ListVolumesParams) SetTags(v map[string]string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["tags"] = v
+}
+
+func (p *ListVolumesParams) ResetTags() {
+	if p.p != nil && p.p["tags"] != nil {
+		delete(p.p, "tags")
+	}
 }
 
 func (p *ListVolumesParams) GetTags() (map[string]string, bool) {
@@ -1964,6 +2369,12 @@ func (p *ListVolumesParams) SetType(v string) {
 	p.p["type"] = v
 }
 
+func (p *ListVolumesParams) ResetType() {
+	if p.p != nil && p.p["type"] != nil {
+		delete(p.p, "type")
+	}
+}
+
 func (p *ListVolumesParams) GetType() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1979,6 +2390,12 @@ func (p *ListVolumesParams) SetVirtualmachineid(v string) {
 	p.p["virtualmachineid"] = v
 }
 
+func (p *ListVolumesParams) ResetVirtualmachineid() {
+	if p.p != nil && p.p["virtualmachineid"] != nil {
+		delete(p.p, "virtualmachineid")
+	}
+}
+
 func (p *ListVolumesParams) GetVirtualmachineid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1992,6 +2409,12 @@ func (p *ListVolumesParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *ListVolumesParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *ListVolumesParams) GetZoneid() (string, bool) {
@@ -2136,6 +2559,7 @@ type Volume struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -2178,6 +2602,7 @@ type Volume struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }
@@ -2228,6 +2653,10 @@ func (p *ListVolumesMetricsParams) toURLValues() url.Values {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("listall", vv)
 	}
+	if v, found := p.p["listsystemvms"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("listsystemvms", vv)
+	}
 	if v, found := p.p["name"]; found {
 		u.Set("name", v.(string))
 	}
@@ -2244,6 +2673,10 @@ func (p *ListVolumesMetricsParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["projectid"]; found {
 		u.Set("projectid", v.(string))
+	}
+	if v, found := p.p["retrieveonlyresourcecount"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("retrieveonlyresourcecount", vv)
 	}
 	if v, found := p.p["state"]; found {
 		u.Set("state", v.(string))
@@ -2277,6 +2710,12 @@ func (p *ListVolumesMetricsParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *ListVolumesMetricsParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *ListVolumesMetricsParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2290,6 +2729,12 @@ func (p *ListVolumesMetricsParams) SetClusterid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["clusterid"] = v
+}
+
+func (p *ListVolumesMetricsParams) ResetClusterid() {
+	if p.p != nil && p.p["clusterid"] != nil {
+		delete(p.p, "clusterid")
+	}
 }
 
 func (p *ListVolumesMetricsParams) GetClusterid() (string, bool) {
@@ -2307,6 +2752,12 @@ func (p *ListVolumesMetricsParams) SetDiskofferingid(v string) {
 	p.p["diskofferingid"] = v
 }
 
+func (p *ListVolumesMetricsParams) ResetDiskofferingid() {
+	if p.p != nil && p.p["diskofferingid"] != nil {
+		delete(p.p, "diskofferingid")
+	}
+}
+
 func (p *ListVolumesMetricsParams) GetDiskofferingid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2320,6 +2771,12 @@ func (p *ListVolumesMetricsParams) SetDisplayvolume(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["displayvolume"] = v
+}
+
+func (p *ListVolumesMetricsParams) ResetDisplayvolume() {
+	if p.p != nil && p.p["displayvolume"] != nil {
+		delete(p.p, "displayvolume")
+	}
 }
 
 func (p *ListVolumesMetricsParams) GetDisplayvolume() (bool, bool) {
@@ -2337,6 +2794,12 @@ func (p *ListVolumesMetricsParams) SetDomainid(v string) {
 	p.p["domainid"] = v
 }
 
+func (p *ListVolumesMetricsParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
+}
+
 func (p *ListVolumesMetricsParams) GetDomainid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2350,6 +2813,12 @@ func (p *ListVolumesMetricsParams) SetHostid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["hostid"] = v
+}
+
+func (p *ListVolumesMetricsParams) ResetHostid() {
+	if p.p != nil && p.p["hostid"] != nil {
+		delete(p.p, "hostid")
+	}
 }
 
 func (p *ListVolumesMetricsParams) GetHostid() (string, bool) {
@@ -2367,6 +2836,12 @@ func (p *ListVolumesMetricsParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ListVolumesMetricsParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *ListVolumesMetricsParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2380,6 +2855,12 @@ func (p *ListVolumesMetricsParams) SetIds(v []string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["ids"] = v
+}
+
+func (p *ListVolumesMetricsParams) ResetIds() {
+	if p.p != nil && p.p["ids"] != nil {
+		delete(p.p, "ids")
+	}
 }
 
 func (p *ListVolumesMetricsParams) GetIds() ([]string, bool) {
@@ -2397,6 +2878,12 @@ func (p *ListVolumesMetricsParams) SetIsrecursive(v bool) {
 	p.p["isrecursive"] = v
 }
 
+func (p *ListVolumesMetricsParams) ResetIsrecursive() {
+	if p.p != nil && p.p["isrecursive"] != nil {
+		delete(p.p, "isrecursive")
+	}
+}
+
 func (p *ListVolumesMetricsParams) GetIsrecursive() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2410,6 +2897,12 @@ func (p *ListVolumesMetricsParams) SetKeyword(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["keyword"] = v
+}
+
+func (p *ListVolumesMetricsParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
 }
 
 func (p *ListVolumesMetricsParams) GetKeyword() (string, bool) {
@@ -2427,6 +2920,12 @@ func (p *ListVolumesMetricsParams) SetListall(v bool) {
 	p.p["listall"] = v
 }
 
+func (p *ListVolumesMetricsParams) ResetListall() {
+	if p.p != nil && p.p["listall"] != nil {
+		delete(p.p, "listall")
+	}
+}
+
 func (p *ListVolumesMetricsParams) GetListall() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2435,11 +2934,38 @@ func (p *ListVolumesMetricsParams) GetListall() (bool, bool) {
 	return value, ok
 }
 
+func (p *ListVolumesMetricsParams) SetListsystemvms(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["listsystemvms"] = v
+}
+
+func (p *ListVolumesMetricsParams) ResetListsystemvms() {
+	if p.p != nil && p.p["listsystemvms"] != nil {
+		delete(p.p, "listsystemvms")
+	}
+}
+
+func (p *ListVolumesMetricsParams) GetListsystemvms() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["listsystemvms"].(bool)
+	return value, ok
+}
+
 func (p *ListVolumesMetricsParams) SetName(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *ListVolumesMetricsParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
 }
 
 func (p *ListVolumesMetricsParams) GetName() (string, bool) {
@@ -2457,6 +2983,12 @@ func (p *ListVolumesMetricsParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListVolumesMetricsParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListVolumesMetricsParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2470,6 +3002,12 @@ func (p *ListVolumesMetricsParams) SetPagesize(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ListVolumesMetricsParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
 }
 
 func (p *ListVolumesMetricsParams) GetPagesize() (int, bool) {
@@ -2487,6 +3025,12 @@ func (p *ListVolumesMetricsParams) SetPodid(v string) {
 	p.p["podid"] = v
 }
 
+func (p *ListVolumesMetricsParams) ResetPodid() {
+	if p.p != nil && p.p["podid"] != nil {
+		delete(p.p, "podid")
+	}
+}
+
 func (p *ListVolumesMetricsParams) GetPodid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2502,6 +3046,12 @@ func (p *ListVolumesMetricsParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *ListVolumesMetricsParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
+}
+
 func (p *ListVolumesMetricsParams) GetProjectid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2510,11 +3060,38 @@ func (p *ListVolumesMetricsParams) GetProjectid() (string, bool) {
 	return value, ok
 }
 
+func (p *ListVolumesMetricsParams) SetRetrieveonlyresourcecount(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["retrieveonlyresourcecount"] = v
+}
+
+func (p *ListVolumesMetricsParams) ResetRetrieveonlyresourcecount() {
+	if p.p != nil && p.p["retrieveonlyresourcecount"] != nil {
+		delete(p.p, "retrieveonlyresourcecount")
+	}
+}
+
+func (p *ListVolumesMetricsParams) GetRetrieveonlyresourcecount() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["retrieveonlyresourcecount"].(bool)
+	return value, ok
+}
+
 func (p *ListVolumesMetricsParams) SetState(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["state"] = v
+}
+
+func (p *ListVolumesMetricsParams) ResetState() {
+	if p.p != nil && p.p["state"] != nil {
+		delete(p.p, "state")
+	}
 }
 
 func (p *ListVolumesMetricsParams) GetState() (string, bool) {
@@ -2532,6 +3109,12 @@ func (p *ListVolumesMetricsParams) SetStorageid(v string) {
 	p.p["storageid"] = v
 }
 
+func (p *ListVolumesMetricsParams) ResetStorageid() {
+	if p.p != nil && p.p["storageid"] != nil {
+		delete(p.p, "storageid")
+	}
+}
+
 func (p *ListVolumesMetricsParams) GetStorageid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2545,6 +3128,12 @@ func (p *ListVolumesMetricsParams) SetTags(v map[string]string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["tags"] = v
+}
+
+func (p *ListVolumesMetricsParams) ResetTags() {
+	if p.p != nil && p.p["tags"] != nil {
+		delete(p.p, "tags")
+	}
 }
 
 func (p *ListVolumesMetricsParams) GetTags() (map[string]string, bool) {
@@ -2562,6 +3151,12 @@ func (p *ListVolumesMetricsParams) SetType(v string) {
 	p.p["type"] = v
 }
 
+func (p *ListVolumesMetricsParams) ResetType() {
+	if p.p != nil && p.p["type"] != nil {
+		delete(p.p, "type")
+	}
+}
+
 func (p *ListVolumesMetricsParams) GetType() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2577,6 +3172,12 @@ func (p *ListVolumesMetricsParams) SetVirtualmachineid(v string) {
 	p.p["virtualmachineid"] = v
 }
 
+func (p *ListVolumesMetricsParams) ResetVirtualmachineid() {
+	if p.p != nil && p.p["virtualmachineid"] != nil {
+		delete(p.p, "virtualmachineid")
+	}
+}
+
 func (p *ListVolumesMetricsParams) GetVirtualmachineid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2590,6 +3191,12 @@ func (p *ListVolumesMetricsParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *ListVolumesMetricsParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *ListVolumesMetricsParams) GetZoneid() (string, bool) {
@@ -2735,6 +3342,7 @@ type VolumesMetric struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -2778,6 +3386,7 @@ type VolumesMetric struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }
@@ -2814,6 +3423,12 @@ func (p *MigrateVolumeParams) SetLivemigrate(v bool) {
 	p.p["livemigrate"] = v
 }
 
+func (p *MigrateVolumeParams) ResetLivemigrate() {
+	if p.p != nil && p.p["livemigrate"] != nil {
+		delete(p.p, "livemigrate")
+	}
+}
+
 func (p *MigrateVolumeParams) GetLivemigrate() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2827,6 +3442,12 @@ func (p *MigrateVolumeParams) SetNewdiskofferingid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["newdiskofferingid"] = v
+}
+
+func (p *MigrateVolumeParams) ResetNewdiskofferingid() {
+	if p.p != nil && p.p["newdiskofferingid"] != nil {
+		delete(p.p, "newdiskofferingid")
+	}
 }
 
 func (p *MigrateVolumeParams) GetNewdiskofferingid() (string, bool) {
@@ -2844,6 +3465,12 @@ func (p *MigrateVolumeParams) SetStorageid(v string) {
 	p.p["storageid"] = v
 }
 
+func (p *MigrateVolumeParams) ResetStorageid() {
+	if p.p != nil && p.p["storageid"] != nil {
+		delete(p.p, "storageid")
+	}
+}
+
 func (p *MigrateVolumeParams) GetStorageid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2857,6 +3484,12 @@ func (p *MigrateVolumeParams) SetVolumeid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["volumeid"] = v
+}
+
+func (p *MigrateVolumeParams) ResetVolumeid() {
+	if p.p != nil && p.p["volumeid"] != nil {
+		delete(p.p, "volumeid")
+	}
 }
 
 func (p *MigrateVolumeParams) GetVolumeid() (string, bool) {
@@ -2935,6 +3568,7 @@ type MigrateVolumeResponse struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -2977,6 +3611,7 @@ type MigrateVolumeResponse struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }
@@ -3001,6 +3636,12 @@ func (p *RecoverVolumeParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *RecoverVolumeParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *RecoverVolumeParams) GetId() (string, bool) {
@@ -3058,6 +3699,7 @@ type RecoverVolumeResponse struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -3100,6 +3742,7 @@ type RecoverVolumeResponse struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }
@@ -3145,6 +3788,12 @@ func (p *ResizeVolumeParams) SetDiskofferingid(v string) {
 	p.p["diskofferingid"] = v
 }
 
+func (p *ResizeVolumeParams) ResetDiskofferingid() {
+	if p.p != nil && p.p["diskofferingid"] != nil {
+		delete(p.p, "diskofferingid")
+	}
+}
+
 func (p *ResizeVolumeParams) GetDiskofferingid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3158,6 +3807,12 @@ func (p *ResizeVolumeParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *ResizeVolumeParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *ResizeVolumeParams) GetId() (string, bool) {
@@ -3175,6 +3830,12 @@ func (p *ResizeVolumeParams) SetMaxiops(v int64) {
 	p.p["maxiops"] = v
 }
 
+func (p *ResizeVolumeParams) ResetMaxiops() {
+	if p.p != nil && p.p["maxiops"] != nil {
+		delete(p.p, "maxiops")
+	}
+}
+
 func (p *ResizeVolumeParams) GetMaxiops() (int64, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3188,6 +3849,12 @@ func (p *ResizeVolumeParams) SetMiniops(v int64) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["miniops"] = v
+}
+
+func (p *ResizeVolumeParams) ResetMiniops() {
+	if p.p != nil && p.p["miniops"] != nil {
+		delete(p.p, "miniops")
+	}
 }
 
 func (p *ResizeVolumeParams) GetMiniops() (int64, bool) {
@@ -3205,6 +3872,12 @@ func (p *ResizeVolumeParams) SetShrinkok(v bool) {
 	p.p["shrinkok"] = v
 }
 
+func (p *ResizeVolumeParams) ResetShrinkok() {
+	if p.p != nil && p.p["shrinkok"] != nil {
+		delete(p.p, "shrinkok")
+	}
+}
+
 func (p *ResizeVolumeParams) GetShrinkok() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3218,6 +3891,12 @@ func (p *ResizeVolumeParams) SetSize(v int64) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["size"] = v
+}
+
+func (p *ResizeVolumeParams) ResetSize() {
+	if p.p != nil && p.p["size"] != nil {
+		delete(p.p, "size")
+	}
 }
 
 func (p *ResizeVolumeParams) GetSize() (int64, bool) {
@@ -3295,6 +3974,7 @@ type ResizeVolumeResponse struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -3337,6 +4017,7 @@ type ResizeVolumeResponse struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }
@@ -3385,6 +4066,12 @@ func (p *UpdateVolumeParams) SetChaininfo(v string) {
 	p.p["chaininfo"] = v
 }
 
+func (p *UpdateVolumeParams) ResetChaininfo() {
+	if p.p != nil && p.p["chaininfo"] != nil {
+		delete(p.p, "chaininfo")
+	}
+}
+
 func (p *UpdateVolumeParams) GetChaininfo() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3398,6 +4085,12 @@ func (p *UpdateVolumeParams) SetCustomid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["customid"] = v
+}
+
+func (p *UpdateVolumeParams) ResetCustomid() {
+	if p.p != nil && p.p["customid"] != nil {
+		delete(p.p, "customid")
+	}
 }
 
 func (p *UpdateVolumeParams) GetCustomid() (string, bool) {
@@ -3415,6 +4108,12 @@ func (p *UpdateVolumeParams) SetDisplayvolume(v bool) {
 	p.p["displayvolume"] = v
 }
 
+func (p *UpdateVolumeParams) ResetDisplayvolume() {
+	if p.p != nil && p.p["displayvolume"] != nil {
+		delete(p.p, "displayvolume")
+	}
+}
+
 func (p *UpdateVolumeParams) GetDisplayvolume() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3428,6 +4127,12 @@ func (p *UpdateVolumeParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *UpdateVolumeParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *UpdateVolumeParams) GetId() (string, bool) {
@@ -3445,6 +4150,12 @@ func (p *UpdateVolumeParams) SetName(v string) {
 	p.p["name"] = v
 }
 
+func (p *UpdateVolumeParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
+}
+
 func (p *UpdateVolumeParams) GetName() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3458,6 +4169,12 @@ func (p *UpdateVolumeParams) SetPath(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["path"] = v
+}
+
+func (p *UpdateVolumeParams) ResetPath() {
+	if p.p != nil && p.p["path"] != nil {
+		delete(p.p, "path")
+	}
 }
 
 func (p *UpdateVolumeParams) GetPath() (string, bool) {
@@ -3475,6 +4192,12 @@ func (p *UpdateVolumeParams) SetState(v string) {
 	p.p["state"] = v
 }
 
+func (p *UpdateVolumeParams) ResetState() {
+	if p.p != nil && p.p["state"] != nil {
+		delete(p.p, "state")
+	}
+}
+
 func (p *UpdateVolumeParams) GetState() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3488,6 +4211,12 @@ func (p *UpdateVolumeParams) SetStorageid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["storageid"] = v
+}
+
+func (p *UpdateVolumeParams) ResetStorageid() {
+	if p.p != nil && p.p["storageid"] != nil {
+		delete(p.p, "storageid")
+	}
 }
 
 func (p *UpdateVolumeParams) GetStorageid() (string, bool) {
@@ -3564,6 +4293,7 @@ type UpdateVolumeResponse struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -3606,6 +4336,7 @@ type UpdateVolumeResponse struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }
@@ -3659,6 +4390,12 @@ func (p *UploadVolumeParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *UploadVolumeParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *UploadVolumeParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3672,6 +4409,12 @@ func (p *UploadVolumeParams) SetChecksum(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["checksum"] = v
+}
+
+func (p *UploadVolumeParams) ResetChecksum() {
+	if p.p != nil && p.p["checksum"] != nil {
+		delete(p.p, "checksum")
+	}
 }
 
 func (p *UploadVolumeParams) GetChecksum() (string, bool) {
@@ -3689,6 +4432,12 @@ func (p *UploadVolumeParams) SetDiskofferingid(v string) {
 	p.p["diskofferingid"] = v
 }
 
+func (p *UploadVolumeParams) ResetDiskofferingid() {
+	if p.p != nil && p.p["diskofferingid"] != nil {
+		delete(p.p, "diskofferingid")
+	}
+}
+
 func (p *UploadVolumeParams) GetDiskofferingid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3702,6 +4451,12 @@ func (p *UploadVolumeParams) SetDomainid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *UploadVolumeParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *UploadVolumeParams) GetDomainid() (string, bool) {
@@ -3719,6 +4474,12 @@ func (p *UploadVolumeParams) SetFormat(v string) {
 	p.p["format"] = v
 }
 
+func (p *UploadVolumeParams) ResetFormat() {
+	if p.p != nil && p.p["format"] != nil {
+		delete(p.p, "format")
+	}
+}
+
 func (p *UploadVolumeParams) GetFormat() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3732,6 +4493,12 @@ func (p *UploadVolumeParams) SetImagestoreuuid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["imagestoreuuid"] = v
+}
+
+func (p *UploadVolumeParams) ResetImagestoreuuid() {
+	if p.p != nil && p.p["imagestoreuuid"] != nil {
+		delete(p.p, "imagestoreuuid")
+	}
 }
 
 func (p *UploadVolumeParams) GetImagestoreuuid() (string, bool) {
@@ -3749,6 +4516,12 @@ func (p *UploadVolumeParams) SetName(v string) {
 	p.p["name"] = v
 }
 
+func (p *UploadVolumeParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
+}
+
 func (p *UploadVolumeParams) GetName() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3762,6 +4535,12 @@ func (p *UploadVolumeParams) SetProjectid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["projectid"] = v
+}
+
+func (p *UploadVolumeParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
 }
 
 func (p *UploadVolumeParams) GetProjectid() (string, bool) {
@@ -3779,6 +4558,12 @@ func (p *UploadVolumeParams) SetUrl(v string) {
 	p.p["url"] = v
 }
 
+func (p *UploadVolumeParams) ResetUrl() {
+	if p.p != nil && p.p["url"] != nil {
+		delete(p.p, "url")
+	}
+}
+
 func (p *UploadVolumeParams) GetUrl() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3792,6 +4577,12 @@ func (p *UploadVolumeParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *UploadVolumeParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *UploadVolumeParams) GetZoneid() (string, bool) {
@@ -3872,6 +4663,7 @@ type UploadVolumeResponse struct {
 	Displayvolume              bool   `json:"displayvolume"`
 	Domain                     string `json:"domain"`
 	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
 	Hasannotations             bool   `json:"hasannotations"`
 	Hypervisor                 string `json:"hypervisor"`
 	Id                         string `json:"id"`
@@ -3914,6 +4706,308 @@ type UploadVolumeResponse struct {
 	Vmdisplayname              string `json:"vmdisplayname"`
 	Vmname                     string `json:"vmname"`
 	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
+	Zoneid                     string `json:"zoneid"`
+	Zonename                   string `json:"zonename"`
+}
+
+type ChangeOfferingForVolumeParams struct {
+	p map[string]interface{}
+}
+
+func (p *ChangeOfferingForVolumeParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["automigrate"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("automigrate", vv)
+	}
+	if v, found := p.p["diskofferingid"]; found {
+		u.Set("diskofferingid", v.(string))
+	}
+	if v, found := p.p["id"]; found {
+		u.Set("id", v.(string))
+	}
+	if v, found := p.p["maxiops"]; found {
+		vv := strconv.FormatInt(v.(int64), 10)
+		u.Set("maxiops", vv)
+	}
+	if v, found := p.p["miniops"]; found {
+		vv := strconv.FormatInt(v.(int64), 10)
+		u.Set("miniops", vv)
+	}
+	if v, found := p.p["shrinkok"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("shrinkok", vv)
+	}
+	if v, found := p.p["size"]; found {
+		vv := strconv.FormatInt(v.(int64), 10)
+		u.Set("size", vv)
+	}
+	return u
+}
+
+func (p *ChangeOfferingForVolumeParams) SetAutomigrate(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["automigrate"] = v
+}
+
+func (p *ChangeOfferingForVolumeParams) ResetAutomigrate() {
+	if p.p != nil && p.p["automigrate"] != nil {
+		delete(p.p, "automigrate")
+	}
+}
+
+func (p *ChangeOfferingForVolumeParams) GetAutomigrate() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["automigrate"].(bool)
+	return value, ok
+}
+
+func (p *ChangeOfferingForVolumeParams) SetDiskofferingid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["diskofferingid"] = v
+}
+
+func (p *ChangeOfferingForVolumeParams) ResetDiskofferingid() {
+	if p.p != nil && p.p["diskofferingid"] != nil {
+		delete(p.p, "diskofferingid")
+	}
+}
+
+func (p *ChangeOfferingForVolumeParams) GetDiskofferingid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["diskofferingid"].(string)
+	return value, ok
+}
+
+func (p *ChangeOfferingForVolumeParams) SetId(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["id"] = v
+}
+
+func (p *ChangeOfferingForVolumeParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
+func (p *ChangeOfferingForVolumeParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+func (p *ChangeOfferingForVolumeParams) SetMaxiops(v int64) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["maxiops"] = v
+}
+
+func (p *ChangeOfferingForVolumeParams) ResetMaxiops() {
+	if p.p != nil && p.p["maxiops"] != nil {
+		delete(p.p, "maxiops")
+	}
+}
+
+func (p *ChangeOfferingForVolumeParams) GetMaxiops() (int64, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["maxiops"].(int64)
+	return value, ok
+}
+
+func (p *ChangeOfferingForVolumeParams) SetMiniops(v int64) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["miniops"] = v
+}
+
+func (p *ChangeOfferingForVolumeParams) ResetMiniops() {
+	if p.p != nil && p.p["miniops"] != nil {
+		delete(p.p, "miniops")
+	}
+}
+
+func (p *ChangeOfferingForVolumeParams) GetMiniops() (int64, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["miniops"].(int64)
+	return value, ok
+}
+
+func (p *ChangeOfferingForVolumeParams) SetShrinkok(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["shrinkok"] = v
+}
+
+func (p *ChangeOfferingForVolumeParams) ResetShrinkok() {
+	if p.p != nil && p.p["shrinkok"] != nil {
+		delete(p.p, "shrinkok")
+	}
+}
+
+func (p *ChangeOfferingForVolumeParams) GetShrinkok() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["shrinkok"].(bool)
+	return value, ok
+}
+
+func (p *ChangeOfferingForVolumeParams) SetSize(v int64) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["size"] = v
+}
+
+func (p *ChangeOfferingForVolumeParams) ResetSize() {
+	if p.p != nil && p.p["size"] != nil {
+		delete(p.p, "size")
+	}
+}
+
+func (p *ChangeOfferingForVolumeParams) GetSize() (int64, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["size"].(int64)
+	return value, ok
+}
+
+// You should always use this function to get a new ChangeOfferingForVolumeParams instance,
+// as then you are sure you have configured all required params
+func (s *VolumeService) NewChangeOfferingForVolumeParams(diskofferingid string, id string) *ChangeOfferingForVolumeParams {
+	p := &ChangeOfferingForVolumeParams{}
+	p.p = make(map[string]interface{})
+	p.p["diskofferingid"] = diskofferingid
+	p.p["id"] = id
+	return p
+}
+
+// Change disk offering of the volume and also an option to auto migrate if required to apply the new disk offering
+func (s *VolumeService) ChangeOfferingForVolume(p *ChangeOfferingForVolumeParams) (*ChangeOfferingForVolumeResponse, error) {
+	resp, err := s.cs.newRequest("changeOfferingForVolume", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r ChangeOfferingForVolumeResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	// If we have a async client, we need to wait for the async result
+	if s.cs.async {
+		b, err := s.cs.GetAsyncJobResult(r.JobID, s.cs.timeout)
+		if err != nil {
+			if err == AsyncTimeoutErr {
+				return &r, err
+			}
+			return nil, err
+		}
+
+		b, err = getRawValue(b)
+		if err != nil {
+			return nil, err
+		}
+
+		if err := json.Unmarshal(b, &r); err != nil {
+			return nil, err
+		}
+	}
+
+	return &r, nil
+}
+
+type ChangeOfferingForVolumeResponse struct {
+	Account                    string `json:"account"`
+	Attached                   string `json:"attached"`
+	Chaininfo                  string `json:"chaininfo"`
+	Clusterid                  string `json:"clusterid"`
+	Clustername                string `json:"clustername"`
+	Created                    string `json:"created"`
+	Destroyed                  bool   `json:"destroyed"`
+	Deviceid                   int64  `json:"deviceid"`
+	DiskBytesReadRate          int64  `json:"diskBytesReadRate"`
+	DiskBytesWriteRate         int64  `json:"diskBytesWriteRate"`
+	DiskIopsReadRate           int64  `json:"diskIopsReadRate"`
+	DiskIopsWriteRate          int64  `json:"diskIopsWriteRate"`
+	Diskioread                 int64  `json:"diskioread"`
+	Diskiowrite                int64  `json:"diskiowrite"`
+	Diskkbsread                int64  `json:"diskkbsread"`
+	Diskkbswrite               int64  `json:"diskkbswrite"`
+	Diskofferingdisplaytext    string `json:"diskofferingdisplaytext"`
+	Diskofferingid             string `json:"diskofferingid"`
+	Diskofferingname           string `json:"diskofferingname"`
+	Displayvolume              bool   `json:"displayvolume"`
+	Domain                     string `json:"domain"`
+	Domainid                   string `json:"domainid"`
+	Externaluuid               string `json:"externaluuid"`
+	Hasannotations             bool   `json:"hasannotations"`
+	Hypervisor                 string `json:"hypervisor"`
+	Id                         string `json:"id"`
+	Isextractable              bool   `json:"isextractable"`
+	Isodisplaytext             string `json:"isodisplaytext"`
+	Isoid                      string `json:"isoid"`
+	Isoname                    string `json:"isoname"`
+	JobID                      string `json:"jobid"`
+	Jobstatus                  int    `json:"jobstatus"`
+	Maxiops                    int64  `json:"maxiops"`
+	Miniops                    int64  `json:"miniops"`
+	Name                       string `json:"name"`
+	Path                       string `json:"path"`
+	Physicalsize               int64  `json:"physicalsize"`
+	Podid                      string `json:"podid"`
+	Podname                    string `json:"podname"`
+	Project                    string `json:"project"`
+	Projectid                  string `json:"projectid"`
+	Provisioningtype           string `json:"provisioningtype"`
+	Quiescevm                  bool   `json:"quiescevm"`
+	Serviceofferingdisplaytext string `json:"serviceofferingdisplaytext"`
+	Serviceofferingid          string `json:"serviceofferingid"`
+	Serviceofferingname        string `json:"serviceofferingname"`
+	Size                       int64  `json:"size"`
+	Snapshotid                 string `json:"snapshotid"`
+	State                      string `json:"state"`
+	Status                     string `json:"status"`
+	Storage                    string `json:"storage"`
+	Storageid                  string `json:"storageid"`
+	Storagetype                string `json:"storagetype"`
+	Supportsstoragesnapshot    bool   `json:"supportsstoragesnapshot"`
+	Tags                       []Tags `json:"tags"`
+	Templatedisplaytext        string `json:"templatedisplaytext"`
+	Templateid                 string `json:"templateid"`
+	Templatename               string `json:"templatename"`
+	Type                       string `json:"type"`
+	Utilization                string `json:"utilization"`
+	Virtualmachineid           string `json:"virtualmachineid"`
+	Virtualsize                int64  `json:"virtualsize"`
+	Vmdisplayname              string `json:"vmdisplayname"`
+	Vmname                     string `json:"vmname"`
+	Vmstate                    string `json:"vmstate"`
+	Vmtype                     string `json:"vmtype"`
 	Zoneid                     string `json:"zoneid"`
 	Zonename                   string `json:"zonename"`
 }

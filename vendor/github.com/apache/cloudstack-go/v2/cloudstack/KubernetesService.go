@@ -58,6 +58,10 @@ type KubernetesServiceIface interface {
 	NewUpdateKubernetesSupportedVersionParams(id string, state string) *UpdateKubernetesSupportedVersionParams
 	UpgradeKubernetesCluster(p *UpgradeKubernetesClusterParams) (*UpgradeKubernetesClusterResponse, error)
 	NewUpgradeKubernetesClusterParams(id string, kubernetesversionid string) *UpgradeKubernetesClusterParams
+	AddVirtualMachinesToKubernetesCluster(p *AddVirtualMachinesToKubernetesClusterParams) (*AddVirtualMachinesToKubernetesClusterResponse, error)
+	NewAddVirtualMachinesToKubernetesClusterParams(id string, virtualmachineids []string) *AddVirtualMachinesToKubernetesClusterParams
+	RemoveVirtualMachinesFromKubernetesCluster(p *RemoveVirtualMachinesFromKubernetesClusterParams) (*RemoveVirtualMachinesFromKubernetesClusterResponse, error)
+	NewRemoveVirtualMachinesFromKubernetesClusterParams(id string, virtualmachineids []string) *RemoveVirtualMachinesFromKubernetesClusterParams
 }
 
 type AddKubernetesSupportedVersionParams struct {
@@ -71,6 +75,10 @@ func (p *AddKubernetesSupportedVersionParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["checksum"]; found {
 		u.Set("checksum", v.(string))
+	}
+	if v, found := p.p["directdownload"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("directdownload", vv)
 	}
 	if v, found := p.p["mincpunumber"]; found {
 		vv := strconv.Itoa(v.(int))
@@ -102,6 +110,12 @@ func (p *AddKubernetesSupportedVersionParams) SetChecksum(v string) {
 	p.p["checksum"] = v
 }
 
+func (p *AddKubernetesSupportedVersionParams) ResetChecksum() {
+	if p.p != nil && p.p["checksum"] != nil {
+		delete(p.p, "checksum")
+	}
+}
+
 func (p *AddKubernetesSupportedVersionParams) GetChecksum() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -110,11 +124,38 @@ func (p *AddKubernetesSupportedVersionParams) GetChecksum() (string, bool) {
 	return value, ok
 }
 
+func (p *AddKubernetesSupportedVersionParams) SetDirectdownload(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["directdownload"] = v
+}
+
+func (p *AddKubernetesSupportedVersionParams) ResetDirectdownload() {
+	if p.p != nil && p.p["directdownload"] != nil {
+		delete(p.p, "directdownload")
+	}
+}
+
+func (p *AddKubernetesSupportedVersionParams) GetDirectdownload() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["directdownload"].(bool)
+	return value, ok
+}
+
 func (p *AddKubernetesSupportedVersionParams) SetMincpunumber(v int) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["mincpunumber"] = v
+}
+
+func (p *AddKubernetesSupportedVersionParams) ResetMincpunumber() {
+	if p.p != nil && p.p["mincpunumber"] != nil {
+		delete(p.p, "mincpunumber")
+	}
 }
 
 func (p *AddKubernetesSupportedVersionParams) GetMincpunumber() (int, bool) {
@@ -132,6 +173,12 @@ func (p *AddKubernetesSupportedVersionParams) SetMinmemory(v int) {
 	p.p["minmemory"] = v
 }
 
+func (p *AddKubernetesSupportedVersionParams) ResetMinmemory() {
+	if p.p != nil && p.p["minmemory"] != nil {
+		delete(p.p, "minmemory")
+	}
+}
+
 func (p *AddKubernetesSupportedVersionParams) GetMinmemory() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -145,6 +192,12 @@ func (p *AddKubernetesSupportedVersionParams) SetName(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *AddKubernetesSupportedVersionParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
 }
 
 func (p *AddKubernetesSupportedVersionParams) GetName() (string, bool) {
@@ -162,6 +215,12 @@ func (p *AddKubernetesSupportedVersionParams) SetSemanticversion(v string) {
 	p.p["semanticversion"] = v
 }
 
+func (p *AddKubernetesSupportedVersionParams) ResetSemanticversion() {
+	if p.p != nil && p.p["semanticversion"] != nil {
+		delete(p.p, "semanticversion")
+	}
+}
+
 func (p *AddKubernetesSupportedVersionParams) GetSemanticversion() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -177,6 +236,12 @@ func (p *AddKubernetesSupportedVersionParams) SetUrl(v string) {
 	p.p["url"] = v
 }
 
+func (p *AddKubernetesSupportedVersionParams) ResetUrl() {
+	if p.p != nil && p.p["url"] != nil {
+		delete(p.p, "url")
+	}
+}
+
 func (p *AddKubernetesSupportedVersionParams) GetUrl() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -190,6 +255,12 @@ func (p *AddKubernetesSupportedVersionParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *AddKubernetesSupportedVersionParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *AddKubernetesSupportedVersionParams) GetZoneid() (string, bool) {
@@ -231,6 +302,8 @@ func (s *KubernetesService) AddKubernetesSupportedVersion(p *AddKubernetesSuppor
 }
 
 type AddKubernetesSupportedVersionResponse struct {
+	Created             string `json:"created"`
+	Directdownload      bool   `json:"directdownload"`
 	Id                  string `json:"id"`
 	Isoid               string `json:"isoid"`
 	Isoname             string `json:"isoname"`
@@ -259,6 +332,9 @@ func (p *CreateKubernetesClusterParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["account"]; found {
 		u.Set("account", v.(string))
+	}
+	if v, found := p.p["clustertype"]; found {
+		u.Set("clustertype", v.(string))
 	}
 	if v, found := p.p["controlnodes"]; found {
 		vv := strconv.FormatInt(v.(int64), 10)
@@ -325,6 +401,12 @@ func (p *CreateKubernetesClusterParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *CreateKubernetesClusterParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *CreateKubernetesClusterParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -333,11 +415,38 @@ func (p *CreateKubernetesClusterParams) GetAccount() (string, bool) {
 	return value, ok
 }
 
+func (p *CreateKubernetesClusterParams) SetClustertype(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["clustertype"] = v
+}
+
+func (p *CreateKubernetesClusterParams) ResetClustertype() {
+	if p.p != nil && p.p["clustertype"] != nil {
+		delete(p.p, "clustertype")
+	}
+}
+
+func (p *CreateKubernetesClusterParams) GetClustertype() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["clustertype"].(string)
+	return value, ok
+}
+
 func (p *CreateKubernetesClusterParams) SetControlnodes(v int64) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["controlnodes"] = v
+}
+
+func (p *CreateKubernetesClusterParams) ResetControlnodes() {
+	if p.p != nil && p.p["controlnodes"] != nil {
+		delete(p.p, "controlnodes")
+	}
 }
 
 func (p *CreateKubernetesClusterParams) GetControlnodes() (int64, bool) {
@@ -355,6 +464,12 @@ func (p *CreateKubernetesClusterParams) SetDescription(v string) {
 	p.p["description"] = v
 }
 
+func (p *CreateKubernetesClusterParams) ResetDescription() {
+	if p.p != nil && p.p["description"] != nil {
+		delete(p.p, "description")
+	}
+}
+
 func (p *CreateKubernetesClusterParams) GetDescription() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -368,6 +483,12 @@ func (p *CreateKubernetesClusterParams) SetDockerregistrypassword(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["dockerregistrypassword"] = v
+}
+
+func (p *CreateKubernetesClusterParams) ResetDockerregistrypassword() {
+	if p.p != nil && p.p["dockerregistrypassword"] != nil {
+		delete(p.p, "dockerregistrypassword")
+	}
 }
 
 func (p *CreateKubernetesClusterParams) GetDockerregistrypassword() (string, bool) {
@@ -385,6 +506,12 @@ func (p *CreateKubernetesClusterParams) SetDockerregistryurl(v string) {
 	p.p["dockerregistryurl"] = v
 }
 
+func (p *CreateKubernetesClusterParams) ResetDockerregistryurl() {
+	if p.p != nil && p.p["dockerregistryurl"] != nil {
+		delete(p.p, "dockerregistryurl")
+	}
+}
+
 func (p *CreateKubernetesClusterParams) GetDockerregistryurl() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -398,6 +525,12 @@ func (p *CreateKubernetesClusterParams) SetDockerregistryusername(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["dockerregistryusername"] = v
+}
+
+func (p *CreateKubernetesClusterParams) ResetDockerregistryusername() {
+	if p.p != nil && p.p["dockerregistryusername"] != nil {
+		delete(p.p, "dockerregistryusername")
+	}
 }
 
 func (p *CreateKubernetesClusterParams) GetDockerregistryusername() (string, bool) {
@@ -415,6 +548,12 @@ func (p *CreateKubernetesClusterParams) SetDomainid(v string) {
 	p.p["domainid"] = v
 }
 
+func (p *CreateKubernetesClusterParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
+}
+
 func (p *CreateKubernetesClusterParams) GetDomainid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -428,6 +567,12 @@ func (p *CreateKubernetesClusterParams) SetExternalloadbalanceripaddress(v strin
 		p.p = make(map[string]interface{})
 	}
 	p.p["externalloadbalanceripaddress"] = v
+}
+
+func (p *CreateKubernetesClusterParams) ResetExternalloadbalanceripaddress() {
+	if p.p != nil && p.p["externalloadbalanceripaddress"] != nil {
+		delete(p.p, "externalloadbalanceripaddress")
+	}
 }
 
 func (p *CreateKubernetesClusterParams) GetExternalloadbalanceripaddress() (string, bool) {
@@ -445,6 +590,12 @@ func (p *CreateKubernetesClusterParams) SetKeypair(v string) {
 	p.p["keypair"] = v
 }
 
+func (p *CreateKubernetesClusterParams) ResetKeypair() {
+	if p.p != nil && p.p["keypair"] != nil {
+		delete(p.p, "keypair")
+	}
+}
+
 func (p *CreateKubernetesClusterParams) GetKeypair() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -458,6 +609,12 @@ func (p *CreateKubernetesClusterParams) SetKubernetesversionid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["kubernetesversionid"] = v
+}
+
+func (p *CreateKubernetesClusterParams) ResetKubernetesversionid() {
+	if p.p != nil && p.p["kubernetesversionid"] != nil {
+		delete(p.p, "kubernetesversionid")
+	}
 }
 
 func (p *CreateKubernetesClusterParams) GetKubernetesversionid() (string, bool) {
@@ -475,6 +632,12 @@ func (p *CreateKubernetesClusterParams) SetMasternodes(v int64) {
 	p.p["masternodes"] = v
 }
 
+func (p *CreateKubernetesClusterParams) ResetMasternodes() {
+	if p.p != nil && p.p["masternodes"] != nil {
+		delete(p.p, "masternodes")
+	}
+}
+
 func (p *CreateKubernetesClusterParams) GetMasternodes() (int64, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -488,6 +651,12 @@ func (p *CreateKubernetesClusterParams) SetName(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *CreateKubernetesClusterParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
 }
 
 func (p *CreateKubernetesClusterParams) GetName() (string, bool) {
@@ -505,6 +674,12 @@ func (p *CreateKubernetesClusterParams) SetNetworkid(v string) {
 	p.p["networkid"] = v
 }
 
+func (p *CreateKubernetesClusterParams) ResetNetworkid() {
+	if p.p != nil && p.p["networkid"] != nil {
+		delete(p.p, "networkid")
+	}
+}
+
 func (p *CreateKubernetesClusterParams) GetNetworkid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -518,6 +693,12 @@ func (p *CreateKubernetesClusterParams) SetNoderootdisksize(v int64) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["noderootdisksize"] = v
+}
+
+func (p *CreateKubernetesClusterParams) ResetNoderootdisksize() {
+	if p.p != nil && p.p["noderootdisksize"] != nil {
+		delete(p.p, "noderootdisksize")
+	}
 }
 
 func (p *CreateKubernetesClusterParams) GetNoderootdisksize() (int64, bool) {
@@ -535,6 +716,12 @@ func (p *CreateKubernetesClusterParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *CreateKubernetesClusterParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
+}
+
 func (p *CreateKubernetesClusterParams) GetProjectid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -548,6 +735,12 @@ func (p *CreateKubernetesClusterParams) SetServiceofferingid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["serviceofferingid"] = v
+}
+
+func (p *CreateKubernetesClusterParams) ResetServiceofferingid() {
+	if p.p != nil && p.p["serviceofferingid"] != nil {
+		delete(p.p, "serviceofferingid")
+	}
 }
 
 func (p *CreateKubernetesClusterParams) GetServiceofferingid() (string, bool) {
@@ -565,6 +758,12 @@ func (p *CreateKubernetesClusterParams) SetSize(v int64) {
 	p.p["size"] = v
 }
 
+func (p *CreateKubernetesClusterParams) ResetSize() {
+	if p.p != nil && p.p["size"] != nil {
+		delete(p.p, "size")
+	}
+}
+
 func (p *CreateKubernetesClusterParams) GetSize() (int64, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -578,6 +777,12 @@ func (p *CreateKubernetesClusterParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *CreateKubernetesClusterParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *CreateKubernetesClusterParams) GetZoneid() (string, bool) {
@@ -641,9 +846,11 @@ type CreateKubernetesClusterResponse struct {
 	Account               string            `json:"account"`
 	Associatednetworkname string            `json:"associatednetworkname"`
 	Autoscalingenabled    bool              `json:"autoscalingenabled"`
+	Clustertype           string            `json:"clustertype"`
 	Consoleendpoint       string            `json:"consoleendpoint"`
 	Controlnodes          int64             `json:"controlnodes"`
 	Cpunumber             string            `json:"cpunumber"`
+	Created               string            `json:"created"`
 	Description           string            `json:"description"`
 	Domain                string            `json:"domain"`
 	Domainid              string            `json:"domainid"`
@@ -684,10 +891,60 @@ func (p *DeleteKubernetesClusterParams) toURLValues() url.Values {
 	if p.p == nil {
 		return u
 	}
+	if v, found := p.p["cleanup"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("cleanup", vv)
+	}
+	if v, found := p.p["expunge"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("expunge", vv)
+	}
 	if v, found := p.p["id"]; found {
 		u.Set("id", v.(string))
 	}
 	return u
+}
+
+func (p *DeleteKubernetesClusterParams) SetCleanup(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["cleanup"] = v
+}
+
+func (p *DeleteKubernetesClusterParams) ResetCleanup() {
+	if p.p != nil && p.p["cleanup"] != nil {
+		delete(p.p, "cleanup")
+	}
+}
+
+func (p *DeleteKubernetesClusterParams) GetCleanup() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["cleanup"].(bool)
+	return value, ok
+}
+
+func (p *DeleteKubernetesClusterParams) SetExpunge(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["expunge"] = v
+}
+
+func (p *DeleteKubernetesClusterParams) ResetExpunge() {
+	if p.p != nil && p.p["expunge"] != nil {
+		delete(p.p, "expunge")
+	}
+}
+
+func (p *DeleteKubernetesClusterParams) GetExpunge() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["expunge"].(bool)
+	return value, ok
 }
 
 func (p *DeleteKubernetesClusterParams) SetId(v string) {
@@ -695,6 +952,12 @@ func (p *DeleteKubernetesClusterParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *DeleteKubernetesClusterParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *DeleteKubernetesClusterParams) GetId() (string, bool) {
@@ -773,6 +1036,12 @@ func (p *DeleteKubernetesSupportedVersionParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *DeleteKubernetesSupportedVersionParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *DeleteKubernetesSupportedVersionParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -849,6 +1118,12 @@ func (p *GetKubernetesClusterConfigParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *GetKubernetesClusterConfigParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *GetKubernetesClusterConfigParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -872,10 +1147,13 @@ func (s *KubernetesService) GetKubernetesClusterConfig(p *GetKubernetesClusterCo
 		return nil, err
 	}
 
-	var r GetKubernetesClusterConfigResponse
-	if err := json.Unmarshal(resp, &r); err != nil {
+	var nested struct {
+		Response GetKubernetesClusterConfigResponse `json:"clusterconfig"`
+	}
+	if err := json.Unmarshal(resp, &nested); err != nil {
 		return nil, err
 	}
+	r := nested.Response
 
 	return &r, nil
 }
@@ -899,6 +1177,9 @@ func (p *ListKubernetesClustersParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["account"]; found {
 		u.Set("account", v.(string))
+	}
+	if v, found := p.p["clustertype"]; found {
+		u.Set("clustertype", v.(string))
 	}
 	if v, found := p.p["domainid"]; found {
 		u.Set("domainid", v.(string))
@@ -944,6 +1225,12 @@ func (p *ListKubernetesClustersParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *ListKubernetesClustersParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *ListKubernetesClustersParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -952,11 +1239,38 @@ func (p *ListKubernetesClustersParams) GetAccount() (string, bool) {
 	return value, ok
 }
 
+func (p *ListKubernetesClustersParams) SetClustertype(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["clustertype"] = v
+}
+
+func (p *ListKubernetesClustersParams) ResetClustertype() {
+	if p.p != nil && p.p["clustertype"] != nil {
+		delete(p.p, "clustertype")
+	}
+}
+
+func (p *ListKubernetesClustersParams) GetClustertype() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["clustertype"].(string)
+	return value, ok
+}
+
 func (p *ListKubernetesClustersParams) SetDomainid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *ListKubernetesClustersParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *ListKubernetesClustersParams) GetDomainid() (string, bool) {
@@ -974,6 +1288,12 @@ func (p *ListKubernetesClustersParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ListKubernetesClustersParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *ListKubernetesClustersParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -987,6 +1307,12 @@ func (p *ListKubernetesClustersParams) SetIsrecursive(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isrecursive"] = v
+}
+
+func (p *ListKubernetesClustersParams) ResetIsrecursive() {
+	if p.p != nil && p.p["isrecursive"] != nil {
+		delete(p.p, "isrecursive")
+	}
 }
 
 func (p *ListKubernetesClustersParams) GetIsrecursive() (bool, bool) {
@@ -1004,6 +1330,12 @@ func (p *ListKubernetesClustersParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListKubernetesClustersParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *ListKubernetesClustersParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1017,6 +1349,12 @@ func (p *ListKubernetesClustersParams) SetListall(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["listall"] = v
+}
+
+func (p *ListKubernetesClustersParams) ResetListall() {
+	if p.p != nil && p.p["listall"] != nil {
+		delete(p.p, "listall")
+	}
 }
 
 func (p *ListKubernetesClustersParams) GetListall() (bool, bool) {
@@ -1034,6 +1372,12 @@ func (p *ListKubernetesClustersParams) SetName(v string) {
 	p.p["name"] = v
 }
 
+func (p *ListKubernetesClustersParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
+}
+
 func (p *ListKubernetesClustersParams) GetName() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1047,6 +1391,12 @@ func (p *ListKubernetesClustersParams) SetPage(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["page"] = v
+}
+
+func (p *ListKubernetesClustersParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
 }
 
 func (p *ListKubernetesClustersParams) GetPage() (int, bool) {
@@ -1064,6 +1414,12 @@ func (p *ListKubernetesClustersParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListKubernetesClustersParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
 func (p *ListKubernetesClustersParams) GetPagesize() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1079,6 +1435,12 @@ func (p *ListKubernetesClustersParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *ListKubernetesClustersParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
+}
+
 func (p *ListKubernetesClustersParams) GetProjectid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1092,6 +1454,12 @@ func (p *ListKubernetesClustersParams) SetState(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["state"] = v
+}
+
+func (p *ListKubernetesClustersParams) ResetState() {
+	if p.p != nil && p.p["state"] != nil {
+		delete(p.p, "state")
+	}
 }
 
 func (p *ListKubernetesClustersParams) GetState() (string, bool) {
@@ -1217,9 +1585,11 @@ type KubernetesCluster struct {
 	Account               string            `json:"account"`
 	Associatednetworkname string            `json:"associatednetworkname"`
 	Autoscalingenabled    bool              `json:"autoscalingenabled"`
+	Clustertype           string            `json:"clustertype"`
 	Consoleendpoint       string            `json:"consoleendpoint"`
 	Controlnodes          int64             `json:"controlnodes"`
 	Cpunumber             string            `json:"cpunumber"`
+	Created               string            `json:"created"`
 	Description           string            `json:"description"`
 	Domain                string            `json:"domain"`
 	Domainid              string            `json:"domainid"`
@@ -1293,6 +1663,12 @@ func (p *ListKubernetesSupportedVersionsParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ListKubernetesSupportedVersionsParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *ListKubernetesSupportedVersionsParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1306,6 +1682,12 @@ func (p *ListKubernetesSupportedVersionsParams) SetKeyword(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["keyword"] = v
+}
+
+func (p *ListKubernetesSupportedVersionsParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
 }
 
 func (p *ListKubernetesSupportedVersionsParams) GetKeyword() (string, bool) {
@@ -1323,6 +1705,12 @@ func (p *ListKubernetesSupportedVersionsParams) SetMinimumkubernetesversionid(v 
 	p.p["minimumkubernetesversionid"] = v
 }
 
+func (p *ListKubernetesSupportedVersionsParams) ResetMinimumkubernetesversionid() {
+	if p.p != nil && p.p["minimumkubernetesversionid"] != nil {
+		delete(p.p, "minimumkubernetesversionid")
+	}
+}
+
 func (p *ListKubernetesSupportedVersionsParams) GetMinimumkubernetesversionid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1336,6 +1724,12 @@ func (p *ListKubernetesSupportedVersionsParams) SetMinimumsemanticversion(v stri
 		p.p = make(map[string]interface{})
 	}
 	p.p["minimumsemanticversion"] = v
+}
+
+func (p *ListKubernetesSupportedVersionsParams) ResetMinimumsemanticversion() {
+	if p.p != nil && p.p["minimumsemanticversion"] != nil {
+		delete(p.p, "minimumsemanticversion")
+	}
 }
 
 func (p *ListKubernetesSupportedVersionsParams) GetMinimumsemanticversion() (string, bool) {
@@ -1353,6 +1747,12 @@ func (p *ListKubernetesSupportedVersionsParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListKubernetesSupportedVersionsParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListKubernetesSupportedVersionsParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1368,6 +1768,12 @@ func (p *ListKubernetesSupportedVersionsParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListKubernetesSupportedVersionsParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
 func (p *ListKubernetesSupportedVersionsParams) GetPagesize() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1381,6 +1787,12 @@ func (p *ListKubernetesSupportedVersionsParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *ListKubernetesSupportedVersionsParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *ListKubernetesSupportedVersionsParams) GetZoneid() (string, bool) {
@@ -1503,6 +1915,8 @@ type ListKubernetesSupportedVersionsResponse struct {
 }
 
 type KubernetesSupportedVersion struct {
+	Created             string `json:"created"`
+	Directdownload      bool   `json:"directdownload"`
 	Id                  string `json:"id"`
 	Isoid               string `json:"isoid"`
 	Isoname             string `json:"isoname"`
@@ -1565,6 +1979,12 @@ func (p *ScaleKubernetesClusterParams) SetAutoscalingenabled(v bool) {
 	p.p["autoscalingenabled"] = v
 }
 
+func (p *ScaleKubernetesClusterParams) ResetAutoscalingenabled() {
+	if p.p != nil && p.p["autoscalingenabled"] != nil {
+		delete(p.p, "autoscalingenabled")
+	}
+}
+
 func (p *ScaleKubernetesClusterParams) GetAutoscalingenabled() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1578,6 +1998,12 @@ func (p *ScaleKubernetesClusterParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *ScaleKubernetesClusterParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *ScaleKubernetesClusterParams) GetId() (string, bool) {
@@ -1595,6 +2021,12 @@ func (p *ScaleKubernetesClusterParams) SetMaxsize(v int64) {
 	p.p["maxsize"] = v
 }
 
+func (p *ScaleKubernetesClusterParams) ResetMaxsize() {
+	if p.p != nil && p.p["maxsize"] != nil {
+		delete(p.p, "maxsize")
+	}
+}
+
 func (p *ScaleKubernetesClusterParams) GetMaxsize() (int64, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1608,6 +2040,12 @@ func (p *ScaleKubernetesClusterParams) SetMinsize(v int64) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["minsize"] = v
+}
+
+func (p *ScaleKubernetesClusterParams) ResetMinsize() {
+	if p.p != nil && p.p["minsize"] != nil {
+		delete(p.p, "minsize")
+	}
 }
 
 func (p *ScaleKubernetesClusterParams) GetMinsize() (int64, bool) {
@@ -1625,6 +2063,12 @@ func (p *ScaleKubernetesClusterParams) SetNodeids(v []string) {
 	p.p["nodeids"] = v
 }
 
+func (p *ScaleKubernetesClusterParams) ResetNodeids() {
+	if p.p != nil && p.p["nodeids"] != nil {
+		delete(p.p, "nodeids")
+	}
+}
+
 func (p *ScaleKubernetesClusterParams) GetNodeids() ([]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1640,6 +2084,12 @@ func (p *ScaleKubernetesClusterParams) SetServiceofferingid(v string) {
 	p.p["serviceofferingid"] = v
 }
 
+func (p *ScaleKubernetesClusterParams) ResetServiceofferingid() {
+	if p.p != nil && p.p["serviceofferingid"] != nil {
+		delete(p.p, "serviceofferingid")
+	}
+}
+
 func (p *ScaleKubernetesClusterParams) GetServiceofferingid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1653,6 +2103,12 @@ func (p *ScaleKubernetesClusterParams) SetSize(v int64) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["size"] = v
+}
+
+func (p *ScaleKubernetesClusterParams) ResetSize() {
+	if p.p != nil && p.p["size"] != nil {
+		delete(p.p, "size")
+	}
 }
 
 func (p *ScaleKubernetesClusterParams) GetSize() (int64, bool) {
@@ -1672,7 +2128,7 @@ func (s *KubernetesService) NewScaleKubernetesClusterParams(id string) *ScaleKub
 	return p
 }
 
-// Scales a created, running or stopped Kubernetes cluster
+// Scales a created, running or stopped CloudManaged Kubernetes cluster
 func (s *KubernetesService) ScaleKubernetesCluster(p *ScaleKubernetesClusterParams) (*ScaleKubernetesClusterResponse, error) {
 	resp, err := s.cs.newRequest("scaleKubernetesCluster", p.toURLValues())
 	if err != nil {
@@ -1711,9 +2167,11 @@ type ScaleKubernetesClusterResponse struct {
 	Account               string            `json:"account"`
 	Associatednetworkname string            `json:"associatednetworkname"`
 	Autoscalingenabled    bool              `json:"autoscalingenabled"`
+	Clustertype           string            `json:"clustertype"`
 	Consoleendpoint       string            `json:"consoleendpoint"`
 	Controlnodes          int64             `json:"controlnodes"`
 	Cpunumber             string            `json:"cpunumber"`
+	Created               string            `json:"created"`
 	Description           string            `json:"description"`
 	Domain                string            `json:"domain"`
 	Domainid              string            `json:"domainid"`
@@ -1767,6 +2225,12 @@ func (p *StartKubernetesClusterParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *StartKubernetesClusterParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *StartKubernetesClusterParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1784,7 +2248,7 @@ func (s *KubernetesService) NewStartKubernetesClusterParams(id string) *StartKub
 	return p
 }
 
-// Starts a stopped Kubernetes cluster
+// Starts a stopped CloudManaged Kubernetes cluster
 func (s *KubernetesService) StartKubernetesCluster(p *StartKubernetesClusterParams) (*StartKubernetesClusterResponse, error) {
 	resp, err := s.cs.newRequest("startKubernetesCluster", p.toURLValues())
 	if err != nil {
@@ -1823,9 +2287,11 @@ type StartKubernetesClusterResponse struct {
 	Account               string            `json:"account"`
 	Associatednetworkname string            `json:"associatednetworkname"`
 	Autoscalingenabled    bool              `json:"autoscalingenabled"`
+	Clustertype           string            `json:"clustertype"`
 	Consoleendpoint       string            `json:"consoleendpoint"`
 	Controlnodes          int64             `json:"controlnodes"`
 	Cpunumber             string            `json:"cpunumber"`
+	Created               string            `json:"created"`
 	Description           string            `json:"description"`
 	Domain                string            `json:"domain"`
 	Domainid              string            `json:"domainid"`
@@ -1879,6 +2345,12 @@ func (p *StopKubernetesClusterParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *StopKubernetesClusterParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *StopKubernetesClusterParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1896,7 +2368,7 @@ func (s *KubernetesService) NewStopKubernetesClusterParams(id string) *StopKuber
 	return p
 }
 
-// Stops a running Kubernetes cluster
+// Stops a running CloudManaged Kubernetes cluster
 func (s *KubernetesService) StopKubernetesCluster(p *StopKubernetesClusterParams) (*StopKubernetesClusterResponse, error) {
 	resp, err := s.cs.newRequest("stopKubernetesCluster", p.toURLValues())
 	if err != nil {
@@ -1958,6 +2430,12 @@ func (p *UpdateKubernetesSupportedVersionParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *UpdateKubernetesSupportedVersionParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *UpdateKubernetesSupportedVersionParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1971,6 +2449,12 @@ func (p *UpdateKubernetesSupportedVersionParams) SetState(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["state"] = v
+}
+
+func (p *UpdateKubernetesSupportedVersionParams) ResetState() {
+	if p.p != nil && p.p["state"] != nil {
+		delete(p.p, "state")
+	}
 }
 
 func (p *UpdateKubernetesSupportedVersionParams) GetState() (string, bool) {
@@ -2007,6 +2491,8 @@ func (s *KubernetesService) UpdateKubernetesSupportedVersion(p *UpdateKubernetes
 }
 
 type UpdateKubernetesSupportedVersionResponse struct {
+	Created             string `json:"created"`
+	Directdownload      bool   `json:"directdownload"`
 	Id                  string `json:"id"`
 	Isoid               string `json:"isoid"`
 	Isoname             string `json:"isoname"`
@@ -2049,6 +2535,12 @@ func (p *UpgradeKubernetesClusterParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *UpgradeKubernetesClusterParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *UpgradeKubernetesClusterParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2062,6 +2554,12 @@ func (p *UpgradeKubernetesClusterParams) SetKubernetesversionid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["kubernetesversionid"] = v
+}
+
+func (p *UpgradeKubernetesClusterParams) ResetKubernetesversionid() {
+	if p.p != nil && p.p["kubernetesversionid"] != nil {
+		delete(p.p, "kubernetesversionid")
+	}
 }
 
 func (p *UpgradeKubernetesClusterParams) GetKubernetesversionid() (string, bool) {
@@ -2082,7 +2580,7 @@ func (s *KubernetesService) NewUpgradeKubernetesClusterParams(id string, kuberne
 	return p
 }
 
-// Upgrades a running Kubernetes cluster
+// Upgrades a running CloudManaged Kubernetes cluster
 func (s *KubernetesService) UpgradeKubernetesCluster(p *UpgradeKubernetesClusterParams) (*UpgradeKubernetesClusterResponse, error) {
 	resp, err := s.cs.newRequest("upgradeKubernetesCluster", p.toURLValues())
 	if err != nil {
@@ -2121,9 +2619,11 @@ type UpgradeKubernetesClusterResponse struct {
 	Account               string            `json:"account"`
 	Associatednetworkname string            `json:"associatednetworkname"`
 	Autoscalingenabled    bool              `json:"autoscalingenabled"`
+	Clustertype           string            `json:"clustertype"`
 	Consoleendpoint       string            `json:"consoleendpoint"`
 	Controlnodes          int64             `json:"controlnodes"`
 	Cpunumber             string            `json:"cpunumber"`
+	Created               string            `json:"created"`
 	Description           string            `json:"description"`
 	Domain                string            `json:"domain"`
 	Domainid              string            `json:"domainid"`
@@ -2153,4 +2653,344 @@ type UpgradeKubernetesClusterResponse struct {
 	Virtualmachines       []*VirtualMachine `json:"virtualmachines"`
 	Zoneid                string            `json:"zoneid"`
 	Zonename              string            `json:"zonename"`
+}
+
+type AddVirtualMachinesToKubernetesClusterParams struct {
+	p map[string]interface{}
+}
+
+func (p *AddVirtualMachinesToKubernetesClusterParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["id"]; found {
+		u.Set("id", v.(string))
+	}
+	if v, found := p.p["iscontrolnode"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("iscontrolnode", vv)
+	}
+	if v, found := p.p["virtualmachineids"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("virtualmachineids", vv)
+	}
+	return u
+}
+
+func (p *AddVirtualMachinesToKubernetesClusterParams) SetId(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["id"] = v
+}
+
+func (p *AddVirtualMachinesToKubernetesClusterParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
+func (p *AddVirtualMachinesToKubernetesClusterParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+func (p *AddVirtualMachinesToKubernetesClusterParams) SetIscontrolnode(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["iscontrolnode"] = v
+}
+
+func (p *AddVirtualMachinesToKubernetesClusterParams) ResetIscontrolnode() {
+	if p.p != nil && p.p["iscontrolnode"] != nil {
+		delete(p.p, "iscontrolnode")
+	}
+}
+
+func (p *AddVirtualMachinesToKubernetesClusterParams) GetIscontrolnode() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["iscontrolnode"].(bool)
+	return value, ok
+}
+
+func (p *AddVirtualMachinesToKubernetesClusterParams) SetVirtualmachineids(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["virtualmachineids"] = v
+}
+
+func (p *AddVirtualMachinesToKubernetesClusterParams) ResetVirtualmachineids() {
+	if p.p != nil && p.p["virtualmachineids"] != nil {
+		delete(p.p, "virtualmachineids")
+	}
+}
+
+func (p *AddVirtualMachinesToKubernetesClusterParams) GetVirtualmachineids() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["virtualmachineids"].([]string)
+	return value, ok
+}
+
+// You should always use this function to get a new AddVirtualMachinesToKubernetesClusterParams instance,
+// as then you are sure you have configured all required params
+func (s *KubernetesService) NewAddVirtualMachinesToKubernetesClusterParams(id string, virtualmachineids []string) *AddVirtualMachinesToKubernetesClusterParams {
+	p := &AddVirtualMachinesToKubernetesClusterParams{}
+	p.p = make(map[string]interface{})
+	p.p["id"] = id
+	p.p["virtualmachineids"] = virtualmachineids
+	return p
+}
+
+// Add VMs to an ExternalManaged kubernetes cluster. Not applicable for CloudManaged kubernetes clusters.
+func (s *KubernetesService) AddVirtualMachinesToKubernetesCluster(p *AddVirtualMachinesToKubernetesClusterParams) (*AddVirtualMachinesToKubernetesClusterResponse, error) {
+	resp, err := s.cs.newRequest("addVirtualMachinesToKubernetesCluster", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r AddVirtualMachinesToKubernetesClusterResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
+
+type AddVirtualMachinesToKubernetesClusterResponse struct {
+	Displaytext string `json:"displaytext"`
+	JobID       string `json:"jobid"`
+	Jobstatus   int    `json:"jobstatus"`
+	Success     bool   `json:"success"`
+}
+
+func (r *AddVirtualMachinesToKubernetesClusterResponse) UnmarshalJSON(b []byte) error {
+	var m map[string]interface{}
+	err := json.Unmarshal(b, &m)
+	if err != nil {
+		return err
+	}
+
+	if success, ok := m["success"].(string); ok {
+		m["success"] = success == "true"
+		b, err = json.Marshal(m)
+		if err != nil {
+			return err
+		}
+	}
+
+	if ostypeid, ok := m["ostypeid"].(float64); ok {
+		m["ostypeid"] = strconv.Itoa(int(ostypeid))
+		b, err = json.Marshal(m)
+		if err != nil {
+			return err
+		}
+	}
+
+	type alias AddVirtualMachinesToKubernetesClusterResponse
+	return json.Unmarshal(b, (*alias)(r))
+}
+
+type RemoveVirtualMachinesFromKubernetesClusterParams struct {
+	p map[string]interface{}
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["id"]; found {
+		u.Set("id", v.(string))
+	}
+	if v, found := p.p["keyword"]; found {
+		u.Set("keyword", v.(string))
+	}
+	if v, found := p.p["page"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("page", vv)
+	}
+	if v, found := p.p["pagesize"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("pagesize", vv)
+	}
+	if v, found := p.p["virtualmachineids"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("virtualmachineids", vv)
+	}
+	return u
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) SetId(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["id"] = v
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) SetKeyword(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["keyword"] = v
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) GetKeyword() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["keyword"].(string)
+	return value, ok
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) SetPage(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["page"] = v
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) GetPage() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["page"].(int)
+	return value, ok
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) SetPagesize(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["pagesize"] = v
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) GetPagesize() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["pagesize"].(int)
+	return value, ok
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) SetVirtualmachineids(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["virtualmachineids"] = v
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) ResetVirtualmachineids() {
+	if p.p != nil && p.p["virtualmachineids"] != nil {
+		delete(p.p, "virtualmachineids")
+	}
+}
+
+func (p *RemoveVirtualMachinesFromKubernetesClusterParams) GetVirtualmachineids() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["virtualmachineids"].([]string)
+	return value, ok
+}
+
+// You should always use this function to get a new RemoveVirtualMachinesFromKubernetesClusterParams instance,
+// as then you are sure you have configured all required params
+func (s *KubernetesService) NewRemoveVirtualMachinesFromKubernetesClusterParams(id string, virtualmachineids []string) *RemoveVirtualMachinesFromKubernetesClusterParams {
+	p := &RemoveVirtualMachinesFromKubernetesClusterParams{}
+	p.p = make(map[string]interface{})
+	p.p["id"] = id
+	p.p["virtualmachineids"] = virtualmachineids
+	return p
+}
+
+// Remove VMs from an ExternalManaged kubernetes cluster. Not applicable for CloudManaged kubernetes clusters.
+func (s *KubernetesService) RemoveVirtualMachinesFromKubernetesCluster(p *RemoveVirtualMachinesFromKubernetesClusterParams) (*RemoveVirtualMachinesFromKubernetesClusterResponse, error) {
+	resp, err := s.cs.newRequest("removeVirtualMachinesFromKubernetesCluster", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r RemoveVirtualMachinesFromKubernetesClusterResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
+
+type RemoveVirtualMachinesFromKubernetesClusterResponse struct {
+	Displaytext string `json:"displaytext"`
+	Id          string `json:"id"`
+	JobID       string `json:"jobid"`
+	Jobstatus   int    `json:"jobstatus"`
+	Success     bool   `json:"success"`
+}
+
+func (r *RemoveVirtualMachinesFromKubernetesClusterResponse) UnmarshalJSON(b []byte) error {
+	var m map[string]interface{}
+	err := json.Unmarshal(b, &m)
+	if err != nil {
+		return err
+	}
+
+	if success, ok := m["success"].(string); ok {
+		m["success"] = success == "true"
+		b, err = json.Marshal(m)
+		if err != nil {
+			return err
+		}
+	}
+
+	if ostypeid, ok := m["ostypeid"].(float64); ok {
+		m["ostypeid"] = strconv.Itoa(int(ostypeid))
+		b, err = json.Marshal(m)
+		if err != nil {
+			return err
+		}
+	}
+
+	type alias RemoveVirtualMachinesFromKubernetesClusterResponse
+	return json.Unmarshal(b, (*alias)(r))
 }

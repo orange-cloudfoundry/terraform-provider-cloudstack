@@ -78,6 +78,12 @@ func (p *AddLdapConfigurationParams) SetDomainid(v string) {
 	p.p["domainid"] = v
 }
 
+func (p *AddLdapConfigurationParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
+}
+
 func (p *AddLdapConfigurationParams) GetDomainid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -93,6 +99,12 @@ func (p *AddLdapConfigurationParams) SetHostname(v string) {
 	p.p["hostname"] = v
 }
 
+func (p *AddLdapConfigurationParams) ResetHostname() {
+	if p.p != nil && p.p["hostname"] != nil {
+		delete(p.p, "hostname")
+	}
+}
+
 func (p *AddLdapConfigurationParams) GetHostname() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -106,6 +118,12 @@ func (p *AddLdapConfigurationParams) SetPort(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["port"] = v
+}
+
+func (p *AddLdapConfigurationParams) ResetPort() {
+	if p.p != nil && p.p["port"] != nil {
+		delete(p.p, "port")
+	}
 }
 
 func (p *AddLdapConfigurationParams) GetPort() (int, bool) {
@@ -178,6 +196,12 @@ func (p *DeleteLdapConfigurationParams) SetDomainid(v string) {
 	p.p["domainid"] = v
 }
 
+func (p *DeleteLdapConfigurationParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
+}
+
 func (p *DeleteLdapConfigurationParams) GetDomainid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -193,6 +217,12 @@ func (p *DeleteLdapConfigurationParams) SetHostname(v string) {
 	p.p["hostname"] = v
 }
 
+func (p *DeleteLdapConfigurationParams) ResetHostname() {
+	if p.p != nil && p.p["hostname"] != nil {
+		delete(p.p, "hostname")
+	}
+}
+
 func (p *DeleteLdapConfigurationParams) GetHostname() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -206,6 +236,12 @@ func (p *DeleteLdapConfigurationParams) SetPort(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["port"] = v
+}
+
+func (p *DeleteLdapConfigurationParams) ResetPort() {
+	if p.p != nil && p.p["port"] != nil {
+		delete(p.p, "port")
+	}
 }
 
 func (p *DeleteLdapConfigurationParams) GetPort() (int, bool) {
@@ -304,6 +340,12 @@ func (p *ImportLdapUsersParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *ImportLdapUsersParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *ImportLdapUsersParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -317,6 +359,12 @@ func (p *ImportLdapUsersParams) SetAccountdetails(v map[string]string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["accountdetails"] = v
+}
+
+func (p *ImportLdapUsersParams) ResetAccountdetails() {
+	if p.p != nil && p.p["accountdetails"] != nil {
+		delete(p.p, "accountdetails")
+	}
 }
 
 func (p *ImportLdapUsersParams) GetAccountdetails() (map[string]string, bool) {
@@ -334,6 +382,12 @@ func (p *ImportLdapUsersParams) SetAccounttype(v int) {
 	p.p["accounttype"] = v
 }
 
+func (p *ImportLdapUsersParams) ResetAccounttype() {
+	if p.p != nil && p.p["accounttype"] != nil {
+		delete(p.p, "accounttype")
+	}
+}
+
 func (p *ImportLdapUsersParams) GetAccounttype() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -347,6 +401,12 @@ func (p *ImportLdapUsersParams) SetDomainid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *ImportLdapUsersParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *ImportLdapUsersParams) GetDomainid() (string, bool) {
@@ -364,6 +424,12 @@ func (p *ImportLdapUsersParams) SetGroup(v string) {
 	p.p["group"] = v
 }
 
+func (p *ImportLdapUsersParams) ResetGroup() {
+	if p.p != nil && p.p["group"] != nil {
+		delete(p.p, "group")
+	}
+}
+
 func (p *ImportLdapUsersParams) GetGroup() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -377,6 +443,12 @@ func (p *ImportLdapUsersParams) SetKeyword(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["keyword"] = v
+}
+
+func (p *ImportLdapUsersParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
 }
 
 func (p *ImportLdapUsersParams) GetKeyword() (string, bool) {
@@ -394,6 +466,12 @@ func (p *ImportLdapUsersParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ImportLdapUsersParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ImportLdapUsersParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -407,6 +485,12 @@ func (p *ImportLdapUsersParams) SetPagesize(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ImportLdapUsersParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
 }
 
 func (p *ImportLdapUsersParams) GetPagesize() (int, bool) {
@@ -424,6 +508,12 @@ func (p *ImportLdapUsersParams) SetRoleid(v string) {
 	p.p["roleid"] = v
 }
 
+func (p *ImportLdapUsersParams) ResetRoleid() {
+	if p.p != nil && p.p["roleid"] != nil {
+		delete(p.p, "roleid")
+	}
+}
+
 func (p *ImportLdapUsersParams) GetRoleid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -437,6 +527,12 @@ func (p *ImportLdapUsersParams) SetTimezone(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["timezone"] = v
+}
+
+func (p *ImportLdapUsersParams) ResetTimezone() {
+	if p.p != nil && p.p["timezone"] != nil {
+		delete(p.p, "timezone")
+	}
 }
 
 func (p *ImportLdapUsersParams) GetTimezone() (string, bool) {
@@ -534,6 +630,12 @@ func (p *LdapConfigParams) SetBinddn(v string) {
 	p.p["binddn"] = v
 }
 
+func (p *LdapConfigParams) ResetBinddn() {
+	if p.p != nil && p.p["binddn"] != nil {
+		delete(p.p, "binddn")
+	}
+}
+
 func (p *LdapConfigParams) GetBinddn() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -547,6 +649,12 @@ func (p *LdapConfigParams) SetBindpass(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["bindpass"] = v
+}
+
+func (p *LdapConfigParams) ResetBindpass() {
+	if p.p != nil && p.p["bindpass"] != nil {
+		delete(p.p, "bindpass")
+	}
 }
 
 func (p *LdapConfigParams) GetBindpass() (string, bool) {
@@ -564,6 +672,12 @@ func (p *LdapConfigParams) SetHostname(v string) {
 	p.p["hostname"] = v
 }
 
+func (p *LdapConfigParams) ResetHostname() {
+	if p.p != nil && p.p["hostname"] != nil {
+		delete(p.p, "hostname")
+	}
+}
+
 func (p *LdapConfigParams) GetHostname() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -577,6 +691,12 @@ func (p *LdapConfigParams) SetListall(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["listall"] = v
+}
+
+func (p *LdapConfigParams) ResetListall() {
+	if p.p != nil && p.p["listall"] != nil {
+		delete(p.p, "listall")
+	}
 }
 
 func (p *LdapConfigParams) GetListall() (bool, bool) {
@@ -594,6 +714,12 @@ func (p *LdapConfigParams) SetPort(v int) {
 	p.p["port"] = v
 }
 
+func (p *LdapConfigParams) ResetPort() {
+	if p.p != nil && p.p["port"] != nil {
+		delete(p.p, "port")
+	}
+}
+
 func (p *LdapConfigParams) GetPort() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -607,6 +733,12 @@ func (p *LdapConfigParams) SetQueryfilter(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["queryfilter"] = v
+}
+
+func (p *LdapConfigParams) ResetQueryfilter() {
+	if p.p != nil && p.p["queryfilter"] != nil {
+		delete(p.p, "queryfilter")
+	}
 }
 
 func (p *LdapConfigParams) GetQueryfilter() (string, bool) {
@@ -624,6 +756,12 @@ func (p *LdapConfigParams) SetSearchbase(v string) {
 	p.p["searchbase"] = v
 }
 
+func (p *LdapConfigParams) ResetSearchbase() {
+	if p.p != nil && p.p["searchbase"] != nil {
+		delete(p.p, "searchbase")
+	}
+}
+
 func (p *LdapConfigParams) GetSearchbase() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -637,6 +775,12 @@ func (p *LdapConfigParams) SetSsl(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["ssl"] = v
+}
+
+func (p *LdapConfigParams) ResetSsl() {
+	if p.p != nil && p.p["ssl"] != nil {
+		delete(p.p, "ssl")
+	}
 }
 
 func (p *LdapConfigParams) GetSsl() (bool, bool) {
@@ -654,6 +798,12 @@ func (p *LdapConfigParams) SetTruststore(v string) {
 	p.p["truststore"] = v
 }
 
+func (p *LdapConfigParams) ResetTruststore() {
+	if p.p != nil && p.p["truststore"] != nil {
+		delete(p.p, "truststore")
+	}
+}
+
 func (p *LdapConfigParams) GetTruststore() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -667,6 +817,12 @@ func (p *LdapConfigParams) SetTruststorepass(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["truststorepass"] = v
+}
+
+func (p *LdapConfigParams) ResetTruststorepass() {
+	if p.p != nil && p.p["truststorepass"] != nil {
+		delete(p.p, "truststorepass")
+	}
 }
 
 func (p *LdapConfigParams) GetTruststorepass() (string, bool) {
@@ -766,6 +922,12 @@ func (p *LdapCreateAccountParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *LdapCreateAccountParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *LdapCreateAccountParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -779,6 +941,12 @@ func (p *LdapCreateAccountParams) SetAccountdetails(v map[string]string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["accountdetails"] = v
+}
+
+func (p *LdapCreateAccountParams) ResetAccountdetails() {
+	if p.p != nil && p.p["accountdetails"] != nil {
+		delete(p.p, "accountdetails")
+	}
 }
 
 func (p *LdapCreateAccountParams) GetAccountdetails() (map[string]string, bool) {
@@ -796,6 +964,12 @@ func (p *LdapCreateAccountParams) SetAccountid(v string) {
 	p.p["accountid"] = v
 }
 
+func (p *LdapCreateAccountParams) ResetAccountid() {
+	if p.p != nil && p.p["accountid"] != nil {
+		delete(p.p, "accountid")
+	}
+}
+
 func (p *LdapCreateAccountParams) GetAccountid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -809,6 +983,12 @@ func (p *LdapCreateAccountParams) SetAccounttype(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["accounttype"] = v
+}
+
+func (p *LdapCreateAccountParams) ResetAccounttype() {
+	if p.p != nil && p.p["accounttype"] != nil {
+		delete(p.p, "accounttype")
+	}
 }
 
 func (p *LdapCreateAccountParams) GetAccounttype() (int, bool) {
@@ -826,6 +1006,12 @@ func (p *LdapCreateAccountParams) SetDomainid(v string) {
 	p.p["domainid"] = v
 }
 
+func (p *LdapCreateAccountParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
+}
+
 func (p *LdapCreateAccountParams) GetDomainid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -839,6 +1025,12 @@ func (p *LdapCreateAccountParams) SetNetworkdomain(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["networkdomain"] = v
+}
+
+func (p *LdapCreateAccountParams) ResetNetworkdomain() {
+	if p.p != nil && p.p["networkdomain"] != nil {
+		delete(p.p, "networkdomain")
+	}
 }
 
 func (p *LdapCreateAccountParams) GetNetworkdomain() (string, bool) {
@@ -856,6 +1048,12 @@ func (p *LdapCreateAccountParams) SetRoleid(v string) {
 	p.p["roleid"] = v
 }
 
+func (p *LdapCreateAccountParams) ResetRoleid() {
+	if p.p != nil && p.p["roleid"] != nil {
+		delete(p.p, "roleid")
+	}
+}
+
 func (p *LdapCreateAccountParams) GetRoleid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -869,6 +1067,12 @@ func (p *LdapCreateAccountParams) SetTimezone(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["timezone"] = v
+}
+
+func (p *LdapCreateAccountParams) ResetTimezone() {
+	if p.p != nil && p.p["timezone"] != nil {
+		delete(p.p, "timezone")
+	}
 }
 
 func (p *LdapCreateAccountParams) GetTimezone() (string, bool) {
@@ -886,6 +1090,12 @@ func (p *LdapCreateAccountParams) SetUserid(v string) {
 	p.p["userid"] = v
 }
 
+func (p *LdapCreateAccountParams) ResetUserid() {
+	if p.p != nil && p.p["userid"] != nil {
+		delete(p.p, "userid")
+	}
+}
+
 func (p *LdapCreateAccountParams) GetUserid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -899,6 +1109,12 @@ func (p *LdapCreateAccountParams) SetUsername(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["username"] = v
+}
+
+func (p *LdapCreateAccountParams) ResetUsername() {
+	if p.p != nil && p.p["username"] != nil {
+		delete(p.p, "username")
+	}
 }
 
 func (p *LdapCreateAccountParams) GetUsername() (string, bool) {
@@ -945,7 +1161,7 @@ type LdapCreateAccountResponse struct {
 	Domainid                  string                          `json:"domainid"`
 	Domainpath                string                          `json:"domainpath"`
 	Groups                    []string                        `json:"groups"`
-	Icon                      string                          `json:"icon"`
+	Icon                      interface{}                     `json:"icon"`
 	Id                        string                          `json:"id"`
 	Ipavailable               string                          `json:"ipavailable"`
 	Iplimit                   string                          `json:"iplimit"`
@@ -998,28 +1214,30 @@ type LdapCreateAccountResponse struct {
 }
 
 type LdapCreateAccountResponseUser struct {
-	Account             string `json:"account"`
-	Accountid           string `json:"accountid"`
-	Accounttype         int    `json:"accounttype"`
-	Apikey              string `json:"apikey"`
-	Created             string `json:"created"`
-	Domain              string `json:"domain"`
-	Domainid            string `json:"domainid"`
-	Email               string `json:"email"`
-	Firstname           string `json:"firstname"`
-	Icon                string `json:"icon"`
-	Id                  string `json:"id"`
-	Iscallerchilddomain bool   `json:"iscallerchilddomain"`
-	Isdefault           bool   `json:"isdefault"`
-	Lastname            string `json:"lastname"`
-	Roleid              string `json:"roleid"`
-	Rolename            string `json:"rolename"`
-	Roletype            string `json:"roletype"`
-	Secretkey           string `json:"secretkey"`
-	State               string `json:"state"`
-	Timezone            string `json:"timezone"`
-	Username            string `json:"username"`
-	Usersource          string `json:"usersource"`
+	Account             string      `json:"account"`
+	Accountid           string      `json:"accountid"`
+	Accounttype         int         `json:"accounttype"`
+	Apikey              string      `json:"apikey"`
+	Created             string      `json:"created"`
+	Domain              string      `json:"domain"`
+	Domainid            string      `json:"domainid"`
+	Email               string      `json:"email"`
+	Firstname           string      `json:"firstname"`
+	Icon                interface{} `json:"icon"`
+	Id                  string      `json:"id"`
+	Is2faenabled        bool        `json:"is2faenabled"`
+	Is2famandated       bool        `json:"is2famandated"`
+	Iscallerchilddomain bool        `json:"iscallerchilddomain"`
+	Isdefault           bool        `json:"isdefault"`
+	Lastname            string      `json:"lastname"`
+	Roleid              string      `json:"roleid"`
+	Rolename            string      `json:"rolename"`
+	Roletype            string      `json:"roletype"`
+	Secretkey           string      `json:"secretkey"`
+	State               string      `json:"state"`
+	Timezone            string      `json:"timezone"`
+	Username            string      `json:"username"`
+	Usersource          string      `json:"usersource"`
 }
 
 type LdapRemoveParams struct {
@@ -1107,6 +1325,12 @@ func (p *LinkDomainToLdapParams) SetAccounttype(v int) {
 	p.p["accounttype"] = v
 }
 
+func (p *LinkDomainToLdapParams) ResetAccounttype() {
+	if p.p != nil && p.p["accounttype"] != nil {
+		delete(p.p, "accounttype")
+	}
+}
+
 func (p *LinkDomainToLdapParams) GetAccounttype() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1120,6 +1344,12 @@ func (p *LinkDomainToLdapParams) SetAdmin(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["admin"] = v
+}
+
+func (p *LinkDomainToLdapParams) ResetAdmin() {
+	if p.p != nil && p.p["admin"] != nil {
+		delete(p.p, "admin")
+	}
 }
 
 func (p *LinkDomainToLdapParams) GetAdmin() (string, bool) {
@@ -1137,6 +1367,12 @@ func (p *LinkDomainToLdapParams) SetDomainid(v string) {
 	p.p["domainid"] = v
 }
 
+func (p *LinkDomainToLdapParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
+}
+
 func (p *LinkDomainToLdapParams) GetDomainid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1150,6 +1386,12 @@ func (p *LinkDomainToLdapParams) SetLdapdomain(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["ldapdomain"] = v
+}
+
+func (p *LinkDomainToLdapParams) ResetLdapdomain() {
+	if p.p != nil && p.p["ldapdomain"] != nil {
+		delete(p.p, "ldapdomain")
+	}
 }
 
 func (p *LinkDomainToLdapParams) GetLdapdomain() (string, bool) {
@@ -1167,6 +1409,12 @@ func (p *LinkDomainToLdapParams) SetName(v string) {
 	p.p["name"] = v
 }
 
+func (p *LinkDomainToLdapParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
+}
+
 func (p *LinkDomainToLdapParams) GetName() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1180,6 +1428,12 @@ func (p *LinkDomainToLdapParams) SetType(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["type"] = v
+}
+
+func (p *LinkDomainToLdapParams) ResetType() {
+	if p.p != nil && p.p["type"] != nil {
+		delete(p.p, "type")
+	}
 }
 
 func (p *LinkDomainToLdapParams) GetType() (string, bool) {
@@ -1271,6 +1525,12 @@ func (p *ListLdapConfigurationsParams) SetDomainid(v string) {
 	p.p["domainid"] = v
 }
 
+func (p *ListLdapConfigurationsParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
+}
+
 func (p *ListLdapConfigurationsParams) GetDomainid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1284,6 +1544,12 @@ func (p *ListLdapConfigurationsParams) SetHostname(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["hostname"] = v
+}
+
+func (p *ListLdapConfigurationsParams) ResetHostname() {
+	if p.p != nil && p.p["hostname"] != nil {
+		delete(p.p, "hostname")
+	}
 }
 
 func (p *ListLdapConfigurationsParams) GetHostname() (string, bool) {
@@ -1301,6 +1567,12 @@ func (p *ListLdapConfigurationsParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListLdapConfigurationsParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *ListLdapConfigurationsParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1314,6 +1586,12 @@ func (p *ListLdapConfigurationsParams) SetListall(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["listall"] = v
+}
+
+func (p *ListLdapConfigurationsParams) ResetListall() {
+	if p.p != nil && p.p["listall"] != nil {
+		delete(p.p, "listall")
+	}
 }
 
 func (p *ListLdapConfigurationsParams) GetListall() (bool, bool) {
@@ -1331,6 +1609,12 @@ func (p *ListLdapConfigurationsParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListLdapConfigurationsParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListLdapConfigurationsParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1346,6 +1630,12 @@ func (p *ListLdapConfigurationsParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListLdapConfigurationsParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
 func (p *ListLdapConfigurationsParams) GetPagesize() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1359,6 +1649,12 @@ func (p *ListLdapConfigurationsParams) SetPort(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["port"] = v
+}
+
+func (p *ListLdapConfigurationsParams) ResetPort() {
+	if p.p != nil && p.p["port"] != nil {
+		delete(p.p, "port")
+	}
 }
 
 func (p *ListLdapConfigurationsParams) GetPort() (int, bool) {
@@ -1444,6 +1740,12 @@ func (p *ListLdapUsersParams) SetDomainid(v string) {
 	p.p["domainid"] = v
 }
 
+func (p *ListLdapUsersParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
+}
+
 func (p *ListLdapUsersParams) GetDomainid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1457,6 +1759,12 @@ func (p *ListLdapUsersParams) SetKeyword(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["keyword"] = v
+}
+
+func (p *ListLdapUsersParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
 }
 
 func (p *ListLdapUsersParams) GetKeyword() (string, bool) {
@@ -1474,6 +1782,12 @@ func (p *ListLdapUsersParams) SetListtype(v string) {
 	p.p["listtype"] = v
 }
 
+func (p *ListLdapUsersParams) ResetListtype() {
+	if p.p != nil && p.p["listtype"] != nil {
+		delete(p.p, "listtype")
+	}
+}
+
 func (p *ListLdapUsersParams) GetListtype() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1487,6 +1801,12 @@ func (p *ListLdapUsersParams) SetPage(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["page"] = v
+}
+
+func (p *ListLdapUsersParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
 }
 
 func (p *ListLdapUsersParams) GetPage() (int, bool) {
@@ -1504,6 +1824,12 @@ func (p *ListLdapUsersParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListLdapUsersParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
 func (p *ListLdapUsersParams) GetPagesize() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1517,6 +1843,12 @@ func (p *ListLdapUsersParams) SetUserfilter(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["userfilter"] = v
+}
+
+func (p *ListLdapUsersParams) ResetUserfilter() {
+	if p.p != nil && p.p["userfilter"] != nil {
+		delete(p.p, "userfilter")
+	}
 }
 
 func (p *ListLdapUsersParams) GetUserfilter() (string, bool) {
@@ -1600,6 +1932,12 @@ func (p *SearchLdapParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *SearchLdapParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *SearchLdapParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1613,6 +1951,12 @@ func (p *SearchLdapParams) SetPage(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["page"] = v
+}
+
+func (p *SearchLdapParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
 }
 
 func (p *SearchLdapParams) GetPage() (int, bool) {
@@ -1630,6 +1974,12 @@ func (p *SearchLdapParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *SearchLdapParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
 func (p *SearchLdapParams) GetPagesize() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1643,6 +1993,12 @@ func (p *SearchLdapParams) SetQuery(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["query"] = v
+}
+
+func (p *SearchLdapParams) ResetQuery() {
+	if p.p != nil && p.p["query"] != nil {
+		delete(p.p, "query")
+	}
 }
 
 func (p *SearchLdapParams) GetQuery() (string, bool) {

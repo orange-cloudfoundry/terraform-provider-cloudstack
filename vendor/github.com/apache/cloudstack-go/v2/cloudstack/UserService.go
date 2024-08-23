@@ -99,6 +99,12 @@ func (p *CreateUserParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *CreateUserParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *CreateUserParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -112,6 +118,12 @@ func (p *CreateUserParams) SetDomainid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *CreateUserParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *CreateUserParams) GetDomainid() (string, bool) {
@@ -129,6 +141,12 @@ func (p *CreateUserParams) SetEmail(v string) {
 	p.p["email"] = v
 }
 
+func (p *CreateUserParams) ResetEmail() {
+	if p.p != nil && p.p["email"] != nil {
+		delete(p.p, "email")
+	}
+}
+
 func (p *CreateUserParams) GetEmail() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -142,6 +160,12 @@ func (p *CreateUserParams) SetFirstname(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["firstname"] = v
+}
+
+func (p *CreateUserParams) ResetFirstname() {
+	if p.p != nil && p.p["firstname"] != nil {
+		delete(p.p, "firstname")
+	}
 }
 
 func (p *CreateUserParams) GetFirstname() (string, bool) {
@@ -159,6 +183,12 @@ func (p *CreateUserParams) SetLastname(v string) {
 	p.p["lastname"] = v
 }
 
+func (p *CreateUserParams) ResetLastname() {
+	if p.p != nil && p.p["lastname"] != nil {
+		delete(p.p, "lastname")
+	}
+}
+
 func (p *CreateUserParams) GetLastname() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -172,6 +202,12 @@ func (p *CreateUserParams) SetPassword(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["password"] = v
+}
+
+func (p *CreateUserParams) ResetPassword() {
+	if p.p != nil && p.p["password"] != nil {
+		delete(p.p, "password")
+	}
 }
 
 func (p *CreateUserParams) GetPassword() (string, bool) {
@@ -189,6 +225,12 @@ func (p *CreateUserParams) SetTimezone(v string) {
 	p.p["timezone"] = v
 }
 
+func (p *CreateUserParams) ResetTimezone() {
+	if p.p != nil && p.p["timezone"] != nil {
+		delete(p.p, "timezone")
+	}
+}
+
 func (p *CreateUserParams) GetTimezone() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -204,6 +246,12 @@ func (p *CreateUserParams) SetUserid(v string) {
 	p.p["userid"] = v
 }
 
+func (p *CreateUserParams) ResetUserid() {
+	if p.p != nil && p.p["userid"] != nil {
+		delete(p.p, "userid")
+	}
+}
+
 func (p *CreateUserParams) GetUserid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -217,6 +265,12 @@ func (p *CreateUserParams) SetUsername(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["username"] = v
+}
+
+func (p *CreateUserParams) ResetUsername() {
+	if p.p != nil && p.p["username"] != nil {
+		delete(p.p, "username")
+	}
 }
 
 func (p *CreateUserParams) GetUsername() (string, bool) {
@@ -243,7 +297,7 @@ func (s *UserService) NewCreateUserParams(account string, email string, firstnam
 
 // Creates a user for an account that already exists
 func (s *UserService) CreateUser(p *CreateUserParams) (*CreateUserResponse, error) {
-	resp, err := s.cs.newRequest("createUser", p.toURLValues())
+	resp, err := s.cs.newPostRequest("createUser", p.toURLValues())
 	if err != nil {
 		return nil, err
 	}
@@ -261,30 +315,32 @@ func (s *UserService) CreateUser(p *CreateUserParams) (*CreateUserResponse, erro
 }
 
 type CreateUserResponse struct {
-	Account             string `json:"account"`
-	Accountid           string `json:"accountid"`
-	Accounttype         int    `json:"accounttype"`
-	Apikey              string `json:"apikey"`
-	Created             string `json:"created"`
-	Domain              string `json:"domain"`
-	Domainid            string `json:"domainid"`
-	Email               string `json:"email"`
-	Firstname           string `json:"firstname"`
-	Icon                string `json:"icon"`
-	Id                  string `json:"id"`
-	Iscallerchilddomain bool   `json:"iscallerchilddomain"`
-	Isdefault           bool   `json:"isdefault"`
-	JobID               string `json:"jobid"`
-	Jobstatus           int    `json:"jobstatus"`
-	Lastname            string `json:"lastname"`
-	Roleid              string `json:"roleid"`
-	Rolename            string `json:"rolename"`
-	Roletype            string `json:"roletype"`
-	Secretkey           string `json:"secretkey"`
-	State               string `json:"state"`
-	Timezone            string `json:"timezone"`
-	Username            string `json:"username"`
-	Usersource          string `json:"usersource"`
+	Account             string      `json:"account"`
+	Accountid           string      `json:"accountid"`
+	Accounttype         int         `json:"accounttype"`
+	Apikey              string      `json:"apikey"`
+	Created             string      `json:"created"`
+	Domain              string      `json:"domain"`
+	Domainid            string      `json:"domainid"`
+	Email               string      `json:"email"`
+	Firstname           string      `json:"firstname"`
+	Icon                interface{} `json:"icon"`
+	Id                  string      `json:"id"`
+	Is2faenabled        bool        `json:"is2faenabled"`
+	Is2famandated       bool        `json:"is2famandated"`
+	Iscallerchilddomain bool        `json:"iscallerchilddomain"`
+	Isdefault           bool        `json:"isdefault"`
+	JobID               string      `json:"jobid"`
+	Jobstatus           int         `json:"jobstatus"`
+	Lastname            string      `json:"lastname"`
+	Roleid              string      `json:"roleid"`
+	Rolename            string      `json:"rolename"`
+	Roletype            string      `json:"roletype"`
+	Secretkey           string      `json:"secretkey"`
+	State               string      `json:"state"`
+	Timezone            string      `json:"timezone"`
+	Username            string      `json:"username"`
+	Usersource          string      `json:"usersource"`
 }
 
 type DeleteUserParams struct {
@@ -307,6 +363,12 @@ func (p *DeleteUserParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *DeleteUserParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *DeleteUserParams) GetId() (string, bool) {
@@ -397,6 +459,12 @@ func (p *DisableUserParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *DisableUserParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *DisableUserParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -450,30 +518,32 @@ func (s *UserService) DisableUser(p *DisableUserParams) (*DisableUserResponse, e
 }
 
 type DisableUserResponse struct {
-	Account             string `json:"account"`
-	Accountid           string `json:"accountid"`
-	Accounttype         int    `json:"accounttype"`
-	Apikey              string `json:"apikey"`
-	Created             string `json:"created"`
-	Domain              string `json:"domain"`
-	Domainid            string `json:"domainid"`
-	Email               string `json:"email"`
-	Firstname           string `json:"firstname"`
-	Icon                string `json:"icon"`
-	Id                  string `json:"id"`
-	Iscallerchilddomain bool   `json:"iscallerchilddomain"`
-	Isdefault           bool   `json:"isdefault"`
-	JobID               string `json:"jobid"`
-	Jobstatus           int    `json:"jobstatus"`
-	Lastname            string `json:"lastname"`
-	Roleid              string `json:"roleid"`
-	Rolename            string `json:"rolename"`
-	Roletype            string `json:"roletype"`
-	Secretkey           string `json:"secretkey"`
-	State               string `json:"state"`
-	Timezone            string `json:"timezone"`
-	Username            string `json:"username"`
-	Usersource          string `json:"usersource"`
+	Account             string      `json:"account"`
+	Accountid           string      `json:"accountid"`
+	Accounttype         int         `json:"accounttype"`
+	Apikey              string      `json:"apikey"`
+	Created             string      `json:"created"`
+	Domain              string      `json:"domain"`
+	Domainid            string      `json:"domainid"`
+	Email               string      `json:"email"`
+	Firstname           string      `json:"firstname"`
+	Icon                interface{} `json:"icon"`
+	Id                  string      `json:"id"`
+	Is2faenabled        bool        `json:"is2faenabled"`
+	Is2famandated       bool        `json:"is2famandated"`
+	Iscallerchilddomain bool        `json:"iscallerchilddomain"`
+	Isdefault           bool        `json:"isdefault"`
+	JobID               string      `json:"jobid"`
+	Jobstatus           int         `json:"jobstatus"`
+	Lastname            string      `json:"lastname"`
+	Roleid              string      `json:"roleid"`
+	Rolename            string      `json:"rolename"`
+	Roletype            string      `json:"roletype"`
+	Secretkey           string      `json:"secretkey"`
+	State               string      `json:"state"`
+	Timezone            string      `json:"timezone"`
+	Username            string      `json:"username"`
+	Usersource          string      `json:"usersource"`
 }
 
 type EnableUserParams struct {
@@ -496,6 +566,12 @@ func (p *EnableUserParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *EnableUserParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *EnableUserParams) GetId() (string, bool) {
@@ -535,30 +611,32 @@ func (s *UserService) EnableUser(p *EnableUserParams) (*EnableUserResponse, erro
 }
 
 type EnableUserResponse struct {
-	Account             string `json:"account"`
-	Accountid           string `json:"accountid"`
-	Accounttype         int    `json:"accounttype"`
-	Apikey              string `json:"apikey"`
-	Created             string `json:"created"`
-	Domain              string `json:"domain"`
-	Domainid            string `json:"domainid"`
-	Email               string `json:"email"`
-	Firstname           string `json:"firstname"`
-	Icon                string `json:"icon"`
-	Id                  string `json:"id"`
-	Iscallerchilddomain bool   `json:"iscallerchilddomain"`
-	Isdefault           bool   `json:"isdefault"`
-	JobID               string `json:"jobid"`
-	Jobstatus           int    `json:"jobstatus"`
-	Lastname            string `json:"lastname"`
-	Roleid              string `json:"roleid"`
-	Rolename            string `json:"rolename"`
-	Roletype            string `json:"roletype"`
-	Secretkey           string `json:"secretkey"`
-	State               string `json:"state"`
-	Timezone            string `json:"timezone"`
-	Username            string `json:"username"`
-	Usersource          string `json:"usersource"`
+	Account             string      `json:"account"`
+	Accountid           string      `json:"accountid"`
+	Accounttype         int         `json:"accounttype"`
+	Apikey              string      `json:"apikey"`
+	Created             string      `json:"created"`
+	Domain              string      `json:"domain"`
+	Domainid            string      `json:"domainid"`
+	Email               string      `json:"email"`
+	Firstname           string      `json:"firstname"`
+	Icon                interface{} `json:"icon"`
+	Id                  string      `json:"id"`
+	Is2faenabled        bool        `json:"is2faenabled"`
+	Is2famandated       bool        `json:"is2famandated"`
+	Iscallerchilddomain bool        `json:"iscallerchilddomain"`
+	Isdefault           bool        `json:"isdefault"`
+	JobID               string      `json:"jobid"`
+	Jobstatus           int         `json:"jobstatus"`
+	Lastname            string      `json:"lastname"`
+	Roleid              string      `json:"roleid"`
+	Rolename            string      `json:"rolename"`
+	Roletype            string      `json:"roletype"`
+	Secretkey           string      `json:"secretkey"`
+	State               string      `json:"state"`
+	Timezone            string      `json:"timezone"`
+	Username            string      `json:"username"`
+	Usersource          string      `json:"usersource"`
 }
 
 type GetUserParams struct {
@@ -581,6 +659,12 @@ func (p *GetUserParams) SetUserapikey(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["userapikey"] = v
+}
+
+func (p *GetUserParams) ResetUserapikey() {
+	if p.p != nil && p.p["userapikey"] != nil {
+		delete(p.p, "userapikey")
+	}
 }
 
 func (p *GetUserParams) GetUserapikey() (string, bool) {
@@ -616,30 +700,32 @@ func (s *UserService) GetUser(p *GetUserParams) (*GetUserResponse, error) {
 }
 
 type GetUserResponse struct {
-	Account             string `json:"account"`
-	Accountid           string `json:"accountid"`
-	Accounttype         int    `json:"accounttype"`
-	Apikey              string `json:"apikey"`
-	Created             string `json:"created"`
-	Domain              string `json:"domain"`
-	Domainid            string `json:"domainid"`
-	Email               string `json:"email"`
-	Firstname           string `json:"firstname"`
-	Icon                string `json:"icon"`
-	Id                  string `json:"id"`
-	Iscallerchilddomain bool   `json:"iscallerchilddomain"`
-	Isdefault           bool   `json:"isdefault"`
-	JobID               string `json:"jobid"`
-	Jobstatus           int    `json:"jobstatus"`
-	Lastname            string `json:"lastname"`
-	Roleid              string `json:"roleid"`
-	Rolename            string `json:"rolename"`
-	Roletype            string `json:"roletype"`
-	Secretkey           string `json:"secretkey"`
-	State               string `json:"state"`
-	Timezone            string `json:"timezone"`
-	Username            string `json:"username"`
-	Usersource          string `json:"usersource"`
+	Account             string      `json:"account"`
+	Accountid           string      `json:"accountid"`
+	Accounttype         int         `json:"accounttype"`
+	Apikey              string      `json:"apikey"`
+	Created             string      `json:"created"`
+	Domain              string      `json:"domain"`
+	Domainid            string      `json:"domainid"`
+	Email               string      `json:"email"`
+	Firstname           string      `json:"firstname"`
+	Icon                interface{} `json:"icon"`
+	Id                  string      `json:"id"`
+	Is2faenabled        bool        `json:"is2faenabled"`
+	Is2famandated       bool        `json:"is2famandated"`
+	Iscallerchilddomain bool        `json:"iscallerchilddomain"`
+	Isdefault           bool        `json:"isdefault"`
+	JobID               string      `json:"jobid"`
+	Jobstatus           int         `json:"jobstatus"`
+	Lastname            string      `json:"lastname"`
+	Roleid              string      `json:"roleid"`
+	Rolename            string      `json:"rolename"`
+	Roletype            string      `json:"roletype"`
+	Secretkey           string      `json:"secretkey"`
+	State               string      `json:"state"`
+	Timezone            string      `json:"timezone"`
+	Username            string      `json:"username"`
+	Usersource          string      `json:"usersource"`
 }
 
 type GetUserKeysParams struct {
@@ -662,6 +748,12 @@ func (p *GetUserKeysParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *GetUserKeysParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *GetUserKeysParams) GetId() (string, bool) {
@@ -729,6 +821,12 @@ func (p *GetVirtualMachineUserDataParams) SetVirtualmachineid(v string) {
 	p.p["virtualmachineid"] = v
 }
 
+func (p *GetVirtualMachineUserDataParams) ResetVirtualmachineid() {
+	if p.p != nil && p.p["virtualmachineid"] != nil {
+		delete(p.p, "virtualmachineid")
+	}
+}
+
 func (p *GetVirtualMachineUserDataParams) GetVirtualmachineid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -785,7 +883,7 @@ func (p *ListUsersParams) toURLValues() url.Values {
 		u.Set("account", v.(string))
 	}
 	if v, found := p.p["accounttype"]; found {
-		vv := strconv.FormatInt(v.(int64), 10)
+		vv := strconv.Itoa(v.(int))
 		u.Set("accounttype", vv)
 	}
 	if v, found := p.p["domainid"]; found {
@@ -833,6 +931,12 @@ func (p *ListUsersParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *ListUsersParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *ListUsersParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -841,18 +945,24 @@ func (p *ListUsersParams) GetAccount() (string, bool) {
 	return value, ok
 }
 
-func (p *ListUsersParams) SetAccounttype(v int64) {
+func (p *ListUsersParams) SetAccounttype(v int) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["accounttype"] = v
 }
 
-func (p *ListUsersParams) GetAccounttype() (int64, bool) {
+func (p *ListUsersParams) ResetAccounttype() {
+	if p.p != nil && p.p["accounttype"] != nil {
+		delete(p.p, "accounttype")
+	}
+}
+
+func (p *ListUsersParams) GetAccounttype() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
-	value, ok := p.p["accounttype"].(int64)
+	value, ok := p.p["accounttype"].(int)
 	return value, ok
 }
 
@@ -861,6 +971,12 @@ func (p *ListUsersParams) SetDomainid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *ListUsersParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *ListUsersParams) GetDomainid() (string, bool) {
@@ -878,6 +994,12 @@ func (p *ListUsersParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ListUsersParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *ListUsersParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -891,6 +1013,12 @@ func (p *ListUsersParams) SetIsrecursive(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isrecursive"] = v
+}
+
+func (p *ListUsersParams) ResetIsrecursive() {
+	if p.p != nil && p.p["isrecursive"] != nil {
+		delete(p.p, "isrecursive")
+	}
 }
 
 func (p *ListUsersParams) GetIsrecursive() (bool, bool) {
@@ -908,6 +1036,12 @@ func (p *ListUsersParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListUsersParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *ListUsersParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -921,6 +1055,12 @@ func (p *ListUsersParams) SetListall(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["listall"] = v
+}
+
+func (p *ListUsersParams) ResetListall() {
+	if p.p != nil && p.p["listall"] != nil {
+		delete(p.p, "listall")
+	}
 }
 
 func (p *ListUsersParams) GetListall() (bool, bool) {
@@ -938,6 +1078,12 @@ func (p *ListUsersParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListUsersParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListUsersParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -951,6 +1097,12 @@ func (p *ListUsersParams) SetPagesize(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ListUsersParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
 }
 
 func (p *ListUsersParams) GetPagesize() (int, bool) {
@@ -968,6 +1120,12 @@ func (p *ListUsersParams) SetShowicon(v bool) {
 	p.p["showicon"] = v
 }
 
+func (p *ListUsersParams) ResetShowicon() {
+	if p.p != nil && p.p["showicon"] != nil {
+		delete(p.p, "showicon")
+	}
+}
+
 func (p *ListUsersParams) GetShowicon() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -983,6 +1141,12 @@ func (p *ListUsersParams) SetState(v string) {
 	p.p["state"] = v
 }
 
+func (p *ListUsersParams) ResetState() {
+	if p.p != nil && p.p["state"] != nil {
+		delete(p.p, "state")
+	}
+}
+
 func (p *ListUsersParams) GetState() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -996,6 +1160,12 @@ func (p *ListUsersParams) SetUsername(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["username"] = v
+}
+
+func (p *ListUsersParams) ResetUsername() {
+	if p.p != nil && p.p["username"] != nil {
+		delete(p.p, "username")
+	}
 }
 
 func (p *ListUsersParams) GetUsername() (string, bool) {
@@ -1068,30 +1238,32 @@ type ListUsersResponse struct {
 }
 
 type User struct {
-	Account             string `json:"account"`
-	Accountid           string `json:"accountid"`
-	Accounttype         int    `json:"accounttype"`
-	Apikey              string `json:"apikey"`
-	Created             string `json:"created"`
-	Domain              string `json:"domain"`
-	Domainid            string `json:"domainid"`
-	Email               string `json:"email"`
-	Firstname           string `json:"firstname"`
-	Icon                string `json:"icon"`
-	Id                  string `json:"id"`
-	Iscallerchilddomain bool   `json:"iscallerchilddomain"`
-	Isdefault           bool   `json:"isdefault"`
-	JobID               string `json:"jobid"`
-	Jobstatus           int    `json:"jobstatus"`
-	Lastname            string `json:"lastname"`
-	Roleid              string `json:"roleid"`
-	Rolename            string `json:"rolename"`
-	Roletype            string `json:"roletype"`
-	Secretkey           string `json:"secretkey"`
-	State               string `json:"state"`
-	Timezone            string `json:"timezone"`
-	Username            string `json:"username"`
-	Usersource          string `json:"usersource"`
+	Account             string      `json:"account"`
+	Accountid           string      `json:"accountid"`
+	Accounttype         int         `json:"accounttype"`
+	Apikey              string      `json:"apikey"`
+	Created             string      `json:"created"`
+	Domain              string      `json:"domain"`
+	Domainid            string      `json:"domainid"`
+	Email               string      `json:"email"`
+	Firstname           string      `json:"firstname"`
+	Icon                interface{} `json:"icon"`
+	Id                  string      `json:"id"`
+	Is2faenabled        bool        `json:"is2faenabled"`
+	Is2famandated       bool        `json:"is2famandated"`
+	Iscallerchilddomain bool        `json:"iscallerchilddomain"`
+	Isdefault           bool        `json:"isdefault"`
+	JobID               string      `json:"jobid"`
+	Jobstatus           int         `json:"jobstatus"`
+	Lastname            string      `json:"lastname"`
+	Roleid              string      `json:"roleid"`
+	Rolename            string      `json:"rolename"`
+	Roletype            string      `json:"roletype"`
+	Secretkey           string      `json:"secretkey"`
+	State               string      `json:"state"`
+	Timezone            string      `json:"timezone"`
+	Username            string      `json:"username"`
+	Usersource          string      `json:"usersource"`
 }
 
 type LockUserParams struct {
@@ -1114,6 +1286,12 @@ func (p *LockUserParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *LockUserParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *LockUserParams) GetId() (string, bool) {
@@ -1153,30 +1331,32 @@ func (s *UserService) LockUser(p *LockUserParams) (*LockUserResponse, error) {
 }
 
 type LockUserResponse struct {
-	Account             string `json:"account"`
-	Accountid           string `json:"accountid"`
-	Accounttype         int    `json:"accounttype"`
-	Apikey              string `json:"apikey"`
-	Created             string `json:"created"`
-	Domain              string `json:"domain"`
-	Domainid            string `json:"domainid"`
-	Email               string `json:"email"`
-	Firstname           string `json:"firstname"`
-	Icon                string `json:"icon"`
-	Id                  string `json:"id"`
-	Iscallerchilddomain bool   `json:"iscallerchilddomain"`
-	Isdefault           bool   `json:"isdefault"`
-	JobID               string `json:"jobid"`
-	Jobstatus           int    `json:"jobstatus"`
-	Lastname            string `json:"lastname"`
-	Roleid              string `json:"roleid"`
-	Rolename            string `json:"rolename"`
-	Roletype            string `json:"roletype"`
-	Secretkey           string `json:"secretkey"`
-	State               string `json:"state"`
-	Timezone            string `json:"timezone"`
-	Username            string `json:"username"`
-	Usersource          string `json:"usersource"`
+	Account             string      `json:"account"`
+	Accountid           string      `json:"accountid"`
+	Accounttype         int         `json:"accounttype"`
+	Apikey              string      `json:"apikey"`
+	Created             string      `json:"created"`
+	Domain              string      `json:"domain"`
+	Domainid            string      `json:"domainid"`
+	Email               string      `json:"email"`
+	Firstname           string      `json:"firstname"`
+	Icon                interface{} `json:"icon"`
+	Id                  string      `json:"id"`
+	Is2faenabled        bool        `json:"is2faenabled"`
+	Is2famandated       bool        `json:"is2famandated"`
+	Iscallerchilddomain bool        `json:"iscallerchilddomain"`
+	Isdefault           bool        `json:"isdefault"`
+	JobID               string      `json:"jobid"`
+	Jobstatus           int         `json:"jobstatus"`
+	Lastname            string      `json:"lastname"`
+	Roleid              string      `json:"roleid"`
+	Rolename            string      `json:"rolename"`
+	Roletype            string      `json:"roletype"`
+	Secretkey           string      `json:"secretkey"`
+	State               string      `json:"state"`
+	Timezone            string      `json:"timezone"`
+	Username            string      `json:"username"`
+	Usersource          string      `json:"usersource"`
 }
 
 type RegisterUserKeysParams struct {
@@ -1199,6 +1379,12 @@ func (p *RegisterUserKeysParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *RegisterUserKeysParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *RegisterUserKeysParams) GetId() (string, bool) {
@@ -1268,6 +1454,10 @@ func (p *UpdateUserParams) toURLValues() url.Values {
 	if v, found := p.p["lastname"]; found {
 		u.Set("lastname", v.(string))
 	}
+	if v, found := p.p["mandate2fa"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("mandate2fa", vv)
+	}
 	if v, found := p.p["password"]; found {
 		u.Set("password", v.(string))
 	}
@@ -1293,6 +1483,12 @@ func (p *UpdateUserParams) SetCurrentpassword(v string) {
 	p.p["currentpassword"] = v
 }
 
+func (p *UpdateUserParams) ResetCurrentpassword() {
+	if p.p != nil && p.p["currentpassword"] != nil {
+		delete(p.p, "currentpassword")
+	}
+}
+
 func (p *UpdateUserParams) GetCurrentpassword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1306,6 +1502,12 @@ func (p *UpdateUserParams) SetEmail(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["email"] = v
+}
+
+func (p *UpdateUserParams) ResetEmail() {
+	if p.p != nil && p.p["email"] != nil {
+		delete(p.p, "email")
+	}
 }
 
 func (p *UpdateUserParams) GetEmail() (string, bool) {
@@ -1323,6 +1525,12 @@ func (p *UpdateUserParams) SetFirstname(v string) {
 	p.p["firstname"] = v
 }
 
+func (p *UpdateUserParams) ResetFirstname() {
+	if p.p != nil && p.p["firstname"] != nil {
+		delete(p.p, "firstname")
+	}
+}
+
 func (p *UpdateUserParams) GetFirstname() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1336,6 +1544,12 @@ func (p *UpdateUserParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *UpdateUserParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *UpdateUserParams) GetId() (string, bool) {
@@ -1353,6 +1567,12 @@ func (p *UpdateUserParams) SetLastname(v string) {
 	p.p["lastname"] = v
 }
 
+func (p *UpdateUserParams) ResetLastname() {
+	if p.p != nil && p.p["lastname"] != nil {
+		delete(p.p, "lastname")
+	}
+}
+
 func (p *UpdateUserParams) GetLastname() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1361,11 +1581,38 @@ func (p *UpdateUserParams) GetLastname() (string, bool) {
 	return value, ok
 }
 
+func (p *UpdateUserParams) SetMandate2fa(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["mandate2fa"] = v
+}
+
+func (p *UpdateUserParams) ResetMandate2fa() {
+	if p.p != nil && p.p["mandate2fa"] != nil {
+		delete(p.p, "mandate2fa")
+	}
+}
+
+func (p *UpdateUserParams) GetMandate2fa() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["mandate2fa"].(bool)
+	return value, ok
+}
+
 func (p *UpdateUserParams) SetPassword(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["password"] = v
+}
+
+func (p *UpdateUserParams) ResetPassword() {
+	if p.p != nil && p.p["password"] != nil {
+		delete(p.p, "password")
+	}
 }
 
 func (p *UpdateUserParams) GetPassword() (string, bool) {
@@ -1383,6 +1630,12 @@ func (p *UpdateUserParams) SetTimezone(v string) {
 	p.p["timezone"] = v
 }
 
+func (p *UpdateUserParams) ResetTimezone() {
+	if p.p != nil && p.p["timezone"] != nil {
+		delete(p.p, "timezone")
+	}
+}
+
 func (p *UpdateUserParams) GetTimezone() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1396,6 +1649,12 @@ func (p *UpdateUserParams) SetUserapikey(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["userapikey"] = v
+}
+
+func (p *UpdateUserParams) ResetUserapikey() {
+	if p.p != nil && p.p["userapikey"] != nil {
+		delete(p.p, "userapikey")
+	}
 }
 
 func (p *UpdateUserParams) GetUserapikey() (string, bool) {
@@ -1413,6 +1672,12 @@ func (p *UpdateUserParams) SetUsername(v string) {
 	p.p["username"] = v
 }
 
+func (p *UpdateUserParams) ResetUsername() {
+	if p.p != nil && p.p["username"] != nil {
+		delete(p.p, "username")
+	}
+}
+
 func (p *UpdateUserParams) GetUsername() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1426,6 +1691,12 @@ func (p *UpdateUserParams) SetUsersecretkey(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["usersecretkey"] = v
+}
+
+func (p *UpdateUserParams) ResetUsersecretkey() {
+	if p.p != nil && p.p["usersecretkey"] != nil {
+		delete(p.p, "usersecretkey")
+	}
 }
 
 func (p *UpdateUserParams) GetUsersecretkey() (string, bool) {
@@ -1447,7 +1718,7 @@ func (s *UserService) NewUpdateUserParams(id string) *UpdateUserParams {
 
 // Updates a user account
 func (s *UserService) UpdateUser(p *UpdateUserParams) (*UpdateUserResponse, error) {
-	resp, err := s.cs.newRequest("updateUser", p.toURLValues())
+	resp, err := s.cs.newPostRequest("updateUser", p.toURLValues())
 	if err != nil {
 		return nil, err
 	}
@@ -1461,28 +1732,30 @@ func (s *UserService) UpdateUser(p *UpdateUserParams) (*UpdateUserResponse, erro
 }
 
 type UpdateUserResponse struct {
-	Account             string `json:"account"`
-	Accountid           string `json:"accountid"`
-	Accounttype         int    `json:"accounttype"`
-	Apikey              string `json:"apikey"`
-	Created             string `json:"created"`
-	Domain              string `json:"domain"`
-	Domainid            string `json:"domainid"`
-	Email               string `json:"email"`
-	Firstname           string `json:"firstname"`
-	Icon                string `json:"icon"`
-	Id                  string `json:"id"`
-	Iscallerchilddomain bool   `json:"iscallerchilddomain"`
-	Isdefault           bool   `json:"isdefault"`
-	JobID               string `json:"jobid"`
-	Jobstatus           int    `json:"jobstatus"`
-	Lastname            string `json:"lastname"`
-	Roleid              string `json:"roleid"`
-	Rolename            string `json:"rolename"`
-	Roletype            string `json:"roletype"`
-	Secretkey           string `json:"secretkey"`
-	State               string `json:"state"`
-	Timezone            string `json:"timezone"`
-	Username            string `json:"username"`
-	Usersource          string `json:"usersource"`
+	Account             string      `json:"account"`
+	Accountid           string      `json:"accountid"`
+	Accounttype         int         `json:"accounttype"`
+	Apikey              string      `json:"apikey"`
+	Created             string      `json:"created"`
+	Domain              string      `json:"domain"`
+	Domainid            string      `json:"domainid"`
+	Email               string      `json:"email"`
+	Firstname           string      `json:"firstname"`
+	Icon                interface{} `json:"icon"`
+	Id                  string      `json:"id"`
+	Is2faenabled        bool        `json:"is2faenabled"`
+	Is2famandated       bool        `json:"is2famandated"`
+	Iscallerchilddomain bool        `json:"iscallerchilddomain"`
+	Isdefault           bool        `json:"isdefault"`
+	JobID               string      `json:"jobid"`
+	Jobstatus           int         `json:"jobstatus"`
+	Lastname            string      `json:"lastname"`
+	Roleid              string      `json:"roleid"`
+	Rolename            string      `json:"rolename"`
+	Roletype            string      `json:"roletype"`
+	Secretkey           string      `json:"secretkey"`
+	State               string      `json:"state"`
+	Timezone            string      `json:"timezone"`
+	Username            string      `json:"username"`
+	Usersource          string      `json:"usersource"`
 }

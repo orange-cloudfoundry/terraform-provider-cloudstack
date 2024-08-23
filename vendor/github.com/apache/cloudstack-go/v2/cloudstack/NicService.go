@@ -61,6 +61,12 @@ func (p *AddIpToNicParams) SetIpaddress(v string) {
 	p.p["ipaddress"] = v
 }
 
+func (p *AddIpToNicParams) ResetIpaddress() {
+	if p.p != nil && p.p["ipaddress"] != nil {
+		delete(p.p, "ipaddress")
+	}
+}
+
 func (p *AddIpToNicParams) GetIpaddress() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -74,6 +80,12 @@ func (p *AddIpToNicParams) SetNicid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["nicid"] = v
+}
+
+func (p *AddIpToNicParams) ResetNicid() {
+	if p.p != nil && p.p["nicid"] != nil {
+		delete(p.p, "nicid")
+	}
 }
 
 func (p *AddIpToNicParams) GetNicid() (string, bool) {
@@ -185,6 +197,12 @@ func (p *ListNicsParams) SetFordisplay(v bool) {
 	p.p["fordisplay"] = v
 }
 
+func (p *ListNicsParams) ResetFordisplay() {
+	if p.p != nil && p.p["fordisplay"] != nil {
+		delete(p.p, "fordisplay")
+	}
+}
+
 func (p *ListNicsParams) GetFordisplay() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -198,6 +216,12 @@ func (p *ListNicsParams) SetKeyword(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["keyword"] = v
+}
+
+func (p *ListNicsParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
 }
 
 func (p *ListNicsParams) GetKeyword() (string, bool) {
@@ -215,6 +239,12 @@ func (p *ListNicsParams) SetNetworkid(v string) {
 	p.p["networkid"] = v
 }
 
+func (p *ListNicsParams) ResetNetworkid() {
+	if p.p != nil && p.p["networkid"] != nil {
+		delete(p.p, "networkid")
+	}
+}
+
 func (p *ListNicsParams) GetNetworkid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -228,6 +258,12 @@ func (p *ListNicsParams) SetNicid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["nicid"] = v
+}
+
+func (p *ListNicsParams) ResetNicid() {
+	if p.p != nil && p.p["nicid"] != nil {
+		delete(p.p, "nicid")
+	}
 }
 
 func (p *ListNicsParams) GetNicid() (string, bool) {
@@ -245,6 +281,12 @@ func (p *ListNicsParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListNicsParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListNicsParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -260,6 +302,12 @@ func (p *ListNicsParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListNicsParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
 func (p *ListNicsParams) GetPagesize() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -273,6 +321,12 @@ func (p *ListNicsParams) SetVirtualmachineid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["virtualmachineid"] = v
+}
+
+func (p *ListNicsParams) ResetVirtualmachineid() {
+	if p.p != nil && p.p["virtualmachineid"] != nil {
+		delete(p.p, "virtualmachineid")
+	}
 }
 
 func (p *ListNicsParams) GetVirtualmachineid() (string, bool) {
@@ -331,11 +385,14 @@ type Nic struct {
 	JobID                string   `json:"jobid"`
 	Jobstatus            int      `json:"jobstatus"`
 	Macaddress           string   `json:"macaddress"`
+	Mtu                  int      `json:"mtu"`
 	Netmask              string   `json:"netmask"`
 	Networkid            string   `json:"networkid"`
 	Networkname          string   `json:"networkname"`
 	Nsxlogicalswitch     string   `json:"nsxlogicalswitch"`
 	Nsxlogicalswitchport string   `json:"nsxlogicalswitchport"`
+	Publicip             string   `json:"publicip"`
+	Publicipid           string   `json:"publicipid"`
 	Secondaryip          []struct {
 		Id        string `json:"id"`
 		Ipaddress string `json:"ipaddress"`
@@ -344,6 +401,8 @@ type Nic struct {
 	Type             string `json:"type"`
 	Virtualmachineid string `json:"virtualmachineid"`
 	Vlanid           int    `json:"vlanid"`
+	Vpcid            string `json:"vpcid"`
+	Vpcname          string `json:"vpcname"`
 }
 
 type RemoveIpFromNicParams struct {
@@ -366,6 +425,12 @@ func (p *RemoveIpFromNicParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *RemoveIpFromNicParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *RemoveIpFromNicParams) GetId() (string, bool) {
@@ -447,6 +512,12 @@ func (p *UpdateVmNicIpParams) SetIpaddress(v string) {
 	p.p["ipaddress"] = v
 }
 
+func (p *UpdateVmNicIpParams) ResetIpaddress() {
+	if p.p != nil && p.p["ipaddress"] != nil {
+		delete(p.p, "ipaddress")
+	}
+}
+
 func (p *UpdateVmNicIpParams) GetIpaddress() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -460,6 +531,12 @@ func (p *UpdateVmNicIpParams) SetNicid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["nicid"] = v
+}
+
+func (p *UpdateVmNicIpParams) ResetNicid() {
+	if p.p != nil && p.p["nicid"] != nil {
+		delete(p.p, "nicid")
+	}
 }
 
 func (p *UpdateVmNicIpParams) GetNicid() (string, bool) {
@@ -517,6 +594,8 @@ func (s *NicService) UpdateVmNicIp(p *UpdateVmNicIpParams) (*UpdateVmNicIpRespon
 type UpdateVmNicIpResponse struct {
 	Account               string                               `json:"account"`
 	Affinitygroup         []UpdateVmNicIpResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                               `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                               `json:"autoscalevmgroupname"`
 	Backupofferingid      string                               `json:"backupofferingid"`
 	Backupofferingname    string                               `json:"backupofferingname"`
 	Bootmode              string                               `json:"bootmode"`
@@ -542,10 +621,11 @@ type UpdateVmNicIpResponse struct {
 	Guestosid             string                               `json:"guestosid"`
 	Haenable              bool                                 `json:"haenable"`
 	Hasannotations        bool                                 `json:"hasannotations"`
+	Hostcontrolstate      string                               `json:"hostcontrolstate"`
 	Hostid                string                               `json:"hostid"`
 	Hostname              string                               `json:"hostname"`
 	Hypervisor            string                               `json:"hypervisor"`
-	Icon                  string                               `json:"icon"`
+	Icon                  interface{}                          `json:"icon"`
 	Id                    string                               `json:"id"`
 	Instancename          string                               `json:"instancename"`
 	Isdynamicallyscalable bool                                 `json:"isdynamicallyscalable"`
@@ -554,7 +634,7 @@ type UpdateVmNicIpResponse struct {
 	Isoname               string                               `json:"isoname"`
 	JobID                 string                               `json:"jobid"`
 	Jobstatus             int                                  `json:"jobstatus"`
-	Keypair               string                               `json:"keypair"`
+	Keypairs              string                               `json:"keypairs"`
 	Lastupdated           string                               `json:"lastupdated"`
 	Memory                int                                  `json:"memory"`
 	Memoryintfreekbs      int64                                `json:"memoryintfreekbs"`
@@ -587,9 +667,17 @@ type UpdateVmNicIpResponse struct {
 	Templatedisplaytext   string                               `json:"templatedisplaytext"`
 	Templateid            string                               `json:"templateid"`
 	Templatename          string                               `json:"templatename"`
+	Templatetype          string                               `json:"templatetype"`
+	Userdata              string                               `json:"userdata"`
+	Userdatadetails       string                               `json:"userdatadetails"`
+	Userdataid            string                               `json:"userdataid"`
+	Userdataname          string                               `json:"userdataname"`
+	Userdatapolicy        string                               `json:"userdatapolicy"`
 	Userid                string                               `json:"userid"`
 	Username              string                               `json:"username"`
 	Vgpu                  string                               `json:"vgpu"`
+	Vnfdetails            map[string]string                    `json:"vnfdetails"`
+	Vnfnics               []string                             `json:"vnfnics"`
 	Zoneid                string                               `json:"zoneid"`
 	Zonename              string                               `json:"zonename"`
 }

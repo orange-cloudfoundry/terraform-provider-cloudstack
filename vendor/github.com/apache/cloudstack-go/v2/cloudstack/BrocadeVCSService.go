@@ -69,6 +69,12 @@ func (p *AddBrocadeVcsDeviceParams) SetHostname(v string) {
 	p.p["hostname"] = v
 }
 
+func (p *AddBrocadeVcsDeviceParams) ResetHostname() {
+	if p.p != nil && p.p["hostname"] != nil {
+		delete(p.p, "hostname")
+	}
+}
+
 func (p *AddBrocadeVcsDeviceParams) GetHostname() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -82,6 +88,12 @@ func (p *AddBrocadeVcsDeviceParams) SetPassword(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["password"] = v
+}
+
+func (p *AddBrocadeVcsDeviceParams) ResetPassword() {
+	if p.p != nil && p.p["password"] != nil {
+		delete(p.p, "password")
+	}
 }
 
 func (p *AddBrocadeVcsDeviceParams) GetPassword() (string, bool) {
@@ -99,6 +111,12 @@ func (p *AddBrocadeVcsDeviceParams) SetPhysicalnetworkid(v string) {
 	p.p["physicalnetworkid"] = v
 }
 
+func (p *AddBrocadeVcsDeviceParams) ResetPhysicalnetworkid() {
+	if p.p != nil && p.p["physicalnetworkid"] != nil {
+		delete(p.p, "physicalnetworkid")
+	}
+}
+
 func (p *AddBrocadeVcsDeviceParams) GetPhysicalnetworkid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -112,6 +130,12 @@ func (p *AddBrocadeVcsDeviceParams) SetUsername(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["username"] = v
+}
+
+func (p *AddBrocadeVcsDeviceParams) ResetUsername() {
+	if p.p != nil && p.p["username"] != nil {
+		delete(p.p, "username")
+	}
 }
 
 func (p *AddBrocadeVcsDeviceParams) GetUsername() (string, bool) {
@@ -201,6 +225,12 @@ func (p *DeleteBrocadeVcsDeviceParams) SetVcsdeviceid(v string) {
 	p.p["vcsdeviceid"] = v
 }
 
+func (p *DeleteBrocadeVcsDeviceParams) ResetVcsdeviceid() {
+	if p.p != nil && p.p["vcsdeviceid"] != nil {
+		delete(p.p, "vcsdeviceid")
+	}
+}
+
 func (p *DeleteBrocadeVcsDeviceParams) GetVcsdeviceid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -218,7 +248,7 @@ func (s *BrocadeVCSService) NewDeleteBrocadeVcsDeviceParams(vcsdeviceid string) 
 	return p
 }
 
-//  delete a Brocade VCS Switch
+// delete a Brocade VCS Switch
 func (s *BrocadeVCSService) DeleteBrocadeVcsDevice(p *DeleteBrocadeVcsDeviceParams) (*DeleteBrocadeVcsDeviceResponse, error) {
 	resp, err := s.cs.newRequest("deleteBrocadeVcsDevice", p.toURLValues())
 	if err != nil {
@@ -288,6 +318,12 @@ func (p *ListBrocadeVcsDeviceNetworksParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListBrocadeVcsDeviceNetworksParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *ListBrocadeVcsDeviceNetworksParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -301,6 +337,12 @@ func (p *ListBrocadeVcsDeviceNetworksParams) SetPage(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["page"] = v
+}
+
+func (p *ListBrocadeVcsDeviceNetworksParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
 }
 
 func (p *ListBrocadeVcsDeviceNetworksParams) GetPage() (int, bool) {
@@ -318,6 +360,12 @@ func (p *ListBrocadeVcsDeviceNetworksParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListBrocadeVcsDeviceNetworksParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
 func (p *ListBrocadeVcsDeviceNetworksParams) GetPagesize() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -331,6 +379,12 @@ func (p *ListBrocadeVcsDeviceNetworksParams) SetVcsdeviceid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["vcsdeviceid"] = v
+}
+
+func (p *ListBrocadeVcsDeviceNetworksParams) ResetVcsdeviceid() {
+	if p.p != nil && p.p["vcsdeviceid"] != nil {
+		delete(p.p, "vcsdeviceid")
+	}
 }
 
 func (p *ListBrocadeVcsDeviceNetworksParams) GetVcsdeviceid() (string, bool) {
@@ -412,6 +466,8 @@ type BrocadeVcsDeviceNetwork struct {
 	Aclid                       string                           `json:"aclid"`
 	Aclname                     string                           `json:"aclname"`
 	Acltype                     string                           `json:"acltype"`
+	Associatednetwork           string                           `json:"associatednetwork"`
+	Associatednetworkid         string                           `json:"associatednetworkid"`
 	Broadcastdomaintype         string                           `json:"broadcastdomaintype"`
 	Broadcasturi                string                           `json:"broadcasturi"`
 	Canusefordeploy             bool                             `json:"canusefordeploy"`
@@ -424,13 +480,20 @@ type BrocadeVcsDeviceNetwork struct {
 	Dns2                        string                           `json:"dns2"`
 	Domain                      string                           `json:"domain"`
 	Domainid                    string                           `json:"domainid"`
+	Domainpath                  string                           `json:"domainpath"`
+	Egressdefaultpolicy         bool                             `json:"egressdefaultpolicy"`
 	Externalid                  string                           `json:"externalid"`
 	Gateway                     string                           `json:"gateway"`
 	Hasannotations              bool                             `json:"hasannotations"`
-	Icon                        string                           `json:"icon"`
+	Icon                        interface{}                      `json:"icon"`
 	Id                          string                           `json:"id"`
+	Internetprotocol            string                           `json:"internetprotocol"`
 	Ip6cidr                     string                           `json:"ip6cidr"`
+	Ip6dns1                     string                           `json:"ip6dns1"`
+	Ip6dns2                     string                           `json:"ip6dns2"`
 	Ip6gateway                  string                           `json:"ip6gateway"`
+	Ip6routes                   []interface{}                    `json:"ip6routes"`
+	Ip6routing                  string                           `json:"ip6routing"`
 	Isdefault                   bool                             `json:"isdefault"`
 	Ispersistent                bool                             `json:"ispersistent"`
 	Issystem                    bool                             `json:"issystem"`
@@ -446,8 +509,10 @@ type BrocadeVcsDeviceNetwork struct {
 	Networkofferingid           string                           `json:"networkofferingid"`
 	Networkofferingname         string                           `json:"networkofferingname"`
 	Physicalnetworkid           string                           `json:"physicalnetworkid"`
+	Privatemtu                  int                              `json:"privatemtu"`
 	Project                     string                           `json:"project"`
 	Projectid                   string                           `json:"projectid"`
+	Publicmtu                   int                              `json:"publicmtu"`
 	Receivedbytes               int64                            `json:"receivedbytes"`
 	Redundantrouter             bool                             `json:"redundantrouter"`
 	Related                     string                           `json:"related"`
@@ -459,8 +524,10 @@ type BrocadeVcsDeviceNetwork struct {
 	State                       string                           `json:"state"`
 	Strechedl2subnet            bool                             `json:"strechedl2subnet"`
 	Subdomainaccess             bool                             `json:"subdomainaccess"`
+	Supportsvmautoscaling       bool                             `json:"supportsvmautoscaling"`
 	Tags                        []Tags                           `json:"tags"`
 	Traffictype                 string                           `json:"traffictype"`
+	Tungstenvirtualrouteruuid   string                           `json:"tungstenvirtualrouteruuid"`
 	Type                        string                           `json:"type"`
 	Vlan                        string                           `json:"vlan"`
 	Vpcid                       string                           `json:"vpcid"`
@@ -528,6 +595,12 @@ func (p *ListBrocadeVcsDevicesParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListBrocadeVcsDevicesParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *ListBrocadeVcsDevicesParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -541,6 +614,12 @@ func (p *ListBrocadeVcsDevicesParams) SetPage(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["page"] = v
+}
+
+func (p *ListBrocadeVcsDevicesParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
 }
 
 func (p *ListBrocadeVcsDevicesParams) GetPage() (int, bool) {
@@ -558,6 +637,12 @@ func (p *ListBrocadeVcsDevicesParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListBrocadeVcsDevicesParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
 func (p *ListBrocadeVcsDevicesParams) GetPagesize() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -573,6 +658,12 @@ func (p *ListBrocadeVcsDevicesParams) SetPhysicalnetworkid(v string) {
 	p.p["physicalnetworkid"] = v
 }
 
+func (p *ListBrocadeVcsDevicesParams) ResetPhysicalnetworkid() {
+	if p.p != nil && p.p["physicalnetworkid"] != nil {
+		delete(p.p, "physicalnetworkid")
+	}
+}
+
 func (p *ListBrocadeVcsDevicesParams) GetPhysicalnetworkid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -586,6 +677,12 @@ func (p *ListBrocadeVcsDevicesParams) SetVcsdeviceid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["vcsdeviceid"] = v
+}
+
+func (p *ListBrocadeVcsDevicesParams) ResetVcsdeviceid() {
+	if p.p != nil && p.p["vcsdeviceid"] != nil {
+		delete(p.p, "vcsdeviceid")
+	}
 }
 
 func (p *ListBrocadeVcsDevicesParams) GetVcsdeviceid() (string, bool) {

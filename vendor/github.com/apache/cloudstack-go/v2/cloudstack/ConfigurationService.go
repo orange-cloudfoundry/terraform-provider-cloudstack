@@ -34,6 +34,8 @@ type ConfigurationServiceIface interface {
 	NewListDeploymentPlannersParams() *ListDeploymentPlannersParams
 	UpdateConfiguration(p *UpdateConfigurationParams) (*UpdateConfigurationResponse, error)
 	NewUpdateConfigurationParams(name string) *UpdateConfigurationParams
+	ResetConfiguration(p *ResetConfigurationParams) (*ResetConfigurationResponse, error)
+	NewResetConfigurationParams(name string) *ResetConfigurationParams
 }
 
 type ListCapabilitiesParams struct {
@@ -86,8 +88,13 @@ type Capability struct {
 	Cloudstackversion                            string `json:"cloudstackversion"`
 	Customdiskofferingmaxsize                    int64  `json:"customdiskofferingmaxsize"`
 	Customdiskofferingminsize                    int64  `json:"customdiskofferingminsize"`
+	Customhypervisordisplayname                  string `json:"customhypervisordisplayname"`
 	Defaultuipagesize                            int64  `json:"defaultuipagesize"`
 	Dynamicrolesenabled                          bool   `json:"dynamicrolesenabled"`
+	Instancesdisksstatsretentionenabled          bool   `json:"instancesdisksstatsretentionenabled"`
+	Instancesdisksstatsretentiontime             int    `json:"instancesdisksstatsretentiontime"`
+	Instancesstatsretentiontime                  int    `json:"instancesstatsretentiontime"`
+	Instancesstatsuseronly                       bool   `json:"instancesstatsuseronly"`
 	JobID                                        string `json:"jobid"`
 	Jobstatus                                    int    `json:"jobstatus"`
 	Kubernetesclusterexperimentalfeaturesenabled bool   `json:"kubernetesclusterexperimentalfeaturesenabled"`
@@ -121,6 +128,9 @@ func (p *ListConfigurationsParams) toURLValues() url.Values {
 	if v, found := p.p["domainid"]; found {
 		u.Set("domainid", v.(string))
 	}
+	if v, found := p.p["group"]; found {
+		u.Set("group", v.(string))
+	}
 	if v, found := p.p["imagestoreuuid"]; found {
 		u.Set("imagestoreuuid", v.(string))
 	}
@@ -138,8 +148,14 @@ func (p *ListConfigurationsParams) toURLValues() url.Values {
 		vv := strconv.Itoa(v.(int))
 		u.Set("pagesize", vv)
 	}
+	if v, found := p.p["parent"]; found {
+		u.Set("parent", v.(string))
+	}
 	if v, found := p.p["storageid"]; found {
 		u.Set("storageid", v.(string))
+	}
+	if v, found := p.p["subgroup"]; found {
+		u.Set("subgroup", v.(string))
 	}
 	if v, found := p.p["zoneid"]; found {
 		u.Set("zoneid", v.(string))
@@ -152,6 +168,12 @@ func (p *ListConfigurationsParams) SetAccountid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["accountid"] = v
+}
+
+func (p *ListConfigurationsParams) ResetAccountid() {
+	if p.p != nil && p.p["accountid"] != nil {
+		delete(p.p, "accountid")
+	}
 }
 
 func (p *ListConfigurationsParams) GetAccountid() (string, bool) {
@@ -169,6 +191,12 @@ func (p *ListConfigurationsParams) SetCategory(v string) {
 	p.p["category"] = v
 }
 
+func (p *ListConfigurationsParams) ResetCategory() {
+	if p.p != nil && p.p["category"] != nil {
+		delete(p.p, "category")
+	}
+}
+
 func (p *ListConfigurationsParams) GetCategory() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -182,6 +210,12 @@ func (p *ListConfigurationsParams) SetClusterid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["clusterid"] = v
+}
+
+func (p *ListConfigurationsParams) ResetClusterid() {
+	if p.p != nil && p.p["clusterid"] != nil {
+		delete(p.p, "clusterid")
+	}
 }
 
 func (p *ListConfigurationsParams) GetClusterid() (string, bool) {
@@ -199,6 +233,12 @@ func (p *ListConfigurationsParams) SetDomainid(v string) {
 	p.p["domainid"] = v
 }
 
+func (p *ListConfigurationsParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
+}
+
 func (p *ListConfigurationsParams) GetDomainid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -207,11 +247,38 @@ func (p *ListConfigurationsParams) GetDomainid() (string, bool) {
 	return value, ok
 }
 
+func (p *ListConfigurationsParams) SetGroup(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["group"] = v
+}
+
+func (p *ListConfigurationsParams) ResetGroup() {
+	if p.p != nil && p.p["group"] != nil {
+		delete(p.p, "group")
+	}
+}
+
+func (p *ListConfigurationsParams) GetGroup() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["group"].(string)
+	return value, ok
+}
+
 func (p *ListConfigurationsParams) SetImagestoreuuid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["imagestoreuuid"] = v
+}
+
+func (p *ListConfigurationsParams) ResetImagestoreuuid() {
+	if p.p != nil && p.p["imagestoreuuid"] != nil {
+		delete(p.p, "imagestoreuuid")
+	}
 }
 
 func (p *ListConfigurationsParams) GetImagestoreuuid() (string, bool) {
@@ -229,6 +296,12 @@ func (p *ListConfigurationsParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListConfigurationsParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *ListConfigurationsParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -242,6 +315,12 @@ func (p *ListConfigurationsParams) SetName(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *ListConfigurationsParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
 }
 
 func (p *ListConfigurationsParams) GetName() (string, bool) {
@@ -259,6 +338,12 @@ func (p *ListConfigurationsParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListConfigurationsParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListConfigurationsParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -274,11 +359,38 @@ func (p *ListConfigurationsParams) SetPagesize(v int) {
 	p.p["pagesize"] = v
 }
 
+func (p *ListConfigurationsParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
 func (p *ListConfigurationsParams) GetPagesize() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["pagesize"].(int)
+	return value, ok
+}
+
+func (p *ListConfigurationsParams) SetParent(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["parent"] = v
+}
+
+func (p *ListConfigurationsParams) ResetParent() {
+	if p.p != nil && p.p["parent"] != nil {
+		delete(p.p, "parent")
+	}
+}
+
+func (p *ListConfigurationsParams) GetParent() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["parent"].(string)
 	return value, ok
 }
 
@@ -289,6 +401,12 @@ func (p *ListConfigurationsParams) SetStorageid(v string) {
 	p.p["storageid"] = v
 }
 
+func (p *ListConfigurationsParams) ResetStorageid() {
+	if p.p != nil && p.p["storageid"] != nil {
+		delete(p.p, "storageid")
+	}
+}
+
 func (p *ListConfigurationsParams) GetStorageid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -297,11 +415,38 @@ func (p *ListConfigurationsParams) GetStorageid() (string, bool) {
 	return value, ok
 }
 
+func (p *ListConfigurationsParams) SetSubgroup(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["subgroup"] = v
+}
+
+func (p *ListConfigurationsParams) ResetSubgroup() {
+	if p.p != nil && p.p["subgroup"] != nil {
+		delete(p.p, "subgroup")
+	}
+}
+
+func (p *ListConfigurationsParams) GetSubgroup() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["subgroup"].(string)
+	return value, ok
+}
+
 func (p *ListConfigurationsParams) SetZoneid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *ListConfigurationsParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *ListConfigurationsParams) GetZoneid() (string, bool) {
@@ -341,15 +486,23 @@ type ListConfigurationsResponse struct {
 }
 
 type Configuration struct {
-	Category    string `json:"category"`
-	Description string `json:"description"`
-	Id          int64  `json:"id"`
-	Isdynamic   bool   `json:"isdynamic"`
-	JobID       string `json:"jobid"`
-	Jobstatus   int    `json:"jobstatus"`
-	Name        string `json:"name"`
-	Scope       string `json:"scope"`
-	Value       string `json:"value"`
+	Category     string `json:"category"`
+	Component    string `json:"component"`
+	Defaultvalue string `json:"defaultvalue"`
+	Description  string `json:"description"`
+	Displaytext  string `json:"displaytext"`
+	Group        string `json:"group"`
+	Id           int64  `json:"id"`
+	Isdynamic    bool   `json:"isdynamic"`
+	JobID        string `json:"jobid"`
+	Jobstatus    int    `json:"jobstatus"`
+	Name         string `json:"name"`
+	Options      string `json:"options"`
+	Parent       string `json:"parent"`
+	Scope        string `json:"scope"`
+	Subgroup     string `json:"subgroup"`
+	Type         string `json:"type"`
+	Value        string `json:"value"`
 }
 
 type ListDeploymentPlannersParams struct {
@@ -382,6 +535,12 @@ func (p *ListDeploymentPlannersParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListDeploymentPlannersParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *ListDeploymentPlannersParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -397,6 +556,12 @@ func (p *ListDeploymentPlannersParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListDeploymentPlannersParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListDeploymentPlannersParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -410,6 +575,12 @@ func (p *ListDeploymentPlannersParams) SetPagesize(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ListDeploymentPlannersParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
 }
 
 func (p *ListDeploymentPlannersParams) GetPagesize() (int, bool) {
@@ -497,6 +668,12 @@ func (p *UpdateConfigurationParams) SetAccountid(v string) {
 	p.p["accountid"] = v
 }
 
+func (p *UpdateConfigurationParams) ResetAccountid() {
+	if p.p != nil && p.p["accountid"] != nil {
+		delete(p.p, "accountid")
+	}
+}
+
 func (p *UpdateConfigurationParams) GetAccountid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -510,6 +687,12 @@ func (p *UpdateConfigurationParams) SetClusterid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["clusterid"] = v
+}
+
+func (p *UpdateConfigurationParams) ResetClusterid() {
+	if p.p != nil && p.p["clusterid"] != nil {
+		delete(p.p, "clusterid")
+	}
 }
 
 func (p *UpdateConfigurationParams) GetClusterid() (string, bool) {
@@ -527,6 +710,12 @@ func (p *UpdateConfigurationParams) SetDomainid(v string) {
 	p.p["domainid"] = v
 }
 
+func (p *UpdateConfigurationParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
+}
+
 func (p *UpdateConfigurationParams) GetDomainid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -540,6 +729,12 @@ func (p *UpdateConfigurationParams) SetImagestoreuuid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["imagestoreuuid"] = v
+}
+
+func (p *UpdateConfigurationParams) ResetImagestoreuuid() {
+	if p.p != nil && p.p["imagestoreuuid"] != nil {
+		delete(p.p, "imagestoreuuid")
+	}
 }
 
 func (p *UpdateConfigurationParams) GetImagestoreuuid() (string, bool) {
@@ -557,6 +752,12 @@ func (p *UpdateConfigurationParams) SetName(v string) {
 	p.p["name"] = v
 }
 
+func (p *UpdateConfigurationParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
+}
+
 func (p *UpdateConfigurationParams) GetName() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -570,6 +771,12 @@ func (p *UpdateConfigurationParams) SetStorageid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["storageid"] = v
+}
+
+func (p *UpdateConfigurationParams) ResetStorageid() {
+	if p.p != nil && p.p["storageid"] != nil {
+		delete(p.p, "storageid")
+	}
 }
 
 func (p *UpdateConfigurationParams) GetStorageid() (string, bool) {
@@ -587,6 +794,12 @@ func (p *UpdateConfigurationParams) SetValue(v string) {
 	p.p["value"] = v
 }
 
+func (p *UpdateConfigurationParams) ResetValue() {
+	if p.p != nil && p.p["value"] != nil {
+		delete(p.p, "value")
+	}
+}
+
 func (p *UpdateConfigurationParams) GetValue() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -600,6 +813,12 @@ func (p *UpdateConfigurationParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *UpdateConfigurationParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *UpdateConfigurationParams) GetZoneid() (string, bool) {
@@ -639,13 +858,245 @@ func (s *ConfigurationService) UpdateConfiguration(p *UpdateConfigurationParams)
 }
 
 type UpdateConfigurationResponse struct {
-	Category    string `json:"category"`
-	Description string `json:"description"`
-	Id          int64  `json:"id"`
-	Isdynamic   bool   `json:"isdynamic"`
-	JobID       string `json:"jobid"`
-	Jobstatus   int    `json:"jobstatus"`
-	Name        string `json:"name"`
-	Scope       string `json:"scope"`
-	Value       string `json:"value"`
+	Category     string `json:"category"`
+	Component    string `json:"component"`
+	Defaultvalue string `json:"defaultvalue"`
+	Description  string `json:"description"`
+	Displaytext  string `json:"displaytext"`
+	Group        string `json:"group"`
+	Id           int64  `json:"id"`
+	Isdynamic    bool   `json:"isdynamic"`
+	JobID        string `json:"jobid"`
+	Jobstatus    int    `json:"jobstatus"`
+	Name         string `json:"name"`
+	Options      string `json:"options"`
+	Parent       string `json:"parent"`
+	Scope        string `json:"scope"`
+	Subgroup     string `json:"subgroup"`
+	Type         string `json:"type"`
+	Value        string `json:"value"`
+}
+
+type ResetConfigurationParams struct {
+	p map[string]interface{}
+}
+
+func (p *ResetConfigurationParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["accountid"]; found {
+		u.Set("accountid", v.(string))
+	}
+	if v, found := p.p["clusterid"]; found {
+		u.Set("clusterid", v.(string))
+	}
+	if v, found := p.p["domainid"]; found {
+		u.Set("domainid", v.(string))
+	}
+	if v, found := p.p["imagestoreid"]; found {
+		u.Set("imagestoreid", v.(string))
+	}
+	if v, found := p.p["name"]; found {
+		u.Set("name", v.(string))
+	}
+	if v, found := p.p["storageid"]; found {
+		u.Set("storageid", v.(string))
+	}
+	if v, found := p.p["zoneid"]; found {
+		u.Set("zoneid", v.(string))
+	}
+	return u
+}
+
+func (p *ResetConfigurationParams) SetAccountid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["accountid"] = v
+}
+
+func (p *ResetConfigurationParams) ResetAccountid() {
+	if p.p != nil && p.p["accountid"] != nil {
+		delete(p.p, "accountid")
+	}
+}
+
+func (p *ResetConfigurationParams) GetAccountid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["accountid"].(string)
+	return value, ok
+}
+
+func (p *ResetConfigurationParams) SetClusterid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["clusterid"] = v
+}
+
+func (p *ResetConfigurationParams) ResetClusterid() {
+	if p.p != nil && p.p["clusterid"] != nil {
+		delete(p.p, "clusterid")
+	}
+}
+
+func (p *ResetConfigurationParams) GetClusterid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["clusterid"].(string)
+	return value, ok
+}
+
+func (p *ResetConfigurationParams) SetDomainid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["domainid"] = v
+}
+
+func (p *ResetConfigurationParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
+}
+
+func (p *ResetConfigurationParams) GetDomainid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["domainid"].(string)
+	return value, ok
+}
+
+func (p *ResetConfigurationParams) SetImagestoreid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["imagestoreid"] = v
+}
+
+func (p *ResetConfigurationParams) ResetImagestoreid() {
+	if p.p != nil && p.p["imagestoreid"] != nil {
+		delete(p.p, "imagestoreid")
+	}
+}
+
+func (p *ResetConfigurationParams) GetImagestoreid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["imagestoreid"].(string)
+	return value, ok
+}
+
+func (p *ResetConfigurationParams) SetName(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["name"] = v
+}
+
+func (p *ResetConfigurationParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
+}
+
+func (p *ResetConfigurationParams) GetName() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["name"].(string)
+	return value, ok
+}
+
+func (p *ResetConfigurationParams) SetStorageid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["storageid"] = v
+}
+
+func (p *ResetConfigurationParams) ResetStorageid() {
+	if p.p != nil && p.p["storageid"] != nil {
+		delete(p.p, "storageid")
+	}
+}
+
+func (p *ResetConfigurationParams) GetStorageid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["storageid"].(string)
+	return value, ok
+}
+
+func (p *ResetConfigurationParams) SetZoneid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["zoneid"] = v
+}
+
+func (p *ResetConfigurationParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
+}
+
+func (p *ResetConfigurationParams) GetZoneid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["zoneid"].(string)
+	return value, ok
+}
+
+// You should always use this function to get a new ResetConfigurationParams instance,
+// as then you are sure you have configured all required params
+func (s *ConfigurationService) NewResetConfigurationParams(name string) *ResetConfigurationParams {
+	p := &ResetConfigurationParams{}
+	p.p = make(map[string]interface{})
+	p.p["name"] = name
+	return p
+}
+
+// Resets a configuration. The configuration will be set to default value for global setting, and removed from account_details or domain_details for Account/Domain settings
+func (s *ConfigurationService) ResetConfiguration(p *ResetConfigurationParams) (*ResetConfigurationResponse, error) {
+	resp, err := s.cs.newRequest("resetConfiguration", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r ResetConfigurationResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
+
+type ResetConfigurationResponse struct {
+	Category     string `json:"category"`
+	Component    string `json:"component"`
+	Defaultvalue string `json:"defaultvalue"`
+	Description  string `json:"description"`
+	Displaytext  string `json:"displaytext"`
+	Group        string `json:"group"`
+	Id           int64  `json:"id"`
+	Isdynamic    bool   `json:"isdynamic"`
+	JobID        string `json:"jobid"`
+	Jobstatus    int    `json:"jobstatus"`
+	Name         string `json:"name"`
+	Options      string `json:"options"`
+	Parent       string `json:"parent"`
+	Scope        string `json:"scope"`
+	Subgroup     string `json:"subgroup"`
+	Type         string `json:"type"`
+	Value        string `json:"value"`
 }

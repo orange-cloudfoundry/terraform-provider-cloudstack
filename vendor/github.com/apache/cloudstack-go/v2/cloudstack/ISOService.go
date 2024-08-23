@@ -83,6 +83,12 @@ func (p *AttachIsoParams) SetForced(v bool) {
 	p.p["forced"] = v
 }
 
+func (p *AttachIsoParams) ResetForced() {
+	if p.p != nil && p.p["forced"] != nil {
+		delete(p.p, "forced")
+	}
+}
+
 func (p *AttachIsoParams) GetForced() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -98,6 +104,12 @@ func (p *AttachIsoParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *AttachIsoParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *AttachIsoParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -111,6 +123,12 @@ func (p *AttachIsoParams) SetVirtualmachineid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["virtualmachineid"] = v
+}
+
+func (p *AttachIsoParams) ResetVirtualmachineid() {
+	if p.p != nil && p.p["virtualmachineid"] != nil {
+		delete(p.p, "virtualmachineid")
+	}
 }
 
 func (p *AttachIsoParams) GetVirtualmachineid() (string, bool) {
@@ -169,6 +187,8 @@ func (s *ISOService) AttachIso(p *AttachIsoParams) (*AttachIsoResponse, error) {
 type AttachIsoResponse struct {
 	Account               string                           `json:"account"`
 	Affinitygroup         []AttachIsoResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                           `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                           `json:"autoscalevmgroupname"`
 	Backupofferingid      string                           `json:"backupofferingid"`
 	Backupofferingname    string                           `json:"backupofferingname"`
 	Bootmode              string                           `json:"bootmode"`
@@ -194,10 +214,11 @@ type AttachIsoResponse struct {
 	Guestosid             string                           `json:"guestosid"`
 	Haenable              bool                             `json:"haenable"`
 	Hasannotations        bool                             `json:"hasannotations"`
+	Hostcontrolstate      string                           `json:"hostcontrolstate"`
 	Hostid                string                           `json:"hostid"`
 	Hostname              string                           `json:"hostname"`
 	Hypervisor            string                           `json:"hypervisor"`
-	Icon                  string                           `json:"icon"`
+	Icon                  interface{}                      `json:"icon"`
 	Id                    string                           `json:"id"`
 	Instancename          string                           `json:"instancename"`
 	Isdynamicallyscalable bool                             `json:"isdynamicallyscalable"`
@@ -206,7 +227,7 @@ type AttachIsoResponse struct {
 	Isoname               string                           `json:"isoname"`
 	JobID                 string                           `json:"jobid"`
 	Jobstatus             int                              `json:"jobstatus"`
-	Keypair               string                           `json:"keypair"`
+	Keypairs              string                           `json:"keypairs"`
 	Lastupdated           string                           `json:"lastupdated"`
 	Memory                int                              `json:"memory"`
 	Memoryintfreekbs      int64                            `json:"memoryintfreekbs"`
@@ -239,9 +260,17 @@ type AttachIsoResponse struct {
 	Templatedisplaytext   string                           `json:"templatedisplaytext"`
 	Templateid            string                           `json:"templateid"`
 	Templatename          string                           `json:"templatename"`
+	Templatetype          string                           `json:"templatetype"`
+	Userdata              string                           `json:"userdata"`
+	Userdatadetails       string                           `json:"userdatadetails"`
+	Userdataid            string                           `json:"userdataid"`
+	Userdataname          string                           `json:"userdataname"`
+	Userdatapolicy        string                           `json:"userdatapolicy"`
 	Userid                string                           `json:"userid"`
 	Username              string                           `json:"username"`
 	Vgpu                  string                           `json:"vgpu"`
+	Vnfdetails            map[string]string                `json:"vnfdetails"`
+	Vnfnics               []string                         `json:"vnfnics"`
 	Zoneid                string                           `json:"zoneid"`
 	Zonename              string                           `json:"zonename"`
 }
@@ -347,6 +376,12 @@ func (p *CopyIsoParams) SetDestzoneid(v string) {
 	p.p["destzoneid"] = v
 }
 
+func (p *CopyIsoParams) ResetDestzoneid() {
+	if p.p != nil && p.p["destzoneid"] != nil {
+		delete(p.p, "destzoneid")
+	}
+}
+
 func (p *CopyIsoParams) GetDestzoneid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -360,6 +395,12 @@ func (p *CopyIsoParams) SetDestzoneids(v []string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["destzoneids"] = v
+}
+
+func (p *CopyIsoParams) ResetDestzoneids() {
+	if p.p != nil && p.p["destzoneids"] != nil {
+		delete(p.p, "destzoneids")
+	}
 }
 
 func (p *CopyIsoParams) GetDestzoneids() ([]string, bool) {
@@ -377,6 +418,12 @@ func (p *CopyIsoParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *CopyIsoParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *CopyIsoParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -390,6 +437,12 @@ func (p *CopyIsoParams) SetSourcezoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["sourcezoneid"] = v
+}
+
+func (p *CopyIsoParams) ResetSourcezoneid() {
+	if p.p != nil && p.p["sourcezoneid"] != nil {
+		delete(p.p, "sourcezoneid")
+	}
 }
 
 func (p *CopyIsoParams) GetSourcezoneid() (string, bool) {
@@ -466,7 +519,7 @@ type CopyIsoResponse struct {
 	Hostid                string              `json:"hostid"`
 	Hostname              string              `json:"hostname"`
 	Hypervisor            string              `json:"hypervisor"`
-	Icon                  string              `json:"icon"`
+	Icon                  interface{}         `json:"icon"`
 	Id                    string              `json:"id"`
 	Isdynamicallyscalable bool                `json:"isdynamicallyscalable"`
 	Isextractable         bool                `json:"isextractable"`
@@ -493,6 +546,10 @@ type CopyIsoResponse struct {
 	Templatetag           string              `json:"templatetag"`
 	Templatetype          string              `json:"templatetype"`
 	Url                   string              `json:"url"`
+	Userdataid            string              `json:"userdataid"`
+	Userdataname          string              `json:"userdataname"`
+	Userdataparams        string              `json:"userdataparams"`
+	Userdatapolicy        string              `json:"userdatapolicy"`
 	Zoneid                string              `json:"zoneid"`
 	Zonename              string              `json:"zonename"`
 }
@@ -549,6 +606,12 @@ func (p *DeleteIsoParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *DeleteIsoParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *DeleteIsoParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -562,6 +625,12 @@ func (p *DeleteIsoParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *DeleteIsoParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *DeleteIsoParams) GetZoneid() (string, bool) {
@@ -644,6 +713,12 @@ func (p *DetachIsoParams) SetForced(v bool) {
 	p.p["forced"] = v
 }
 
+func (p *DetachIsoParams) ResetForced() {
+	if p.p != nil && p.p["forced"] != nil {
+		delete(p.p, "forced")
+	}
+}
+
 func (p *DetachIsoParams) GetForced() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -657,6 +732,12 @@ func (p *DetachIsoParams) SetVirtualmachineid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["virtualmachineid"] = v
+}
+
+func (p *DetachIsoParams) ResetVirtualmachineid() {
+	if p.p != nil && p.p["virtualmachineid"] != nil {
+		delete(p.p, "virtualmachineid")
+	}
 }
 
 func (p *DetachIsoParams) GetVirtualmachineid() (string, bool) {
@@ -714,6 +795,8 @@ func (s *ISOService) DetachIso(p *DetachIsoParams) (*DetachIsoResponse, error) {
 type DetachIsoResponse struct {
 	Account               string                           `json:"account"`
 	Affinitygroup         []DetachIsoResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                           `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                           `json:"autoscalevmgroupname"`
 	Backupofferingid      string                           `json:"backupofferingid"`
 	Backupofferingname    string                           `json:"backupofferingname"`
 	Bootmode              string                           `json:"bootmode"`
@@ -739,10 +822,11 @@ type DetachIsoResponse struct {
 	Guestosid             string                           `json:"guestosid"`
 	Haenable              bool                             `json:"haenable"`
 	Hasannotations        bool                             `json:"hasannotations"`
+	Hostcontrolstate      string                           `json:"hostcontrolstate"`
 	Hostid                string                           `json:"hostid"`
 	Hostname              string                           `json:"hostname"`
 	Hypervisor            string                           `json:"hypervisor"`
-	Icon                  string                           `json:"icon"`
+	Icon                  interface{}                      `json:"icon"`
 	Id                    string                           `json:"id"`
 	Instancename          string                           `json:"instancename"`
 	Isdynamicallyscalable bool                             `json:"isdynamicallyscalable"`
@@ -751,7 +835,7 @@ type DetachIsoResponse struct {
 	Isoname               string                           `json:"isoname"`
 	JobID                 string                           `json:"jobid"`
 	Jobstatus             int                              `json:"jobstatus"`
-	Keypair               string                           `json:"keypair"`
+	Keypairs              string                           `json:"keypairs"`
 	Lastupdated           string                           `json:"lastupdated"`
 	Memory                int                              `json:"memory"`
 	Memoryintfreekbs      int64                            `json:"memoryintfreekbs"`
@@ -784,9 +868,17 @@ type DetachIsoResponse struct {
 	Templatedisplaytext   string                           `json:"templatedisplaytext"`
 	Templateid            string                           `json:"templateid"`
 	Templatename          string                           `json:"templatename"`
+	Templatetype          string                           `json:"templatetype"`
+	Userdata              string                           `json:"userdata"`
+	Userdatadetails       string                           `json:"userdatadetails"`
+	Userdataid            string                           `json:"userdataid"`
+	Userdataname          string                           `json:"userdataname"`
+	Userdatapolicy        string                           `json:"userdatapolicy"`
 	Userid                string                           `json:"userid"`
 	Username              string                           `json:"username"`
 	Vgpu                  string                           `json:"vgpu"`
+	Vnfdetails            map[string]string                `json:"vnfdetails"`
+	Vnfnics               []string                         `json:"vnfnics"`
 	Zoneid                string                           `json:"zoneid"`
 	Zonename              string                           `json:"zonename"`
 }
@@ -891,6 +983,12 @@ func (p *ExtractIsoParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ExtractIsoParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *ExtractIsoParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -904,6 +1002,12 @@ func (p *ExtractIsoParams) SetMode(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["mode"] = v
+}
+
+func (p *ExtractIsoParams) ResetMode() {
+	if p.p != nil && p.p["mode"] != nil {
+		delete(p.p, "mode")
+	}
 }
 
 func (p *ExtractIsoParams) GetMode() (string, bool) {
@@ -921,6 +1025,12 @@ func (p *ExtractIsoParams) SetUrl(v string) {
 	p.p["url"] = v
 }
 
+func (p *ExtractIsoParams) ResetUrl() {
+	if p.p != nil && p.p["url"] != nil {
+		delete(p.p, "url")
+	}
+}
+
 func (p *ExtractIsoParams) GetUrl() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -934,6 +1044,12 @@ func (p *ExtractIsoParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *ExtractIsoParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *ExtractIsoParams) GetZoneid() (string, bool) {
@@ -1028,6 +1144,12 @@ func (p *ListIsoPermissionsParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *ListIsoPermissionsParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *ListIsoPermissionsParams) GetId() (string, bool) {
@@ -1135,6 +1257,9 @@ func (p *ListIsosParams) toURLValues() url.Values {
 	if v, found := p.p["id"]; found {
 		u.Set("id", v.(string))
 	}
+	if v, found := p.p["imagestoreid"]; found {
+		u.Set("imagestoreid", v.(string))
+	}
 	if v, found := p.p["isofilter"]; found {
 		u.Set("isofilter", v.(string))
 	}
@@ -1183,6 +1308,9 @@ func (p *ListIsosParams) toURLValues() url.Values {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("showunique", vv)
 	}
+	if v, found := p.p["storageid"]; found {
+		u.Set("storageid", v.(string))
+	}
 	if v, found := p.p["tags"]; found {
 		m := v.(map[string]string)
 		for i, k := range getSortedKeysFromMap(m) {
@@ -1203,6 +1331,12 @@ func (p *ListIsosParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *ListIsosParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *ListIsosParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1216,6 +1350,12 @@ func (p *ListIsosParams) SetBootable(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["bootable"] = v
+}
+
+func (p *ListIsosParams) ResetBootable() {
+	if p.p != nil && p.p["bootable"] != nil {
+		delete(p.p, "bootable")
+	}
 }
 
 func (p *ListIsosParams) GetBootable() (bool, bool) {
@@ -1233,6 +1373,12 @@ func (p *ListIsosParams) SetDomainid(v string) {
 	p.p["domainid"] = v
 }
 
+func (p *ListIsosParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
+}
+
 func (p *ListIsosParams) GetDomainid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1246,6 +1392,12 @@ func (p *ListIsosParams) SetHypervisor(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["hypervisor"] = v
+}
+
+func (p *ListIsosParams) ResetHypervisor() {
+	if p.p != nil && p.p["hypervisor"] != nil {
+		delete(p.p, "hypervisor")
+	}
 }
 
 func (p *ListIsosParams) GetHypervisor() (string, bool) {
@@ -1263,6 +1415,12 @@ func (p *ListIsosParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ListIsosParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *ListIsosParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1271,11 +1429,38 @@ func (p *ListIsosParams) GetId() (string, bool) {
 	return value, ok
 }
 
+func (p *ListIsosParams) SetImagestoreid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["imagestoreid"] = v
+}
+
+func (p *ListIsosParams) ResetImagestoreid() {
+	if p.p != nil && p.p["imagestoreid"] != nil {
+		delete(p.p, "imagestoreid")
+	}
+}
+
+func (p *ListIsosParams) GetImagestoreid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["imagestoreid"].(string)
+	return value, ok
+}
+
 func (p *ListIsosParams) SetIsofilter(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isofilter"] = v
+}
+
+func (p *ListIsosParams) ResetIsofilter() {
+	if p.p != nil && p.p["isofilter"] != nil {
+		delete(p.p, "isofilter")
+	}
 }
 
 func (p *ListIsosParams) GetIsofilter() (string, bool) {
@@ -1293,6 +1478,12 @@ func (p *ListIsosParams) SetIspublic(v bool) {
 	p.p["ispublic"] = v
 }
 
+func (p *ListIsosParams) ResetIspublic() {
+	if p.p != nil && p.p["ispublic"] != nil {
+		delete(p.p, "ispublic")
+	}
+}
+
 func (p *ListIsosParams) GetIspublic() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1306,6 +1497,12 @@ func (p *ListIsosParams) SetIsready(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isready"] = v
+}
+
+func (p *ListIsosParams) ResetIsready() {
+	if p.p != nil && p.p["isready"] != nil {
+		delete(p.p, "isready")
+	}
 }
 
 func (p *ListIsosParams) GetIsready() (bool, bool) {
@@ -1323,6 +1520,12 @@ func (p *ListIsosParams) SetIsrecursive(v bool) {
 	p.p["isrecursive"] = v
 }
 
+func (p *ListIsosParams) ResetIsrecursive() {
+	if p.p != nil && p.p["isrecursive"] != nil {
+		delete(p.p, "isrecursive")
+	}
+}
+
 func (p *ListIsosParams) GetIsrecursive() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1336,6 +1539,12 @@ func (p *ListIsosParams) SetKeyword(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["keyword"] = v
+}
+
+func (p *ListIsosParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
 }
 
 func (p *ListIsosParams) GetKeyword() (string, bool) {
@@ -1353,6 +1562,12 @@ func (p *ListIsosParams) SetListall(v bool) {
 	p.p["listall"] = v
 }
 
+func (p *ListIsosParams) ResetListall() {
+	if p.p != nil && p.p["listall"] != nil {
+		delete(p.p, "listall")
+	}
+}
+
 func (p *ListIsosParams) GetListall() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1366,6 +1581,12 @@ func (p *ListIsosParams) SetName(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *ListIsosParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
 }
 
 func (p *ListIsosParams) GetName() (string, bool) {
@@ -1383,6 +1604,12 @@ func (p *ListIsosParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListIsosParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListIsosParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1396,6 +1623,12 @@ func (p *ListIsosParams) SetPagesize(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ListIsosParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
 }
 
 func (p *ListIsosParams) GetPagesize() (int, bool) {
@@ -1413,6 +1646,12 @@ func (p *ListIsosParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *ListIsosParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
+}
+
 func (p *ListIsosParams) GetProjectid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1426,6 +1665,12 @@ func (p *ListIsosParams) SetShowicon(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["showicon"] = v
+}
+
+func (p *ListIsosParams) ResetShowicon() {
+	if p.p != nil && p.p["showicon"] != nil {
+		delete(p.p, "showicon")
+	}
 }
 
 func (p *ListIsosParams) GetShowicon() (bool, bool) {
@@ -1443,6 +1688,12 @@ func (p *ListIsosParams) SetShowremoved(v bool) {
 	p.p["showremoved"] = v
 }
 
+func (p *ListIsosParams) ResetShowremoved() {
+	if p.p != nil && p.p["showremoved"] != nil {
+		delete(p.p, "showremoved")
+	}
+}
+
 func (p *ListIsosParams) GetShowremoved() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1458,6 +1709,12 @@ func (p *ListIsosParams) SetShowunique(v bool) {
 	p.p["showunique"] = v
 }
 
+func (p *ListIsosParams) ResetShowunique() {
+	if p.p != nil && p.p["showunique"] != nil {
+		delete(p.p, "showunique")
+	}
+}
+
 func (p *ListIsosParams) GetShowunique() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1466,11 +1723,38 @@ func (p *ListIsosParams) GetShowunique() (bool, bool) {
 	return value, ok
 }
 
+func (p *ListIsosParams) SetStorageid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["storageid"] = v
+}
+
+func (p *ListIsosParams) ResetStorageid() {
+	if p.p != nil && p.p["storageid"] != nil {
+		delete(p.p, "storageid")
+	}
+}
+
+func (p *ListIsosParams) GetStorageid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["storageid"].(string)
+	return value, ok
+}
+
 func (p *ListIsosParams) SetTags(v map[string]string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["tags"] = v
+}
+
+func (p *ListIsosParams) ResetTags() {
+	if p.p != nil && p.p["tags"] != nil {
+		delete(p.p, "tags")
+	}
 }
 
 func (p *ListIsosParams) GetTags() (map[string]string, bool) {
@@ -1486,6 +1770,12 @@ func (p *ListIsosParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *ListIsosParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *ListIsosParams) GetZoneid() (string, bool) {
@@ -1631,7 +1921,7 @@ type Iso struct {
 	Hostid                string              `json:"hostid"`
 	Hostname              string              `json:"hostname"`
 	Hypervisor            string              `json:"hypervisor"`
-	Icon                  string              `json:"icon"`
+	Icon                  interface{}         `json:"icon"`
 	Id                    string              `json:"id"`
 	Isdynamicallyscalable bool                `json:"isdynamicallyscalable"`
 	Isextractable         bool                `json:"isextractable"`
@@ -1658,6 +1948,10 @@ type Iso struct {
 	Templatetag           string              `json:"templatetag"`
 	Templatetype          string              `json:"templatetype"`
 	Url                   string              `json:"url"`
+	Userdataid            string              `json:"userdataid"`
+	Userdataname          string              `json:"userdataname"`
+	Userdataparams        string              `json:"userdataparams"`
+	Userdatapolicy        string              `json:"userdatapolicy"`
 	Zoneid                string              `json:"zoneid"`
 	Zonename              string              `json:"zonename"`
 }
@@ -1766,6 +2060,12 @@ func (p *RegisterIsoParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *RegisterIsoParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *RegisterIsoParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1779,6 +2079,12 @@ func (p *RegisterIsoParams) SetBootable(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["bootable"] = v
+}
+
+func (p *RegisterIsoParams) ResetBootable() {
+	if p.p != nil && p.p["bootable"] != nil {
+		delete(p.p, "bootable")
+	}
 }
 
 func (p *RegisterIsoParams) GetBootable() (bool, bool) {
@@ -1796,6 +2102,12 @@ func (p *RegisterIsoParams) SetChecksum(v string) {
 	p.p["checksum"] = v
 }
 
+func (p *RegisterIsoParams) ResetChecksum() {
+	if p.p != nil && p.p["checksum"] != nil {
+		delete(p.p, "checksum")
+	}
+}
+
 func (p *RegisterIsoParams) GetChecksum() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1809,6 +2121,12 @@ func (p *RegisterIsoParams) SetDirectdownload(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["directdownload"] = v
+}
+
+func (p *RegisterIsoParams) ResetDirectdownload() {
+	if p.p != nil && p.p["directdownload"] != nil {
+		delete(p.p, "directdownload")
+	}
 }
 
 func (p *RegisterIsoParams) GetDirectdownload() (bool, bool) {
@@ -1826,6 +2144,12 @@ func (p *RegisterIsoParams) SetDisplaytext(v string) {
 	p.p["displaytext"] = v
 }
 
+func (p *RegisterIsoParams) ResetDisplaytext() {
+	if p.p != nil && p.p["displaytext"] != nil {
+		delete(p.p, "displaytext")
+	}
+}
+
 func (p *RegisterIsoParams) GetDisplaytext() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1839,6 +2163,12 @@ func (p *RegisterIsoParams) SetDomainid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *RegisterIsoParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *RegisterIsoParams) GetDomainid() (string, bool) {
@@ -1856,6 +2186,12 @@ func (p *RegisterIsoParams) SetImagestoreuuid(v string) {
 	p.p["imagestoreuuid"] = v
 }
 
+func (p *RegisterIsoParams) ResetImagestoreuuid() {
+	if p.p != nil && p.p["imagestoreuuid"] != nil {
+		delete(p.p, "imagestoreuuid")
+	}
+}
+
 func (p *RegisterIsoParams) GetImagestoreuuid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1869,6 +2205,12 @@ func (p *RegisterIsoParams) SetIsdynamicallyscalable(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isdynamicallyscalable"] = v
+}
+
+func (p *RegisterIsoParams) ResetIsdynamicallyscalable() {
+	if p.p != nil && p.p["isdynamicallyscalable"] != nil {
+		delete(p.p, "isdynamicallyscalable")
+	}
 }
 
 func (p *RegisterIsoParams) GetIsdynamicallyscalable() (bool, bool) {
@@ -1886,6 +2228,12 @@ func (p *RegisterIsoParams) SetIsextractable(v bool) {
 	p.p["isextractable"] = v
 }
 
+func (p *RegisterIsoParams) ResetIsextractable() {
+	if p.p != nil && p.p["isextractable"] != nil {
+		delete(p.p, "isextractable")
+	}
+}
+
 func (p *RegisterIsoParams) GetIsextractable() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1899,6 +2247,12 @@ func (p *RegisterIsoParams) SetIsfeatured(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isfeatured"] = v
+}
+
+func (p *RegisterIsoParams) ResetIsfeatured() {
+	if p.p != nil && p.p["isfeatured"] != nil {
+		delete(p.p, "isfeatured")
+	}
 }
 
 func (p *RegisterIsoParams) GetIsfeatured() (bool, bool) {
@@ -1916,6 +2270,12 @@ func (p *RegisterIsoParams) SetIspublic(v bool) {
 	p.p["ispublic"] = v
 }
 
+func (p *RegisterIsoParams) ResetIspublic() {
+	if p.p != nil && p.p["ispublic"] != nil {
+		delete(p.p, "ispublic")
+	}
+}
+
 func (p *RegisterIsoParams) GetIspublic() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1929,6 +2289,12 @@ func (p *RegisterIsoParams) SetName(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["name"] = v
+}
+
+func (p *RegisterIsoParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
 }
 
 func (p *RegisterIsoParams) GetName() (string, bool) {
@@ -1946,6 +2312,12 @@ func (p *RegisterIsoParams) SetOstypeid(v string) {
 	p.p["ostypeid"] = v
 }
 
+func (p *RegisterIsoParams) ResetOstypeid() {
+	if p.p != nil && p.p["ostypeid"] != nil {
+		delete(p.p, "ostypeid")
+	}
+}
+
 func (p *RegisterIsoParams) GetOstypeid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1959,6 +2331,12 @@ func (p *RegisterIsoParams) SetPasswordenabled(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["passwordenabled"] = v
+}
+
+func (p *RegisterIsoParams) ResetPasswordenabled() {
+	if p.p != nil && p.p["passwordenabled"] != nil {
+		delete(p.p, "passwordenabled")
+	}
 }
 
 func (p *RegisterIsoParams) GetPasswordenabled() (bool, bool) {
@@ -1976,6 +2354,12 @@ func (p *RegisterIsoParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *RegisterIsoParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
+}
+
 func (p *RegisterIsoParams) GetProjectid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1991,6 +2375,12 @@ func (p *RegisterIsoParams) SetUrl(v string) {
 	p.p["url"] = v
 }
 
+func (p *RegisterIsoParams) ResetUrl() {
+	if p.p != nil && p.p["url"] != nil {
+		delete(p.p, "url")
+	}
+}
+
 func (p *RegisterIsoParams) GetUrl() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2004,6 +2394,12 @@ func (p *RegisterIsoParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *RegisterIsoParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *RegisterIsoParams) GetZoneid() (string, bool) {
@@ -2067,7 +2463,7 @@ type RegisterIsoResponse struct {
 	Hostid                string              `json:"hostid"`
 	Hostname              string              `json:"hostname"`
 	Hypervisor            string              `json:"hypervisor"`
-	Icon                  string              `json:"icon"`
+	Icon                  interface{}         `json:"icon"`
 	Id                    string              `json:"id"`
 	Isdynamicallyscalable bool                `json:"isdynamicallyscalable"`
 	Isextractable         bool                `json:"isextractable"`
@@ -2094,6 +2490,10 @@ type RegisterIsoResponse struct {
 	Templatetag           string              `json:"templatetag"`
 	Templatetype          string              `json:"templatetype"`
 	Url                   string              `json:"url"`
+	Userdataid            string              `json:"userdataid"`
+	Userdataname          string              `json:"userdataname"`
+	Userdataparams        string              `json:"userdataparams"`
+	Userdatapolicy        string              `json:"userdatapolicy"`
 	Zoneid                string              `json:"zoneid"`
 	Zonename              string              `json:"zonename"`
 }
@@ -2197,6 +2597,12 @@ func (p *UpdateIsoParams) SetBootable(v bool) {
 	p.p["bootable"] = v
 }
 
+func (p *UpdateIsoParams) ResetBootable() {
+	if p.p != nil && p.p["bootable"] != nil {
+		delete(p.p, "bootable")
+	}
+}
+
 func (p *UpdateIsoParams) GetBootable() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2210,6 +2616,12 @@ func (p *UpdateIsoParams) SetCleanupdetails(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["cleanupdetails"] = v
+}
+
+func (p *UpdateIsoParams) ResetCleanupdetails() {
+	if p.p != nil && p.p["cleanupdetails"] != nil {
+		delete(p.p, "cleanupdetails")
+	}
 }
 
 func (p *UpdateIsoParams) GetCleanupdetails() (bool, bool) {
@@ -2227,6 +2639,12 @@ func (p *UpdateIsoParams) SetDetails(v map[string]string) {
 	p.p["details"] = v
 }
 
+func (p *UpdateIsoParams) ResetDetails() {
+	if p.p != nil && p.p["details"] != nil {
+		delete(p.p, "details")
+	}
+}
+
 func (p *UpdateIsoParams) GetDetails() (map[string]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2240,6 +2658,12 @@ func (p *UpdateIsoParams) SetDisplaytext(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["displaytext"] = v
+}
+
+func (p *UpdateIsoParams) ResetDisplaytext() {
+	if p.p != nil && p.p["displaytext"] != nil {
+		delete(p.p, "displaytext")
+	}
 }
 
 func (p *UpdateIsoParams) GetDisplaytext() (string, bool) {
@@ -2257,6 +2681,12 @@ func (p *UpdateIsoParams) SetFormat(v string) {
 	p.p["format"] = v
 }
 
+func (p *UpdateIsoParams) ResetFormat() {
+	if p.p != nil && p.p["format"] != nil {
+		delete(p.p, "format")
+	}
+}
+
 func (p *UpdateIsoParams) GetFormat() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2270,6 +2700,12 @@ func (p *UpdateIsoParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *UpdateIsoParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *UpdateIsoParams) GetId() (string, bool) {
@@ -2287,6 +2723,12 @@ func (p *UpdateIsoParams) SetIsdynamicallyscalable(v bool) {
 	p.p["isdynamicallyscalable"] = v
 }
 
+func (p *UpdateIsoParams) ResetIsdynamicallyscalable() {
+	if p.p != nil && p.p["isdynamicallyscalable"] != nil {
+		delete(p.p, "isdynamicallyscalable")
+	}
+}
+
 func (p *UpdateIsoParams) GetIsdynamicallyscalable() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2300,6 +2742,12 @@ func (p *UpdateIsoParams) SetIsrouting(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isrouting"] = v
+}
+
+func (p *UpdateIsoParams) ResetIsrouting() {
+	if p.p != nil && p.p["isrouting"] != nil {
+		delete(p.p, "isrouting")
+	}
 }
 
 func (p *UpdateIsoParams) GetIsrouting() (bool, bool) {
@@ -2317,6 +2765,12 @@ func (p *UpdateIsoParams) SetName(v string) {
 	p.p["name"] = v
 }
 
+func (p *UpdateIsoParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
+}
+
 func (p *UpdateIsoParams) GetName() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2330,6 +2784,12 @@ func (p *UpdateIsoParams) SetOstypeid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["ostypeid"] = v
+}
+
+func (p *UpdateIsoParams) ResetOstypeid() {
+	if p.p != nil && p.p["ostypeid"] != nil {
+		delete(p.p, "ostypeid")
+	}
 }
 
 func (p *UpdateIsoParams) GetOstypeid() (string, bool) {
@@ -2347,6 +2807,12 @@ func (p *UpdateIsoParams) SetPasswordenabled(v bool) {
 	p.p["passwordenabled"] = v
 }
 
+func (p *UpdateIsoParams) ResetPasswordenabled() {
+	if p.p != nil && p.p["passwordenabled"] != nil {
+		delete(p.p, "passwordenabled")
+	}
+}
+
 func (p *UpdateIsoParams) GetPasswordenabled() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2360,6 +2826,12 @@ func (p *UpdateIsoParams) SetRequireshvm(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["requireshvm"] = v
+}
+
+func (p *UpdateIsoParams) ResetRequireshvm() {
+	if p.p != nil && p.p["requireshvm"] != nil {
+		delete(p.p, "requireshvm")
+	}
 }
 
 func (p *UpdateIsoParams) GetRequireshvm() (bool, bool) {
@@ -2377,6 +2849,12 @@ func (p *UpdateIsoParams) SetSortkey(v int) {
 	p.p["sortkey"] = v
 }
 
+func (p *UpdateIsoParams) ResetSortkey() {
+	if p.p != nil && p.p["sortkey"] != nil {
+		delete(p.p, "sortkey")
+	}
+}
+
 func (p *UpdateIsoParams) GetSortkey() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2390,6 +2868,12 @@ func (p *UpdateIsoParams) SetSshkeyenabled(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["sshkeyenabled"] = v
+}
+
+func (p *UpdateIsoParams) ResetSshkeyenabled() {
+	if p.p != nil && p.p["sshkeyenabled"] != nil {
+		delete(p.p, "sshkeyenabled")
+	}
 }
 
 func (p *UpdateIsoParams) GetSshkeyenabled() (bool, bool) {
@@ -2446,7 +2930,7 @@ type UpdateIsoResponse struct {
 	Hostid                string              `json:"hostid"`
 	Hostname              string              `json:"hostname"`
 	Hypervisor            string              `json:"hypervisor"`
-	Icon                  string              `json:"icon"`
+	Icon                  interface{}         `json:"icon"`
 	Id                    string              `json:"id"`
 	Isdynamicallyscalable bool                `json:"isdynamicallyscalable"`
 	Isextractable         bool                `json:"isextractable"`
@@ -2473,6 +2957,10 @@ type UpdateIsoResponse struct {
 	Templatetag           string              `json:"templatetag"`
 	Templatetype          string              `json:"templatetype"`
 	Url                   string              `json:"url"`
+	Userdataid            string              `json:"userdataid"`
+	Userdataname          string              `json:"userdataname"`
+	Userdataparams        string              `json:"userdataparams"`
+	Userdatapolicy        string              `json:"userdatapolicy"`
 	Zoneid                string              `json:"zoneid"`
 	Zonename              string              `json:"zonename"`
 }
@@ -2549,6 +3037,12 @@ func (p *UpdateIsoPermissionsParams) SetAccounts(v []string) {
 	p.p["accounts"] = v
 }
 
+func (p *UpdateIsoPermissionsParams) ResetAccounts() {
+	if p.p != nil && p.p["accounts"] != nil {
+		delete(p.p, "accounts")
+	}
+}
+
 func (p *UpdateIsoPermissionsParams) GetAccounts() ([]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2562,6 +3056,12 @@ func (p *UpdateIsoPermissionsParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *UpdateIsoPermissionsParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *UpdateIsoPermissionsParams) GetId() (string, bool) {
@@ -2579,6 +3079,12 @@ func (p *UpdateIsoPermissionsParams) SetIsextractable(v bool) {
 	p.p["isextractable"] = v
 }
 
+func (p *UpdateIsoPermissionsParams) ResetIsextractable() {
+	if p.p != nil && p.p["isextractable"] != nil {
+		delete(p.p, "isextractable")
+	}
+}
+
 func (p *UpdateIsoPermissionsParams) GetIsextractable() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2592,6 +3098,12 @@ func (p *UpdateIsoPermissionsParams) SetIsfeatured(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isfeatured"] = v
+}
+
+func (p *UpdateIsoPermissionsParams) ResetIsfeatured() {
+	if p.p != nil && p.p["isfeatured"] != nil {
+		delete(p.p, "isfeatured")
+	}
 }
 
 func (p *UpdateIsoPermissionsParams) GetIsfeatured() (bool, bool) {
@@ -2609,6 +3121,12 @@ func (p *UpdateIsoPermissionsParams) SetIspublic(v bool) {
 	p.p["ispublic"] = v
 }
 
+func (p *UpdateIsoPermissionsParams) ResetIspublic() {
+	if p.p != nil && p.p["ispublic"] != nil {
+		delete(p.p, "ispublic")
+	}
+}
+
 func (p *UpdateIsoPermissionsParams) GetIspublic() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2624,6 +3142,12 @@ func (p *UpdateIsoPermissionsParams) SetOp(v string) {
 	p.p["op"] = v
 }
 
+func (p *UpdateIsoPermissionsParams) ResetOp() {
+	if p.p != nil && p.p["op"] != nil {
+		delete(p.p, "op")
+	}
+}
+
 func (p *UpdateIsoPermissionsParams) GetOp() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2637,6 +3161,12 @@ func (p *UpdateIsoPermissionsParams) SetProjectids(v []string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["projectids"] = v
+}
+
+func (p *UpdateIsoPermissionsParams) ResetProjectids() {
+	if p.p != nil && p.p["projectids"] != nil {
+		delete(p.p, "projectids")
+	}
 }
 
 func (p *UpdateIsoPermissionsParams) GetProjectids() ([]string, bool) {

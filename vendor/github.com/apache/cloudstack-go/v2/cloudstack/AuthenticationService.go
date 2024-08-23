@@ -64,6 +64,12 @@ func (p *LoginParams) SetDomain(v string) {
 	p.p["domain"] = v
 }
 
+func (p *LoginParams) ResetDomain() {
+	if p.p != nil && p.p["domain"] != nil {
+		delete(p.p, "domain")
+	}
+}
+
 func (p *LoginParams) GetDomain() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -77,6 +83,12 @@ func (p *LoginParams) SetDomainId(v int64) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainId"] = v
+}
+
+func (p *LoginParams) ResetDomainId() {
+	if p.p != nil && p.p["domainId"] != nil {
+		delete(p.p, "domainId")
+	}
 }
 
 func (p *LoginParams) GetDomainId() (int64, bool) {
@@ -94,6 +106,12 @@ func (p *LoginParams) SetPassword(v string) {
 	p.p["password"] = v
 }
 
+func (p *LoginParams) ResetPassword() {
+	if p.p != nil && p.p["password"] != nil {
+		delete(p.p, "password")
+	}
+}
+
 func (p *LoginParams) GetPassword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -107,6 +125,12 @@ func (p *LoginParams) SetUsername(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["username"] = v
+}
+
+func (p *LoginParams) ResetUsername() {
+	if p.p != nil && p.p["username"] != nil {
+		delete(p.p, "username")
+	}
 }
 
 func (p *LoginParams) GetUsername() (string, bool) {
@@ -129,7 +153,7 @@ func (s *AuthenticationService) NewLoginParams(password string, username string)
 
 // Logs a user into the CloudStack. A successful login attempt will generate a JSESSIONID cookie value that can be passed in subsequent Query command calls until the "logout" command has been issued or the session has expired.
 func (s *AuthenticationService) Login(p *LoginParams) (*LoginResponse, error) {
-	resp, err := s.cs.newRequest("login", p.toURLValues())
+	resp, err := s.cs.newPostRequest("login", p.toURLValues())
 	if err != nil {
 		return nil, err
 	}
@@ -146,9 +170,13 @@ type LoginResponse struct {
 	Account        string `json:"account"`
 	Domainid       string `json:"domainid"`
 	Firstname      string `json:"firstname"`
+	Is2faenabled   string `json:"is2faenabled"`
+	Is2faverified  string `json:"is2faverified"`
+	Issuerfor2fa   string `json:"issuerfor2fa"`
 	JobID          string `json:"jobid"`
 	Jobstatus      int    `json:"jobstatus"`
 	Lastname       string `json:"lastname"`
+	Providerfor2fa string `json:"providerfor2fa"`
 	Registered     string `json:"registered"`
 	Sessionkey     string `json:"sessionkey"`
 	Timeout        int    `json:"timeout"`

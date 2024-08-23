@@ -78,6 +78,11 @@ type VirtualMachineServiceIface interface {
 	NewUpdateDefaultNicForVirtualMachineParams(nicid string, virtualmachineid string) *UpdateDefaultNicForVirtualMachineParams
 	UpdateVirtualMachine(p *UpdateVirtualMachineParams) (*UpdateVirtualMachineResponse, error)
 	NewUpdateVirtualMachineParams(id string) *UpdateVirtualMachineParams
+	ListVirtualMachinesUsageHistory(p *ListVirtualMachinesUsageHistoryParams) (*ListVirtualMachinesUsageHistoryResponse, error)
+	NewListVirtualMachinesUsageHistoryParams() *ListVirtualMachinesUsageHistoryParams
+	GetVirtualMachinesUsageHistoryID(name string, opts ...OptionFunc) (string, int, error)
+	GetVirtualMachinesUsageHistoryByName(name string, opts ...OptionFunc) (*VirtualMachinesUsageHistory, int, error)
+	GetVirtualMachinesUsageHistoryByID(id string, opts ...OptionFunc) (*VirtualMachinesUsageHistory, int, error)
 }
 
 type AddNicToVirtualMachineParams struct {
@@ -118,6 +123,12 @@ func (p *AddNicToVirtualMachineParams) SetDhcpoptions(v map[string]string) {
 	p.p["dhcpoptions"] = v
 }
 
+func (p *AddNicToVirtualMachineParams) ResetDhcpoptions() {
+	if p.p != nil && p.p["dhcpoptions"] != nil {
+		delete(p.p, "dhcpoptions")
+	}
+}
+
 func (p *AddNicToVirtualMachineParams) GetDhcpoptions() (map[string]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -131,6 +142,12 @@ func (p *AddNicToVirtualMachineParams) SetIpaddress(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["ipaddress"] = v
+}
+
+func (p *AddNicToVirtualMachineParams) ResetIpaddress() {
+	if p.p != nil && p.p["ipaddress"] != nil {
+		delete(p.p, "ipaddress")
+	}
 }
 
 func (p *AddNicToVirtualMachineParams) GetIpaddress() (string, bool) {
@@ -148,6 +165,12 @@ func (p *AddNicToVirtualMachineParams) SetMacaddress(v string) {
 	p.p["macaddress"] = v
 }
 
+func (p *AddNicToVirtualMachineParams) ResetMacaddress() {
+	if p.p != nil && p.p["macaddress"] != nil {
+		delete(p.p, "macaddress")
+	}
+}
+
 func (p *AddNicToVirtualMachineParams) GetMacaddress() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -163,6 +186,12 @@ func (p *AddNicToVirtualMachineParams) SetNetworkid(v string) {
 	p.p["networkid"] = v
 }
 
+func (p *AddNicToVirtualMachineParams) ResetNetworkid() {
+	if p.p != nil && p.p["networkid"] != nil {
+		delete(p.p, "networkid")
+	}
+}
+
 func (p *AddNicToVirtualMachineParams) GetNetworkid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -176,6 +205,12 @@ func (p *AddNicToVirtualMachineParams) SetVirtualmachineid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["virtualmachineid"] = v
+}
+
+func (p *AddNicToVirtualMachineParams) ResetVirtualmachineid() {
+	if p.p != nil && p.p["virtualmachineid"] != nil {
+		delete(p.p, "virtualmachineid")
+	}
 }
 
 func (p *AddNicToVirtualMachineParams) GetVirtualmachineid() (string, bool) {
@@ -234,6 +269,8 @@ func (s *VirtualMachineService) AddNicToVirtualMachine(p *AddNicToVirtualMachine
 type AddNicToVirtualMachineResponse struct {
 	Account               string                                        `json:"account"`
 	Affinitygroup         []AddNicToVirtualMachineResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                                        `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                                        `json:"autoscalevmgroupname"`
 	Backupofferingid      string                                        `json:"backupofferingid"`
 	Backupofferingname    string                                        `json:"backupofferingname"`
 	Bootmode              string                                        `json:"bootmode"`
@@ -259,10 +296,11 @@ type AddNicToVirtualMachineResponse struct {
 	Guestosid             string                                        `json:"guestosid"`
 	Haenable              bool                                          `json:"haenable"`
 	Hasannotations        bool                                          `json:"hasannotations"`
+	Hostcontrolstate      string                                        `json:"hostcontrolstate"`
 	Hostid                string                                        `json:"hostid"`
 	Hostname              string                                        `json:"hostname"`
 	Hypervisor            string                                        `json:"hypervisor"`
-	Icon                  string                                        `json:"icon"`
+	Icon                  interface{}                                   `json:"icon"`
 	Id                    string                                        `json:"id"`
 	Instancename          string                                        `json:"instancename"`
 	Isdynamicallyscalable bool                                          `json:"isdynamicallyscalable"`
@@ -271,7 +309,7 @@ type AddNicToVirtualMachineResponse struct {
 	Isoname               string                                        `json:"isoname"`
 	JobID                 string                                        `json:"jobid"`
 	Jobstatus             int                                           `json:"jobstatus"`
-	Keypair               string                                        `json:"keypair"`
+	Keypairs              string                                        `json:"keypairs"`
 	Lastupdated           string                                        `json:"lastupdated"`
 	Memory                int                                           `json:"memory"`
 	Memoryintfreekbs      int64                                         `json:"memoryintfreekbs"`
@@ -304,9 +342,17 @@ type AddNicToVirtualMachineResponse struct {
 	Templatedisplaytext   string                                        `json:"templatedisplaytext"`
 	Templateid            string                                        `json:"templateid"`
 	Templatename          string                                        `json:"templatename"`
+	Templatetype          string                                        `json:"templatetype"`
+	Userdata              string                                        `json:"userdata"`
+	Userdatadetails       string                                        `json:"userdatadetails"`
+	Userdataid            string                                        `json:"userdataid"`
+	Userdataname          string                                        `json:"userdataname"`
+	Userdatapolicy        string                                        `json:"userdatapolicy"`
 	Userid                string                                        `json:"userid"`
 	Username              string                                        `json:"username"`
 	Vgpu                  string                                        `json:"vgpu"`
+	Vnfdetails            map[string]string                             `json:"vnfdetails"`
+	Vnfnics               []string                                      `json:"vnfnics"`
 	Zoneid                string                                        `json:"zoneid"`
 	Zonename              string                                        `json:"zonename"`
 }
@@ -419,6 +465,12 @@ func (p *AssignVirtualMachineParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *AssignVirtualMachineParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *AssignVirtualMachineParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -432,6 +484,12 @@ func (p *AssignVirtualMachineParams) SetDomainid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *AssignVirtualMachineParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *AssignVirtualMachineParams) GetDomainid() (string, bool) {
@@ -449,6 +507,12 @@ func (p *AssignVirtualMachineParams) SetNetworkids(v []string) {
 	p.p["networkids"] = v
 }
 
+func (p *AssignVirtualMachineParams) ResetNetworkids() {
+	if p.p != nil && p.p["networkids"] != nil {
+		delete(p.p, "networkids")
+	}
+}
+
 func (p *AssignVirtualMachineParams) GetNetworkids() ([]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -462,6 +526,12 @@ func (p *AssignVirtualMachineParams) SetProjectid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["projectid"] = v
+}
+
+func (p *AssignVirtualMachineParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
 }
 
 func (p *AssignVirtualMachineParams) GetProjectid() (string, bool) {
@@ -479,6 +549,12 @@ func (p *AssignVirtualMachineParams) SetSecuritygroupids(v []string) {
 	p.p["securitygroupids"] = v
 }
 
+func (p *AssignVirtualMachineParams) ResetSecuritygroupids() {
+	if p.p != nil && p.p["securitygroupids"] != nil {
+		delete(p.p, "securitygroupids")
+	}
+}
+
 func (p *AssignVirtualMachineParams) GetSecuritygroupids() ([]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -492,6 +568,12 @@ func (p *AssignVirtualMachineParams) SetVirtualmachineid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["virtualmachineid"] = v
+}
+
+func (p *AssignVirtualMachineParams) ResetVirtualmachineid() {
+	if p.p != nil && p.p["virtualmachineid"] != nil {
+		delete(p.p, "virtualmachineid")
+	}
 }
 
 func (p *AssignVirtualMachineParams) GetVirtualmachineid() (string, bool) {
@@ -529,6 +611,8 @@ func (s *VirtualMachineService) AssignVirtualMachine(p *AssignVirtualMachinePara
 type AssignVirtualMachineResponse struct {
 	Account               string                                      `json:"account"`
 	Affinitygroup         []AssignVirtualMachineResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                                      `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                                      `json:"autoscalevmgroupname"`
 	Backupofferingid      string                                      `json:"backupofferingid"`
 	Backupofferingname    string                                      `json:"backupofferingname"`
 	Bootmode              string                                      `json:"bootmode"`
@@ -554,10 +638,11 @@ type AssignVirtualMachineResponse struct {
 	Guestosid             string                                      `json:"guestosid"`
 	Haenable              bool                                        `json:"haenable"`
 	Hasannotations        bool                                        `json:"hasannotations"`
+	Hostcontrolstate      string                                      `json:"hostcontrolstate"`
 	Hostid                string                                      `json:"hostid"`
 	Hostname              string                                      `json:"hostname"`
 	Hypervisor            string                                      `json:"hypervisor"`
-	Icon                  string                                      `json:"icon"`
+	Icon                  interface{}                                 `json:"icon"`
 	Id                    string                                      `json:"id"`
 	Instancename          string                                      `json:"instancename"`
 	Isdynamicallyscalable bool                                        `json:"isdynamicallyscalable"`
@@ -566,7 +651,7 @@ type AssignVirtualMachineResponse struct {
 	Isoname               string                                      `json:"isoname"`
 	JobID                 string                                      `json:"jobid"`
 	Jobstatus             int                                         `json:"jobstatus"`
-	Keypair               string                                      `json:"keypair"`
+	Keypairs              string                                      `json:"keypairs"`
 	Lastupdated           string                                      `json:"lastupdated"`
 	Memory                int                                         `json:"memory"`
 	Memoryintfreekbs      int64                                       `json:"memoryintfreekbs"`
@@ -599,9 +684,17 @@ type AssignVirtualMachineResponse struct {
 	Templatedisplaytext   string                                      `json:"templatedisplaytext"`
 	Templateid            string                                      `json:"templateid"`
 	Templatename          string                                      `json:"templatename"`
+	Templatetype          string                                      `json:"templatetype"`
+	Userdata              string                                      `json:"userdata"`
+	Userdatadetails       string                                      `json:"userdatadetails"`
+	Userdataid            string                                      `json:"userdataid"`
+	Userdataname          string                                      `json:"userdataname"`
+	Userdatapolicy        string                                      `json:"userdatapolicy"`
 	Userid                string                                      `json:"userid"`
 	Username              string                                      `json:"username"`
 	Vgpu                  string                                      `json:"vgpu"`
+	Vnfdetails            map[string]string                           `json:"vnfdetails"`
+	Vnfnics               []string                                    `json:"vnfnics"`
 	Zoneid                string                                      `json:"zoneid"`
 	Zonename              string                                      `json:"zonename"`
 }
@@ -684,6 +777,10 @@ func (p *ChangeServiceForVirtualMachineParams) toURLValues() url.Values {
 	if p.p == nil {
 		return u
 	}
+	if v, found := p.p["automigrate"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("automigrate", vv)
+	}
 	if v, found := p.p["details"]; found {
 		m := v.(map[string]string)
 		for i, k := range getSortedKeysFromMap(m) {
@@ -693,10 +790,43 @@ func (p *ChangeServiceForVirtualMachineParams) toURLValues() url.Values {
 	if v, found := p.p["id"]; found {
 		u.Set("id", v.(string))
 	}
+	if v, found := p.p["maxiops"]; found {
+		vv := strconv.FormatInt(v.(int64), 10)
+		u.Set("maxiops", vv)
+	}
+	if v, found := p.p["miniops"]; found {
+		vv := strconv.FormatInt(v.(int64), 10)
+		u.Set("miniops", vv)
+	}
 	if v, found := p.p["serviceofferingid"]; found {
 		u.Set("serviceofferingid", v.(string))
 	}
+	if v, found := p.p["shrinkok"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("shrinkok", vv)
+	}
 	return u
+}
+
+func (p *ChangeServiceForVirtualMachineParams) SetAutomigrate(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["automigrate"] = v
+}
+
+func (p *ChangeServiceForVirtualMachineParams) ResetAutomigrate() {
+	if p.p != nil && p.p["automigrate"] != nil {
+		delete(p.p, "automigrate")
+	}
+}
+
+func (p *ChangeServiceForVirtualMachineParams) GetAutomigrate() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["automigrate"].(bool)
+	return value, ok
 }
 
 func (p *ChangeServiceForVirtualMachineParams) SetDetails(v map[string]string) {
@@ -704,6 +834,12 @@ func (p *ChangeServiceForVirtualMachineParams) SetDetails(v map[string]string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["details"] = v
+}
+
+func (p *ChangeServiceForVirtualMachineParams) ResetDetails() {
+	if p.p != nil && p.p["details"] != nil {
+		delete(p.p, "details")
+	}
 }
 
 func (p *ChangeServiceForVirtualMachineParams) GetDetails() (map[string]string, bool) {
@@ -721,11 +857,59 @@ func (p *ChangeServiceForVirtualMachineParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ChangeServiceForVirtualMachineParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *ChangeServiceForVirtualMachineParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+func (p *ChangeServiceForVirtualMachineParams) SetMaxiops(v int64) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["maxiops"] = v
+}
+
+func (p *ChangeServiceForVirtualMachineParams) ResetMaxiops() {
+	if p.p != nil && p.p["maxiops"] != nil {
+		delete(p.p, "maxiops")
+	}
+}
+
+func (p *ChangeServiceForVirtualMachineParams) GetMaxiops() (int64, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["maxiops"].(int64)
+	return value, ok
+}
+
+func (p *ChangeServiceForVirtualMachineParams) SetMiniops(v int64) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["miniops"] = v
+}
+
+func (p *ChangeServiceForVirtualMachineParams) ResetMiniops() {
+	if p.p != nil && p.p["miniops"] != nil {
+		delete(p.p, "miniops")
+	}
+}
+
+func (p *ChangeServiceForVirtualMachineParams) GetMiniops() (int64, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["miniops"].(int64)
 	return value, ok
 }
 
@@ -736,11 +920,38 @@ func (p *ChangeServiceForVirtualMachineParams) SetServiceofferingid(v string) {
 	p.p["serviceofferingid"] = v
 }
 
+func (p *ChangeServiceForVirtualMachineParams) ResetServiceofferingid() {
+	if p.p != nil && p.p["serviceofferingid"] != nil {
+		delete(p.p, "serviceofferingid")
+	}
+}
+
 func (p *ChangeServiceForVirtualMachineParams) GetServiceofferingid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["serviceofferingid"].(string)
+	return value, ok
+}
+
+func (p *ChangeServiceForVirtualMachineParams) SetShrinkok(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["shrinkok"] = v
+}
+
+func (p *ChangeServiceForVirtualMachineParams) ResetShrinkok() {
+	if p.p != nil && p.p["shrinkok"] != nil {
+		delete(p.p, "shrinkok")
+	}
+}
+
+func (p *ChangeServiceForVirtualMachineParams) GetShrinkok() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["shrinkok"].(bool)
 	return value, ok
 }
 
@@ -754,7 +965,7 @@ func (s *VirtualMachineService) NewChangeServiceForVirtualMachineParams(id strin
 	return p
 }
 
-// Changes the service offering for a virtual machine. The virtual machine must be in a "Stopped" state for this command to take effect. Note that it only changes the VM's compute offering and it does not update the root volume offering. If the Service Offering has a root disk size the volume will be resized only if using API command 'scaleVirtualMachine'.
+// (This API is deprecated, use scaleVirtualMachine API)Changes the service offering for a virtual machine. The virtual machine must be in a "Stopped" state for this command to take effect.
 func (s *VirtualMachineService) ChangeServiceForVirtualMachine(p *ChangeServiceForVirtualMachineParams) (*ChangeServiceForVirtualMachineResponse, error) {
 	resp, err := s.cs.newRequest("changeServiceForVirtualMachine", p.toURLValues())
 	if err != nil {
@@ -772,6 +983,8 @@ func (s *VirtualMachineService) ChangeServiceForVirtualMachine(p *ChangeServiceF
 type ChangeServiceForVirtualMachineResponse struct {
 	Account               string                                                `json:"account"`
 	Affinitygroup         []ChangeServiceForVirtualMachineResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                                                `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                                                `json:"autoscalevmgroupname"`
 	Backupofferingid      string                                                `json:"backupofferingid"`
 	Backupofferingname    string                                                `json:"backupofferingname"`
 	Bootmode              string                                                `json:"bootmode"`
@@ -797,10 +1010,11 @@ type ChangeServiceForVirtualMachineResponse struct {
 	Guestosid             string                                                `json:"guestosid"`
 	Haenable              bool                                                  `json:"haenable"`
 	Hasannotations        bool                                                  `json:"hasannotations"`
+	Hostcontrolstate      string                                                `json:"hostcontrolstate"`
 	Hostid                string                                                `json:"hostid"`
 	Hostname              string                                                `json:"hostname"`
 	Hypervisor            string                                                `json:"hypervisor"`
-	Icon                  string                                                `json:"icon"`
+	Icon                  interface{}                                           `json:"icon"`
 	Id                    string                                                `json:"id"`
 	Instancename          string                                                `json:"instancename"`
 	Isdynamicallyscalable bool                                                  `json:"isdynamicallyscalable"`
@@ -809,7 +1023,7 @@ type ChangeServiceForVirtualMachineResponse struct {
 	Isoname               string                                                `json:"isoname"`
 	JobID                 string                                                `json:"jobid"`
 	Jobstatus             int                                                   `json:"jobstatus"`
-	Keypair               string                                                `json:"keypair"`
+	Keypairs              string                                                `json:"keypairs"`
 	Lastupdated           string                                                `json:"lastupdated"`
 	Memory                int                                                   `json:"memory"`
 	Memoryintfreekbs      int64                                                 `json:"memoryintfreekbs"`
@@ -842,9 +1056,17 @@ type ChangeServiceForVirtualMachineResponse struct {
 	Templatedisplaytext   string                                                `json:"templatedisplaytext"`
 	Templateid            string                                                `json:"templateid"`
 	Templatename          string                                                `json:"templatename"`
+	Templatetype          string                                                `json:"templatetype"`
+	Userdata              string                                                `json:"userdata"`
+	Userdatadetails       string                                                `json:"userdatadetails"`
+	Userdataid            string                                                `json:"userdataid"`
+	Userdataname          string                                                `json:"userdataname"`
+	Userdatapolicy        string                                                `json:"userdatapolicy"`
 	Userid                string                                                `json:"userid"`
 	Username              string                                                `json:"username"`
 	Vgpu                  string                                                `json:"vgpu"`
+	Vnfdetails            map[string]string                                     `json:"vnfdetails"`
+	Vnfnics               []string                                              `json:"vnfnics"`
 	Zoneid                string                                                `json:"zoneid"`
 	Zonename              string                                                `json:"zonename"`
 }
@@ -1068,6 +1290,13 @@ func (p *DeployVirtualMachineParams) toURLValues() url.Values {
 	if v, found := p.p["hypervisor"]; found {
 		u.Set("hypervisor", v.(string))
 	}
+	if v, found := p.p["iodriverpolicy"]; found {
+		u.Set("iodriverpolicy", v.(string))
+	}
+	if v, found := p.p["iothreadsenabled"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("iothreadsenabled", vv)
+	}
 	if v, found := p.p["ip6address"]; found {
 		u.Set("ip6address", v.(string))
 	}
@@ -1088,6 +1317,10 @@ func (p *DeployVirtualMachineParams) toURLValues() url.Values {
 	if v, found := p.p["keypair"]; found {
 		u.Set("keypair", v.(string))
 	}
+	if v, found := p.p["keypairs"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("keypairs", vv)
+	}
 	if v, found := p.p["macaddress"]; found {
 		u.Set("macaddress", v.(string))
 	}
@@ -1098,6 +1331,10 @@ func (p *DeployVirtualMachineParams) toURLValues() url.Values {
 		vv := strings.Join(v.([]string), ",")
 		u.Set("networkids", vv)
 	}
+	if v, found := p.p["nicmultiqueuenumber"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("nicmultiqueuenumber", vv)
+	}
 	if v, found := p.p["nicnetworklist"]; found {
 		l := v.([]map[string]string)
 		for i, m := range l {
@@ -1105,6 +1342,16 @@ func (p *DeployVirtualMachineParams) toURLValues() url.Values {
 				u.Set(fmt.Sprintf("nicnetworklist[%d].%s", i, key), val)
 			}
 		}
+	}
+	if v, found := p.p["nicpackedvirtqueuesenabled"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("nicpackedvirtqueuesenabled", vv)
+	}
+	if v, found := p.p["overridediskofferingid"]; found {
+		u.Set("overridediskofferingid", v.(string))
+	}
+	if v, found := p.p["password"]; found {
+		u.Set("password", v.(string))
 	}
 	if v, found := p.p["podid"]; found {
 		u.Set("podid", v.(string))
@@ -1148,6 +1395,16 @@ func (p *DeployVirtualMachineParams) toURLValues() url.Values {
 	if v, found := p.p["userdata"]; found {
 		u.Set("userdata", v.(string))
 	}
+	if v, found := p.p["userdatadetails"]; found {
+		m := v.(map[string]string)
+		for i, k := range getSortedKeysFromMap(m) {
+			u.Set(fmt.Sprintf("userdatadetails[%d].key", i), k)
+			u.Set(fmt.Sprintf("userdatadetails[%d].value", i), m[k])
+		}
+	}
+	if v, found := p.p["userdataid"]; found {
+		u.Set("userdataid", v.(string))
+	}
 	if v, found := p.p["zoneid"]; found {
 		u.Set("zoneid", v.(string))
 	}
@@ -1159,6 +1416,12 @@ func (p *DeployVirtualMachineParams) SetAccount(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["account"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
 }
 
 func (p *DeployVirtualMachineParams) GetAccount() (string, bool) {
@@ -1176,6 +1439,12 @@ func (p *DeployVirtualMachineParams) SetAffinitygroupids(v []string) {
 	p.p["affinitygroupids"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetAffinitygroupids() {
+	if p.p != nil && p.p["affinitygroupids"] != nil {
+		delete(p.p, "affinitygroupids")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetAffinitygroupids() ([]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1189,6 +1458,12 @@ func (p *DeployVirtualMachineParams) SetAffinitygroupnames(v []string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["affinitygroupnames"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetAffinitygroupnames() {
+	if p.p != nil && p.p["affinitygroupnames"] != nil {
+		delete(p.p, "affinitygroupnames")
+	}
 }
 
 func (p *DeployVirtualMachineParams) GetAffinitygroupnames() ([]string, bool) {
@@ -1206,6 +1481,12 @@ func (p *DeployVirtualMachineParams) SetBootintosetup(v bool) {
 	p.p["bootintosetup"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetBootintosetup() {
+	if p.p != nil && p.p["bootintosetup"] != nil {
+		delete(p.p, "bootintosetup")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetBootintosetup() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1219,6 +1500,12 @@ func (p *DeployVirtualMachineParams) SetBootmode(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["bootmode"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetBootmode() {
+	if p.p != nil && p.p["bootmode"] != nil {
+		delete(p.p, "bootmode")
+	}
 }
 
 func (p *DeployVirtualMachineParams) GetBootmode() (string, bool) {
@@ -1236,6 +1523,12 @@ func (p *DeployVirtualMachineParams) SetBoottype(v string) {
 	p.p["boottype"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetBoottype() {
+	if p.p != nil && p.p["boottype"] != nil {
+		delete(p.p, "boottype")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetBoottype() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1249,6 +1542,12 @@ func (p *DeployVirtualMachineParams) SetClusterid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["clusterid"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetClusterid() {
+	if p.p != nil && p.p["clusterid"] != nil {
+		delete(p.p, "clusterid")
+	}
 }
 
 func (p *DeployVirtualMachineParams) GetClusterid() (string, bool) {
@@ -1266,6 +1565,12 @@ func (p *DeployVirtualMachineParams) SetCopyimagetags(v bool) {
 	p.p["copyimagetags"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetCopyimagetags() {
+	if p.p != nil && p.p["copyimagetags"] != nil {
+		delete(p.p, "copyimagetags")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetCopyimagetags() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1279,6 +1584,12 @@ func (p *DeployVirtualMachineParams) SetCustomid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["customid"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetCustomid() {
+	if p.p != nil && p.p["customid"] != nil {
+		delete(p.p, "customid")
+	}
 }
 
 func (p *DeployVirtualMachineParams) GetCustomid() (string, bool) {
@@ -1296,6 +1607,12 @@ func (p *DeployVirtualMachineParams) SetDatadiskofferinglist(v map[string]string
 	p.p["datadiskofferinglist"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetDatadiskofferinglist() {
+	if p.p != nil && p.p["datadiskofferinglist"] != nil {
+		delete(p.p, "datadiskofferinglist")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetDatadiskofferinglist() (map[string]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1309,6 +1626,12 @@ func (p *DeployVirtualMachineParams) SetDeploymentplanner(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["deploymentplanner"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetDeploymentplanner() {
+	if p.p != nil && p.p["deploymentplanner"] != nil {
+		delete(p.p, "deploymentplanner")
+	}
 }
 
 func (p *DeployVirtualMachineParams) GetDeploymentplanner() (string, bool) {
@@ -1326,6 +1649,12 @@ func (p *DeployVirtualMachineParams) SetDetails(v map[string]string) {
 	p.p["details"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetDetails() {
+	if p.p != nil && p.p["details"] != nil {
+		delete(p.p, "details")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetDetails() (map[string]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1339,6 +1668,12 @@ func (p *DeployVirtualMachineParams) SetDhcpoptionsnetworklist(v []map[string]st
 		p.p = make(map[string]interface{})
 	}
 	p.p["dhcpoptionsnetworklist"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetDhcpoptionsnetworklist() {
+	if p.p != nil && p.p["dhcpoptionsnetworklist"] != nil {
+		delete(p.p, "dhcpoptionsnetworklist")
+	}
 }
 
 func (p *DeployVirtualMachineParams) GetDhcpoptionsnetworklist() ([]map[string]string, bool) {
@@ -1370,6 +1705,12 @@ func (p *DeployVirtualMachineParams) SetDiskofferingid(v string) {
 	p.p["diskofferingid"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetDiskofferingid() {
+	if p.p != nil && p.p["diskofferingid"] != nil {
+		delete(p.p, "diskofferingid")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetDiskofferingid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1383,6 +1724,12 @@ func (p *DeployVirtualMachineParams) SetDisplayname(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["displayname"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetDisplayname() {
+	if p.p != nil && p.p["displayname"] != nil {
+		delete(p.p, "displayname")
+	}
 }
 
 func (p *DeployVirtualMachineParams) GetDisplayname() (string, bool) {
@@ -1400,6 +1747,12 @@ func (p *DeployVirtualMachineParams) SetDisplayvm(v bool) {
 	p.p["displayvm"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetDisplayvm() {
+	if p.p != nil && p.p["displayvm"] != nil {
+		delete(p.p, "displayvm")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetDisplayvm() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1413,6 +1766,12 @@ func (p *DeployVirtualMachineParams) SetDomainid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *DeployVirtualMachineParams) GetDomainid() (string, bool) {
@@ -1430,6 +1789,12 @@ func (p *DeployVirtualMachineParams) SetDynamicscalingenabled(v bool) {
 	p.p["dynamicscalingenabled"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetDynamicscalingenabled() {
+	if p.p != nil && p.p["dynamicscalingenabled"] != nil {
+		delete(p.p, "dynamicscalingenabled")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetDynamicscalingenabled() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1443,6 +1808,12 @@ func (p *DeployVirtualMachineParams) SetExtraconfig(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["extraconfig"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetExtraconfig() {
+	if p.p != nil && p.p["extraconfig"] != nil {
+		delete(p.p, "extraconfig")
+	}
 }
 
 func (p *DeployVirtualMachineParams) GetExtraconfig() (string, bool) {
@@ -1460,6 +1831,12 @@ func (p *DeployVirtualMachineParams) SetGroup(v string) {
 	p.p["group"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetGroup() {
+	if p.p != nil && p.p["group"] != nil {
+		delete(p.p, "group")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetGroup() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1473,6 +1850,12 @@ func (p *DeployVirtualMachineParams) SetHostid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["hostid"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetHostid() {
+	if p.p != nil && p.p["hostid"] != nil {
+		delete(p.p, "hostid")
+	}
 }
 
 func (p *DeployVirtualMachineParams) GetHostid() (string, bool) {
@@ -1490,6 +1873,12 @@ func (p *DeployVirtualMachineParams) SetHypervisor(v string) {
 	p.p["hypervisor"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetHypervisor() {
+	if p.p != nil && p.p["hypervisor"] != nil {
+		delete(p.p, "hypervisor")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetHypervisor() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1498,11 +1887,59 @@ func (p *DeployVirtualMachineParams) GetHypervisor() (string, bool) {
 	return value, ok
 }
 
+func (p *DeployVirtualMachineParams) SetIodriverpolicy(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["iodriverpolicy"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetIodriverpolicy() {
+	if p.p != nil && p.p["iodriverpolicy"] != nil {
+		delete(p.p, "iodriverpolicy")
+	}
+}
+
+func (p *DeployVirtualMachineParams) GetIodriverpolicy() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["iodriverpolicy"].(string)
+	return value, ok
+}
+
+func (p *DeployVirtualMachineParams) SetIothreadsenabled(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["iothreadsenabled"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetIothreadsenabled() {
+	if p.p != nil && p.p["iothreadsenabled"] != nil {
+		delete(p.p, "iothreadsenabled")
+	}
+}
+
+func (p *DeployVirtualMachineParams) GetIothreadsenabled() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["iothreadsenabled"].(bool)
+	return value, ok
+}
+
 func (p *DeployVirtualMachineParams) SetIp6address(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["ip6address"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetIp6address() {
+	if p.p != nil && p.p["ip6address"] != nil {
+		delete(p.p, "ip6address")
+	}
 }
 
 func (p *DeployVirtualMachineParams) GetIp6address() (string, bool) {
@@ -1520,6 +1957,12 @@ func (p *DeployVirtualMachineParams) SetIpaddress(v string) {
 	p.p["ipaddress"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetIpaddress() {
+	if p.p != nil && p.p["ipaddress"] != nil {
+		delete(p.p, "ipaddress")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetIpaddress() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1533,6 +1976,12 @@ func (p *DeployVirtualMachineParams) SetIptonetworklist(v []map[string]string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["iptonetworklist"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetIptonetworklist() {
+	if p.p != nil && p.p["iptonetworklist"] != nil {
+		delete(p.p, "iptonetworklist")
+	}
 }
 
 func (p *DeployVirtualMachineParams) GetIptonetworklist() ([]map[string]string, bool) {
@@ -1564,6 +2013,12 @@ func (p *DeployVirtualMachineParams) SetKeyboard(v string) {
 	p.p["keyboard"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetKeyboard() {
+	if p.p != nil && p.p["keyboard"] != nil {
+		delete(p.p, "keyboard")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetKeyboard() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1579,6 +2034,12 @@ func (p *DeployVirtualMachineParams) SetKeypair(v string) {
 	p.p["keypair"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetKeypair() {
+	if p.p != nil && p.p["keypair"] != nil {
+		delete(p.p, "keypair")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetKeypair() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1587,11 +2048,38 @@ func (p *DeployVirtualMachineParams) GetKeypair() (string, bool) {
 	return value, ok
 }
 
+func (p *DeployVirtualMachineParams) SetKeypairs(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["keypairs"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetKeypairs() {
+	if p.p != nil && p.p["keypairs"] != nil {
+		delete(p.p, "keypairs")
+	}
+}
+
+func (p *DeployVirtualMachineParams) GetKeypairs() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["keypairs"].([]string)
+	return value, ok
+}
+
 func (p *DeployVirtualMachineParams) SetMacaddress(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["macaddress"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetMacaddress() {
+	if p.p != nil && p.p["macaddress"] != nil {
+		delete(p.p, "macaddress")
+	}
 }
 
 func (p *DeployVirtualMachineParams) GetMacaddress() (string, bool) {
@@ -1609,6 +2097,12 @@ func (p *DeployVirtualMachineParams) SetName(v string) {
 	p.p["name"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetName() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1624,6 +2118,12 @@ func (p *DeployVirtualMachineParams) SetNetworkids(v []string) {
 	p.p["networkids"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetNetworkids() {
+	if p.p != nil && p.p["networkids"] != nil {
+		delete(p.p, "networkids")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetNetworkids() ([]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1632,11 +2132,38 @@ func (p *DeployVirtualMachineParams) GetNetworkids() ([]string, bool) {
 	return value, ok
 }
 
+func (p *DeployVirtualMachineParams) SetNicmultiqueuenumber(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["nicmultiqueuenumber"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetNicmultiqueuenumber() {
+	if p.p != nil && p.p["nicmultiqueuenumber"] != nil {
+		delete(p.p, "nicmultiqueuenumber")
+	}
+}
+
+func (p *DeployVirtualMachineParams) GetNicmultiqueuenumber() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["nicmultiqueuenumber"].(int)
+	return value, ok
+}
+
 func (p *DeployVirtualMachineParams) SetNicnetworklist(v []map[string]string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["nicnetworklist"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetNicnetworklist() {
+	if p.p != nil && p.p["nicnetworklist"] != nil {
+		delete(p.p, "nicnetworklist")
+	}
 }
 
 func (p *DeployVirtualMachineParams) GetNicnetworklist() ([]map[string]string, bool) {
@@ -1661,11 +2188,80 @@ func (p *DeployVirtualMachineParams) AddNicnetworklist(item map[string]string) {
 	p.p["nicnetworklist"] = l
 }
 
+func (p *DeployVirtualMachineParams) SetNicpackedvirtqueuesenabled(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["nicpackedvirtqueuesenabled"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetNicpackedvirtqueuesenabled() {
+	if p.p != nil && p.p["nicpackedvirtqueuesenabled"] != nil {
+		delete(p.p, "nicpackedvirtqueuesenabled")
+	}
+}
+
+func (p *DeployVirtualMachineParams) GetNicpackedvirtqueuesenabled() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["nicpackedvirtqueuesenabled"].(bool)
+	return value, ok
+}
+
+func (p *DeployVirtualMachineParams) SetOverridediskofferingid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["overridediskofferingid"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetOverridediskofferingid() {
+	if p.p != nil && p.p["overridediskofferingid"] != nil {
+		delete(p.p, "overridediskofferingid")
+	}
+}
+
+func (p *DeployVirtualMachineParams) GetOverridediskofferingid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["overridediskofferingid"].(string)
+	return value, ok
+}
+
+func (p *DeployVirtualMachineParams) SetPassword(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["password"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetPassword() {
+	if p.p != nil && p.p["password"] != nil {
+		delete(p.p, "password")
+	}
+}
+
+func (p *DeployVirtualMachineParams) GetPassword() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["password"].(string)
+	return value, ok
+}
+
 func (p *DeployVirtualMachineParams) SetPodid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["podid"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetPodid() {
+	if p.p != nil && p.p["podid"] != nil {
+		delete(p.p, "podid")
+	}
 }
 
 func (p *DeployVirtualMachineParams) GetPodid() (string, bool) {
@@ -1683,6 +2279,12 @@ func (p *DeployVirtualMachineParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetProjectid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1696,6 +2298,12 @@ func (p *DeployVirtualMachineParams) SetProperties(v map[string]string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["properties"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetProperties() {
+	if p.p != nil && p.p["properties"] != nil {
+		delete(p.p, "properties")
+	}
 }
 
 func (p *DeployVirtualMachineParams) GetProperties() (map[string]string, bool) {
@@ -1713,6 +2321,12 @@ func (p *DeployVirtualMachineParams) SetRootdisksize(v int64) {
 	p.p["rootdisksize"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetRootdisksize() {
+	if p.p != nil && p.p["rootdisksize"] != nil {
+		delete(p.p, "rootdisksize")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetRootdisksize() (int64, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1726,6 +2340,12 @@ func (p *DeployVirtualMachineParams) SetSecuritygroupids(v []string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["securitygroupids"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetSecuritygroupids() {
+	if p.p != nil && p.p["securitygroupids"] != nil {
+		delete(p.p, "securitygroupids")
+	}
 }
 
 func (p *DeployVirtualMachineParams) GetSecuritygroupids() ([]string, bool) {
@@ -1743,6 +2363,12 @@ func (p *DeployVirtualMachineParams) SetSecuritygroupnames(v []string) {
 	p.p["securitygroupnames"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetSecuritygroupnames() {
+	if p.p != nil && p.p["securitygroupnames"] != nil {
+		delete(p.p, "securitygroupnames")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetSecuritygroupnames() ([]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1756,6 +2382,12 @@ func (p *DeployVirtualMachineParams) SetServiceofferingid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["serviceofferingid"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetServiceofferingid() {
+	if p.p != nil && p.p["serviceofferingid"] != nil {
+		delete(p.p, "serviceofferingid")
+	}
 }
 
 func (p *DeployVirtualMachineParams) GetServiceofferingid() (string, bool) {
@@ -1773,6 +2405,12 @@ func (p *DeployVirtualMachineParams) SetSize(v int64) {
 	p.p["size"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetSize() {
+	if p.p != nil && p.p["size"] != nil {
+		delete(p.p, "size")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetSize() (int64, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1786,6 +2424,12 @@ func (p *DeployVirtualMachineParams) SetStartvm(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["startvm"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetStartvm() {
+	if p.p != nil && p.p["startvm"] != nil {
+		delete(p.p, "startvm")
+	}
 }
 
 func (p *DeployVirtualMachineParams) GetStartvm() (bool, bool) {
@@ -1803,6 +2447,12 @@ func (p *DeployVirtualMachineParams) SetTemplateid(v string) {
 	p.p["templateid"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetTemplateid() {
+	if p.p != nil && p.p["templateid"] != nil {
+		delete(p.p, "templateid")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetTemplateid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1818,6 +2468,12 @@ func (p *DeployVirtualMachineParams) SetUserdata(v string) {
 	p.p["userdata"] = v
 }
 
+func (p *DeployVirtualMachineParams) ResetUserdata() {
+	if p.p != nil && p.p["userdata"] != nil {
+		delete(p.p, "userdata")
+	}
+}
+
 func (p *DeployVirtualMachineParams) GetUserdata() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -1826,11 +2482,59 @@ func (p *DeployVirtualMachineParams) GetUserdata() (string, bool) {
 	return value, ok
 }
 
+func (p *DeployVirtualMachineParams) SetUserdatadetails(v map[string]string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["userdatadetails"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetUserdatadetails() {
+	if p.p != nil && p.p["userdatadetails"] != nil {
+		delete(p.p, "userdatadetails")
+	}
+}
+
+func (p *DeployVirtualMachineParams) GetUserdatadetails() (map[string]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["userdatadetails"].(map[string]string)
+	return value, ok
+}
+
+func (p *DeployVirtualMachineParams) SetUserdataid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["userdataid"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetUserdataid() {
+	if p.p != nil && p.p["userdataid"] != nil {
+		delete(p.p, "userdataid")
+	}
+}
+
+func (p *DeployVirtualMachineParams) GetUserdataid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["userdataid"].(string)
+	return value, ok
+}
+
 func (p *DeployVirtualMachineParams) SetZoneid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *DeployVirtualMachineParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *DeployVirtualMachineParams) GetZoneid() (string, bool) {
@@ -1854,7 +2558,7 @@ func (s *VirtualMachineService) NewDeployVirtualMachineParams(serviceofferingid 
 
 // Creates and automatically starts a virtual machine based on a service offering, disk offering, and template.
 func (s *VirtualMachineService) DeployVirtualMachine(p *DeployVirtualMachineParams) (*DeployVirtualMachineResponse, error) {
-	resp, err := s.cs.newRequest("deployVirtualMachine", p.toURLValues())
+	resp, err := s.cs.newPostRequest("deployVirtualMachine", p.toURLValues())
 	if err != nil {
 		return nil, err
 	}
@@ -1890,6 +2594,8 @@ func (s *VirtualMachineService) DeployVirtualMachine(p *DeployVirtualMachinePara
 type DeployVirtualMachineResponse struct {
 	Account               string                                      `json:"account"`
 	Affinitygroup         []DeployVirtualMachineResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                                      `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                                      `json:"autoscalevmgroupname"`
 	Backupofferingid      string                                      `json:"backupofferingid"`
 	Backupofferingname    string                                      `json:"backupofferingname"`
 	Bootmode              string                                      `json:"bootmode"`
@@ -1915,10 +2621,11 @@ type DeployVirtualMachineResponse struct {
 	Guestosid             string                                      `json:"guestosid"`
 	Haenable              bool                                        `json:"haenable"`
 	Hasannotations        bool                                        `json:"hasannotations"`
+	Hostcontrolstate      string                                      `json:"hostcontrolstate"`
 	Hostid                string                                      `json:"hostid"`
 	Hostname              string                                      `json:"hostname"`
 	Hypervisor            string                                      `json:"hypervisor"`
-	Icon                  string                                      `json:"icon"`
+	Icon                  interface{}                                 `json:"icon"`
 	Id                    string                                      `json:"id"`
 	Instancename          string                                      `json:"instancename"`
 	Isdynamicallyscalable bool                                        `json:"isdynamicallyscalable"`
@@ -1927,7 +2634,7 @@ type DeployVirtualMachineResponse struct {
 	Isoname               string                                      `json:"isoname"`
 	JobID                 string                                      `json:"jobid"`
 	Jobstatus             int                                         `json:"jobstatus"`
-	Keypair               string                                      `json:"keypair"`
+	Keypairs              string                                      `json:"keypairs"`
 	Lastupdated           string                                      `json:"lastupdated"`
 	Memory                int                                         `json:"memory"`
 	Memoryintfreekbs      int64                                       `json:"memoryintfreekbs"`
@@ -1960,9 +2667,17 @@ type DeployVirtualMachineResponse struct {
 	Templatedisplaytext   string                                      `json:"templatedisplaytext"`
 	Templateid            string                                      `json:"templateid"`
 	Templatename          string                                      `json:"templatename"`
+	Templatetype          string                                      `json:"templatetype"`
+	Userdata              string                                      `json:"userdata"`
+	Userdatadetails       string                                      `json:"userdatadetails"`
+	Userdataid            string                                      `json:"userdataid"`
+	Userdataname          string                                      `json:"userdataname"`
+	Userdatapolicy        string                                      `json:"userdatapolicy"`
 	Userid                string                                      `json:"userid"`
 	Username              string                                      `json:"username"`
 	Vgpu                  string                                      `json:"vgpu"`
+	Vnfdetails            map[string]string                           `json:"vnfdetails"`
+	Vnfnics               []string                                    `json:"vnfnics"`
 	Zoneid                string                                      `json:"zoneid"`
 	Zonename              string                                      `json:"zonename"`
 }
@@ -2066,6 +2781,12 @@ func (p *DestroyVirtualMachineParams) SetExpunge(v bool) {
 	p.p["expunge"] = v
 }
 
+func (p *DestroyVirtualMachineParams) ResetExpunge() {
+	if p.p != nil && p.p["expunge"] != nil {
+		delete(p.p, "expunge")
+	}
+}
+
 func (p *DestroyVirtualMachineParams) GetExpunge() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2081,6 +2802,12 @@ func (p *DestroyVirtualMachineParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *DestroyVirtualMachineParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *DestroyVirtualMachineParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2094,6 +2821,12 @@ func (p *DestroyVirtualMachineParams) SetVolumeids(v []string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["volumeids"] = v
+}
+
+func (p *DestroyVirtualMachineParams) ResetVolumeids() {
+	if p.p != nil && p.p["volumeids"] != nil {
+		delete(p.p, "volumeids")
+	}
 }
 
 func (p *DestroyVirtualMachineParams) GetVolumeids() ([]string, bool) {
@@ -2151,6 +2884,8 @@ func (s *VirtualMachineService) DestroyVirtualMachine(p *DestroyVirtualMachinePa
 type DestroyVirtualMachineResponse struct {
 	Account               string                                       `json:"account"`
 	Affinitygroup         []DestroyVirtualMachineResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                                       `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                                       `json:"autoscalevmgroupname"`
 	Backupofferingid      string                                       `json:"backupofferingid"`
 	Backupofferingname    string                                       `json:"backupofferingname"`
 	Bootmode              string                                       `json:"bootmode"`
@@ -2176,10 +2911,11 @@ type DestroyVirtualMachineResponse struct {
 	Guestosid             string                                       `json:"guestosid"`
 	Haenable              bool                                         `json:"haenable"`
 	Hasannotations        bool                                         `json:"hasannotations"`
+	Hostcontrolstate      string                                       `json:"hostcontrolstate"`
 	Hostid                string                                       `json:"hostid"`
 	Hostname              string                                       `json:"hostname"`
 	Hypervisor            string                                       `json:"hypervisor"`
-	Icon                  string                                       `json:"icon"`
+	Icon                  interface{}                                  `json:"icon"`
 	Id                    string                                       `json:"id"`
 	Instancename          string                                       `json:"instancename"`
 	Isdynamicallyscalable bool                                         `json:"isdynamicallyscalable"`
@@ -2188,7 +2924,7 @@ type DestroyVirtualMachineResponse struct {
 	Isoname               string                                       `json:"isoname"`
 	JobID                 string                                       `json:"jobid"`
 	Jobstatus             int                                          `json:"jobstatus"`
-	Keypair               string                                       `json:"keypair"`
+	Keypairs              string                                       `json:"keypairs"`
 	Lastupdated           string                                       `json:"lastupdated"`
 	Memory                int                                          `json:"memory"`
 	Memoryintfreekbs      int64                                        `json:"memoryintfreekbs"`
@@ -2221,9 +2957,17 @@ type DestroyVirtualMachineResponse struct {
 	Templatedisplaytext   string                                       `json:"templatedisplaytext"`
 	Templateid            string                                       `json:"templateid"`
 	Templatename          string                                       `json:"templatename"`
+	Templatetype          string                                       `json:"templatetype"`
+	Userdata              string                                       `json:"userdata"`
+	Userdatadetails       string                                       `json:"userdatadetails"`
+	Userdataid            string                                       `json:"userdataid"`
+	Userdataname          string                                       `json:"userdataname"`
+	Userdatapolicy        string                                       `json:"userdatapolicy"`
 	Userid                string                                       `json:"userid"`
 	Username              string                                       `json:"username"`
 	Vgpu                  string                                       `json:"vgpu"`
+	Vnfdetails            map[string]string                            `json:"vnfdetails"`
+	Vnfnics               []string                                     `json:"vnfnics"`
 	Zoneid                string                                       `json:"zoneid"`
 	Zonename              string                                       `json:"zonename"`
 }
@@ -2319,6 +3063,12 @@ func (p *ExpungeVirtualMachineParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ExpungeVirtualMachineParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *ExpungeVirtualMachineParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2395,6 +3145,12 @@ func (p *GetVMPasswordParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *GetVMPasswordParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *GetVMPasswordParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2445,8 +3201,18 @@ func (p *ListVirtualMachinesParams) toURLValues() url.Values {
 	if v, found := p.p["account"]; found {
 		u.Set("account", v.(string))
 	}
+	if v, found := p.p["accumulate"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("accumulate", vv)
+	}
 	if v, found := p.p["affinitygroupid"]; found {
 		u.Set("affinitygroupid", v.(string))
+	}
+	if v, found := p.p["autoscalevmgroupid"]; found {
+		u.Set("autoscalevmgroupid", v.(string))
+	}
+	if v, found := p.p["backupofferingid"]; found {
+		u.Set("backupofferingid", v.(string))
 	}
 	if v, found := p.p["clusterid"]; found {
 		u.Set("clusterid", v.(string))
@@ -2476,9 +3242,6 @@ func (p *ListVirtualMachinesParams) toURLValues() url.Values {
 	if v, found := p.p["hostid"]; found {
 		u.Set("hostid", v.(string))
 	}
-	if v, found := p.p["hostid"]; found {
-		u.Set("hostid", v.(string))
-	}
 	if v, found := p.p["hypervisor"]; found {
 		u.Set("hypervisor", v.(string))
 	}
@@ -2495,6 +3258,10 @@ func (p *ListVirtualMachinesParams) toURLValues() url.Values {
 	if v, found := p.p["isrecursive"]; found {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("isrecursive", vv)
+	}
+	if v, found := p.p["isvnf"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("isvnf", vv)
 	}
 	if v, found := p.p["keypair"]; found {
 		u.Set("keypair", v.(string))
@@ -2523,11 +3290,12 @@ func (p *ListVirtualMachinesParams) toURLValues() url.Values {
 	if v, found := p.p["podid"]; found {
 		u.Set("podid", v.(string))
 	}
-	if v, found := p.p["podid"]; found {
-		u.Set("podid", v.(string))
-	}
 	if v, found := p.p["projectid"]; found {
 		u.Set("projectid", v.(string))
+	}
+	if v, found := p.p["retrieveonlyresourcecount"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("retrieveonlyresourcecount", vv)
 	}
 	if v, found := p.p["securitygroupid"]; found {
 		u.Set("securitygroupid", v.(string))
@@ -2545,9 +3313,6 @@ func (p *ListVirtualMachinesParams) toURLValues() url.Values {
 	if v, found := p.p["storageid"]; found {
 		u.Set("storageid", v.(string))
 	}
-	if v, found := p.p["storageid"]; found {
-		u.Set("storageid", v.(string))
-	}
 	if v, found := p.p["tags"]; found {
 		m := v.(map[string]string)
 		for i, k := range getSortedKeysFromMap(m) {
@@ -2557,6 +3322,10 @@ func (p *ListVirtualMachinesParams) toURLValues() url.Values {
 	}
 	if v, found := p.p["templateid"]; found {
 		u.Set("templateid", v.(string))
+	}
+	if v, found := p.p["userdata"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("userdata", vv)
 	}
 	if v, found := p.p["userid"]; found {
 		u.Set("userid", v.(string))
@@ -2577,11 +3346,38 @@ func (p *ListVirtualMachinesParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *ListVirtualMachinesParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *ListVirtualMachinesParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["account"].(string)
+	return value, ok
+}
+
+func (p *ListVirtualMachinesParams) SetAccumulate(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["accumulate"] = v
+}
+
+func (p *ListVirtualMachinesParams) ResetAccumulate() {
+	if p.p != nil && p.p["accumulate"] != nil {
+		delete(p.p, "accumulate")
+	}
+}
+
+func (p *ListVirtualMachinesParams) GetAccumulate() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["accumulate"].(bool)
 	return value, ok
 }
 
@@ -2592,6 +3388,12 @@ func (p *ListVirtualMachinesParams) SetAffinitygroupid(v string) {
 	p.p["affinitygroupid"] = v
 }
 
+func (p *ListVirtualMachinesParams) ResetAffinitygroupid() {
+	if p.p != nil && p.p["affinitygroupid"] != nil {
+		delete(p.p, "affinitygroupid")
+	}
+}
+
 func (p *ListVirtualMachinesParams) GetAffinitygroupid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2600,11 +3402,59 @@ func (p *ListVirtualMachinesParams) GetAffinitygroupid() (string, bool) {
 	return value, ok
 }
 
+func (p *ListVirtualMachinesParams) SetAutoscalevmgroupid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["autoscalevmgroupid"] = v
+}
+
+func (p *ListVirtualMachinesParams) ResetAutoscalevmgroupid() {
+	if p.p != nil && p.p["autoscalevmgroupid"] != nil {
+		delete(p.p, "autoscalevmgroupid")
+	}
+}
+
+func (p *ListVirtualMachinesParams) GetAutoscalevmgroupid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["autoscalevmgroupid"].(string)
+	return value, ok
+}
+
+func (p *ListVirtualMachinesParams) SetBackupofferingid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["backupofferingid"] = v
+}
+
+func (p *ListVirtualMachinesParams) ResetBackupofferingid() {
+	if p.p != nil && p.p["backupofferingid"] != nil {
+		delete(p.p, "backupofferingid")
+	}
+}
+
+func (p *ListVirtualMachinesParams) GetBackupofferingid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["backupofferingid"].(string)
+	return value, ok
+}
+
 func (p *ListVirtualMachinesParams) SetClusterid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["clusterid"] = v
+}
+
+func (p *ListVirtualMachinesParams) ResetClusterid() {
+	if p.p != nil && p.p["clusterid"] != nil {
+		delete(p.p, "clusterid")
+	}
 }
 
 func (p *ListVirtualMachinesParams) GetClusterid() (string, bool) {
@@ -2622,6 +3472,12 @@ func (p *ListVirtualMachinesParams) SetDetails(v []string) {
 	p.p["details"] = v
 }
 
+func (p *ListVirtualMachinesParams) ResetDetails() {
+	if p.p != nil && p.p["details"] != nil {
+		delete(p.p, "details")
+	}
+}
+
 func (p *ListVirtualMachinesParams) GetDetails() ([]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2635,6 +3491,12 @@ func (p *ListVirtualMachinesParams) SetDisplayvm(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["displayvm"] = v
+}
+
+func (p *ListVirtualMachinesParams) ResetDisplayvm() {
+	if p.p != nil && p.p["displayvm"] != nil {
+		delete(p.p, "displayvm")
+	}
 }
 
 func (p *ListVirtualMachinesParams) GetDisplayvm() (bool, bool) {
@@ -2652,6 +3514,12 @@ func (p *ListVirtualMachinesParams) SetDomainid(v string) {
 	p.p["domainid"] = v
 }
 
+func (p *ListVirtualMachinesParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
+}
+
 func (p *ListVirtualMachinesParams) GetDomainid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2665,6 +3533,12 @@ func (p *ListVirtualMachinesParams) SetForvirtualnetwork(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["forvirtualnetwork"] = v
+}
+
+func (p *ListVirtualMachinesParams) ResetForvirtualnetwork() {
+	if p.p != nil && p.p["forvirtualnetwork"] != nil {
+		delete(p.p, "forvirtualnetwork")
+	}
 }
 
 func (p *ListVirtualMachinesParams) GetForvirtualnetwork() (bool, bool) {
@@ -2682,6 +3556,12 @@ func (p *ListVirtualMachinesParams) SetGroupid(v string) {
 	p.p["groupid"] = v
 }
 
+func (p *ListVirtualMachinesParams) ResetGroupid() {
+	if p.p != nil && p.p["groupid"] != nil {
+		delete(p.p, "groupid")
+	}
+}
+
 func (p *ListVirtualMachinesParams) GetGroupid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2695,6 +3575,12 @@ func (p *ListVirtualMachinesParams) SetHaenable(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["haenable"] = v
+}
+
+func (p *ListVirtualMachinesParams) ResetHaenable() {
+	if p.p != nil && p.p["haenable"] != nil {
+		delete(p.p, "haenable")
+	}
 }
 
 func (p *ListVirtualMachinesParams) GetHaenable() (bool, bool) {
@@ -2712,6 +3598,12 @@ func (p *ListVirtualMachinesParams) SetHostid(v string) {
 	p.p["hostid"] = v
 }
 
+func (p *ListVirtualMachinesParams) ResetHostid() {
+	if p.p != nil && p.p["hostid"] != nil {
+		delete(p.p, "hostid")
+	}
+}
+
 func (p *ListVirtualMachinesParams) GetHostid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2725,6 +3617,12 @@ func (p *ListVirtualMachinesParams) SetHypervisor(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["hypervisor"] = v
+}
+
+func (p *ListVirtualMachinesParams) ResetHypervisor() {
+	if p.p != nil && p.p["hypervisor"] != nil {
+		delete(p.p, "hypervisor")
+	}
 }
 
 func (p *ListVirtualMachinesParams) GetHypervisor() (string, bool) {
@@ -2742,6 +3640,12 @@ func (p *ListVirtualMachinesParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ListVirtualMachinesParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *ListVirtualMachinesParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2755,6 +3659,12 @@ func (p *ListVirtualMachinesParams) SetIds(v []string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["ids"] = v
+}
+
+func (p *ListVirtualMachinesParams) ResetIds() {
+	if p.p != nil && p.p["ids"] != nil {
+		delete(p.p, "ids")
+	}
 }
 
 func (p *ListVirtualMachinesParams) GetIds() ([]string, bool) {
@@ -2772,6 +3682,12 @@ func (p *ListVirtualMachinesParams) SetIsoid(v string) {
 	p.p["isoid"] = v
 }
 
+func (p *ListVirtualMachinesParams) ResetIsoid() {
+	if p.p != nil && p.p["isoid"] != nil {
+		delete(p.p, "isoid")
+	}
+}
+
 func (p *ListVirtualMachinesParams) GetIsoid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2787,6 +3703,12 @@ func (p *ListVirtualMachinesParams) SetIsrecursive(v bool) {
 	p.p["isrecursive"] = v
 }
 
+func (p *ListVirtualMachinesParams) ResetIsrecursive() {
+	if p.p != nil && p.p["isrecursive"] != nil {
+		delete(p.p, "isrecursive")
+	}
+}
+
 func (p *ListVirtualMachinesParams) GetIsrecursive() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2795,11 +3717,38 @@ func (p *ListVirtualMachinesParams) GetIsrecursive() (bool, bool) {
 	return value, ok
 }
 
+func (p *ListVirtualMachinesParams) SetIsvnf(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["isvnf"] = v
+}
+
+func (p *ListVirtualMachinesParams) ResetIsvnf() {
+	if p.p != nil && p.p["isvnf"] != nil {
+		delete(p.p, "isvnf")
+	}
+}
+
+func (p *ListVirtualMachinesParams) GetIsvnf() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["isvnf"].(bool)
+	return value, ok
+}
+
 func (p *ListVirtualMachinesParams) SetKeypair(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["keypair"] = v
+}
+
+func (p *ListVirtualMachinesParams) ResetKeypair() {
+	if p.p != nil && p.p["keypair"] != nil {
+		delete(p.p, "keypair")
+	}
 }
 
 func (p *ListVirtualMachinesParams) GetKeypair() (string, bool) {
@@ -2817,6 +3766,12 @@ func (p *ListVirtualMachinesParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListVirtualMachinesParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *ListVirtualMachinesParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2830,6 +3785,12 @@ func (p *ListVirtualMachinesParams) SetListall(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["listall"] = v
+}
+
+func (p *ListVirtualMachinesParams) ResetListall() {
+	if p.p != nil && p.p["listall"] != nil {
+		delete(p.p, "listall")
+	}
 }
 
 func (p *ListVirtualMachinesParams) GetListall() (bool, bool) {
@@ -2847,6 +3808,12 @@ func (p *ListVirtualMachinesParams) SetName(v string) {
 	p.p["name"] = v
 }
 
+func (p *ListVirtualMachinesParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
+}
+
 func (p *ListVirtualMachinesParams) GetName() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2860,6 +3827,12 @@ func (p *ListVirtualMachinesParams) SetNetworkid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["networkid"] = v
+}
+
+func (p *ListVirtualMachinesParams) ResetNetworkid() {
+	if p.p != nil && p.p["networkid"] != nil {
+		delete(p.p, "networkid")
+	}
 }
 
 func (p *ListVirtualMachinesParams) GetNetworkid() (string, bool) {
@@ -2877,6 +3850,12 @@ func (p *ListVirtualMachinesParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListVirtualMachinesParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListVirtualMachinesParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2890,6 +3869,12 @@ func (p *ListVirtualMachinesParams) SetPagesize(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ListVirtualMachinesParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
 }
 
 func (p *ListVirtualMachinesParams) GetPagesize() (int, bool) {
@@ -2907,6 +3892,12 @@ func (p *ListVirtualMachinesParams) SetPodid(v string) {
 	p.p["podid"] = v
 }
 
+func (p *ListVirtualMachinesParams) ResetPodid() {
+	if p.p != nil && p.p["podid"] != nil {
+		delete(p.p, "podid")
+	}
+}
+
 func (p *ListVirtualMachinesParams) GetPodid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2922,6 +3913,12 @@ func (p *ListVirtualMachinesParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *ListVirtualMachinesParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
+}
+
 func (p *ListVirtualMachinesParams) GetProjectid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2930,11 +3927,38 @@ func (p *ListVirtualMachinesParams) GetProjectid() (string, bool) {
 	return value, ok
 }
 
+func (p *ListVirtualMachinesParams) SetRetrieveonlyresourcecount(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["retrieveonlyresourcecount"] = v
+}
+
+func (p *ListVirtualMachinesParams) ResetRetrieveonlyresourcecount() {
+	if p.p != nil && p.p["retrieveonlyresourcecount"] != nil {
+		delete(p.p, "retrieveonlyresourcecount")
+	}
+}
+
+func (p *ListVirtualMachinesParams) GetRetrieveonlyresourcecount() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["retrieveonlyresourcecount"].(bool)
+	return value, ok
+}
+
 func (p *ListVirtualMachinesParams) SetSecuritygroupid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["securitygroupid"] = v
+}
+
+func (p *ListVirtualMachinesParams) ResetSecuritygroupid() {
+	if p.p != nil && p.p["securitygroupid"] != nil {
+		delete(p.p, "securitygroupid")
+	}
 }
 
 func (p *ListVirtualMachinesParams) GetSecuritygroupid() (string, bool) {
@@ -2952,6 +3976,12 @@ func (p *ListVirtualMachinesParams) SetServiceofferingid(v string) {
 	p.p["serviceofferingid"] = v
 }
 
+func (p *ListVirtualMachinesParams) ResetServiceofferingid() {
+	if p.p != nil && p.p["serviceofferingid"] != nil {
+		delete(p.p, "serviceofferingid")
+	}
+}
+
 func (p *ListVirtualMachinesParams) GetServiceofferingid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2965,6 +3995,12 @@ func (p *ListVirtualMachinesParams) SetShowicon(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["showicon"] = v
+}
+
+func (p *ListVirtualMachinesParams) ResetShowicon() {
+	if p.p != nil && p.p["showicon"] != nil {
+		delete(p.p, "showicon")
+	}
 }
 
 func (p *ListVirtualMachinesParams) GetShowicon() (bool, bool) {
@@ -2982,6 +4018,12 @@ func (p *ListVirtualMachinesParams) SetState(v string) {
 	p.p["state"] = v
 }
 
+func (p *ListVirtualMachinesParams) ResetState() {
+	if p.p != nil && p.p["state"] != nil {
+		delete(p.p, "state")
+	}
+}
+
 func (p *ListVirtualMachinesParams) GetState() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -2995,6 +4037,12 @@ func (p *ListVirtualMachinesParams) SetStorageid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["storageid"] = v
+}
+
+func (p *ListVirtualMachinesParams) ResetStorageid() {
+	if p.p != nil && p.p["storageid"] != nil {
+		delete(p.p, "storageid")
+	}
 }
 
 func (p *ListVirtualMachinesParams) GetStorageid() (string, bool) {
@@ -3012,6 +4060,12 @@ func (p *ListVirtualMachinesParams) SetTags(v map[string]string) {
 	p.p["tags"] = v
 }
 
+func (p *ListVirtualMachinesParams) ResetTags() {
+	if p.p != nil && p.p["tags"] != nil {
+		delete(p.p, "tags")
+	}
+}
+
 func (p *ListVirtualMachinesParams) GetTags() (map[string]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3027,6 +4081,12 @@ func (p *ListVirtualMachinesParams) SetTemplateid(v string) {
 	p.p["templateid"] = v
 }
 
+func (p *ListVirtualMachinesParams) ResetTemplateid() {
+	if p.p != nil && p.p["templateid"] != nil {
+		delete(p.p, "templateid")
+	}
+}
+
 func (p *ListVirtualMachinesParams) GetTemplateid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3035,11 +4095,38 @@ func (p *ListVirtualMachinesParams) GetTemplateid() (string, bool) {
 	return value, ok
 }
 
+func (p *ListVirtualMachinesParams) SetUserdata(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["userdata"] = v
+}
+
+func (p *ListVirtualMachinesParams) ResetUserdata() {
+	if p.p != nil && p.p["userdata"] != nil {
+		delete(p.p, "userdata")
+	}
+}
+
+func (p *ListVirtualMachinesParams) GetUserdata() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["userdata"].(bool)
+	return value, ok
+}
+
 func (p *ListVirtualMachinesParams) SetUserid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["userid"] = v
+}
+
+func (p *ListVirtualMachinesParams) ResetUserid() {
+	if p.p != nil && p.p["userid"] != nil {
+		delete(p.p, "userid")
+	}
 }
 
 func (p *ListVirtualMachinesParams) GetUserid() (string, bool) {
@@ -3057,6 +4144,12 @@ func (p *ListVirtualMachinesParams) SetVpcid(v string) {
 	p.p["vpcid"] = v
 }
 
+func (p *ListVirtualMachinesParams) ResetVpcid() {
+	if p.p != nil && p.p["vpcid"] != nil {
+		delete(p.p, "vpcid")
+	}
+}
+
 func (p *ListVirtualMachinesParams) GetVpcid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3070,6 +4163,12 @@ func (p *ListVirtualMachinesParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *ListVirtualMachinesParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *ListVirtualMachinesParams) GetZoneid() (string, bool) {
@@ -3194,6 +4293,8 @@ type ListVirtualMachinesResponse struct {
 type VirtualMachine struct {
 	Account               string                        `json:"account"`
 	Affinitygroup         []VirtualMachineAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                        `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                        `json:"autoscalevmgroupname"`
 	Backupofferingid      string                        `json:"backupofferingid"`
 	Backupofferingname    string                        `json:"backupofferingname"`
 	Bootmode              string                        `json:"bootmode"`
@@ -3219,10 +4320,11 @@ type VirtualMachine struct {
 	Guestosid             string                        `json:"guestosid"`
 	Haenable              bool                          `json:"haenable"`
 	Hasannotations        bool                          `json:"hasannotations"`
+	Hostcontrolstate      string                        `json:"hostcontrolstate"`
 	Hostid                string                        `json:"hostid"`
 	Hostname              string                        `json:"hostname"`
 	Hypervisor            string                        `json:"hypervisor"`
-	Icon                  string                        `json:"icon"`
+	Icon                  interface{}                   `json:"icon"`
 	Id                    string                        `json:"id"`
 	Instancename          string                        `json:"instancename"`
 	Isdynamicallyscalable bool                          `json:"isdynamicallyscalable"`
@@ -3231,7 +4333,7 @@ type VirtualMachine struct {
 	Isoname               string                        `json:"isoname"`
 	JobID                 string                        `json:"jobid"`
 	Jobstatus             int                           `json:"jobstatus"`
-	Keypair               string                        `json:"keypair"`
+	Keypairs              string                        `json:"keypairs"`
 	Lastupdated           string                        `json:"lastupdated"`
 	Memory                int                           `json:"memory"`
 	Memoryintfreekbs      int64                         `json:"memoryintfreekbs"`
@@ -3264,9 +4366,17 @@ type VirtualMachine struct {
 	Templatedisplaytext   string                        `json:"templatedisplaytext"`
 	Templateid            string                        `json:"templateid"`
 	Templatename          string                        `json:"templatename"`
+	Templatetype          string                        `json:"templatetype"`
+	Userdata              string                        `json:"userdata"`
+	Userdatadetails       string                        `json:"userdatadetails"`
+	Userdataid            string                        `json:"userdataid"`
+	Userdataname          string                        `json:"userdataname"`
+	Userdatapolicy        string                        `json:"userdatapolicy"`
 	Userid                string                        `json:"userid"`
 	Username              string                        `json:"username"`
 	Vgpu                  string                        `json:"vgpu"`
+	Vnfdetails            map[string]string             `json:"vnfdetails"`
+	Vnfnics               []string                      `json:"vnfnics"`
 	Zoneid                string                        `json:"zoneid"`
 	Zonename              string                        `json:"zonename"`
 }
@@ -3352,8 +4462,21 @@ func (p *ListVirtualMachinesMetricsParams) toURLValues() url.Values {
 	if v, found := p.p["account"]; found {
 		u.Set("account", v.(string))
 	}
+	if v, found := p.p["accumulate"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("accumulate", vv)
+	}
 	if v, found := p.p["affinitygroupid"]; found {
 		u.Set("affinitygroupid", v.(string))
+	}
+	if v, found := p.p["autoscalevmgroupid"]; found {
+		u.Set("autoscalevmgroupid", v.(string))
+	}
+	if v, found := p.p["backupofferingid"]; found {
+		u.Set("backupofferingid", v.(string))
+	}
+	if v, found := p.p["clusterid"]; found {
+		u.Set("clusterid", v.(string))
 	}
 	if v, found := p.p["details"]; found {
 		vv := strings.Join(v.([]string), ",")
@@ -3397,6 +4520,10 @@ func (p *ListVirtualMachinesMetricsParams) toURLValues() url.Values {
 		vv := strconv.FormatBool(v.(bool))
 		u.Set("isrecursive", vv)
 	}
+	if v, found := p.p["isvnf"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("isvnf", vv)
+	}
 	if v, found := p.p["keypair"]; found {
 		u.Set("keypair", v.(string))
 	}
@@ -3427,6 +4554,10 @@ func (p *ListVirtualMachinesMetricsParams) toURLValues() url.Values {
 	if v, found := p.p["projectid"]; found {
 		u.Set("projectid", v.(string))
 	}
+	if v, found := p.p["retrieveonlyresourcecount"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("retrieveonlyresourcecount", vv)
+	}
 	if v, found := p.p["securitygroupid"]; found {
 		u.Set("securitygroupid", v.(string))
 	}
@@ -3453,6 +4584,10 @@ func (p *ListVirtualMachinesMetricsParams) toURLValues() url.Values {
 	if v, found := p.p["templateid"]; found {
 		u.Set("templateid", v.(string))
 	}
+	if v, found := p.p["userdata"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("userdata", vv)
+	}
 	if v, found := p.p["userid"]; found {
 		u.Set("userid", v.(string))
 	}
@@ -3472,11 +4607,38 @@ func (p *ListVirtualMachinesMetricsParams) SetAccount(v string) {
 	p.p["account"] = v
 }
 
+func (p *ListVirtualMachinesMetricsParams) ResetAccount() {
+	if p.p != nil && p.p["account"] != nil {
+		delete(p.p, "account")
+	}
+}
+
 func (p *ListVirtualMachinesMetricsParams) GetAccount() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["account"].(string)
+	return value, ok
+}
+
+func (p *ListVirtualMachinesMetricsParams) SetAccumulate(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["accumulate"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetAccumulate() {
+	if p.p != nil && p.p["accumulate"] != nil {
+		delete(p.p, "accumulate")
+	}
+}
+
+func (p *ListVirtualMachinesMetricsParams) GetAccumulate() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["accumulate"].(bool)
 	return value, ok
 }
 
@@ -3487,6 +4649,12 @@ func (p *ListVirtualMachinesMetricsParams) SetAffinitygroupid(v string) {
 	p.p["affinitygroupid"] = v
 }
 
+func (p *ListVirtualMachinesMetricsParams) ResetAffinitygroupid() {
+	if p.p != nil && p.p["affinitygroupid"] != nil {
+		delete(p.p, "affinitygroupid")
+	}
+}
+
 func (p *ListVirtualMachinesMetricsParams) GetAffinitygroupid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3495,11 +4663,80 @@ func (p *ListVirtualMachinesMetricsParams) GetAffinitygroupid() (string, bool) {
 	return value, ok
 }
 
+func (p *ListVirtualMachinesMetricsParams) SetAutoscalevmgroupid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["autoscalevmgroupid"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetAutoscalevmgroupid() {
+	if p.p != nil && p.p["autoscalevmgroupid"] != nil {
+		delete(p.p, "autoscalevmgroupid")
+	}
+}
+
+func (p *ListVirtualMachinesMetricsParams) GetAutoscalevmgroupid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["autoscalevmgroupid"].(string)
+	return value, ok
+}
+
+func (p *ListVirtualMachinesMetricsParams) SetBackupofferingid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["backupofferingid"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetBackupofferingid() {
+	if p.p != nil && p.p["backupofferingid"] != nil {
+		delete(p.p, "backupofferingid")
+	}
+}
+
+func (p *ListVirtualMachinesMetricsParams) GetBackupofferingid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["backupofferingid"].(string)
+	return value, ok
+}
+
+func (p *ListVirtualMachinesMetricsParams) SetClusterid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["clusterid"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetClusterid() {
+	if p.p != nil && p.p["clusterid"] != nil {
+		delete(p.p, "clusterid")
+	}
+}
+
+func (p *ListVirtualMachinesMetricsParams) GetClusterid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["clusterid"].(string)
+	return value, ok
+}
+
 func (p *ListVirtualMachinesMetricsParams) SetDetails(v []string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["details"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetDetails() {
+	if p.p != nil && p.p["details"] != nil {
+		delete(p.p, "details")
+	}
 }
 
 func (p *ListVirtualMachinesMetricsParams) GetDetails() ([]string, bool) {
@@ -3517,6 +4754,12 @@ func (p *ListVirtualMachinesMetricsParams) SetDisplayvm(v bool) {
 	p.p["displayvm"] = v
 }
 
+func (p *ListVirtualMachinesMetricsParams) ResetDisplayvm() {
+	if p.p != nil && p.p["displayvm"] != nil {
+		delete(p.p, "displayvm")
+	}
+}
+
 func (p *ListVirtualMachinesMetricsParams) GetDisplayvm() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3530,6 +4773,12 @@ func (p *ListVirtualMachinesMetricsParams) SetDomainid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["domainid"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetDomainid() {
+	if p.p != nil && p.p["domainid"] != nil {
+		delete(p.p, "domainid")
+	}
 }
 
 func (p *ListVirtualMachinesMetricsParams) GetDomainid() (string, bool) {
@@ -3547,6 +4796,12 @@ func (p *ListVirtualMachinesMetricsParams) SetForvirtualnetwork(v bool) {
 	p.p["forvirtualnetwork"] = v
 }
 
+func (p *ListVirtualMachinesMetricsParams) ResetForvirtualnetwork() {
+	if p.p != nil && p.p["forvirtualnetwork"] != nil {
+		delete(p.p, "forvirtualnetwork")
+	}
+}
+
 func (p *ListVirtualMachinesMetricsParams) GetForvirtualnetwork() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3560,6 +4815,12 @@ func (p *ListVirtualMachinesMetricsParams) SetGroupid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["groupid"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetGroupid() {
+	if p.p != nil && p.p["groupid"] != nil {
+		delete(p.p, "groupid")
+	}
 }
 
 func (p *ListVirtualMachinesMetricsParams) GetGroupid() (string, bool) {
@@ -3577,6 +4838,12 @@ func (p *ListVirtualMachinesMetricsParams) SetHaenable(v bool) {
 	p.p["haenable"] = v
 }
 
+func (p *ListVirtualMachinesMetricsParams) ResetHaenable() {
+	if p.p != nil && p.p["haenable"] != nil {
+		delete(p.p, "haenable")
+	}
+}
+
 func (p *ListVirtualMachinesMetricsParams) GetHaenable() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3590,6 +4857,12 @@ func (p *ListVirtualMachinesMetricsParams) SetHostid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["hostid"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetHostid() {
+	if p.p != nil && p.p["hostid"] != nil {
+		delete(p.p, "hostid")
+	}
 }
 
 func (p *ListVirtualMachinesMetricsParams) GetHostid() (string, bool) {
@@ -3607,6 +4880,12 @@ func (p *ListVirtualMachinesMetricsParams) SetHypervisor(v string) {
 	p.p["hypervisor"] = v
 }
 
+func (p *ListVirtualMachinesMetricsParams) ResetHypervisor() {
+	if p.p != nil && p.p["hypervisor"] != nil {
+		delete(p.p, "hypervisor")
+	}
+}
+
 func (p *ListVirtualMachinesMetricsParams) GetHypervisor() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3620,6 +4899,12 @@ func (p *ListVirtualMachinesMetricsParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *ListVirtualMachinesMetricsParams) GetId() (string, bool) {
@@ -3637,6 +4922,12 @@ func (p *ListVirtualMachinesMetricsParams) SetIds(v []string) {
 	p.p["ids"] = v
 }
 
+func (p *ListVirtualMachinesMetricsParams) ResetIds() {
+	if p.p != nil && p.p["ids"] != nil {
+		delete(p.p, "ids")
+	}
+}
+
 func (p *ListVirtualMachinesMetricsParams) GetIds() ([]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3650,6 +4941,12 @@ func (p *ListVirtualMachinesMetricsParams) SetIsoid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isoid"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetIsoid() {
+	if p.p != nil && p.p["isoid"] != nil {
+		delete(p.p, "isoid")
+	}
 }
 
 func (p *ListVirtualMachinesMetricsParams) GetIsoid() (string, bool) {
@@ -3667,6 +4964,12 @@ func (p *ListVirtualMachinesMetricsParams) SetIsrecursive(v bool) {
 	p.p["isrecursive"] = v
 }
 
+func (p *ListVirtualMachinesMetricsParams) ResetIsrecursive() {
+	if p.p != nil && p.p["isrecursive"] != nil {
+		delete(p.p, "isrecursive")
+	}
+}
+
 func (p *ListVirtualMachinesMetricsParams) GetIsrecursive() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3675,11 +4978,38 @@ func (p *ListVirtualMachinesMetricsParams) GetIsrecursive() (bool, bool) {
 	return value, ok
 }
 
+func (p *ListVirtualMachinesMetricsParams) SetIsvnf(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["isvnf"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetIsvnf() {
+	if p.p != nil && p.p["isvnf"] != nil {
+		delete(p.p, "isvnf")
+	}
+}
+
+func (p *ListVirtualMachinesMetricsParams) GetIsvnf() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["isvnf"].(bool)
+	return value, ok
+}
+
 func (p *ListVirtualMachinesMetricsParams) SetKeypair(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["keypair"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetKeypair() {
+	if p.p != nil && p.p["keypair"] != nil {
+		delete(p.p, "keypair")
+	}
 }
 
 func (p *ListVirtualMachinesMetricsParams) GetKeypair() (string, bool) {
@@ -3697,6 +5027,12 @@ func (p *ListVirtualMachinesMetricsParams) SetKeyword(v string) {
 	p.p["keyword"] = v
 }
 
+func (p *ListVirtualMachinesMetricsParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
 func (p *ListVirtualMachinesMetricsParams) GetKeyword() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3710,6 +5046,12 @@ func (p *ListVirtualMachinesMetricsParams) SetListall(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["listall"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetListall() {
+	if p.p != nil && p.p["listall"] != nil {
+		delete(p.p, "listall")
+	}
 }
 
 func (p *ListVirtualMachinesMetricsParams) GetListall() (bool, bool) {
@@ -3727,6 +5069,12 @@ func (p *ListVirtualMachinesMetricsParams) SetName(v string) {
 	p.p["name"] = v
 }
 
+func (p *ListVirtualMachinesMetricsParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
+}
+
 func (p *ListVirtualMachinesMetricsParams) GetName() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3740,6 +5088,12 @@ func (p *ListVirtualMachinesMetricsParams) SetNetworkid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["networkid"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetNetworkid() {
+	if p.p != nil && p.p["networkid"] != nil {
+		delete(p.p, "networkid")
+	}
 }
 
 func (p *ListVirtualMachinesMetricsParams) GetNetworkid() (string, bool) {
@@ -3757,6 +5111,12 @@ func (p *ListVirtualMachinesMetricsParams) SetPage(v int) {
 	p.p["page"] = v
 }
 
+func (p *ListVirtualMachinesMetricsParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
 func (p *ListVirtualMachinesMetricsParams) GetPage() (int, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3770,6 +5130,12 @@ func (p *ListVirtualMachinesMetricsParams) SetPagesize(v int) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["pagesize"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
 }
 
 func (p *ListVirtualMachinesMetricsParams) GetPagesize() (int, bool) {
@@ -3787,6 +5153,12 @@ func (p *ListVirtualMachinesMetricsParams) SetPodid(v string) {
 	p.p["podid"] = v
 }
 
+func (p *ListVirtualMachinesMetricsParams) ResetPodid() {
+	if p.p != nil && p.p["podid"] != nil {
+		delete(p.p, "podid")
+	}
+}
+
 func (p *ListVirtualMachinesMetricsParams) GetPodid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3802,6 +5174,12 @@ func (p *ListVirtualMachinesMetricsParams) SetProjectid(v string) {
 	p.p["projectid"] = v
 }
 
+func (p *ListVirtualMachinesMetricsParams) ResetProjectid() {
+	if p.p != nil && p.p["projectid"] != nil {
+		delete(p.p, "projectid")
+	}
+}
+
 func (p *ListVirtualMachinesMetricsParams) GetProjectid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3810,11 +5188,38 @@ func (p *ListVirtualMachinesMetricsParams) GetProjectid() (string, bool) {
 	return value, ok
 }
 
+func (p *ListVirtualMachinesMetricsParams) SetRetrieveonlyresourcecount(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["retrieveonlyresourcecount"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetRetrieveonlyresourcecount() {
+	if p.p != nil && p.p["retrieveonlyresourcecount"] != nil {
+		delete(p.p, "retrieveonlyresourcecount")
+	}
+}
+
+func (p *ListVirtualMachinesMetricsParams) GetRetrieveonlyresourcecount() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["retrieveonlyresourcecount"].(bool)
+	return value, ok
+}
+
 func (p *ListVirtualMachinesMetricsParams) SetSecuritygroupid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["securitygroupid"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetSecuritygroupid() {
+	if p.p != nil && p.p["securitygroupid"] != nil {
+		delete(p.p, "securitygroupid")
+	}
 }
 
 func (p *ListVirtualMachinesMetricsParams) GetSecuritygroupid() (string, bool) {
@@ -3832,6 +5237,12 @@ func (p *ListVirtualMachinesMetricsParams) SetServiceofferingid(v string) {
 	p.p["serviceofferingid"] = v
 }
 
+func (p *ListVirtualMachinesMetricsParams) ResetServiceofferingid() {
+	if p.p != nil && p.p["serviceofferingid"] != nil {
+		delete(p.p, "serviceofferingid")
+	}
+}
+
 func (p *ListVirtualMachinesMetricsParams) GetServiceofferingid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3845,6 +5256,12 @@ func (p *ListVirtualMachinesMetricsParams) SetShowicon(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["showicon"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetShowicon() {
+	if p.p != nil && p.p["showicon"] != nil {
+		delete(p.p, "showicon")
+	}
 }
 
 func (p *ListVirtualMachinesMetricsParams) GetShowicon() (bool, bool) {
@@ -3862,6 +5279,12 @@ func (p *ListVirtualMachinesMetricsParams) SetState(v string) {
 	p.p["state"] = v
 }
 
+func (p *ListVirtualMachinesMetricsParams) ResetState() {
+	if p.p != nil && p.p["state"] != nil {
+		delete(p.p, "state")
+	}
+}
+
 func (p *ListVirtualMachinesMetricsParams) GetState() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3875,6 +5298,12 @@ func (p *ListVirtualMachinesMetricsParams) SetStorageid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["storageid"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetStorageid() {
+	if p.p != nil && p.p["storageid"] != nil {
+		delete(p.p, "storageid")
+	}
 }
 
 func (p *ListVirtualMachinesMetricsParams) GetStorageid() (string, bool) {
@@ -3892,6 +5321,12 @@ func (p *ListVirtualMachinesMetricsParams) SetTags(v map[string]string) {
 	p.p["tags"] = v
 }
 
+func (p *ListVirtualMachinesMetricsParams) ResetTags() {
+	if p.p != nil && p.p["tags"] != nil {
+		delete(p.p, "tags")
+	}
+}
+
 func (p *ListVirtualMachinesMetricsParams) GetTags() (map[string]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3907,6 +5342,12 @@ func (p *ListVirtualMachinesMetricsParams) SetTemplateid(v string) {
 	p.p["templateid"] = v
 }
 
+func (p *ListVirtualMachinesMetricsParams) ResetTemplateid() {
+	if p.p != nil && p.p["templateid"] != nil {
+		delete(p.p, "templateid")
+	}
+}
+
 func (p *ListVirtualMachinesMetricsParams) GetTemplateid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3915,11 +5356,38 @@ func (p *ListVirtualMachinesMetricsParams) GetTemplateid() (string, bool) {
 	return value, ok
 }
 
+func (p *ListVirtualMachinesMetricsParams) SetUserdata(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["userdata"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetUserdata() {
+	if p.p != nil && p.p["userdata"] != nil {
+		delete(p.p, "userdata")
+	}
+}
+
+func (p *ListVirtualMachinesMetricsParams) GetUserdata() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["userdata"].(bool)
+	return value, ok
+}
+
 func (p *ListVirtualMachinesMetricsParams) SetUserid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["userid"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetUserid() {
+	if p.p != nil && p.p["userid"] != nil {
+		delete(p.p, "userid")
+	}
 }
 
 func (p *ListVirtualMachinesMetricsParams) GetUserid() (string, bool) {
@@ -3937,6 +5405,12 @@ func (p *ListVirtualMachinesMetricsParams) SetVpcid(v string) {
 	p.p["vpcid"] = v
 }
 
+func (p *ListVirtualMachinesMetricsParams) ResetVpcid() {
+	if p.p != nil && p.p["vpcid"] != nil {
+		delete(p.p, "vpcid")
+	}
+}
+
 func (p *ListVirtualMachinesMetricsParams) GetVpcid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -3950,6 +5424,12 @@ func (p *ListVirtualMachinesMetricsParams) SetZoneid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["zoneid"] = v
+}
+
+func (p *ListVirtualMachinesMetricsParams) ResetZoneid() {
+	if p.p != nil && p.p["zoneid"] != nil {
+		delete(p.p, "zoneid")
+	}
 }
 
 func (p *ListVirtualMachinesMetricsParams) GetZoneid() (string, bool) {
@@ -4074,6 +5554,8 @@ type ListVirtualMachinesMetricsResponse struct {
 type VirtualMachinesMetric struct {
 	Account               string                               `json:"account"`
 	Affinitygroup         []VirtualMachinesMetricAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                               `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                               `json:"autoscalevmgroupname"`
 	Backupofferingid      string                               `json:"backupofferingid"`
 	Backupofferingname    string                               `json:"backupofferingname"`
 	Bootmode              string                               `json:"bootmode"`
@@ -4103,10 +5585,11 @@ type VirtualMachinesMetric struct {
 	Guestosid             string                               `json:"guestosid"`
 	Haenable              bool                                 `json:"haenable"`
 	Hasannotations        bool                                 `json:"hasannotations"`
+	Hostcontrolstate      string                               `json:"hostcontrolstate"`
 	Hostid                string                               `json:"hostid"`
 	Hostname              string                               `json:"hostname"`
 	Hypervisor            string                               `json:"hypervisor"`
-	Icon                  string                               `json:"icon"`
+	Icon                  interface{}                          `json:"icon"`
 	Id                    string                               `json:"id"`
 	Instancename          string                               `json:"instancename"`
 	Ipaddress             string                               `json:"ipaddress"`
@@ -4116,7 +5599,7 @@ type VirtualMachinesMetric struct {
 	Isoname               string                               `json:"isoname"`
 	JobID                 string                               `json:"jobid"`
 	Jobstatus             int                                  `json:"jobstatus"`
-	Keypair               string                               `json:"keypair"`
+	Keypairs              string                               `json:"keypairs"`
 	Lastupdated           string                               `json:"lastupdated"`
 	Memory                int                                  `json:"memory"`
 	Memoryintfreekbs      int64                                `json:"memoryintfreekbs"`
@@ -4152,9 +5635,17 @@ type VirtualMachinesMetric struct {
 	Templatedisplaytext   string                               `json:"templatedisplaytext"`
 	Templateid            string                               `json:"templateid"`
 	Templatename          string                               `json:"templatename"`
+	Templatetype          string                               `json:"templatetype"`
+	Userdata              string                               `json:"userdata"`
+	Userdatadetails       string                               `json:"userdatadetails"`
+	Userdataid            string                               `json:"userdataid"`
+	Userdataname          string                               `json:"userdataname"`
+	Userdatapolicy        string                               `json:"userdatapolicy"`
 	Userid                string                               `json:"userid"`
 	Username              string                               `json:"username"`
 	Vgpu                  string                               `json:"vgpu"`
+	Vnfdetails            map[string]string                    `json:"vnfdetails"`
+	Vnfnics               []string                             `json:"vnfnics"`
 	Zoneid                string                               `json:"zoneid"`
 	Zonename              string                               `json:"zonename"`
 }
@@ -4260,6 +5751,12 @@ func (p *MigrateVirtualMachineParams) SetAutoselect(v bool) {
 	p.p["autoselect"] = v
 }
 
+func (p *MigrateVirtualMachineParams) ResetAutoselect() {
+	if p.p != nil && p.p["autoselect"] != nil {
+		delete(p.p, "autoselect")
+	}
+}
+
 func (p *MigrateVirtualMachineParams) GetAutoselect() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -4273,6 +5770,12 @@ func (p *MigrateVirtualMachineParams) SetHostid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["hostid"] = v
+}
+
+func (p *MigrateVirtualMachineParams) ResetHostid() {
+	if p.p != nil && p.p["hostid"] != nil {
+		delete(p.p, "hostid")
+	}
 }
 
 func (p *MigrateVirtualMachineParams) GetHostid() (string, bool) {
@@ -4290,6 +5793,12 @@ func (p *MigrateVirtualMachineParams) SetStorageid(v string) {
 	p.p["storageid"] = v
 }
 
+func (p *MigrateVirtualMachineParams) ResetStorageid() {
+	if p.p != nil && p.p["storageid"] != nil {
+		delete(p.p, "storageid")
+	}
+}
+
 func (p *MigrateVirtualMachineParams) GetStorageid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -4303,6 +5812,12 @@ func (p *MigrateVirtualMachineParams) SetVirtualmachineid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["virtualmachineid"] = v
+}
+
+func (p *MigrateVirtualMachineParams) ResetVirtualmachineid() {
+	if p.p != nil && p.p["virtualmachineid"] != nil {
+		delete(p.p, "virtualmachineid")
+	}
 }
 
 func (p *MigrateVirtualMachineParams) GetVirtualmachineid() (string, bool) {
@@ -4360,6 +5875,8 @@ func (s *VirtualMachineService) MigrateVirtualMachine(p *MigrateVirtualMachinePa
 type MigrateVirtualMachineResponse struct {
 	Account               string                                       `json:"account"`
 	Affinitygroup         []MigrateVirtualMachineResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                                       `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                                       `json:"autoscalevmgroupname"`
 	Backupofferingid      string                                       `json:"backupofferingid"`
 	Backupofferingname    string                                       `json:"backupofferingname"`
 	Bootmode              string                                       `json:"bootmode"`
@@ -4385,10 +5902,11 @@ type MigrateVirtualMachineResponse struct {
 	Guestosid             string                                       `json:"guestosid"`
 	Haenable              bool                                         `json:"haenable"`
 	Hasannotations        bool                                         `json:"hasannotations"`
+	Hostcontrolstate      string                                       `json:"hostcontrolstate"`
 	Hostid                string                                       `json:"hostid"`
 	Hostname              string                                       `json:"hostname"`
 	Hypervisor            string                                       `json:"hypervisor"`
-	Icon                  string                                       `json:"icon"`
+	Icon                  interface{}                                  `json:"icon"`
 	Id                    string                                       `json:"id"`
 	Instancename          string                                       `json:"instancename"`
 	Isdynamicallyscalable bool                                         `json:"isdynamicallyscalable"`
@@ -4397,7 +5915,7 @@ type MigrateVirtualMachineResponse struct {
 	Isoname               string                                       `json:"isoname"`
 	JobID                 string                                       `json:"jobid"`
 	Jobstatus             int                                          `json:"jobstatus"`
-	Keypair               string                                       `json:"keypair"`
+	Keypairs              string                                       `json:"keypairs"`
 	Lastupdated           string                                       `json:"lastupdated"`
 	Memory                int                                          `json:"memory"`
 	Memoryintfreekbs      int64                                        `json:"memoryintfreekbs"`
@@ -4430,9 +5948,17 @@ type MigrateVirtualMachineResponse struct {
 	Templatedisplaytext   string                                       `json:"templatedisplaytext"`
 	Templateid            string                                       `json:"templateid"`
 	Templatename          string                                       `json:"templatename"`
+	Templatetype          string                                       `json:"templatetype"`
+	Userdata              string                                       `json:"userdata"`
+	Userdatadetails       string                                       `json:"userdatadetails"`
+	Userdataid            string                                       `json:"userdataid"`
+	Userdataname          string                                       `json:"userdataname"`
+	Userdatapolicy        string                                       `json:"userdatapolicy"`
 	Userid                string                                       `json:"userid"`
 	Username              string                                       `json:"username"`
 	Vgpu                  string                                       `json:"vgpu"`
+	Vnfdetails            map[string]string                            `json:"vnfdetails"`
+	Vnfnics               []string                                     `json:"vnfnics"`
 	Zoneid                string                                       `json:"zoneid"`
 	Zonename              string                                       `json:"zonename"`
 }
@@ -4515,6 +6041,10 @@ func (p *MigrateVirtualMachineWithVolumeParams) toURLValues() url.Values {
 	if p.p == nil {
 		return u
 	}
+	if v, found := p.p["autoselect"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("autoselect", vv)
+	}
 	if v, found := p.p["hostid"]; found {
 		u.Set("hostid", v.(string))
 	}
@@ -4532,11 +6062,38 @@ func (p *MigrateVirtualMachineWithVolumeParams) toURLValues() url.Values {
 	return u
 }
 
+func (p *MigrateVirtualMachineWithVolumeParams) SetAutoselect(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["autoselect"] = v
+}
+
+func (p *MigrateVirtualMachineWithVolumeParams) ResetAutoselect() {
+	if p.p != nil && p.p["autoselect"] != nil {
+		delete(p.p, "autoselect")
+	}
+}
+
+func (p *MigrateVirtualMachineWithVolumeParams) GetAutoselect() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["autoselect"].(bool)
+	return value, ok
+}
+
 func (p *MigrateVirtualMachineWithVolumeParams) SetHostid(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["hostid"] = v
+}
+
+func (p *MigrateVirtualMachineWithVolumeParams) ResetHostid() {
+	if p.p != nil && p.p["hostid"] != nil {
+		delete(p.p, "hostid")
+	}
 }
 
 func (p *MigrateVirtualMachineWithVolumeParams) GetHostid() (string, bool) {
@@ -4552,6 +6109,12 @@ func (p *MigrateVirtualMachineWithVolumeParams) SetMigrateto(v []map[string]stri
 		p.p = make(map[string]interface{})
 	}
 	p.p["migrateto"] = v
+}
+
+func (p *MigrateVirtualMachineWithVolumeParams) ResetMigrateto() {
+	if p.p != nil && p.p["migrateto"] != nil {
+		delete(p.p, "migrateto")
+	}
 }
 
 func (p *MigrateVirtualMachineWithVolumeParams) GetMigrateto() ([]map[string]string, bool) {
@@ -4581,6 +6144,12 @@ func (p *MigrateVirtualMachineWithVolumeParams) SetVirtualmachineid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["virtualmachineid"] = v
+}
+
+func (p *MigrateVirtualMachineWithVolumeParams) ResetVirtualmachineid() {
+	if p.p != nil && p.p["virtualmachineid"] != nil {
+		delete(p.p, "virtualmachineid")
+	}
 }
 
 func (p *MigrateVirtualMachineWithVolumeParams) GetVirtualmachineid() (string, bool) {
@@ -4638,6 +6207,8 @@ func (s *VirtualMachineService) MigrateVirtualMachineWithVolume(p *MigrateVirtua
 type MigrateVirtualMachineWithVolumeResponse struct {
 	Account               string                                                 `json:"account"`
 	Affinitygroup         []MigrateVirtualMachineWithVolumeResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                                                 `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                                                 `json:"autoscalevmgroupname"`
 	Backupofferingid      string                                                 `json:"backupofferingid"`
 	Backupofferingname    string                                                 `json:"backupofferingname"`
 	Bootmode              string                                                 `json:"bootmode"`
@@ -4663,10 +6234,11 @@ type MigrateVirtualMachineWithVolumeResponse struct {
 	Guestosid             string                                                 `json:"guestosid"`
 	Haenable              bool                                                   `json:"haenable"`
 	Hasannotations        bool                                                   `json:"hasannotations"`
+	Hostcontrolstate      string                                                 `json:"hostcontrolstate"`
 	Hostid                string                                                 `json:"hostid"`
 	Hostname              string                                                 `json:"hostname"`
 	Hypervisor            string                                                 `json:"hypervisor"`
-	Icon                  string                                                 `json:"icon"`
+	Icon                  interface{}                                            `json:"icon"`
 	Id                    string                                                 `json:"id"`
 	Instancename          string                                                 `json:"instancename"`
 	Isdynamicallyscalable bool                                                   `json:"isdynamicallyscalable"`
@@ -4675,7 +6247,7 @@ type MigrateVirtualMachineWithVolumeResponse struct {
 	Isoname               string                                                 `json:"isoname"`
 	JobID                 string                                                 `json:"jobid"`
 	Jobstatus             int                                                    `json:"jobstatus"`
-	Keypair               string                                                 `json:"keypair"`
+	Keypairs              string                                                 `json:"keypairs"`
 	Lastupdated           string                                                 `json:"lastupdated"`
 	Memory                int                                                    `json:"memory"`
 	Memoryintfreekbs      int64                                                  `json:"memoryintfreekbs"`
@@ -4708,9 +6280,17 @@ type MigrateVirtualMachineWithVolumeResponse struct {
 	Templatedisplaytext   string                                                 `json:"templatedisplaytext"`
 	Templateid            string                                                 `json:"templateid"`
 	Templatename          string                                                 `json:"templatename"`
+	Templatetype          string                                                 `json:"templatetype"`
+	Userdata              string                                                 `json:"userdata"`
+	Userdatadetails       string                                                 `json:"userdatadetails"`
+	Userdataid            string                                                 `json:"userdataid"`
+	Userdataname          string                                                 `json:"userdataname"`
+	Userdatapolicy        string                                                 `json:"userdatapolicy"`
 	Userid                string                                                 `json:"userid"`
 	Username              string                                                 `json:"username"`
 	Vgpu                  string                                                 `json:"vgpu"`
+	Vnfdetails            map[string]string                                      `json:"vnfdetails"`
+	Vnfnics               []string                                               `json:"vnfnics"`
 	Zoneid                string                                                 `json:"zoneid"`
 	Zonename              string                                                 `json:"zonename"`
 }
@@ -4814,6 +6394,12 @@ func (p *RebootVirtualMachineParams) SetBootintosetup(v bool) {
 	p.p["bootintosetup"] = v
 }
 
+func (p *RebootVirtualMachineParams) ResetBootintosetup() {
+	if p.p != nil && p.p["bootintosetup"] != nil {
+		delete(p.p, "bootintosetup")
+	}
+}
+
 func (p *RebootVirtualMachineParams) GetBootintosetup() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -4829,6 +6415,12 @@ func (p *RebootVirtualMachineParams) SetForced(v bool) {
 	p.p["forced"] = v
 }
 
+func (p *RebootVirtualMachineParams) ResetForced() {
+	if p.p != nil && p.p["forced"] != nil {
+		delete(p.p, "forced")
+	}
+}
+
 func (p *RebootVirtualMachineParams) GetForced() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -4842,6 +6434,12 @@ func (p *RebootVirtualMachineParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *RebootVirtualMachineParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *RebootVirtualMachineParams) GetId() (string, bool) {
@@ -4899,6 +6497,8 @@ func (s *VirtualMachineService) RebootVirtualMachine(p *RebootVirtualMachinePara
 type RebootVirtualMachineResponse struct {
 	Account               string                                      `json:"account"`
 	Affinitygroup         []RebootVirtualMachineResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                                      `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                                      `json:"autoscalevmgroupname"`
 	Backupofferingid      string                                      `json:"backupofferingid"`
 	Backupofferingname    string                                      `json:"backupofferingname"`
 	Bootmode              string                                      `json:"bootmode"`
@@ -4924,10 +6524,11 @@ type RebootVirtualMachineResponse struct {
 	Guestosid             string                                      `json:"guestosid"`
 	Haenable              bool                                        `json:"haenable"`
 	Hasannotations        bool                                        `json:"hasannotations"`
+	Hostcontrolstate      string                                      `json:"hostcontrolstate"`
 	Hostid                string                                      `json:"hostid"`
 	Hostname              string                                      `json:"hostname"`
 	Hypervisor            string                                      `json:"hypervisor"`
-	Icon                  string                                      `json:"icon"`
+	Icon                  interface{}                                 `json:"icon"`
 	Id                    string                                      `json:"id"`
 	Instancename          string                                      `json:"instancename"`
 	Isdynamicallyscalable bool                                        `json:"isdynamicallyscalable"`
@@ -4936,7 +6537,7 @@ type RebootVirtualMachineResponse struct {
 	Isoname               string                                      `json:"isoname"`
 	JobID                 string                                      `json:"jobid"`
 	Jobstatus             int                                         `json:"jobstatus"`
-	Keypair               string                                      `json:"keypair"`
+	Keypairs              string                                      `json:"keypairs"`
 	Lastupdated           string                                      `json:"lastupdated"`
 	Memory                int                                         `json:"memory"`
 	Memoryintfreekbs      int64                                       `json:"memoryintfreekbs"`
@@ -4969,9 +6570,17 @@ type RebootVirtualMachineResponse struct {
 	Templatedisplaytext   string                                      `json:"templatedisplaytext"`
 	Templateid            string                                      `json:"templateid"`
 	Templatename          string                                      `json:"templatename"`
+	Templatetype          string                                      `json:"templatetype"`
+	Userdata              string                                      `json:"userdata"`
+	Userdatadetails       string                                      `json:"userdatadetails"`
+	Userdataid            string                                      `json:"userdataid"`
+	Userdataname          string                                      `json:"userdataname"`
+	Userdatapolicy        string                                      `json:"userdatapolicy"`
 	Userid                string                                      `json:"userid"`
 	Username              string                                      `json:"username"`
 	Vgpu                  string                                      `json:"vgpu"`
+	Vnfdetails            map[string]string                           `json:"vnfdetails"`
+	Vnfnics               []string                                    `json:"vnfnics"`
 	Zoneid                string                                      `json:"zoneid"`
 	Zonename              string                                      `json:"zonename"`
 }
@@ -5067,6 +6676,12 @@ func (p *RecoverVirtualMachineParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *RecoverVirtualMachineParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *RecoverVirtualMachineParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -5102,6 +6717,8 @@ func (s *VirtualMachineService) RecoverVirtualMachine(p *RecoverVirtualMachinePa
 type RecoverVirtualMachineResponse struct {
 	Account               string                                       `json:"account"`
 	Affinitygroup         []RecoverVirtualMachineResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                                       `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                                       `json:"autoscalevmgroupname"`
 	Backupofferingid      string                                       `json:"backupofferingid"`
 	Backupofferingname    string                                       `json:"backupofferingname"`
 	Bootmode              string                                       `json:"bootmode"`
@@ -5127,10 +6744,11 @@ type RecoverVirtualMachineResponse struct {
 	Guestosid             string                                       `json:"guestosid"`
 	Haenable              bool                                         `json:"haenable"`
 	Hasannotations        bool                                         `json:"hasannotations"`
+	Hostcontrolstate      string                                       `json:"hostcontrolstate"`
 	Hostid                string                                       `json:"hostid"`
 	Hostname              string                                       `json:"hostname"`
 	Hypervisor            string                                       `json:"hypervisor"`
-	Icon                  string                                       `json:"icon"`
+	Icon                  interface{}                                  `json:"icon"`
 	Id                    string                                       `json:"id"`
 	Instancename          string                                       `json:"instancename"`
 	Isdynamicallyscalable bool                                         `json:"isdynamicallyscalable"`
@@ -5139,7 +6757,7 @@ type RecoverVirtualMachineResponse struct {
 	Isoname               string                                       `json:"isoname"`
 	JobID                 string                                       `json:"jobid"`
 	Jobstatus             int                                          `json:"jobstatus"`
-	Keypair               string                                       `json:"keypair"`
+	Keypairs              string                                       `json:"keypairs"`
 	Lastupdated           string                                       `json:"lastupdated"`
 	Memory                int                                          `json:"memory"`
 	Memoryintfreekbs      int64                                        `json:"memoryintfreekbs"`
@@ -5172,9 +6790,17 @@ type RecoverVirtualMachineResponse struct {
 	Templatedisplaytext   string                                       `json:"templatedisplaytext"`
 	Templateid            string                                       `json:"templateid"`
 	Templatename          string                                       `json:"templatename"`
+	Templatetype          string                                       `json:"templatetype"`
+	Userdata              string                                       `json:"userdata"`
+	Userdatadetails       string                                       `json:"userdatadetails"`
+	Userdataid            string                                       `json:"userdataid"`
+	Userdataname          string                                       `json:"userdataname"`
+	Userdatapolicy        string                                       `json:"userdatapolicy"`
 	Userid                string                                       `json:"userid"`
 	Username              string                                       `json:"username"`
 	Vgpu                  string                                       `json:"vgpu"`
+	Vnfdetails            map[string]string                            `json:"vnfdetails"`
+	Vnfnics               []string                                     `json:"vnfnics"`
 	Zoneid                string                                       `json:"zoneid"`
 	Zonename              string                                       `json:"zonename"`
 }
@@ -5273,6 +6899,12 @@ func (p *RemoveNicFromVirtualMachineParams) SetNicid(v string) {
 	p.p["nicid"] = v
 }
 
+func (p *RemoveNicFromVirtualMachineParams) ResetNicid() {
+	if p.p != nil && p.p["nicid"] != nil {
+		delete(p.p, "nicid")
+	}
+}
+
 func (p *RemoveNicFromVirtualMachineParams) GetNicid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -5286,6 +6918,12 @@ func (p *RemoveNicFromVirtualMachineParams) SetVirtualmachineid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["virtualmachineid"] = v
+}
+
+func (p *RemoveNicFromVirtualMachineParams) ResetVirtualmachineid() {
+	if p.p != nil && p.p["virtualmachineid"] != nil {
+		delete(p.p, "virtualmachineid")
+	}
 }
 
 func (p *RemoveNicFromVirtualMachineParams) GetVirtualmachineid() (string, bool) {
@@ -5344,6 +6982,8 @@ func (s *VirtualMachineService) RemoveNicFromVirtualMachine(p *RemoveNicFromVirt
 type RemoveNicFromVirtualMachineResponse struct {
 	Account               string                                             `json:"account"`
 	Affinitygroup         []RemoveNicFromVirtualMachineResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                                             `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                                             `json:"autoscalevmgroupname"`
 	Backupofferingid      string                                             `json:"backupofferingid"`
 	Backupofferingname    string                                             `json:"backupofferingname"`
 	Bootmode              string                                             `json:"bootmode"`
@@ -5369,10 +7009,11 @@ type RemoveNicFromVirtualMachineResponse struct {
 	Guestosid             string                                             `json:"guestosid"`
 	Haenable              bool                                               `json:"haenable"`
 	Hasannotations        bool                                               `json:"hasannotations"`
+	Hostcontrolstate      string                                             `json:"hostcontrolstate"`
 	Hostid                string                                             `json:"hostid"`
 	Hostname              string                                             `json:"hostname"`
 	Hypervisor            string                                             `json:"hypervisor"`
-	Icon                  string                                             `json:"icon"`
+	Icon                  interface{}                                        `json:"icon"`
 	Id                    string                                             `json:"id"`
 	Instancename          string                                             `json:"instancename"`
 	Isdynamicallyscalable bool                                               `json:"isdynamicallyscalable"`
@@ -5381,7 +7022,7 @@ type RemoveNicFromVirtualMachineResponse struct {
 	Isoname               string                                             `json:"isoname"`
 	JobID                 string                                             `json:"jobid"`
 	Jobstatus             int                                                `json:"jobstatus"`
-	Keypair               string                                             `json:"keypair"`
+	Keypairs              string                                             `json:"keypairs"`
 	Lastupdated           string                                             `json:"lastupdated"`
 	Memory                int                                                `json:"memory"`
 	Memoryintfreekbs      int64                                              `json:"memoryintfreekbs"`
@@ -5414,9 +7055,17 @@ type RemoveNicFromVirtualMachineResponse struct {
 	Templatedisplaytext   string                                             `json:"templatedisplaytext"`
 	Templateid            string                                             `json:"templateid"`
 	Templatename          string                                             `json:"templatename"`
+	Templatetype          string                                             `json:"templatetype"`
+	Userdata              string                                             `json:"userdata"`
+	Userdatadetails       string                                             `json:"userdatadetails"`
+	Userdataid            string                                             `json:"userdataid"`
+	Userdataname          string                                             `json:"userdataname"`
+	Userdatapolicy        string                                             `json:"userdatapolicy"`
 	Userid                string                                             `json:"userid"`
 	Username              string                                             `json:"username"`
 	Vgpu                  string                                             `json:"vgpu"`
+	Vnfdetails            map[string]string                                  `json:"vnfdetails"`
+	Vnfnics               []string                                           `json:"vnfnics"`
 	Zoneid                string                                             `json:"zoneid"`
 	Zonename              string                                             `json:"zonename"`
 }
@@ -5502,6 +7151,9 @@ func (p *ResetPasswordForVirtualMachineParams) toURLValues() url.Values {
 	if v, found := p.p["id"]; found {
 		u.Set("id", v.(string))
 	}
+	if v, found := p.p["password"]; found {
+		u.Set("password", v.(string))
+	}
 	return u
 }
 
@@ -5512,11 +7164,38 @@ func (p *ResetPasswordForVirtualMachineParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ResetPasswordForVirtualMachineParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *ResetPasswordForVirtualMachineParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+func (p *ResetPasswordForVirtualMachineParams) SetPassword(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["password"] = v
+}
+
+func (p *ResetPasswordForVirtualMachineParams) ResetPassword() {
+	if p.p != nil && p.p["password"] != nil {
+		delete(p.p, "password")
+	}
+}
+
+func (p *ResetPasswordForVirtualMachineParams) GetPassword() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["password"].(string)
 	return value, ok
 }
 
@@ -5567,6 +7246,8 @@ func (s *VirtualMachineService) ResetPasswordForVirtualMachine(p *ResetPasswordF
 type ResetPasswordForVirtualMachineResponse struct {
 	Account               string                                                `json:"account"`
 	Affinitygroup         []ResetPasswordForVirtualMachineResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                                                `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                                                `json:"autoscalevmgroupname"`
 	Backupofferingid      string                                                `json:"backupofferingid"`
 	Backupofferingname    string                                                `json:"backupofferingname"`
 	Bootmode              string                                                `json:"bootmode"`
@@ -5592,10 +7273,11 @@ type ResetPasswordForVirtualMachineResponse struct {
 	Guestosid             string                                                `json:"guestosid"`
 	Haenable              bool                                                  `json:"haenable"`
 	Hasannotations        bool                                                  `json:"hasannotations"`
+	Hostcontrolstate      string                                                `json:"hostcontrolstate"`
 	Hostid                string                                                `json:"hostid"`
 	Hostname              string                                                `json:"hostname"`
 	Hypervisor            string                                                `json:"hypervisor"`
-	Icon                  string                                                `json:"icon"`
+	Icon                  interface{}                                           `json:"icon"`
 	Id                    string                                                `json:"id"`
 	Instancename          string                                                `json:"instancename"`
 	Isdynamicallyscalable bool                                                  `json:"isdynamicallyscalable"`
@@ -5604,7 +7286,7 @@ type ResetPasswordForVirtualMachineResponse struct {
 	Isoname               string                                                `json:"isoname"`
 	JobID                 string                                                `json:"jobid"`
 	Jobstatus             int                                                   `json:"jobstatus"`
-	Keypair               string                                                `json:"keypair"`
+	Keypairs              string                                                `json:"keypairs"`
 	Lastupdated           string                                                `json:"lastupdated"`
 	Memory                int                                                   `json:"memory"`
 	Memoryintfreekbs      int64                                                 `json:"memoryintfreekbs"`
@@ -5637,9 +7319,17 @@ type ResetPasswordForVirtualMachineResponse struct {
 	Templatedisplaytext   string                                                `json:"templatedisplaytext"`
 	Templateid            string                                                `json:"templateid"`
 	Templatename          string                                                `json:"templatename"`
+	Templatetype          string                                                `json:"templatetype"`
+	Userdata              string                                                `json:"userdata"`
+	Userdatadetails       string                                                `json:"userdatadetails"`
+	Userdataid            string                                                `json:"userdataid"`
+	Userdataname          string                                                `json:"userdataname"`
+	Userdatapolicy        string                                                `json:"userdatapolicy"`
 	Userid                string                                                `json:"userid"`
 	Username              string                                                `json:"username"`
 	Vgpu                  string                                                `json:"vgpu"`
+	Vnfdetails            map[string]string                                     `json:"vnfdetails"`
+	Vnfnics               []string                                              `json:"vnfnics"`
 	Zoneid                string                                                `json:"zoneid"`
 	Zonename              string                                                `json:"zonename"`
 }
@@ -5738,6 +7428,12 @@ func (p *RestoreVirtualMachineParams) SetTemplateid(v string) {
 	p.p["templateid"] = v
 }
 
+func (p *RestoreVirtualMachineParams) ResetTemplateid() {
+	if p.p != nil && p.p["templateid"] != nil {
+		delete(p.p, "templateid")
+	}
+}
+
 func (p *RestoreVirtualMachineParams) GetTemplateid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -5751,6 +7447,12 @@ func (p *RestoreVirtualMachineParams) SetVirtualmachineid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["virtualmachineid"] = v
+}
+
+func (p *RestoreVirtualMachineParams) ResetVirtualmachineid() {
+	if p.p != nil && p.p["virtualmachineid"] != nil {
+		delete(p.p, "virtualmachineid")
+	}
 }
 
 func (p *RestoreVirtualMachineParams) GetVirtualmachineid() (string, bool) {
@@ -5808,6 +7510,8 @@ func (s *VirtualMachineService) RestoreVirtualMachine(p *RestoreVirtualMachinePa
 type RestoreVirtualMachineResponse struct {
 	Account               string                                       `json:"account"`
 	Affinitygroup         []RestoreVirtualMachineResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                                       `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                                       `json:"autoscalevmgroupname"`
 	Backupofferingid      string                                       `json:"backupofferingid"`
 	Backupofferingname    string                                       `json:"backupofferingname"`
 	Bootmode              string                                       `json:"bootmode"`
@@ -5833,10 +7537,11 @@ type RestoreVirtualMachineResponse struct {
 	Guestosid             string                                       `json:"guestosid"`
 	Haenable              bool                                         `json:"haenable"`
 	Hasannotations        bool                                         `json:"hasannotations"`
+	Hostcontrolstate      string                                       `json:"hostcontrolstate"`
 	Hostid                string                                       `json:"hostid"`
 	Hostname              string                                       `json:"hostname"`
 	Hypervisor            string                                       `json:"hypervisor"`
-	Icon                  string                                       `json:"icon"`
+	Icon                  interface{}                                  `json:"icon"`
 	Id                    string                                       `json:"id"`
 	Instancename          string                                       `json:"instancename"`
 	Isdynamicallyscalable bool                                         `json:"isdynamicallyscalable"`
@@ -5845,7 +7550,7 @@ type RestoreVirtualMachineResponse struct {
 	Isoname               string                                       `json:"isoname"`
 	JobID                 string                                       `json:"jobid"`
 	Jobstatus             int                                          `json:"jobstatus"`
-	Keypair               string                                       `json:"keypair"`
+	Keypairs              string                                       `json:"keypairs"`
 	Lastupdated           string                                       `json:"lastupdated"`
 	Memory                int                                          `json:"memory"`
 	Memoryintfreekbs      int64                                        `json:"memoryintfreekbs"`
@@ -5878,9 +7583,17 @@ type RestoreVirtualMachineResponse struct {
 	Templatedisplaytext   string                                       `json:"templatedisplaytext"`
 	Templateid            string                                       `json:"templateid"`
 	Templatename          string                                       `json:"templatename"`
+	Templatetype          string                                       `json:"templatetype"`
+	Userdata              string                                       `json:"userdata"`
+	Userdatadetails       string                                       `json:"userdatadetails"`
+	Userdataid            string                                       `json:"userdataid"`
+	Userdataname          string                                       `json:"userdataname"`
+	Userdatapolicy        string                                       `json:"userdatapolicy"`
 	Userid                string                                       `json:"userid"`
 	Username              string                                       `json:"username"`
 	Vgpu                  string                                       `json:"vgpu"`
+	Vnfdetails            map[string]string                            `json:"vnfdetails"`
+	Vnfnics               []string                                     `json:"vnfnics"`
 	Zoneid                string                                       `json:"zoneid"`
 	Zonename              string                                       `json:"zonename"`
 }
@@ -5963,6 +7676,10 @@ func (p *ScaleVirtualMachineParams) toURLValues() url.Values {
 	if p.p == nil {
 		return u
 	}
+	if v, found := p.p["automigrate"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("automigrate", vv)
+	}
 	if v, found := p.p["details"]; found {
 		m := v.(map[string]string)
 		for i, k := range getSortedKeysFromMap(m) {
@@ -5972,10 +7689,43 @@ func (p *ScaleVirtualMachineParams) toURLValues() url.Values {
 	if v, found := p.p["id"]; found {
 		u.Set("id", v.(string))
 	}
+	if v, found := p.p["maxiops"]; found {
+		vv := strconv.FormatInt(v.(int64), 10)
+		u.Set("maxiops", vv)
+	}
+	if v, found := p.p["miniops"]; found {
+		vv := strconv.FormatInt(v.(int64), 10)
+		u.Set("miniops", vv)
+	}
 	if v, found := p.p["serviceofferingid"]; found {
 		u.Set("serviceofferingid", v.(string))
 	}
+	if v, found := p.p["shrinkok"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("shrinkok", vv)
+	}
 	return u
+}
+
+func (p *ScaleVirtualMachineParams) SetAutomigrate(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["automigrate"] = v
+}
+
+func (p *ScaleVirtualMachineParams) ResetAutomigrate() {
+	if p.p != nil && p.p["automigrate"] != nil {
+		delete(p.p, "automigrate")
+	}
+}
+
+func (p *ScaleVirtualMachineParams) GetAutomigrate() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["automigrate"].(bool)
+	return value, ok
 }
 
 func (p *ScaleVirtualMachineParams) SetDetails(v map[string]string) {
@@ -5983,6 +7733,12 @@ func (p *ScaleVirtualMachineParams) SetDetails(v map[string]string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["details"] = v
+}
+
+func (p *ScaleVirtualMachineParams) ResetDetails() {
+	if p.p != nil && p.p["details"] != nil {
+		delete(p.p, "details")
+	}
 }
 
 func (p *ScaleVirtualMachineParams) GetDetails() (map[string]string, bool) {
@@ -6000,11 +7756,59 @@ func (p *ScaleVirtualMachineParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *ScaleVirtualMachineParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *ScaleVirtualMachineParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+func (p *ScaleVirtualMachineParams) SetMaxiops(v int64) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["maxiops"] = v
+}
+
+func (p *ScaleVirtualMachineParams) ResetMaxiops() {
+	if p.p != nil && p.p["maxiops"] != nil {
+		delete(p.p, "maxiops")
+	}
+}
+
+func (p *ScaleVirtualMachineParams) GetMaxiops() (int64, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["maxiops"].(int64)
+	return value, ok
+}
+
+func (p *ScaleVirtualMachineParams) SetMiniops(v int64) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["miniops"] = v
+}
+
+func (p *ScaleVirtualMachineParams) ResetMiniops() {
+	if p.p != nil && p.p["miniops"] != nil {
+		delete(p.p, "miniops")
+	}
+}
+
+func (p *ScaleVirtualMachineParams) GetMiniops() (int64, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["miniops"].(int64)
 	return value, ok
 }
 
@@ -6015,11 +7819,38 @@ func (p *ScaleVirtualMachineParams) SetServiceofferingid(v string) {
 	p.p["serviceofferingid"] = v
 }
 
+func (p *ScaleVirtualMachineParams) ResetServiceofferingid() {
+	if p.p != nil && p.p["serviceofferingid"] != nil {
+		delete(p.p, "serviceofferingid")
+	}
+}
+
 func (p *ScaleVirtualMachineParams) GetServiceofferingid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["serviceofferingid"].(string)
+	return value, ok
+}
+
+func (p *ScaleVirtualMachineParams) SetShrinkok(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["shrinkok"] = v
+}
+
+func (p *ScaleVirtualMachineParams) ResetShrinkok() {
+	if p.p != nil && p.p["shrinkok"] != nil {
+		delete(p.p, "shrinkok")
+	}
+}
+
+func (p *ScaleVirtualMachineParams) GetShrinkok() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["shrinkok"].(bool)
 	return value, ok
 }
 
@@ -6033,7 +7864,7 @@ func (s *VirtualMachineService) NewScaleVirtualMachineParams(id string, serviceo
 	return p
 }
 
-// Scales the virtual machine to a new service offering. This command also takes into account the Volume and it may resize the root disk size according to the service offering.
+// Scales the virtual machine to a new service offering. This command also considers the volume size in the service offering or disk offering linked to the new service offering and apply all characteristics to the root volume.
 func (s *VirtualMachineService) ScaleVirtualMachine(p *ScaleVirtualMachineParams) (*ScaleVirtualMachineResponse, error) {
 	resp, err := s.cs.newRequest("scaleVirtualMachine", p.toURLValues())
 	if err != nil {
@@ -6086,6 +7917,10 @@ func (p *StartVirtualMachineParams) toURLValues() url.Values {
 	if v, found := p.p["clusterid"]; found {
 		u.Set("clusterid", v.(string))
 	}
+	if v, found := p.p["considerlasthost"]; found {
+		vv := strconv.FormatBool(v.(bool))
+		u.Set("considerlasthost", vv)
+	}
 	if v, found := p.p["deploymentplanner"]; found {
 		u.Set("deploymentplanner", v.(string))
 	}
@@ -6108,6 +7943,12 @@ func (p *StartVirtualMachineParams) SetBootintosetup(v bool) {
 	p.p["bootintosetup"] = v
 }
 
+func (p *StartVirtualMachineParams) ResetBootintosetup() {
+	if p.p != nil && p.p["bootintosetup"] != nil {
+		delete(p.p, "bootintosetup")
+	}
+}
+
 func (p *StartVirtualMachineParams) GetBootintosetup() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -6123,6 +7964,12 @@ func (p *StartVirtualMachineParams) SetClusterid(v string) {
 	p.p["clusterid"] = v
 }
 
+func (p *StartVirtualMachineParams) ResetClusterid() {
+	if p.p != nil && p.p["clusterid"] != nil {
+		delete(p.p, "clusterid")
+	}
+}
+
 func (p *StartVirtualMachineParams) GetClusterid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -6131,11 +7978,38 @@ func (p *StartVirtualMachineParams) GetClusterid() (string, bool) {
 	return value, ok
 }
 
+func (p *StartVirtualMachineParams) SetConsiderlasthost(v bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["considerlasthost"] = v
+}
+
+func (p *StartVirtualMachineParams) ResetConsiderlasthost() {
+	if p.p != nil && p.p["considerlasthost"] != nil {
+		delete(p.p, "considerlasthost")
+	}
+}
+
+func (p *StartVirtualMachineParams) GetConsiderlasthost() (bool, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["considerlasthost"].(bool)
+	return value, ok
+}
+
 func (p *StartVirtualMachineParams) SetDeploymentplanner(v string) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	p.p["deploymentplanner"] = v
+}
+
+func (p *StartVirtualMachineParams) ResetDeploymentplanner() {
+	if p.p != nil && p.p["deploymentplanner"] != nil {
+		delete(p.p, "deploymentplanner")
+	}
 }
 
 func (p *StartVirtualMachineParams) GetDeploymentplanner() (string, bool) {
@@ -6153,6 +8027,12 @@ func (p *StartVirtualMachineParams) SetHostid(v string) {
 	p.p["hostid"] = v
 }
 
+func (p *StartVirtualMachineParams) ResetHostid() {
+	if p.p != nil && p.p["hostid"] != nil {
+		delete(p.p, "hostid")
+	}
+}
+
 func (p *StartVirtualMachineParams) GetHostid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -6168,6 +8048,12 @@ func (p *StartVirtualMachineParams) SetId(v string) {
 	p.p["id"] = v
 }
 
+func (p *StartVirtualMachineParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
 func (p *StartVirtualMachineParams) GetId() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -6181,6 +8067,12 @@ func (p *StartVirtualMachineParams) SetPodid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["podid"] = v
+}
+
+func (p *StartVirtualMachineParams) ResetPodid() {
+	if p.p != nil && p.p["podid"] != nil {
+		delete(p.p, "podid")
+	}
 }
 
 func (p *StartVirtualMachineParams) GetPodid() (string, bool) {
@@ -6238,6 +8130,8 @@ func (s *VirtualMachineService) StartVirtualMachine(p *StartVirtualMachineParams
 type StartVirtualMachineResponse struct {
 	Account               string                                     `json:"account"`
 	Affinitygroup         []StartVirtualMachineResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                                     `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                                     `json:"autoscalevmgroupname"`
 	Backupofferingid      string                                     `json:"backupofferingid"`
 	Backupofferingname    string                                     `json:"backupofferingname"`
 	Bootmode              string                                     `json:"bootmode"`
@@ -6263,10 +8157,11 @@ type StartVirtualMachineResponse struct {
 	Guestosid             string                                     `json:"guestosid"`
 	Haenable              bool                                       `json:"haenable"`
 	Hasannotations        bool                                       `json:"hasannotations"`
+	Hostcontrolstate      string                                     `json:"hostcontrolstate"`
 	Hostid                string                                     `json:"hostid"`
 	Hostname              string                                     `json:"hostname"`
 	Hypervisor            string                                     `json:"hypervisor"`
-	Icon                  string                                     `json:"icon"`
+	Icon                  interface{}                                `json:"icon"`
 	Id                    string                                     `json:"id"`
 	Instancename          string                                     `json:"instancename"`
 	Isdynamicallyscalable bool                                       `json:"isdynamicallyscalable"`
@@ -6275,7 +8170,7 @@ type StartVirtualMachineResponse struct {
 	Isoname               string                                     `json:"isoname"`
 	JobID                 string                                     `json:"jobid"`
 	Jobstatus             int                                        `json:"jobstatus"`
-	Keypair               string                                     `json:"keypair"`
+	Keypairs              string                                     `json:"keypairs"`
 	Lastupdated           string                                     `json:"lastupdated"`
 	Memory                int                                        `json:"memory"`
 	Memoryintfreekbs      int64                                      `json:"memoryintfreekbs"`
@@ -6308,9 +8203,17 @@ type StartVirtualMachineResponse struct {
 	Templatedisplaytext   string                                     `json:"templatedisplaytext"`
 	Templateid            string                                     `json:"templateid"`
 	Templatename          string                                     `json:"templatename"`
+	Templatetype          string                                     `json:"templatetype"`
+	Userdata              string                                     `json:"userdata"`
+	Userdatadetails       string                                     `json:"userdatadetails"`
+	Userdataid            string                                     `json:"userdataid"`
+	Userdataname          string                                     `json:"userdataname"`
+	Userdatapolicy        string                                     `json:"userdatapolicy"`
 	Userid                string                                     `json:"userid"`
 	Username              string                                     `json:"username"`
 	Vgpu                  string                                     `json:"vgpu"`
+	Vnfdetails            map[string]string                          `json:"vnfdetails"`
+	Vnfnics               []string                                   `json:"vnfnics"`
 	Zoneid                string                                     `json:"zoneid"`
 	Zonename              string                                     `json:"zonename"`
 }
@@ -6410,6 +8313,12 @@ func (p *StopVirtualMachineParams) SetForced(v bool) {
 	p.p["forced"] = v
 }
 
+func (p *StopVirtualMachineParams) ResetForced() {
+	if p.p != nil && p.p["forced"] != nil {
+		delete(p.p, "forced")
+	}
+}
+
 func (p *StopVirtualMachineParams) GetForced() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -6423,6 +8332,12 @@ func (p *StopVirtualMachineParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *StopVirtualMachineParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *StopVirtualMachineParams) GetId() (string, bool) {
@@ -6480,6 +8395,8 @@ func (s *VirtualMachineService) StopVirtualMachine(p *StopVirtualMachineParams) 
 type StopVirtualMachineResponse struct {
 	Account               string                                    `json:"account"`
 	Affinitygroup         []StopVirtualMachineResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                                    `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                                    `json:"autoscalevmgroupname"`
 	Backupofferingid      string                                    `json:"backupofferingid"`
 	Backupofferingname    string                                    `json:"backupofferingname"`
 	Bootmode              string                                    `json:"bootmode"`
@@ -6505,10 +8422,11 @@ type StopVirtualMachineResponse struct {
 	Guestosid             string                                    `json:"guestosid"`
 	Haenable              bool                                      `json:"haenable"`
 	Hasannotations        bool                                      `json:"hasannotations"`
+	Hostcontrolstate      string                                    `json:"hostcontrolstate"`
 	Hostid                string                                    `json:"hostid"`
 	Hostname              string                                    `json:"hostname"`
 	Hypervisor            string                                    `json:"hypervisor"`
-	Icon                  string                                    `json:"icon"`
+	Icon                  interface{}                               `json:"icon"`
 	Id                    string                                    `json:"id"`
 	Instancename          string                                    `json:"instancename"`
 	Isdynamicallyscalable bool                                      `json:"isdynamicallyscalable"`
@@ -6517,7 +8435,7 @@ type StopVirtualMachineResponse struct {
 	Isoname               string                                    `json:"isoname"`
 	JobID                 string                                    `json:"jobid"`
 	Jobstatus             int                                       `json:"jobstatus"`
-	Keypair               string                                    `json:"keypair"`
+	Keypairs              string                                    `json:"keypairs"`
 	Lastupdated           string                                    `json:"lastupdated"`
 	Memory                int                                       `json:"memory"`
 	Memoryintfreekbs      int64                                     `json:"memoryintfreekbs"`
@@ -6550,9 +8468,17 @@ type StopVirtualMachineResponse struct {
 	Templatedisplaytext   string                                    `json:"templatedisplaytext"`
 	Templateid            string                                    `json:"templateid"`
 	Templatename          string                                    `json:"templatename"`
+	Templatetype          string                                    `json:"templatetype"`
+	Userdata              string                                    `json:"userdata"`
+	Userdatadetails       string                                    `json:"userdatadetails"`
+	Userdataid            string                                    `json:"userdataid"`
+	Userdataname          string                                    `json:"userdataname"`
+	Userdatapolicy        string                                    `json:"userdatapolicy"`
 	Userid                string                                    `json:"userid"`
 	Username              string                                    `json:"username"`
 	Vgpu                  string                                    `json:"vgpu"`
+	Vnfdetails            map[string]string                         `json:"vnfdetails"`
+	Vnfnics               []string                                  `json:"vnfnics"`
 	Zoneid                string                                    `json:"zoneid"`
 	Zonename              string                                    `json:"zonename"`
 }
@@ -6651,6 +8577,12 @@ func (p *UpdateDefaultNicForVirtualMachineParams) SetNicid(v string) {
 	p.p["nicid"] = v
 }
 
+func (p *UpdateDefaultNicForVirtualMachineParams) ResetNicid() {
+	if p.p != nil && p.p["nicid"] != nil {
+		delete(p.p, "nicid")
+	}
+}
+
 func (p *UpdateDefaultNicForVirtualMachineParams) GetNicid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -6664,6 +8596,12 @@ func (p *UpdateDefaultNicForVirtualMachineParams) SetVirtualmachineid(v string) 
 		p.p = make(map[string]interface{})
 	}
 	p.p["virtualmachineid"] = v
+}
+
+func (p *UpdateDefaultNicForVirtualMachineParams) ResetVirtualmachineid() {
+	if p.p != nil && p.p["virtualmachineid"] != nil {
+		delete(p.p, "virtualmachineid")
+	}
 }
 
 func (p *UpdateDefaultNicForVirtualMachineParams) GetVirtualmachineid() (string, bool) {
@@ -6722,6 +8660,8 @@ func (s *VirtualMachineService) UpdateDefaultNicForVirtualMachine(p *UpdateDefau
 type UpdateDefaultNicForVirtualMachineResponse struct {
 	Account               string                                                   `json:"account"`
 	Affinitygroup         []UpdateDefaultNicForVirtualMachineResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                                                   `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                                                   `json:"autoscalevmgroupname"`
 	Backupofferingid      string                                                   `json:"backupofferingid"`
 	Backupofferingname    string                                                   `json:"backupofferingname"`
 	Bootmode              string                                                   `json:"bootmode"`
@@ -6747,10 +8687,11 @@ type UpdateDefaultNicForVirtualMachineResponse struct {
 	Guestosid             string                                                   `json:"guestosid"`
 	Haenable              bool                                                     `json:"haenable"`
 	Hasannotations        bool                                                     `json:"hasannotations"`
+	Hostcontrolstate      string                                                   `json:"hostcontrolstate"`
 	Hostid                string                                                   `json:"hostid"`
 	Hostname              string                                                   `json:"hostname"`
 	Hypervisor            string                                                   `json:"hypervisor"`
-	Icon                  string                                                   `json:"icon"`
+	Icon                  interface{}                                              `json:"icon"`
 	Id                    string                                                   `json:"id"`
 	Instancename          string                                                   `json:"instancename"`
 	Isdynamicallyscalable bool                                                     `json:"isdynamicallyscalable"`
@@ -6759,7 +8700,7 @@ type UpdateDefaultNicForVirtualMachineResponse struct {
 	Isoname               string                                                   `json:"isoname"`
 	JobID                 string                                                   `json:"jobid"`
 	Jobstatus             int                                                      `json:"jobstatus"`
-	Keypair               string                                                   `json:"keypair"`
+	Keypairs              string                                                   `json:"keypairs"`
 	Lastupdated           string                                                   `json:"lastupdated"`
 	Memory                int                                                      `json:"memory"`
 	Memoryintfreekbs      int64                                                    `json:"memoryintfreekbs"`
@@ -6792,9 +8733,17 @@ type UpdateDefaultNicForVirtualMachineResponse struct {
 	Templatedisplaytext   string                                                   `json:"templatedisplaytext"`
 	Templateid            string                                                   `json:"templateid"`
 	Templatename          string                                                   `json:"templatename"`
+	Templatetype          string                                                   `json:"templatetype"`
+	Userdata              string                                                   `json:"userdata"`
+	Userdatadetails       string                                                   `json:"userdatadetails"`
+	Userdataid            string                                                   `json:"userdataid"`
+	Userdataname          string                                                   `json:"userdataname"`
+	Userdatapolicy        string                                                   `json:"userdatapolicy"`
 	Userid                string                                                   `json:"userid"`
 	Username              string                                                   `json:"username"`
 	Vgpu                  string                                                   `json:"vgpu"`
+	Vnfdetails            map[string]string                                        `json:"vnfdetails"`
+	Vnfnics               []string                                                 `json:"vnfnics"`
 	Zoneid                string                                                   `json:"zoneid"`
 	Zonename              string                                                   `json:"zonename"`
 }
@@ -6942,6 +8891,16 @@ func (p *UpdateVirtualMachineParams) toURLValues() url.Values {
 	if v, found := p.p["userdata"]; found {
 		u.Set("userdata", v.(string))
 	}
+	if v, found := p.p["userdatadetails"]; found {
+		m := v.(map[string]string)
+		for i, k := range getSortedKeysFromMap(m) {
+			u.Set(fmt.Sprintf("userdatadetails[%d].key", i), k)
+			u.Set(fmt.Sprintf("userdatadetails[%d].value", i), m[k])
+		}
+	}
+	if v, found := p.p["userdataid"]; found {
+		u.Set("userdataid", v.(string))
+	}
 	return u
 }
 
@@ -6950,6 +8909,12 @@ func (p *UpdateVirtualMachineParams) SetCleanupdetails(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["cleanupdetails"] = v
+}
+
+func (p *UpdateVirtualMachineParams) ResetCleanupdetails() {
+	if p.p != nil && p.p["cleanupdetails"] != nil {
+		delete(p.p, "cleanupdetails")
+	}
 }
 
 func (p *UpdateVirtualMachineParams) GetCleanupdetails() (bool, bool) {
@@ -6967,6 +8932,12 @@ func (p *UpdateVirtualMachineParams) SetCustomid(v string) {
 	p.p["customid"] = v
 }
 
+func (p *UpdateVirtualMachineParams) ResetCustomid() {
+	if p.p != nil && p.p["customid"] != nil {
+		delete(p.p, "customid")
+	}
+}
+
 func (p *UpdateVirtualMachineParams) GetCustomid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -6982,6 +8953,12 @@ func (p *UpdateVirtualMachineParams) SetDetails(v map[string]string) {
 	p.p["details"] = v
 }
 
+func (p *UpdateVirtualMachineParams) ResetDetails() {
+	if p.p != nil && p.p["details"] != nil {
+		delete(p.p, "details")
+	}
+}
+
 func (p *UpdateVirtualMachineParams) GetDetails() (map[string]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -6995,6 +8972,12 @@ func (p *UpdateVirtualMachineParams) SetDhcpoptionsnetworklist(v []map[string]st
 		p.p = make(map[string]interface{})
 	}
 	p.p["dhcpoptionsnetworklist"] = v
+}
+
+func (p *UpdateVirtualMachineParams) ResetDhcpoptionsnetworklist() {
+	if p.p != nil && p.p["dhcpoptionsnetworklist"] != nil {
+		delete(p.p, "dhcpoptionsnetworklist")
+	}
 }
 
 func (p *UpdateVirtualMachineParams) GetDhcpoptionsnetworklist() ([]map[string]string, bool) {
@@ -7026,6 +9009,12 @@ func (p *UpdateVirtualMachineParams) SetDisplayname(v string) {
 	p.p["displayname"] = v
 }
 
+func (p *UpdateVirtualMachineParams) ResetDisplayname() {
+	if p.p != nil && p.p["displayname"] != nil {
+		delete(p.p, "displayname")
+	}
+}
+
 func (p *UpdateVirtualMachineParams) GetDisplayname() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -7039,6 +9028,12 @@ func (p *UpdateVirtualMachineParams) SetDisplayvm(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["displayvm"] = v
+}
+
+func (p *UpdateVirtualMachineParams) ResetDisplayvm() {
+	if p.p != nil && p.p["displayvm"] != nil {
+		delete(p.p, "displayvm")
+	}
 }
 
 func (p *UpdateVirtualMachineParams) GetDisplayvm() (bool, bool) {
@@ -7056,6 +9051,12 @@ func (p *UpdateVirtualMachineParams) SetExtraconfig(v string) {
 	p.p["extraconfig"] = v
 }
 
+func (p *UpdateVirtualMachineParams) ResetExtraconfig() {
+	if p.p != nil && p.p["extraconfig"] != nil {
+		delete(p.p, "extraconfig")
+	}
+}
+
 func (p *UpdateVirtualMachineParams) GetExtraconfig() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -7069,6 +9070,12 @@ func (p *UpdateVirtualMachineParams) SetGroup(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["group"] = v
+}
+
+func (p *UpdateVirtualMachineParams) ResetGroup() {
+	if p.p != nil && p.p["group"] != nil {
+		delete(p.p, "group")
+	}
 }
 
 func (p *UpdateVirtualMachineParams) GetGroup() (string, bool) {
@@ -7086,6 +9093,12 @@ func (p *UpdateVirtualMachineParams) SetHaenable(v bool) {
 	p.p["haenable"] = v
 }
 
+func (p *UpdateVirtualMachineParams) ResetHaenable() {
+	if p.p != nil && p.p["haenable"] != nil {
+		delete(p.p, "haenable")
+	}
+}
+
 func (p *UpdateVirtualMachineParams) GetHaenable() (bool, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -7099,6 +9112,12 @@ func (p *UpdateVirtualMachineParams) SetId(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["id"] = v
+}
+
+func (p *UpdateVirtualMachineParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
 }
 
 func (p *UpdateVirtualMachineParams) GetId() (string, bool) {
@@ -7116,6 +9135,12 @@ func (p *UpdateVirtualMachineParams) SetInstancename(v string) {
 	p.p["instancename"] = v
 }
 
+func (p *UpdateVirtualMachineParams) ResetInstancename() {
+	if p.p != nil && p.p["instancename"] != nil {
+		delete(p.p, "instancename")
+	}
+}
+
 func (p *UpdateVirtualMachineParams) GetInstancename() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -7129,6 +9154,12 @@ func (p *UpdateVirtualMachineParams) SetIsdynamicallyscalable(v bool) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["isdynamicallyscalable"] = v
+}
+
+func (p *UpdateVirtualMachineParams) ResetIsdynamicallyscalable() {
+	if p.p != nil && p.p["isdynamicallyscalable"] != nil {
+		delete(p.p, "isdynamicallyscalable")
+	}
 }
 
 func (p *UpdateVirtualMachineParams) GetIsdynamicallyscalable() (bool, bool) {
@@ -7146,6 +9177,12 @@ func (p *UpdateVirtualMachineParams) SetName(v string) {
 	p.p["name"] = v
 }
 
+func (p *UpdateVirtualMachineParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
+}
+
 func (p *UpdateVirtualMachineParams) GetName() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -7159,6 +9196,12 @@ func (p *UpdateVirtualMachineParams) SetOstypeid(v string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["ostypeid"] = v
+}
+
+func (p *UpdateVirtualMachineParams) ResetOstypeid() {
+	if p.p != nil && p.p["ostypeid"] != nil {
+		delete(p.p, "ostypeid")
+	}
 }
 
 func (p *UpdateVirtualMachineParams) GetOstypeid() (string, bool) {
@@ -7176,6 +9219,12 @@ func (p *UpdateVirtualMachineParams) SetSecuritygroupids(v []string) {
 	p.p["securitygroupids"] = v
 }
 
+func (p *UpdateVirtualMachineParams) ResetSecuritygroupids() {
+	if p.p != nil && p.p["securitygroupids"] != nil {
+		delete(p.p, "securitygroupids")
+	}
+}
+
 func (p *UpdateVirtualMachineParams) GetSecuritygroupids() ([]string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -7189,6 +9238,12 @@ func (p *UpdateVirtualMachineParams) SetSecuritygroupnames(v []string) {
 		p.p = make(map[string]interface{})
 	}
 	p.p["securitygroupnames"] = v
+}
+
+func (p *UpdateVirtualMachineParams) ResetSecuritygroupnames() {
+	if p.p != nil && p.p["securitygroupnames"] != nil {
+		delete(p.p, "securitygroupnames")
+	}
 }
 
 func (p *UpdateVirtualMachineParams) GetSecuritygroupnames() ([]string, bool) {
@@ -7206,11 +9261,59 @@ func (p *UpdateVirtualMachineParams) SetUserdata(v string) {
 	p.p["userdata"] = v
 }
 
+func (p *UpdateVirtualMachineParams) ResetUserdata() {
+	if p.p != nil && p.p["userdata"] != nil {
+		delete(p.p, "userdata")
+	}
+}
+
 func (p *UpdateVirtualMachineParams) GetUserdata() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
 	}
 	value, ok := p.p["userdata"].(string)
+	return value, ok
+}
+
+func (p *UpdateVirtualMachineParams) SetUserdatadetails(v map[string]string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["userdatadetails"] = v
+}
+
+func (p *UpdateVirtualMachineParams) ResetUserdatadetails() {
+	if p.p != nil && p.p["userdatadetails"] != nil {
+		delete(p.p, "userdatadetails")
+	}
+}
+
+func (p *UpdateVirtualMachineParams) GetUserdatadetails() (map[string]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["userdatadetails"].(map[string]string)
+	return value, ok
+}
+
+func (p *UpdateVirtualMachineParams) SetUserdataid(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["userdataid"] = v
+}
+
+func (p *UpdateVirtualMachineParams) ResetUserdataid() {
+	if p.p != nil && p.p["userdataid"] != nil {
+		delete(p.p, "userdataid")
+	}
+}
+
+func (p *UpdateVirtualMachineParams) GetUserdataid() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["userdataid"].(string)
 	return value, ok
 }
 
@@ -7225,7 +9328,7 @@ func (s *VirtualMachineService) NewUpdateVirtualMachineParams(id string) *Update
 
 // Updates properties of a virtual machine. The VM has to be stopped and restarted for the new properties to take effect. UpdateVirtualMachine does not first check whether the VM is stopped. Therefore, stop the VM manually before issuing this call.
 func (s *VirtualMachineService) UpdateVirtualMachine(p *UpdateVirtualMachineParams) (*UpdateVirtualMachineResponse, error) {
-	resp, err := s.cs.newRequest("updateVirtualMachine", p.toURLValues())
+	resp, err := s.cs.newPostRequest("updateVirtualMachine", p.toURLValues())
 	if err != nil {
 		return nil, err
 	}
@@ -7241,6 +9344,8 @@ func (s *VirtualMachineService) UpdateVirtualMachine(p *UpdateVirtualMachinePara
 type UpdateVirtualMachineResponse struct {
 	Account               string                                      `json:"account"`
 	Affinitygroup         []UpdateVirtualMachineResponseAffinitygroup `json:"affinitygroup"`
+	Autoscalevmgroupid    string                                      `json:"autoscalevmgroupid"`
+	Autoscalevmgroupname  string                                      `json:"autoscalevmgroupname"`
 	Backupofferingid      string                                      `json:"backupofferingid"`
 	Backupofferingname    string                                      `json:"backupofferingname"`
 	Bootmode              string                                      `json:"bootmode"`
@@ -7266,10 +9371,11 @@ type UpdateVirtualMachineResponse struct {
 	Guestosid             string                                      `json:"guestosid"`
 	Haenable              bool                                        `json:"haenable"`
 	Hasannotations        bool                                        `json:"hasannotations"`
+	Hostcontrolstate      string                                      `json:"hostcontrolstate"`
 	Hostid                string                                      `json:"hostid"`
 	Hostname              string                                      `json:"hostname"`
 	Hypervisor            string                                      `json:"hypervisor"`
-	Icon                  string                                      `json:"icon"`
+	Icon                  interface{}                                 `json:"icon"`
 	Id                    string                                      `json:"id"`
 	Instancename          string                                      `json:"instancename"`
 	Isdynamicallyscalable bool                                        `json:"isdynamicallyscalable"`
@@ -7278,7 +9384,7 @@ type UpdateVirtualMachineResponse struct {
 	Isoname               string                                      `json:"isoname"`
 	JobID                 string                                      `json:"jobid"`
 	Jobstatus             int                                         `json:"jobstatus"`
-	Keypair               string                                      `json:"keypair"`
+	Keypairs              string                                      `json:"keypairs"`
 	Lastupdated           string                                      `json:"lastupdated"`
 	Memory                int                                         `json:"memory"`
 	Memoryintfreekbs      int64                                       `json:"memoryintfreekbs"`
@@ -7311,9 +9417,17 @@ type UpdateVirtualMachineResponse struct {
 	Templatedisplaytext   string                                      `json:"templatedisplaytext"`
 	Templateid            string                                      `json:"templateid"`
 	Templatename          string                                      `json:"templatename"`
+	Templatetype          string                                      `json:"templatetype"`
+	Userdata              string                                      `json:"userdata"`
+	Userdatadetails       string                                      `json:"userdatadetails"`
+	Userdataid            string                                      `json:"userdataid"`
+	Userdataname          string                                      `json:"userdataname"`
+	Userdatapolicy        string                                      `json:"userdatapolicy"`
 	Userid                string                                      `json:"userid"`
 	Username              string                                      `json:"username"`
 	Vgpu                  string                                      `json:"vgpu"`
+	Vnfdetails            map[string]string                           `json:"vnfdetails"`
+	Vnfnics               []string                                    `json:"vnfnics"`
 	Zoneid                string                                      `json:"zoneid"`
 	Zonename              string                                      `json:"zonename"`
 }
@@ -7385,4 +9499,331 @@ func (r *UpdateVirtualMachineResponse) UnmarshalJSON(b []byte) error {
 
 	type alias UpdateVirtualMachineResponse
 	return json.Unmarshal(b, (*alias)(r))
+}
+
+type ListVirtualMachinesUsageHistoryParams struct {
+	p map[string]interface{}
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) toURLValues() url.Values {
+	u := url.Values{}
+	if p.p == nil {
+		return u
+	}
+	if v, found := p.p["enddate"]; found {
+		u.Set("enddate", v.(string))
+	}
+	if v, found := p.p["id"]; found {
+		u.Set("id", v.(string))
+	}
+	if v, found := p.p["ids"]; found {
+		vv := strings.Join(v.([]string), ",")
+		u.Set("ids", vv)
+	}
+	if v, found := p.p["keyword"]; found {
+		u.Set("keyword", v.(string))
+	}
+	if v, found := p.p["name"]; found {
+		u.Set("name", v.(string))
+	}
+	if v, found := p.p["page"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("page", vv)
+	}
+	if v, found := p.p["pagesize"]; found {
+		vv := strconv.Itoa(v.(int))
+		u.Set("pagesize", vv)
+	}
+	if v, found := p.p["startdate"]; found {
+		u.Set("startdate", v.(string))
+	}
+	return u
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) SetEnddate(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["enddate"] = v
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) ResetEnddate() {
+	if p.p != nil && p.p["enddate"] != nil {
+		delete(p.p, "enddate")
+	}
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) GetEnddate() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["enddate"].(string)
+	return value, ok
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) SetId(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["id"] = v
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) ResetId() {
+	if p.p != nil && p.p["id"] != nil {
+		delete(p.p, "id")
+	}
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) GetId() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["id"].(string)
+	return value, ok
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) SetIds(v []string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["ids"] = v
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) ResetIds() {
+	if p.p != nil && p.p["ids"] != nil {
+		delete(p.p, "ids")
+	}
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) GetIds() ([]string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["ids"].([]string)
+	return value, ok
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) SetKeyword(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["keyword"] = v
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) ResetKeyword() {
+	if p.p != nil && p.p["keyword"] != nil {
+		delete(p.p, "keyword")
+	}
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) GetKeyword() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["keyword"].(string)
+	return value, ok
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) SetName(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["name"] = v
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) ResetName() {
+	if p.p != nil && p.p["name"] != nil {
+		delete(p.p, "name")
+	}
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) GetName() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["name"].(string)
+	return value, ok
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) SetPage(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["page"] = v
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) ResetPage() {
+	if p.p != nil && p.p["page"] != nil {
+		delete(p.p, "page")
+	}
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) GetPage() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["page"].(int)
+	return value, ok
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) SetPagesize(v int) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["pagesize"] = v
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) ResetPagesize() {
+	if p.p != nil && p.p["pagesize"] != nil {
+		delete(p.p, "pagesize")
+	}
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) GetPagesize() (int, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["pagesize"].(int)
+	return value, ok
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) SetStartdate(v string) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	p.p["startdate"] = v
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) ResetStartdate() {
+	if p.p != nil && p.p["startdate"] != nil {
+		delete(p.p, "startdate")
+	}
+}
+
+func (p *ListVirtualMachinesUsageHistoryParams) GetStartdate() (string, bool) {
+	if p.p == nil {
+		p.p = make(map[string]interface{})
+	}
+	value, ok := p.p["startdate"].(string)
+	return value, ok
+}
+
+// You should always use this function to get a new ListVirtualMachinesUsageHistoryParams instance,
+// as then you are sure you have configured all required params
+func (s *VirtualMachineService) NewListVirtualMachinesUsageHistoryParams() *ListVirtualMachinesUsageHistoryParams {
+	p := &ListVirtualMachinesUsageHistoryParams{}
+	p.p = make(map[string]interface{})
+	return p
+}
+
+// This is a courtesy helper function, which in some cases may not work as expected!
+func (s *VirtualMachineService) GetVirtualMachinesUsageHistoryID(name string, opts ...OptionFunc) (string, int, error) {
+	p := &ListVirtualMachinesUsageHistoryParams{}
+	p.p = make(map[string]interface{})
+
+	p.p["name"] = name
+
+	for _, fn := range append(s.cs.options, opts...) {
+		if err := fn(s.cs, p); err != nil {
+			return "", -1, err
+		}
+	}
+
+	l, err := s.ListVirtualMachinesUsageHistory(p)
+	if err != nil {
+		return "", -1, err
+	}
+
+	if l.Count == 0 {
+		return "", l.Count, fmt.Errorf("No match found for %s: %+v", name, l)
+	}
+
+	if l.Count == 1 {
+		return l.VirtualMachinesUsageHistory[0].Id, l.Count, nil
+	}
+
+	if l.Count > 1 {
+		for _, v := range l.VirtualMachinesUsageHistory {
+			if v.Name == name {
+				return v.Id, l.Count, nil
+			}
+		}
+	}
+	return "", l.Count, fmt.Errorf("Could not find an exact match for %s: %+v", name, l)
+}
+
+// This is a courtesy helper function, which in some cases may not work as expected!
+func (s *VirtualMachineService) GetVirtualMachinesUsageHistoryByName(name string, opts ...OptionFunc) (*VirtualMachinesUsageHistory, int, error) {
+	id, count, err := s.GetVirtualMachinesUsageHistoryID(name, opts...)
+	if err != nil {
+		return nil, count, err
+	}
+
+	r, count, err := s.GetVirtualMachinesUsageHistoryByID(id, opts...)
+	if err != nil {
+		return nil, count, err
+	}
+	return r, count, nil
+}
+
+// This is a courtesy helper function, which in some cases may not work as expected!
+func (s *VirtualMachineService) GetVirtualMachinesUsageHistoryByID(id string, opts ...OptionFunc) (*VirtualMachinesUsageHistory, int, error) {
+	p := &ListVirtualMachinesUsageHistoryParams{}
+	p.p = make(map[string]interface{})
+
+	p.p["id"] = id
+
+	for _, fn := range append(s.cs.options, opts...) {
+		if err := fn(s.cs, p); err != nil {
+			return nil, -1, err
+		}
+	}
+
+	l, err := s.ListVirtualMachinesUsageHistory(p)
+	if err != nil {
+		if strings.Contains(err.Error(), fmt.Sprintf(
+			"Invalid parameter id value=%s due to incorrect long value format, "+
+				"or entity does not exist", id)) {
+			return nil, 0, fmt.Errorf("No match found for %s: %+v", id, l)
+		}
+		return nil, -1, err
+	}
+
+	if l.Count == 0 {
+		return nil, l.Count, fmt.Errorf("No match found for %s: %+v", id, l)
+	}
+
+	if l.Count == 1 {
+		return l.VirtualMachinesUsageHistory[0], l.Count, nil
+	}
+	return nil, l.Count, fmt.Errorf("There is more then one result for VirtualMachinesUsageHistory UUID: %s!", id)
+}
+
+// Lists VM stats
+func (s *VirtualMachineService) ListVirtualMachinesUsageHistory(p *ListVirtualMachinesUsageHistoryParams) (*ListVirtualMachinesUsageHistoryResponse, error) {
+	resp, err := s.cs.newRequest("listVirtualMachinesUsageHistory", p.toURLValues())
+	if err != nil {
+		return nil, err
+	}
+
+	var r ListVirtualMachinesUsageHistoryResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
+
+type ListVirtualMachinesUsageHistoryResponse struct {
+	Count                       int                            `json:"count"`
+	VirtualMachinesUsageHistory []*VirtualMachinesUsageHistory `json:"virtualmachinesusagehistory"`
+}
+
+type VirtualMachinesUsageHistory struct {
+	Displayname string   `json:"displayname"`
+	Id          string   `json:"id"`
+	JobID       string   `json:"jobid"`
+	Jobstatus   int      `json:"jobstatus"`
+	Name        string   `json:"name"`
+	Stats       []string `json:"stats"`
 }

@@ -51,6 +51,12 @@ func (p *GetCloudIdentifierParams) SetUserid(v string) {
 	p.p["userid"] = v
 }
 
+func (p *GetCloudIdentifierParams) ResetUserid() {
+	if p.p != nil && p.p["userid"] != nil {
+		delete(p.p, "userid")
+	}
+}
+
 func (p *GetCloudIdentifierParams) GetUserid() (string, bool) {
 	if p.p == nil {
 		p.p = make(map[string]interface{})
@@ -75,10 +81,13 @@ func (s *CloudIdentifierService) GetCloudIdentifier(p *GetCloudIdentifierParams)
 		return nil, err
 	}
 
-	var r GetCloudIdentifierResponse
-	if err := json.Unmarshal(resp, &r); err != nil {
+	var nested struct {
+		Response GetCloudIdentifierResponse `json:"cloudidentifier"`
+	}
+	if err := json.Unmarshal(resp, &nested); err != nil {
 		return nil, err
 	}
+	r := nested.Response
 
 	return &r, nil
 }
